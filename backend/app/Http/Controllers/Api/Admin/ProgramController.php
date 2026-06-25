@@ -16,7 +16,7 @@ class ProgramController extends Controller
     {
         $limit = min(max((int) $request->query('limit', 20), 1), 100);
 
-        $query = Program::query()->orderBy('id');
+        $query = Program::query()->orderBy('sort_order')->orderBy('id');
 
         if ($slug = $request->query('slug')) {
             $query->where('slug', $slug);
@@ -43,6 +43,9 @@ class ProgramController extends Controller
             'titleEn' => ['required', 'string', 'max:255'],
             'heroIntroAr' => ['nullable', 'string'],
             'heroIntroEn' => ['nullable', 'string'],
+            'cardDescriptionAr' => ['nullable', 'string'],
+            'cardDescriptionEn' => ['nullable', 'string'],
+            'sortOrder' => ['sometimes', 'integer', 'min:0'],
         ]);
 
         $program = Program::query()->create([
@@ -51,6 +54,9 @@ class ProgramController extends Controller
             'title_en' => $validated['titleEn'],
             'hero_intro_ar' => $validated['heroIntroAr'] ?? null,
             'hero_intro_en' => $validated['heroIntroEn'] ?? null,
+            'card_description_ar' => $validated['cardDescriptionAr'] ?? null,
+            'card_description_en' => $validated['cardDescriptionEn'] ?? null,
+            'sort_order' => $validated['sortOrder'] ?? 0,
         ]);
 
         return response()->json(['data' => $this->transform($program)], 201);
@@ -68,6 +74,9 @@ class ProgramController extends Controller
             'titleEn' => ['sometimes', 'string', 'max:255'],
             'heroIntroAr' => ['sometimes', 'nullable', 'string'],
             'heroIntroEn' => ['sometimes', 'nullable', 'string'],
+            'cardDescriptionAr' => ['sometimes', 'nullable', 'string'],
+            'cardDescriptionEn' => ['sometimes', 'nullable', 'string'],
+            'sortOrder' => ['sometimes', 'integer', 'min:0'],
         ]);
 
         $payload = [];
@@ -83,6 +92,15 @@ class ProgramController extends Controller
         }
         if (array_key_exists('heroIntroEn', $validated)) {
             $payload['hero_intro_en'] = $validated['heroIntroEn'];
+        }
+        if (array_key_exists('cardDescriptionAr', $validated)) {
+            $payload['card_description_ar'] = $validated['cardDescriptionAr'];
+        }
+        if (array_key_exists('cardDescriptionEn', $validated)) {
+            $payload['card_description_en'] = $validated['cardDescriptionEn'];
+        }
+        if (array_key_exists('sortOrder', $validated)) {
+            $payload['sort_order'] = $validated['sortOrder'];
         }
 
         $program->update($payload);
@@ -109,6 +127,9 @@ class ProgramController extends Controller
             'titleEn' => $program->title_en,
             'heroIntroAr' => $program->hero_intro_ar,
             'heroIntroEn' => $program->hero_intro_en,
+            'cardDescriptionAr' => $program->card_description_ar,
+            'cardDescriptionEn' => $program->card_description_en,
+            'sortOrder' => $program->sort_order,
             'createdAt' => $program->created_at?->toIso8601String(),
             'updatedAt' => $program->updated_at?->toIso8601String(),
         ];

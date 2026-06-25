@@ -9,6 +9,7 @@ use App\Models\Expert;
 use App\Models\Program;
 use App\Models\ProgramSection;
 use App\Models\TrainingCourse;
+use App\Support\ImageUrl;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProgramService
@@ -54,7 +55,7 @@ class ProgramService
             $sectionPayload[$section->tab_key] = array_merge([
                 'title' => $isAr ? $section->title_ar : $section->title_en,
                 'intro' => $isAr ? $section->intro_ar : $section->intro_en,
-                'image' => $section->image_url,
+                'image' => ImageUrl::public($section->image_url),
             ], $body);
         }
 
@@ -114,7 +115,7 @@ class ProgramService
             ->map(fn (Expert $expert) => [
                 'name' => $isAr ? $expert->name_ar : $expert->name_en,
                 'specialty' => $isAr ? $expert->specialty_ar : $expert->specialty_en,
-                'image' => $expert->image_url,
+                'image' => ImageUrl::public($expert->image_url),
             ])
             ->values()
             ->all();

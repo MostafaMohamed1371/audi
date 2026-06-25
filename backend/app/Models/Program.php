@@ -13,12 +13,15 @@ class Program extends Model
 {
     use HasFactory, LocalizesAttributes;
     protected $fillable = [
-  'slug',
-  'title_ar',
-  'title_en',
-  'hero_intro_ar',
-  'hero_intro_en',
-];
+        'slug',
+        'title_ar',
+        'title_en',
+        'hero_intro_ar',
+        'hero_intro_en',
+        'card_description_ar',
+        'card_description_en',
+        'sort_order',
+    ];
 
     public function sections(): HasMany
     {

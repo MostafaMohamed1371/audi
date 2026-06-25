@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Resource;
+use App\Support\ImageUrl;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
@@ -29,7 +30,7 @@ class ResourcesSeeder extends Seeder
                     'title_ar' => $arItem['title'],
                     'title_en' => $enItem['title'] ?? $arItem['title'],
                     'published_date' => $publishedDate,
-                    'image_url' => $arItem['image'] ?? null,
+                    'image_url' => ImageUrl::publicAsset($arItem['image'] ?? null, 'our-sources'),
                     'file_url' => $this->normalizeUrl($arItem['downloadHref'] ?? null),
                     'resource_type' => null,
                     'focus_area_id' => null,

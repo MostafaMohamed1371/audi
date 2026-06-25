@@ -80,6 +80,9 @@ Import from `docs/postman/`:
 | File | Purpose |
 |------|---------|
 | `AUDI-API.postman_collection.json` | **Full API** — all modules (public + admin) |
+| `API.md` | **Documentation index** — links to Public + Admin references |
+| `PUBLIC-API.md` | **Public API reference** — purpose, descriptions, parameters (Arabic + English) |
+| `ADMIN-API.md` | **Admin API reference** — purpose, descriptions, parameters (Arabic + English) |
 | `AUDI-Member-Cities.postman_collection.json` | Member cities map (detailed GeoJSON spec) |
 | `AUDI.postman_environment.json` | Local environment (`baseUrl`, `locale`, `adminToken`) |
 
@@ -88,6 +91,17 @@ Regenerate the main collection after endpoint changes:
 ```bash
 php docs/postman/generate-audi-api-collection.php
 ```
+
+Verify image-path alignment on public endpoints (requires DB migrated + seeded):
+
+```bash
+php artisan migrate
+php artisan db:seed
+php artisan serve
+php docs/postman/smoke-test-image-endpoints.php http://127.0.0.1:8000 ar
+```
+
+The regenerated collection includes **Postman tests** on key public requests (`/home`, `/about/advisory-board`, `/about/team`, `/about/partners`, `/resources`, `/media/news`) that assert image fields use full paths (`/…` or `http…`), not bare filenames.
 
 ## Implementation phases (next steps)
 

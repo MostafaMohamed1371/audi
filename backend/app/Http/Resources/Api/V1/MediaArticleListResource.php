@@ -7,6 +7,7 @@ namespace App\Http\Resources\Api\V1;
 use App\Enums\MediaCategory;
 use App\Models\MediaArticle;
 use App\Support\MediaCategoryResolver;
+use App\Support\ImageUrl;
 use App\Support\PublishedDateFormatter;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -28,7 +29,7 @@ class MediaArticleListResource extends JsonResource
             'slug' => $isAr ? $this->slug_ar : $this->slug_en,
             'title' => $isAr ? $this->title_ar : $this->title_en,
             'date' => PublishedDateFormatter::format($this->published_date, $locale),
-            'image' => basename((string) ($this->image_url ?? '')),
+            'image' => ImageUrl::public($this->image_url),
             'category' => MediaCategoryResolver::toFrontend($category),
         ];
 

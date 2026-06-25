@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AboutContent;
+use App\Support\AboutContentBodyRules;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -25,14 +26,14 @@ class AboutContentController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        $validated = $request->validate([
+        $validated = $request->validate(array_merge([
             'sectionKey' => ['required', 'string', 'max:120', Rule::unique('about_content', 'section_key')],
             'titleAr' => ['nullable', 'string', 'max:255'],
             'titleEn' => ['nullable', 'string', 'max:255'],
             'bodyAr' => ['nullable', 'array'],
             'bodyEn' => ['nullable', 'array'],
             'imageUrl' => ['nullable', 'string', 'max:500'],
-        ]);
+        ], AboutContentBodyRules::rules($request->input('sectionKey', ''))));
 
         $content = AboutContent::query()->create([
             'section_key' => $validated['sectionKey'],
@@ -53,7 +54,9 @@ class AboutContentController extends Controller
 
     public function update(Request $request, AboutContent $aboutContent): JsonResponse
     {
-        $validated = $request->validate([
+        $sectionKey = $request->input('sectionKey', $aboutContent->section_key);
+
+        $validated = $request->validate(array_merge([
             'sectionKey' => [
                 'sometimes',
                 'string',
@@ -65,7 +68,7 @@ class AboutContentController extends Controller
             'bodyAr' => ['sometimes', 'nullable', 'array'],
             'bodyEn' => ['sometimes', 'nullable', 'array'],
             'imageUrl' => ['sometimes', 'nullable', 'string', 'max:500'],
-        ]);
+        ], AboutContentBodyRules::rules($sectionKey, partial: true)));
 
         $payload = [];
 

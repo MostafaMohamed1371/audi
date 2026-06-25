@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Resources\Api\V1;
 
 use App\Models\Resource;
+use App\Support\ImageUrl;
 use App\Support\PublishedDateFormatter;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -24,7 +25,7 @@ class ResourceItemResource extends JsonResource
             'slug' => $this->slug,
             'title' => $isAr ? $this->title_ar : $this->title_en,
             'date' => PublishedDateFormatter::format($this->published_date, $locale),
-            'image' => basename((string) ($this->image_url ?? '')),
+            'image' => ImageUrl::public($this->image_url),
             'downloadHref' => $this->file_url ?? '#',
             'buttonVariant' => $this->buttonVariant(),
             'resourceType' => $this->resource_type,

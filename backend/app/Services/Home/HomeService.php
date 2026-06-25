@@ -11,7 +11,9 @@ use App\Models\AboutContent;
 use App\Models\HomeHeroSlide;
 use App\Models\HomeStat;
 use App\Models\MediaArticle;
+use App\Models\Program;
 use App\Models\Resource;
+use App\Support\ImageUrl;
 use App\Services\ContactInfoService;
 use App\Services\MemberCities\MemberCityStatService;
 use Illuminate\Http\Request;
@@ -54,7 +56,7 @@ class HomeService
             ->get()
             ->map(fn (HomeHeroSlide $slide) => [
                 'title' => $isAr ? $slide->title_ar : $slide->title_en,
-                'imageUrl' => $slide->image_url,
+                'imageUrl' => ImageUrl::public($slide->image_url),
             ])
             ->values()
             ->all();
@@ -121,10 +123,25 @@ class HomeService
         $content = $this->content('home_programs');
         $body = $isAr ? ($content?->body_ar ?? []) : ($content?->body_en ?? []);
 
+        $items = Program::query()
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get()
+            ->map(fn (Program $program) => [
+                'slug' => $program->slug,
+                'title' => $isAr ? $program->title_ar : $program->title_en,
+                'description' => $isAr
+                    ? ($program->card_description_ar ?? $program->hero_intro_ar ?? '')
+                    : ($program->card_description_en ?? $program->hero_intro_en ?? ''),
+                'href' => '/programs/'.$program->slug,
+            ])
+            ->values()
+            ->all();
+
         return [
             'title' => $isAr ? $content?->title_ar : $content?->title_en,
             'cta' => $body['cta'] ?? '',
-            'items' => $body['items'] ?? [],
+            'items' => $items,
         ];
     }
 

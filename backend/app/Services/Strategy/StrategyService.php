@@ -8,6 +8,7 @@ use App\Models\FocusArea;
 use App\Models\StrategyDiagramItem;
 use App\Models\StrategyPage;
 use App\Models\StrategyPillar;
+use App\Support\ImageUrl;
 
 class StrategyService
 {
@@ -146,8 +147,8 @@ class StrategyService
             'highlight' => $isAr ? $area->highlight_ar : $area->highlight_en,
             'tags' => $isAr ? $area->tags_ar : $area->tags_en,
             'description' => $isAr ? $area->description_ar : $area->description_en,
-            'listImage' => $area->list_image_url,
-            'detailImage' => $area->detail_image_url,
+            'listImage' => ImageUrl::public($area->list_image_url),
+            'detailImage' => ImageUrl::public($area->detail_image_url),
         ];
     }
 

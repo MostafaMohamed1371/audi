@@ -56,6 +56,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Frontend URL (public static assets)
+    |--------------------------------------------------------------------------
+    |
+    | Root-relative image paths in API responses (/emp, /blog, /slider, …)
+    | are resolved against this URL for public consumers (Postman, mobile, etc.).
+    |
+    */
+
+    'frontend_url' => env('FRONTEND_URL'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |

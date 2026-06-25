@@ -12,6 +12,7 @@ use App\Models\LeadershipMessage;
 use App\Models\Partner;
 use App\Models\PartnerCategory;
 use App\Models\TeamSection;
+use App\Support\ImageUrl;
 
 class AboutService
 {
@@ -54,13 +55,13 @@ class AboutService
                 'title' => $body['visionTitle'] ?? null,
                 'text' => $body['visionText'] ?? null,
                 'readMore' => $body['readMore'] ?? null,
-                'image' => $body['visionImage'] ?? '/vision-mission/1.png',
+                'image' => ImageUrl::public($body['visionImage'] ?? '/vision-mission/1.png'),
             ],
             'mission' => [
                 'title' => $body['missionTitle'] ?? null,
                 'text' => $body['missionText'] ?? null,
                 'readMore' => $body['readMore'] ?? null,
-                'image' => $body['missionImage'] ?? '/vision-mission/2.png',
+                'image' => ImageUrl::public($body['missionImage'] ?? '/vision-mission/2.png'),
             ],
             'goals' => [
                 'title' => $isAr ? $goals?->title_ar : $goals?->title_en,
@@ -93,7 +94,7 @@ class AboutService
             'position' => $isAr ? $message->position_ar : $message->position_en,
             'quote' => $isAr ? $message->quote_ar : $message->quote_en,
             'paragraphs' => $isAr ? $message->paragraphs_ar : $message->paragraphs_en,
-            'image' => $message->image_url ?? ($type === LeadershipType::President->value ? '/emp/1.png' : '/emp/2.png'),
+            'image' => ImageUrl::public($message->image_url ?? ($type === LeadershipType::President->value ? '/emp/1.png' : '/emp/2.png')),
             'imageAlt' => $isAr ? $message->image_alt_ar : $message->image_alt_en,
         ];
     }
@@ -111,7 +112,7 @@ class AboutService
                 'featured' => $member->is_featured,
                 'role' => $isAr ? $member->role_ar : $member->role_en,
                 'name' => $isAr ? $member->name_ar : $member->name_en,
-                'image' => basename((string) ($member->image_url ?? '')),
+                'image' => ImageUrl::public($member->image_url),
                 'bio' => $isAr ? $member->bio_ar : $member->bio_en,
             ])
             ->values()
@@ -142,7 +143,7 @@ class AboutService
                         'id' => (string) $member->id,
                         'role' => $isAr ? $member->role_ar : $member->role_en,
                         'name' => $isAr ? $member->name_ar : $member->name_en,
-                        'image' => basename((string) ($member->image_url ?? '')),
+                        'image' => ImageUrl::public($member->image_url),
                         'bio' => $isAr ? $member->bio_ar : $member->bio_en,
                     ])->values()->all(),
                 ];
@@ -165,7 +166,7 @@ class AboutService
         $body = $isAr ? ($structure?->body_ar ?? []) : ($structure?->body_en ?? []);
 
         return [
-            'imageUrl' => $structure?->image_url ?? '/operational-structure.png',
+            'imageUrl' => ImageUrl::public($structure?->image_url ?? '/operational-structure.png'),
             'imageAlt' => $body['imageAlt'] ?? null,
         ];
     }
@@ -181,7 +182,7 @@ class AboutService
             ->ordered()
             ->get()
             ->map(fn (Partner $partner) => [
-                'image' => basename((string) ($partner->logo_url ?? '')),
+                'image' => ImageUrl::public($partner->logo_url),
                 'name' => $isAr ? $partner->name_ar : $partner->name_en,
             ])
             ->values()
@@ -195,7 +196,7 @@ class AboutService
                 'id' => $category->slug,
                 'title' => $isAr ? $category->title_ar : $category->title_en,
                 'logos' => $category->partners->map(fn (Partner $partner) => [
-                    'image' => basename((string) ($partner->logo_url ?? '')),
+                    'image' => ImageUrl::public($partner->logo_url),
                     'name' => $isAr ? $partner->name_ar : $partner->name_en,
                 ])->values()->all(),
             ])

@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\File;
 
 class HomeSeeder extends Seeder
 {
-    private const PROGRAM_SLUGS = ['urban-policies', 'training', 'partnerships'];
-
     public function run(): void
     {
         $ar = $this->loadJson('ar');
@@ -86,11 +84,9 @@ class HomeSeeder extends Seeder
             'title_en' => $en['programs']['title'] ?? '',
             'body_ar' => [
                 'cta' => $ar['programs']['cta'] ?? '',
-                'items' => $this->mapProgramItems($ar['programs']['items'] ?? []),
             ],
             'body_en' => [
                 'cta' => $en['programs']['cta'] ?? '',
-                'items' => $this->mapProgramItems($en['programs']['items'] ?? []),
             ],
         ]);
 
@@ -142,27 +138,6 @@ class HomeSeeder extends Seeder
                 ],
             ],
         ]);
-    }
-
-    /**
-     * @param  array<int, array<string, mixed>>  $items
-     * @return array<int, array<string, mixed>>
-     */
-    private function mapProgramItems(array $items): array
-    {
-        return collect($items)
-            ->values()
-            ->map(function (array $item, int $index) {
-                $slug = self::PROGRAM_SLUGS[$index] ?? null;
-
-                return [
-                    'slug' => $slug,
-                    'title' => $item['title'] ?? '',
-                    'description' => $item['description'] ?? '',
-                    'href' => $slug ? "/programs/{$slug}" : ($item['href'] ?? '#programs'),
-                ];
-            })
-            ->all();
     }
 
     /**

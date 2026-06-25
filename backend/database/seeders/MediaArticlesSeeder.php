@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Enums\MediaCategory;
 use App\Models\MediaArticle;
+use App\Support\ImageUrl;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
@@ -43,7 +44,7 @@ class MediaArticlesSeeder extends Seeder
                         'body_ar' => $arItem['body'] ?? [],
                         'body_en' => $enItem['body'] ?? [],
                         'published_date' => $this->parseDate($arItem['date'] ?? null),
-                        'image_url' => $arItem['image'] ?? null,
+                        'image_url' => ImageUrl::publicAsset($arItem['image'] ?? null, 'blog'),
                         'pdf_url' => $this->normalizeUrl($arItem['pdfHref'] ?? null),
                         'authors_ar' => $arItem['authors'] ?? null,
                         'authors_en' => $enItem['authors'] ?? ($arItem['authors'] ?? null),

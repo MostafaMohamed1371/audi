@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Admin\AboutContentController;
 use App\Http\Controllers\Api\Admin\AdvisoryBoardMemberController;
 use App\Http\Controllers\Api\Admin\AuthController;
+use App\Http\Controllers\Api\Admin\ContactInfoController;
 use App\Http\Controllers\Api\Admin\ContactSubmissionController;
 use App\Http\Controllers\Api\Admin\HeroSlideController;
 use App\Http\Controllers\Api\Admin\HomeStatController;
@@ -316,6 +317,9 @@ Route::prefix('admin')->group(function () {
         Route::get('media/{mediaArticle}', [MediaArticleController::class, 'show']);
         Route::put('media/{mediaArticle}', [MediaArticleController::class, 'update']);
         Route::delete('media/{mediaArticle}', [MediaArticleController::class, 'destroy']);
+
+        Route::get('contact-info', [ContactInfoController::class, 'show']);
+        Route::put('contact-info', [ContactInfoController::class, 'update']);
 
         Route::get('contact-submissions', [ContactSubmissionController::class, 'index']);
         Route::get('contact-submissions/{contactSubmission}', [ContactSubmissionController::class, 'show']);

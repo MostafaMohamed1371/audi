@@ -11,6 +11,7 @@ use App\Models\Expert;
 use App\Models\Program;
 use App\Models\ProgramSection;
 use App\Models\TrainingCourse;
+use App\Support\ImageUrl;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 
@@ -21,6 +22,9 @@ class ProgramsSeeder extends Seeder
         'urban-policies' => 'urbanPolicies',
         'partnerships' => 'partnerships',
     ];
+
+    /** @var array<int, string> Display order on the home page. */
+    private const HOME_PROGRAM_SLUGS = ['urban-policies', 'training', 'partnerships'];
 
     /** @var array<string, array<string, string>> */
     private const SECTION_TABS = [
@@ -61,6 +65,9 @@ class ProgramsSeeder extends Seeder
                 'title_en' => $en['pages'][$this->pageKey($slug)] ?? $slug,
                 'hero_intro_ar' => $arProgram['heroIntro'] ?? null,
                 'hero_intro_en' => $enProgram['heroIntro'] ?? null,
+                'card_description_ar' => $this->homeProgramCard('ar', $slug)['description'] ?? null,
+                'card_description_en' => $this->homeProgramCard('en', $slug)['description'] ?? null,
+                'sort_order' => ($index = array_search($slug, self::HOME_PROGRAM_SLUGS, true)) !== false ? $index : 0,
             ],
         );
 
@@ -175,7 +182,7 @@ class ProgramsSeeder extends Seeder
                     'name_en' => $enExpert['name'] ?? ($expert['name'] ?? ''),
                     'specialty_ar' => $expert['specialty'] ?? '',
                     'specialty_en' => $enExpert['specialty'] ?? ($expert['specialty'] ?? ''),
-                    'image_url' => $expert['image'] ?? null,
+                    'image_url' => ImageUrl::publicAsset($expert['image'] ?? null, 'emp'),
                 ],
             );
         }
@@ -267,6 +274,34 @@ class ProgramsSeeder extends Seeder
         }
 
         return null;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function homeProgramCard(string $locale, string $slug): array
+    {
+        static $cache = [];
+
+        if (! isset($cache[$locale])) {
+            $path = dirname(base_path())."/messages/{$locale}/home.json";
+            $items = [];
+
+            if (File::exists($path)) {
+                $home = json_decode(File::get($path), true) ?? [];
+                $items = $home['programs']['items'] ?? [];
+            }
+
+            $cache[$locale] = [];
+
+            foreach (self::HOME_PROGRAM_SLUGS as $index => $programSlug) {
+                if (isset($items[$index]) && is_array($items[$index])) {
+                    $cache[$locale][$programSlug] = $items[$index];
+                }
+            }
+        }
+
+        return $cache[$locale][$slug] ?? [];
     }
 
     /**

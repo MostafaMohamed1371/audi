@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\UploadFileRequest;
 use App\Models\Upload;
+use App\Support\ImageUrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -52,7 +53,7 @@ class UploadController extends Controller
         $directory = 'uploads/'.now()->format('Y/m');
         $filename = Str::uuid()->toString().'.'.$file->getClientOriginalExtension();
         $path = $file->storeAs($directory, $filename, $disk);
-        $url = Storage::disk($disk)->url($path);
+        $url = ImageUrl::absolute(Storage::disk($disk)->url($path));
 
         $upload = Upload::query()->create([
             'disk' => $disk,

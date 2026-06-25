@@ -15,6 +15,7 @@ use App\Models\StrategyPage;
 use App\Models\StrategyPillar;
 use App\Models\TeamMember;
 use App\Models\TeamSection;
+use App\Support\ImageUrl;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 
@@ -222,7 +223,7 @@ class AboutAndStrategySeeder extends Seeder
                     'role_en' => $enMember['role'] ?? ($member['role'] ?? ''),
                     'bio_ar' => $member['bio'] ?? null,
                     'bio_en' => $enMember['bio'] ?? ($member['bio'] ?? null),
-                    'image_url' => $member['image'] ?? null,
+                    'image_url' => ImageUrl::publicAsset($member['image'] ?? null, 'emp'),
                     'is_featured' => (bool) ($member['featured'] ?? false),
                 ],
             );
@@ -266,7 +267,7 @@ class AboutAndStrategySeeder extends Seeder
                         'role_en' => $enMember['role'] ?? ($member['role'] ?? ''),
                         'bio_ar' => $member['bio'] ?? null,
                         'bio_en' => $enMember['bio'] ?? ($member['bio'] ?? null),
-                        'image_url' => $member['image'] ?? null,
+                        'image_url' => ImageUrl::publicAsset($member['image'] ?? null, 'emp'),
                     ],
                 );
             }
@@ -286,7 +287,7 @@ class AboutAndStrategySeeder extends Seeder
                 'partner_category_id' => null,
                 'name_ar' => $logo['name'] ?? '',
                 'name_en' => $logo['name'] ?? '',
-                'logo_url' => $logo['image'] ?? null,
+                'logo_url' => ImageUrl::publicAsset($logo['image'] ?? null, 'client'),
                 'is_featured' => true,
                 'sort_order' => $index,
             ]);
@@ -313,7 +314,7 @@ class AboutAndStrategySeeder extends Seeder
                     'partner_category_id' => $partnerCategory->id,
                     'name_ar' => $logo['name'] ?? '',
                     'name_en' => $logo['name'] ?? '',
-                    'logo_url' => $logo['image'] ?? null,
+                    'logo_url' => ImageUrl::publicAsset($logo['image'] ?? null, 'client'),
                     'is_featured' => false,
                     'sort_order' => $logoIndex,
                 ]);
