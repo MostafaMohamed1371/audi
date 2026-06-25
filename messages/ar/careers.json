@@ -1,0 +1,34 @@
+{
+  "pages": {
+    "title": "اعمل معنا",
+    "subtitle": "انضم إلى فريق المعهد العربي لإنماء المدن وساهم في تعزيز التنمية الحضرية في العالم العربي."
+  },
+  "empty": "لا توجد فرص عمل متاحة حالياً.",
+  "viewDetails": "عرض التفاصيل",
+  "backToList": "العودة إلى الوظائف",
+  "employmentTypes": {
+    "full_time": "دوام كامل",
+    "part_time": "دوام جزئي",
+    "contract": "عقد",
+    "internship": "تدريب"
+  },
+  "detail": {
+    "location": "الموقع",
+    "employmentType": "نوع التوظيف",
+    "responsibilities": "المسؤوليات"
+  },
+  "application": {
+    "title": "قدّم طلبك",
+    "description": "املأ النموذج أدناه وسيتواصل معك فريقنا.",
+    "fields": {
+      "fullName": { "label": "الاسم الكامل", "placeholder": "أدخل اسمك الكامل" },
+      "email": { "label": "البريد الإلكتروني", "placeholder": "example@email.com" },
+      "phone": { "label": "رقم الهاتف", "placeholder": "05xxxxxxxx" },
+      "coverLetter": { "label": "رسالة التقديم", "placeholder": "أخبرنا عن خبرتك ودوافعك..." },
+      "cvUrl": { "label": "رابط السيرة الذاتية (اختياري)", "placeholder": "https://..." }
+    },
+    "submit": "إرسال الطلب",
+    "success": "تم إرسال طلبك بنجاح. سنتواصل معك قريباً.",
+    "error": "تعذّر إرسال الطلب. يرجى المحاولة مرة أخرى."
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "terms": {
+    "title": "Terms and Conditions",
+    "content": "Welcome to the Arab Urban Development Institute website. By using this site, you agree to comply with the following terms and conditions.\n\nAll content published on the site is the intellectual property of the institute and may not be republished without prior written permission."
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "content": "The Arab Urban Development Institute is committed to protecting the privacy of its visitors and service users.\n\nWe collect only the data necessary to provide our services and do not share your data with third parties without your consent."
+  },
+  "effectiveDate": "Effective date: {date}"
+}

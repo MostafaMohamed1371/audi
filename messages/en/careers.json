@@ -1,0 +1,34 @@
+{
+  "pages": {
+    "title": "Work With Us",
+    "subtitle": "Join the Arab Urban Development Institute team and help advance urban development across the Arab world."
+  },
+  "empty": "No job openings are available at the moment.",
+  "viewDetails": "View details",
+  "backToList": "Back to openings",
+  "employmentTypes": {
+    "full_time": "Full time",
+    "part_time": "Part time",
+    "contract": "Contract",
+    "internship": "Internship"
+  },
+  "detail": {
+    "location": "Location",
+    "employmentType": "Employment type",
+    "responsibilities": "Responsibilities"
+  },
+  "application": {
+    "title": "Apply now",
+    "description": "Fill out the form below and our team will get in touch.",
+    "fields": {
+      "fullName": { "label": "Full name", "placeholder": "Enter your full name" },
+      "email": { "label": "Email", "placeholder": "example@email.com" },
+      "phone": { "label": "Phone", "placeholder": "+966..." },
+      "coverLetter": { "label": "Cover letter", "placeholder": "Tell us about your experience and motivation..." },
+      "cvUrl": { "label": "CV link (optional)", "placeholder": "https://..." }
+    },
+    "submit": "Submit application",
+    "success": "Your application was submitted successfully. We will contact you soon.",
+    "error": "Could not submit your application. Please try again."
+  }
+}

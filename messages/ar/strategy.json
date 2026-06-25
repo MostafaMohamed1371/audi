@@ -1,0 +1,185 @@
+{
+  "pages": {
+    "placeholder": "المحتوى قيد الإعداد.",
+    "strategy2025": "استراتيجية المعهد 2026",
+    "focusAreas": "مجالات تركيز المعهد"
+  },
+  "strategy2025": {
+    "booklet": "كتيب الاستراتيجية",
+    "bookletHref": "#strategy-booklet",
+    "bookletPdf": "/AUDI-Strategy-2025_ARABIC.pdf",
+    "bookletLoading": "جاري تحميل الكتيب...",
+    "bookletLoadError": "تعذر تحميل الكتيب. حاول تحديث الصفحة.",
+    "bookletPrev": "الصفحة السابقة",
+    "bookletNext": "الصفحة التالية",
+    "bookletZoomIn": "تكبير",
+    "bookletZoomOut": "تصغير",
+    "bookletFullscreen": "ملء الشاشة",
+    "bookletExitFullscreen": "الخروج من ملء الشاشة",
+    "bookletShare": "مشاركة",
+    "bookletThumbnails": "عرض الصفحات",
+    "bookletDownload": "تحميل PDF",
+    "bookletMore": "المزيد",
+    "bookletPage": "{current} / {total}",
+    "bookletShareCopied": "تم نسخ الرابط",
+    "introTitle": "هي عبارة عن خريطة طريق لتفعيل دور المعهد كمؤسسة رائدة في مجال تنمية المدن العربية",
+    "introSubtitle": "وتبنى الاستراتيجية على ثلاثة من مكامن القوة للمعهد وهي:",
+    "pillars": [
+      {
+        "number": "01",
+        "text": "نافذة للمدن العربية للمساهمة في تشكيل أجندة حضرية ودعم الجهود العالمية في الاستدامة"
+      },
+      {
+        "number": "02",
+        "text": "المؤسسة النوعية الأولى في مجال تنمية المدن العربية منذ عام 1980 وبعضوية أكثر من 650 مدينة عربية"
+      },
+      {
+        "number": "03",
+        "text": "مركز إقليمي لدعم الشراكات بين المدن وتوجيه جهود التنمية الحضرية في العالم العربي"
+      }
+    ]
+  },
+  "diagram": {
+    "title": "مخطط الاستراتيجية",
+    "readMore": "اقرأ المزيد",
+    "placeholder": "المحتوى قيد الإعداد.",
+    "items": [
+      {
+        "id": "vision",
+        "title": "الرؤية",
+        "content": "مؤسسة عالمية رائدة تساهم في صنع مستقبل حضري أفضل قائم على الابتكار والشراكة بين المدن والجهات التنموية في العالم العربي."
+      },
+      {
+        "id": "goals",
+        "title": "الأهداف",
+        "columns": [
+          "تعزيز الشراكات بين المدن الأعضاء والمنظمات",
+          "توفير برامج ومنصات تدريبية نوعية",
+          "الاستجابة لاحتياجات وتطلعات المدن",
+          "إنتاج أبحاث سياسات حضرية ذات جودة عالية"
+        ]
+      },
+      {
+        "id": "values",
+        "title": "القيم",
+        "content": "المحتوى قيد الإعداد."
+      },
+      {
+        "id": "programs",
+        "title": "البرامج",
+        "content": "المحتوى قيد الإعداد."
+      },
+      {
+        "id": "focusAreas",
+        "title": "مجالات التركيز",
+        "content": "المحتوى قيد الإعداد."
+      },
+      {
+        "id": "initiatives",
+        "title": "المبادرات التأسيسية",
+        "content": "المحتوى قيد الإعداد."
+      },
+      {
+        "id": "initiativesAlt",
+        "title": "المبادرات التأسيسية",
+        "content": "المحتوى قيد الإعداد."
+      },
+      {
+        "id": "enablers",
+        "title": "الممكنات المؤسسية للمعهد",
+        "content": "المحتوى قيد الإعداد."
+      }
+    ],
+    "rows": [
+      {
+        "type": "split",
+        "leftId": "goals",
+        "rightId": "values",
+        "leftSpan": 1,
+        "rightSpan": 1
+      },
+      {
+        "type": "split",
+        "leftId": "programs",
+        "rightId": "focusAreas",
+        "leftSpan": 1,
+        "rightSpan": 2
+      },
+      {
+        "type": "split",
+        "leftId": "initiatives",
+        "rightId": "initiativesAlt",
+        "leftSpan": 2,
+        "rightSpan": 1
+      }
+    ],
+    "enablersId": "enablers"
+  },
+  "focusAreas": {
+    "pages": {
+      "title": "مجالات التركيز",
+      "back": "رجوع",
+      "viewMore": "رؤية المزيد",
+      "previous": "السابق",
+      "next": "التالي"
+    },
+    "items": [
+      {
+        "slug": "governance-and-institutional-development",
+        "number": "01",
+        "title": "الحوكمة والتطوير المؤسسي",
+        "highlight": "الشراكة بين القطاعين العام والخاص",
+        "tags": [
+          "إدارة العقود البلدية والاستثمار",
+          "التحول الرقمي للبلديات",
+          "الشراكة بين القطاعين العام والخاص"
+        ],
+        "description": "نلتزم بتطبيق مبادئ الحوكمة لضمان الشفافية والمساءلة، بما يدعم بيئة عمل فعّالة ومستقرة. ومن خلال ذلك، نعزز جهود التطوير المؤسسي لرفع كفاءة الأداء وتحقيق النمو المستدام.",
+        "listImage": "/focus-areas/governance-list.png",
+        "detailImage": "/focus-areas/governance-detail.png"
+      },
+      {
+        "slug": "urban-resilience",
+        "number": "02",
+        "title": "المرونة الحضرية",
+        "highlight": "تخضير المدن",
+        "tags": [
+          "تخضير المدن",
+          "التغير المناخي وإدارة الكوارث الطبيعية",
+          "المياه والغذاء والطاقة وإدارة النفايات"
+        ],
+        "description": "تهدف إلى بناء مدن أكثر استدامة ومرونة من خلال التخطيط الذكي وتعزيز البنية التحتية القادرة على مواجهة الأزمات والتعافي منها بسرعة.",
+        "listImage": "/focus-areas/urban-resilience-list.png",
+        "detailImage": "/focus-areas/urban-resilience-detail.png"
+      },
+      {
+        "slug": "local-economic-development",
+        "number": "03",
+        "title": "التنمية الاقتصادية المحلية",
+        "highlight": "تمكين الاقتصاد المحلي",
+        "tags": [
+          "تأسيس المدن",
+          "استراتيجية التنمية الاقتصادية المحلية",
+          "العدالة الاجتماعية"
+        ],
+        "description": "نسعى إلى تعزيز التنافسية الاقتصادية للمدن العربية من خلال دعم المشاريع المحلية، وتطوير فرص الاستثمار، وبناء شراكات فاعلة بين القطاعين العام والخاص لتحقيق نمو اقتصادي مستدام.",
+        "listImage": "/focus-areas/local-economic-list.png",
+        "detailImage": "/focus-areas/local-economic-detail.png"
+      },
+      {
+        "slug": "cities-for-people",
+        "number": "04",
+        "title": "مدن للناس",
+        "highlight": "جودة الحياة الحضرية",
+        "tags": [
+          "أنسنة المدن",
+          "الارتقاء بالخدمات الحضرية",
+          "المشاركة المجتمعية"
+        ],
+        "description": "نركز على تحسين جودة الحياة في المدن العربية عبر التخطيط المراعي لاحتياجات السكان، وتوفير مساحات عامة آمنة، وتعزيز المشاركة المجتمعية في تصميم وتطوير المدن.",
+        "listImage": "/focus-areas/cities-for-people-list.png",
+        "detailImage": "/focus-areas/cities-for-people-detail.png"
+      }
+    ]
+  }
+}

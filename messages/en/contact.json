@@ -1,0 +1,90 @@
+{
+  "info": {
+    "title": "Contact Us",
+    "subtitle": "Your path to achievements with experts in logistics and supply chain solutions",
+    "addressLabel": "Location on map:",
+    "address": "Abdullah bin Hudhafa Al-Sahmi, 1, Diplomatic Quarter, 12521-3803, Riyadh, Kingdom of Saudi Arabia",
+    "mapTitle": "Arab Urban Development Institute location",
+    "items": [
+      {
+        "label": "Email:",
+        "value": "info@araburban.org",
+        "type": "email",
+        "href": "mailto:info@araburban.org"
+      },
+      {
+        "label": "Phone:",
+        "value": "+966 114802555",
+        "type": "phone",
+        "href": "tel:+966114802555"
+      },
+      {
+        "label": "Fax:",
+        "value": "+966 114802666",
+        "type": "fax"
+      }
+    ]
+  },
+  "form": {
+    "title": "Start with us by registering your details..",
+    "description": "We provide integrated logistics solutions that support your projects across the Kingdom of Saudi Arabia, and we are happy to hear from you and answer your inquiries.",
+    "fields": {
+      "name": {
+        "label": "Name",
+        "placeholder": "Enter your name here..."
+      },
+      "phone": {
+        "label": "Phone Number",
+        "placeholder": "Enter your phone number here..."
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email here..."
+      },
+      "message": {
+        "label": "Message",
+        "placeholder": "Enter your message here..."
+      }
+    },
+    "submit": "Send",
+    "success": "Your message has been sent successfully. We will contact you soon.",
+    "error": "An error occurred while sending. Please try again."
+  },
+  "membership": {
+    "title": "Join the Institute's Membership",
+    "description": "Submit your organization's membership application. We will review your request and contact you soon.",
+    "fields": {
+      "organizationName": {
+        "label": "Organization Name",
+        "placeholder": "Enter organization name..."
+      },
+      "contactName": {
+        "label": "Contact Person",
+        "placeholder": "Enter contact name..."
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter email address..."
+      },
+      "phone": {
+        "label": "Phone",
+        "placeholder": "Enter phone number..."
+      },
+      "countryCode": {
+        "label": "Country Code",
+        "placeholder": "e.g. SA"
+      },
+      "city": {
+        "label": "City",
+        "placeholder": "Enter city..."
+      },
+      "message": {
+        "label": "Additional Notes",
+        "placeholder": "Optional message..."
+      }
+    },
+    "submit": "Submit Application",
+    "success": "Your membership application was received successfully.",
+    "error": "An error occurred while submitting. Please try again."
+  }
+}

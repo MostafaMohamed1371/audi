@@ -1,0 +1,212 @@
+@import "leaflet/dist/leaflet.css";
+@import "leaflet.markercluster/dist/MarkerCluster.css";
+@import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --primary: #00709e;
+  --primary-foreground: #ffffff;
+  --secondary: #111f42;
+  --secondary-foreground: #ffffff;
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a1a;
+  --muted: #f4f6f8;
+  --muted-foreground: #5c6678;
+  --accent: #e8f4f8;
+  --accent-foreground: #111f42;
+  --destructive: #dc2626;
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --ring: #00709e;
+  --chart-1: #00709e;
+  --chart-2: #111f42;
+  --chart-3: #5c6678;
+  --chart-4: #94a3b8;
+  --chart-5: #cbd5e1;
+  --radius: 0.625rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1a1a1a;
+  --sidebar-primary: #00709e;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f4f6f8;
+  --sidebar-accent-foreground: #111f42;
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: #00709e;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --font-sans: var(--font-rb), ui-sans-serif, sans-serif;
+  --font-heading: var(--font-rb), ui-sans-serif, sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* Strategy booklet flipbook (StPageFlip / react-pageflip) */
+.strategy-booklet .stf__parent {
+  margin-inline: auto;
+}
+
+.strategy-booklet .stf__block {
+  margin-inline: auto;
+}
+
+.member-cities-map-shell .leaflet-container {
+  font-family: inherit;
+  background: #eef4f8;
+}
+
+.member-cities-map .leaflet-control-zoom {
+  margin: 16px !important;
+  border: 0 !important;
+  box-shadow: 0 8px 24px rgba(17, 31, 66, 0.12) !important;
+  border-radius: 14px !important;
+  overflow: hidden;
+}
+
+.member-cities-map .leaflet-control-zoom a {
+  width: 36px !important;
+  height: 36px !important;
+  line-height: 36px !important;
+  color: #111f42 !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #e5ebf0 !important;
+  font-size: 18px !important;
+}
+
+.member-cities-map .leaflet-control-zoom a:hover {
+  background: #e8f4f8 !important;
+  color: #00709e !important;
+}
+
+.member-cities-map .leaflet-control-zoom-in {
+  border-radius: 14px 14px 0 0 !important;
+}
+
+.member-cities-map .leaflet-control-zoom-out {
+  border-radius: 0 0 14px 14px !important;
+  border-bottom: 0 !important;
+}
+
+.member-cities-map .leaflet-popup-content-wrapper {
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(17, 31, 66, 0.14);
+  border: 1px solid #e5ebf0;
+}
+
+.member-cities-map .leaflet-popup-tip {
+  box-shadow: none;
+}
+
+.member-cities-cluster-wrap,
+.member-cities-marker-wrap {
+  background: transparent;
+  border: 0;
+}
+
+.member-cities-marker-wrap .member-cities-google-pin {
+  display: block;
+  filter: drop-shadow(0 4px 8px rgba(17, 31, 66, 0.28));
+  transition: transform 0.15s ease;
+}
+
+.member-cities-marker-wrap:hover .member-cities-google-pin {
+  transform: translateY(-3px) scale(1.06);
+}
+
+.member-cities-google-cluster {
+  --cluster-size: 40px;
+  display: flex;
+  height: var(--cluster-size);
+  width: var(--cluster-size);
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: #00709e;
+  color: #ffffff; 
+  border: 3px solid #ffffff; 
+}
+
+
+.member-cities-popup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #111f42;
+  padding: 2px 0;
+}
+
+.member-cities-popup-dot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: #00709e;
+  box-shadow: 0 0 0 3px rgba(0, 112, 158, 0.2);
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

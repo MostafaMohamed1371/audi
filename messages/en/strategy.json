@@ -1,0 +1,167 @@
+{
+  "pages": {
+    "placeholder": "Content coming soon.",
+    "strategy2025": "Institute Strategy 2026",
+    "focusAreas": "Institute Focus Areas"
+  },
+  "strategy2025": {
+    "booklet": "Strategy Booklet",
+    "bookletHref": "#strategy-booklet",
+    "bookletPdf": "/AUDI-Strategy-2025_ARABIC.pdf",
+    "bookletLoading": "Loading booklet...",
+    "bookletLoadError": "Unable to load the booklet. Please refresh the page.",
+    "bookletPrev": "Previous page",
+    "bookletNext": "Next page",
+    "bookletZoomIn": "Zoom in",
+    "bookletZoomOut": "Zoom out",
+    "bookletFullscreen": "Fullscreen",
+    "bookletExitFullscreen": "Exit fullscreen",
+    "bookletShare": "Share",
+    "bookletThumbnails": "Page thumbnails",
+    "bookletDownload": "Download PDF",
+    "bookletMore": "More options",
+    "bookletPage": "{current} / {total}",
+    "bookletShareCopied": "Link copied to clipboard",
+    "introTitle": "It is a roadmap to activate the Institute's role as a leading institution in Arab urban development.",
+    "introSubtitle": "The strategy is built on three of the Institute's strengths:",
+    "pillars": [
+      {
+        "number": "01",
+        "text": "A window for Arab cities to contribute to shaping an urban agenda and supporting global sustainability efforts."
+      },
+      {
+        "number": "02",
+        "text": "The first specialized institution in Arab urban development since 1980, with a membership of more than 650 Arab cities."
+      },
+      {
+        "number": "03",
+        "text": "A regional center supporting partnerships between cities and guiding urban development efforts across the Arab world."
+      }
+    ]
+  },
+  "diagram": {
+    "title": "Strategy Diagram",
+    "readMore": "Read more",
+    "placeholder": "Content coming soon.",
+    "items": [
+      {
+        "id": "vision",
+        "title": "Vision",
+        "content": "A leading global institution contributing to building a better urban future based on innovation and partnership between cities and development entities in the Arab world."
+      },
+      {
+        "id": "goals",
+        "title": "Goals",
+        "columns": [
+          "Strengthening partnerships between member cities and organizations",
+          "Providing quality training programs and platforms",
+          "Responding to the needs and aspirations of cities",
+          "Producing high-quality urban policy research"
+        ]
+      },
+      {
+        "id": "values",
+        "title": "Values",
+        "content": "Content coming soon."
+      },
+      {
+        "id": "programs",
+        "title": "Programs",
+        "content": "Content coming soon."
+      },
+      {
+        "id": "focusAreas",
+        "title": "Focus Areas",
+        "content": "Content coming soon."
+      },
+      {
+        "id": "initiatives",
+        "title": "Foundational Initiatives",
+        "content": "Content coming soon."
+      },
+      {
+        "id": "initiativesAlt",
+        "title": "Foundational Initiatives",
+        "content": "Content coming soon."
+      },
+      {
+        "id": "enablers",
+        "title": "Institutional Enablers",
+        "content": "Content coming soon."
+      }
+    ],
+    "rows": [
+      { "type": "split", "leftId": "goals", "rightId": "values", "leftSpan": 1, "rightSpan": 1 },
+      { "type": "split", "leftId": "programs", "rightId": "focusAreas", "leftSpan": 1, "rightSpan": 2 },
+      { "type": "split", "leftId": "initiatives", "rightId": "initiativesAlt", "leftSpan": 2, "rightSpan": 1 }
+    ],
+    "enablersId": "enablers"
+  },
+  "focusAreas": {
+    "pages": {
+      "title": "Focus Areas",
+      "back": "Back",
+      "viewMore": "View more",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "items": [
+      {
+        "slug": "governance-and-institutional-development",
+        "number": "01",
+        "title": "Governance and Institutional Development",
+        "highlight": "Public-private partnership",
+        "tags": [
+          "Municipal contracts and investment management",
+          "Municipal digital transformation",
+          "Public-private partnership"
+        ],
+        "description": "We are committed to applying governance principles to ensure transparency and accountability, supporting an effective and stable work environment. Through this, we enhance institutional development efforts to improve performance efficiency and achieve sustainable growth.",
+        "listImage": "/focus-areas/governance-list.png",
+        "detailImage": "/focus-areas/governance-detail.png"
+      },
+      {
+        "slug": "urban-resilience",
+        "number": "02",
+        "title": "Urban Resilience",
+        "highlight": "Greening cities",
+        "tags": [
+          "Greening cities",
+          "Climate change and natural disaster management",
+          "Water, food, energy, and waste management"
+        ],
+        "description": "This focus area aims to build more sustainable and resilient cities through smart planning and strengthening infrastructure capable of facing crises and recovering from them quickly.",
+        "listImage": "/focus-areas/urban-resilience-list.png",
+        "detailImage": "/focus-areas/urban-resilience-detail.png"
+      },
+      {
+        "slug": "local-economic-development",
+        "number": "03",
+        "title": "Local Economic Development",
+        "highlight": "Empowering the local economy",
+        "tags": [
+          "City establishment",
+          "Local economic development strategy",
+          "Social equity"
+        ],
+        "description": "We seek to enhance the economic competitiveness of Arab cities by supporting local projects, developing investment opportunities, and building effective public-private partnerships to achieve sustainable economic growth.",
+        "listImage": "/focus-areas/local-economic-list.png",
+        "detailImage": "/focus-areas/local-economic-detail.png"
+      },
+      {
+        "slug": "cities-for-people",
+        "number": "04",
+        "title": "Cities for People",
+        "highlight": "Urban quality of life",
+        "tags": [
+          "Human-centered cities",
+          "Urban service excellence",
+          "Community participation"
+        ],
+        "description": "We focus on improving quality of life in Arab cities through planning that responds to residents' needs, providing safe public spaces, and strengthening community participation in city design and development.",
+        "listImage": "/focus-areas/cities-for-people-list.png",
+        "detailImage": "/focus-areas/cities-for-people-detail.png"
+      }
+    ]
+  }
+}

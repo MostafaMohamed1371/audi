@@ -1,0 +1,83 @@
+{
+  "siteName": "المعهد العربي لإنماء المدن",
+  "siteNameEn": "Arab Urban Development Inst.",
+  "nav": {
+    "home": "الرئيسية",
+    "about": "من نحن",
+    "aboutInstitute": "عن المعهد",
+    "aboutVisionMission": "الرؤية والرسالة",
+    "aboutPresidentSpeech": "كلمة سمو رئيس المعهد",
+    "aboutDirectorMessage": "رسالة المدير العام",
+    "aboutAdvisoryBoard": "أعضاء المجلس الاستشاري",
+    "aboutTeam": "فريق العمل",
+    "aboutStructure": "الهيكل التشغيلي",
+    "aboutPartners": "شركاؤنا",
+    "strategy": "استراتيجية المعهد",
+    "strategy2025": "استراتيجية المعهد 2026",
+    "strategyFocusAreas": "مجالات تركيز المعهد",
+    "programs": "برامجنا",
+    "programsUrbanPolicies": "السياسات الحضرية",
+    "programsTraining": "التدريب و تطوير القدرات",
+    "programsPartnerships": "الشراكات",
+    "resources": "مصادرنا",
+    "media": "المركز الإعلامي",
+    "mediaNews": "الأخبار",
+    "mediaEvents": "الفعاليات",
+    "contact": "تواصل معنا",
+    "menu": "القائمة",
+    "openMenu": "فتح القائمة",
+    "closeMenu": "إغلاق القائمة"
+  },
+  "languageSwitcher": {
+    "label": "ع",
+    "ar": "العربية",
+    "en": "English"
+  },
+  "footer": {
+    "followUs": "تابعنا على",
+    "backToTop": "للأعلى",
+    "copyright": "© AUDI – جميع الحقوق محفوظة {year}",
+    "about": {
+      "title": "من نحن",
+      "aboutInstitute": "عن المعهد",
+      "visionMission": "الرؤية والرسالة",
+      "structure": "الهيكل التشغيلي"
+    },
+    "strategy": {
+      "title": "استراتيجية المعهد",
+      "strategy2025": "استراتيجية المعهد 2026",
+      "focusAreas": "مجالات تركيز المعهد"
+    },
+    "programs": {
+      "title": "برامجنا",
+      "urbanPolicies": "السياسات الحضرية",
+      "training": "التدريب و تطوير القدرات",
+      "partnerships": "الشراكات"
+    },
+    "media": {
+      "title": "المركز الإعلامي",
+      "news": "الأخبار",
+      "newsletter": "نشرة مدننا",
+      "cityMeetings": "لقاءات حراك المدن",
+      "secretarySpeaks": "الأمين يتحدث"
+    },
+    "community": {
+      "title": "مجتمع المعهد",
+      "joinUs": "انضم إلينا",
+      "workWithUs": "اعمل معنا"
+    },
+    "quickLinks": {
+      "title": "روابط سريعة",
+      "terms": "الشروط والأحكام",
+      "privacy": "سياسة الخصوصية",
+      "faq": "الأسئلة الشائعة"
+    },
+    "newsletter": {
+      "title": "اشترك في نشرتنا",
+      "placeholder": "بريدك الإلكتروني",
+      "submit": "اشتراك",
+      "success": "تم الاشتراك بنجاح.",
+      "error": "تعذّر الاشتراك. يرجى المحاولة مرة أخرى."
+    }
+  }
+}

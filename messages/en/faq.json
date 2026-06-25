@@ -1,0 +1,33 @@
+{
+  "pages": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Answers to common questions about the Arab Urban Development Institute, its programs, and services."
+  },
+  "empty": "No questions are available at the moment.",
+  "fallback": [
+    {
+      "id": 1,
+      "category": "membership",
+      "question": "How can I join the Arab Urban Development Institute membership?",
+      "answer": "You can apply by filling out the membership form on the \"Join Us\" page. Our team will review your application and contact you."
+    },
+    {
+      "id": 2,
+      "category": "membership",
+      "question": "What membership categories are available?",
+      "answer": "The institute offers memberships for cities, government entities, academic institutions, and individual experts."
+    },
+    {
+      "id": 3,
+      "category": "programs",
+      "question": "Are the institute programs free?",
+      "answer": "Programs vary between free and paid depending on the program type and target audience."
+    },
+    {
+      "id": 4,
+      "category": "general",
+      "question": "How can I contact the institute?",
+      "answer": "You can reach us through the \"Contact Us\" page, email, or our social media channels."
+    }
+  ]
+}

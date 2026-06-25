@@ -1,0 +1,48 @@
+{
+  "pages": {
+    "title": "Our Resources",
+    "sectionTitle": "Resources"
+  },
+  "filters": {
+    "resourceType": "Resource Type",
+    "focusArea": "Focus Area",
+    "year": "Year",
+    "search": "Search",
+    "reset": "Reset"
+  },
+  "download": "Download",
+  "items": [
+    {
+      "slug": "city-partnerships",
+      "title": "Building Bridges of Communication and the Future: Partnerships Between Cities",
+      "date": "DEC 29, 2025",
+      "image": "1.png",
+      "downloadHref": "#",
+      "buttonVariant": "primary"
+    },
+    {
+      "slug": "urban-heritage",
+      "title": "Management of Urban Heritage in Arab Cities",
+      "date": "MAY 29, 2025",
+      "image": "2.png",
+      "downloadHref": "#",
+      "buttonVariant": "primary"
+    },
+    {
+      "slug": "urban-greening",
+      "title": "60 Urban Greening Projects",
+      "date": "MAY 29, 2025",
+      "image": "3.png",
+      "downloadHref": "#",
+      "buttonVariant": "secondary"
+    },
+    {
+      "slug": "green-infrastructure",
+      "title": "Green Infrastructure Towards an Integrated Green System in Arab Cities",
+      "date": "DEC 29, 2025",
+      "image": "4.png",
+      "downloadHref": "#",
+      "buttonVariant": "light"
+    }
+  ]
+}

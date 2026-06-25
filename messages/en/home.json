@@ -1,0 +1,249 @@
+{
+  "slider": {
+    "slides": [
+      {
+        "title": "Technical Development"
+      },
+      {
+        "title": "Urban Development"
+      },
+      {
+        "title": "Sustainable Partnerships"
+      },
+      {
+        "title": "Research & Initiatives"
+      }
+    ]
+  },
+  "aboutIntro": {
+    "title": "Arab Urban Development Institute",
+    "description": "Founded in 1980 and headquartered in Riyadh, the Arab Urban Development Institute is a non-profit organization dedicated to research and training in urban development, supporting Arab cities and municipalities in meeting the challenges of sustainable urban growth.",
+    "cta": "Learn More",
+    "mission": {
+      "title": "Our Mission",
+      "description": "A leading global institution contributing to a better urban future based on innovation and partnership between cities and development agencies in the Arab world.",
+      "readMore": "Read More"
+    },
+    "vision": {
+      "title": "Our Vision",
+      "description": "Supporting Arab cities and municipalities in facing urban development challenges through studies, training programs, and promoting a culture of cooperation and shared learning.",
+      "readMore": "Read More"
+    }
+  },
+  "stats": {
+    "title": "The Institute in Numbers",
+    "subtitle": "A leading global institution contributing to creating a better urban future based on",
+    "items": [
+      {
+        "value": "+25",
+        "label": "Agreements",
+        "description": "Partnership agreements"
+      },
+      {
+        "value": "+10",
+        "label": "Newsletters",
+        "description": "Our Cities Newsletter"
+      },
+      {
+        "value": "+500",
+        "label": "Participants",
+        "description": "Participants in municipal leadership programs"
+      },
+      {
+        "value": "+400",
+        "label": "Projects",
+        "description": "Projects in urban policy reports"
+      }
+    ]
+  },
+  "memberCities": {
+    "title": "Member Cities",
+    "stats": [
+      {
+        "label": "Countries",
+        "value": "12",
+        "unit": "countries"
+      },
+      {
+        "label": "Cities",
+        "value": "400",
+        "unit": "cities"
+      },
+      {
+        "label": "Members",
+        "value": "1240",
+        "unit": "members"
+      }
+    ]
+  },
+  "programs": {
+    "title": "Our Programs",
+    "cta": "Explore",
+    "items": [
+      {
+        "title": "Urban Policies",
+        "description": "Developing urban policy studies and reports that support decision-makers in Arab cities and promote sustainable urban planning.",
+        "href": "#programs"
+      },
+      {
+        "title": "Training & Capacity Building",
+        "description": "Specialized training programs to build the capabilities of municipal staff and urban institutions across the Arab world.",
+        "href": "#programs"
+      },
+      {
+        "title": "Partnerships",
+        "description": "Building strategic partnerships with cities and regional and international institutions to support shared urban development.",
+        "href": "#programs"
+      }
+    ]
+  },
+  "mediaCenter": {
+    "title": "Media Center",
+    "subtitle": "Explore our news, periodic newsletter, and audiovisual publications.",
+    "readMore": "Read More",
+    "viewAll": "View All",
+    "slides": [
+      {
+        "title": "Institute Director Participates in Al-Futtaim Dialogue Session on..",
+        "description": "Join us at the Urban Development Conference hosted by the Arab Urban Development Institute, featuring leading experts and decision-makers discussing key challenges and opportunities in Arab cities.",
+        "date": "DEC 29, 2025",
+        "href": "#media"
+      },
+      {
+        "title": "UAE Urban Contractors League Opens with Municipal Leadership Participation",
+        "description": "The UAE Urban Contractors League launched with broad participation from municipal leaders and specialists in urban development.",
+        "date": "22 JAN 2025",
+        "href": "#media"
+      },
+      {
+        "title": "Institute Holds Annual Meeting of Arab Municipal Cooperation Network",
+        "description": "The Arab Urban Development Institute held its annual meeting of the Arab Municipal Cooperation Network to discuss strengthening integration among Arab cities.",
+        "date": "15 FEB 2025",
+        "href": "#media"
+      },
+      {
+        "title": "New Initiative Launched to Support Sustainable Urban Planning in Arab Cities",
+        "description": "The Arab Urban Development Institute announced a new initiative to strengthen municipal capacities in sustainable urban planning across the Arab world.",
+        "date": "08 MAR 2025",
+        "href": "#media"
+      }
+    ],
+    "items": [
+      {
+        "title": "UAE Urban Contractors League Opens with Municipal Leadership Participation",
+        "description": "The UAE Urban Contractors League launched with broad participation from municipal leaders and specialists in urban development.",
+        "date": "22 JAN 2025",
+        "href": "#media"
+      },
+      {
+        "title": "Institute Holds Annual Meeting of Arab Municipal Cooperation Network",
+        "description": "The Arab Urban Development Institute held its annual meeting of the Arab Municipal Cooperation Network to discuss strengthening integration among Arab cities.",
+        "date": "15 FEB 2025",
+        "href": "#media"
+      },
+      {
+        "title": "New Initiative Launched to Support Sustainable Urban Planning in Arab Cities",
+        "description": "The Arab Urban Development Institute announced a new initiative to strengthen municipal capacities in sustainable urban planning across the Arab world.",
+        "date": "08 MAR 2025",
+        "href": "#media"
+      },
+      {
+        "title": "Workshop on Good Municipal Governance with International Experts",
+        "description": "The Institute organized a specialized workshop on good municipal governance with experts and specialists from across the Arab region.",
+        "date": "20 APR 2025",
+        "href": "#media"
+      }
+    ]
+  },
+  "knowledgeCenter": {
+    "viewIssue": "View Issue",
+    "downloadPdf": "Download PDF",
+    "headerSlides": [
+      {
+        "title": "Knowledge Center",
+        "description": "A platform bringing together all of the Institute's digital and audio publications, including meetings, newsletters, podcasts, and knowledge materials."
+      },
+      {
+        "title": "Mudununa",
+        "description": "A periodic newsletter published by the Arab Urban Development Institute, highlighting urban development issues and practices in Arab cities."
+      },
+      {
+        "title": "Meetings Platform",
+        "description": "A digital archive of the Institute's events and meetings, documenting discussions and recommendations on urban challenges in the Arab world."
+      }
+    ],
+    "items": [
+      {
+        "title": "Solid Waste Management in Arab Cities",
+        "date": "DEC 29, 2025",
+        "href": "#knowledge",
+        "pdfHref": "#knowledge"
+      },
+      {
+        "title": "The City: Discovering Urban Tourism in the Arab Region",
+        "date": "DEC 29, 2025",
+        "href": "#knowledge",
+        "pdfHref": "#knowledge"
+      },
+      {
+        "title": "Green Infrastructure Toward an Integrated Green System in Arab Cities",
+        "date": "DEC 29, 2025",
+        "href": "#knowledge",
+        "pdfHref": "#knowledge"
+      }
+    ]
+  },
+  "membershipContact": {
+    "membership": {
+      "title": "Join the Institute's Membership",
+      "subtitle": "Let's work together to build a promising future for our Arab cities",
+      "cta": "Join Now",
+      "href": "#membership"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "addressTitle": "Address",
+      "address": "Abdullah bin Hudhafa Al-Sahmi Street, Diplomatic Quarter, 12521-3803 Riyadh, Kingdom of Saudi Arabia",
+      "mapTitle": "Arab Urban Development Institute location",
+      "items": [
+        {
+          "label": "Phone",
+          "value": "+966 114802555",
+          "type": "phone",
+          "href": "tel:+966114802555"
+        },
+        {
+          "label": "Fax",
+          "value": "+966 114802666",
+          "type": "fax"
+        },
+        {
+          "label": "Email",
+          "value": "Info@Araburban.Org",
+          "type": "email",
+          "href": "mailto:Info@Araburban.Org"
+        },
+        {
+          "label": "P.O. Box",
+          "value": "11452 6892 Riyadh",
+          "type": "mailbox"
+        }
+      ]
+    }
+  },
+  "features": {
+    "title": "Why the Institute?",
+    "performance": {
+      "title": "Excellence in Action",
+      "description": "Advanced initiatives and programs supporting sustainable urban development in Arab cities."
+    },
+    "design": {
+      "title": "Forward Vision",
+      "description": "Innovative strategies and solutions for the needs of contemporary Arab cities."
+    },
+    "technology": {
+      "title": "Smart Technology",
+      "description": "Digital tools and knowledge platforms supporting decision-makers and specialists."
+    }
+  }
+}

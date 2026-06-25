@@ -1,0 +1,315 @@
+{
+  "info": {
+    "_postman_id": "audi-member-cities-v1",
+    "name": "AUDI - Member Cities Map (المدن الأعضاء)",
+    "description": "مواصفات الـ API لقسم «المدن الأعضاء» في الصفحة الرئيسية.\n\n## ما يحتاجه الـ Frontend حالياً\nالخريطة (`member-cities-map.tsx`) تجلب ملفين GeoJSON:\n1. **حدود الدول العربية** — `arab-countries.geojson` (MultiPolygon)\n2. **نقاط المدن الأعضاء** — `member-cities.geojson` (Point + تجميع markers)\n\nبالإضافة لإحصائيات القسم: عدد الدول / المدن / الأعضاء.\n\n## توصية للباك اند\n- **Public**: endpoint واحد يرجّع `stats` + `countriesGeoJson` + `citiesGeoJson` (نفس شكل GeoJSON القياسي).\n- **Admin**: إدارة المدن (CRUD) + تعديل الإحصائيات. حدود الدول عادة **مرجع ثابت** (ملف GeoJSON) ولا تُعدَّل من الأدمن.\n- عند إضافة/تعديل مدينة من الأدمن: يُحفظ `countryCode` (مثل AE, SA) + `latitude` + `longitude` + الأسماء.\n\n## متغيرات المجموعة\n- `baseUrl` — عنوان الـ API\n- `adminToken` — JWT أو Bearer token للأدمن",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.example.com" },
+    { "key": "adminToken", "value": "YOUR_ADMIN_JWT" },
+    { "key": "cityId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Public - Home Map",
+      "description": "Endpoints عامة بدون مصادقة — يستهلكها موقع الويب.",
+      "item": [
+        {
+          "name": "Get Member Cities Map (Full Payload)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept-Language", "value": "ar", "description": "ar | en — للعناوين والوحدات في stats" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/home/member-cities",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "home", "member-cities"]
+            },
+            "description": "يرجع كل ما يحتاجه قسم الخريطة في طلب واحد.\n\n### Response 200 — مثال\n```json\n{\n  \"stats\": [\n    { \"key\": \"countries\", \"value\": 12, \"label\": \"الدول\", \"unit\": \"دولة\" },\n    { \"key\": \"cities\", \"value\": 400, \"label\": \"المدن\", \"unit\": \"مدينة\" },\n    { \"key\": \"members\", \"value\": 1240, \"label\": \"الاعضاء\", \"unit\": \"عضو\" }\n  ],\n  \"countriesGeoJson\": { \"type\": \"FeatureCollection\", \"features\": [ /* انظر مثال الدول */ ] },\n  \"citiesGeoJson\": { \"type\": \"FeatureCollection\", \"features\": [ /* انظر مثال المدن */ ] }\n}\n```\n\n> **ملاحظة:** يمكن حساب `stats.cities` تلقائياً من عدد المدن النشطة، أو تخزينها يدوياً من الأدمن."
+          },
+          "response": [
+            {
+              "name": "200 - Success (مثال مختصر)",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"stats\": [\n    { \"key\": \"countries\", \"value\": 12, \"label\": \"الدول\", \"unit\": \"دولة\" },\n    { \"key\": \"cities\", \"value\": 400, \"label\": \"المدن\", \"unit\": \"مدينة\" },\n    { \"key\": \"members\", \"value\": 1240, \"label\": \"الاعضاء\", \"unit\": \"عضو\" }\n  ],\n  \"countriesGeoJson\": {\n    \"type\": \"FeatureCollection\",\n    \"features\": [\n      {\n        \"type\": \"Feature\",\n        \"properties\": {\n          \"name\": \"United Arab Emirates\",\n          \"formal_en_name\": \"United Arab Emirates\",\n          \"code_a2\": \"AE\",\n          \"code_a3\": \"ARE\"\n        },\n        \"geometry\": {\n          \"type\": \"MultiPolygon\",\n          \"coordinates\": [ [ [ [53.863, 24.234], [53.888, 24.219] ] ] ]\n        }\n      }\n    ]\n  },\n  \"citiesGeoJson\": {\n    \"type\": \"FeatureCollection\",\n    \"features\": [\n      {\n        \"type\": \"Feature\",\n        \"ccode\": \"AE\",\n        \"properties\": {\n          \"Name\": \"دبي\",\n          \"Info\": \"\",\n          \"Image\": null,\n          \"x\": 55.2708,\n          \"y\": 25.2048\n        },\n        \"geometry\": {\n          \"type\": \"Point\",\n          \"coordinates\": [55.2708, 25.2048]\n        }\n      }\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Countries GeoJSON Only",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/home/member-cities/countries.geojson",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "home", "member-cities", "countries.geojson"]
+            },
+            "description": "بديل: ملف حدود الدول فقط (نفس `public/data/arab-countries.geojson`).\n\n### properties لكل Feature\n| حقل | نوع | مطلوب | وصف |\n|-----|-----|-------|-----|\n| name | string | نعم | اسم الدولة بالإنجليزية |\n| formal_en_name | string | لا | الاسم الرسمي |\n| code_a2 | string | نعم | ISO 3166-1 alpha-2 (AE, SA, EG...) |\n| code_a3 | string | لا | ISO alpha-3 |\n\n### geometry\n- النوع: `MultiPolygon` أو `Polygon`\n- الإحداثيات: `[longitude, latitude]` (EPSG:4326 / WGS84)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Cities GeoJSON Only",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/home/member-cities/cities.geojson",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "home", "member-cities", "cities.geojson"]
+            },
+            "description": "نقاط المدن الأعضاء فقط (نفس `public/data/member-cities.geojson`).\n\n### حقول مهمة لكل Feature\n| حقل | موقع | مطلوب | وصف |\n|-----|------|-------|-----|\n| ccode | جذر Feature | نعم | كود الدولة (AE, SA...) — يربط المدينة بالدولة |\n| properties.Name | object | نعم | اسم المدينة (يُعرض في الـ popup) |\n| properties.Info | string | لا | نص إضافي للـ popup |\n| properties.Image | string\\|null | لا | رابط صورة للـ popup |\n| properties.x | number | نعم | خط الطول (longitude) — مكرر للتوافق مع الموقع القديم |\n| properties.y | number | نعم | خط العرض (latitude) |\n| geometry.type | — | نعم | دائماً `Point` |\n| geometry.coordinates | [lng, lat] | نعم | `[x, y]` |\n\n> الـ Frontend يقرأ `properties.Name` للـ popup حالياً."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin - Stats (الإحصائيات)",
+      "description": "تعديل أرقام شريط الإحصائيات (12 دولة / 400 مدينة / 1240 عضو).",
+      "item": [
+        {
+          "name": "Get Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/member-cities/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "member-cities", "stats"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Stats",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "body": "{\n  \"items\": [\n    {\n      \"key\": \"countries\",\n      \"value\": 12,\n      \"label\": { \"ar\": \"الدول\", \"en\": \"Countries\" },\n      \"unit\": { \"ar\": \"دولة\", \"en\": \"countries\" },\n      \"autoCalculate\": false\n    },\n    {\n      \"key\": \"cities\",\n      \"value\": 400,\n      \"label\": { \"ar\": \"المدن\", \"en\": \"Cities\" },\n      \"unit\": { \"ar\": \"مدينة\", \"en\": \"cities\" },\n      \"autoCalculate\": true\n    },\n    {\n      \"key\": \"members\",\n      \"value\": 1240,\n      \"label\": { \"ar\": \"الاعضاء\", \"en\": \"Members\" },\n      \"unit\": { \"ar\": \"عضو\", \"en\": \"members\" },\n      \"autoCalculate\": false\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Stats",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"key\": \"countries\",\n      \"value\": 12,\n      \"autoCalculate\": false,\n      \"label\": { \"ar\": \"الدول\", \"en\": \"Countries\" },\n      \"unit\": { \"ar\": \"دولة\", \"en\": \"countries\" }\n    },\n    {\n      \"key\": \"cities\",\n      \"value\": null,\n      \"autoCalculate\": true\n    },\n    {\n      \"key\": \"members\",\n      \"value\": 1240,\n      \"autoCalculate\": false,\n      \"label\": { \"ar\": \"الاعضاء\", \"en\": \"Members\" },\n      \"unit\": { \"ar\": \"عضو\", \"en\": \"members\" }\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/member-cities/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "member-cities", "stats"]
+            },
+            "description": "عند `autoCalculate: true` للمدن: يتجاهل الباك اند `value` ويحسب من عدد المدن `isActive=true`."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin - Cities (المدن)",
+      "description": "إضافة وتعديل وحذف مدن على الخريطة من لوحة التحكم.",
+      "item": [
+        {
+          "name": "List Cities",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/member-cities/cities?page=1&limit=20&countryCode=AE&search=دبي",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "member-cities", "cities"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "countryCode", "value": "AE", "description": "اختياري — فلترة حسب الدولة" },
+                { "key": "search", "value": "دبي", "description": "اختياري — بحث بالاسم" },
+                { "key": "isActive", "value": "true", "disabled": true }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Paginated List",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"countryCode\": \"AE\",\n      \"nameAr\": \"دبي\",\n      \"nameEn\": \"Dubai\",\n      \"latitude\": 25.2048,\n      \"longitude\": 55.2708,\n      \"infoAr\": \"\",\n      \"infoEn\": \"\",\n      \"imageUrl\": null,\n      \"isActive\": true,\n      \"createdAt\": \"2025-01-15T10:00:00Z\",\n      \"updatedAt\": \"2025-01-15T10:00:00Z\"\n    }\n  ],\n  \"meta\": { \"page\": 1, \"limit\": 20, \"total\": 400, \"totalPages\": 20 }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get City By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/member-cities/cities/{{cityId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "member-cities", "cities", "{{cityId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create City",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"countryCode\": \"AE\",\n  \"nameAr\": \"دبي\",\n  \"nameEn\": \"Dubai\",\n  \"latitude\": 25.2048,\n  \"longitude\": 55.2708,\n  \"infoAr\": \"مدينة عضو في المعهد العربي لإنماء المدن\",\n  \"infoEn\": \"Member city of AUDI\",\n  \"imageUrl\": \"https://cdn.example.com/cities/dubai.jpg\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/member-cities/cities",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "member-cities", "cities"]
+            },
+            "description": "### Validation مطلوبة\n- `countryCode`: 2 حروف ISO (AE, SA, EG...)\n- `nameAr`, `nameEn`: نص غير فارغ\n- `latitude`: -90 إلى 90\n- `longitude`: -180 إلى 180\n\n### ما يفعله الباك اند بعد الحفظ\n1. يخزّن السجل في DB\n2. عند بناء `citiesGeoJson` للـ public API يحوّل السجل إلى:\n```json\n{\n  \"type\": \"Feature\",\n  \"ccode\": \"AE\",\n  \"properties\": {\n    \"Name\": \"دبي\",\n    \"Info\": \"...\",\n    \"Image\": \"https://...\",\n    \"x\": 55.2708,\n    \"y\": 25.2048\n  },\n  \"geometry\": {\n    \"type\": \"Point\",\n    \"coordinates\": [55.2708, 25.2048]\n  }\n}\n```\n> `Name` و `Info` حسب `Accept-Language` أو يرجع نسختين في properties (قرار فريق الباك اند)."
+          },
+          "response": [
+            {
+              "name": "201 - Created",
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "body": "{\n  \"id\": 401,\n  \"countryCode\": \"AE\",\n  \"nameAr\": \"دبي\",\n  \"nameEn\": \"Dubai\",\n  \"latitude\": 25.2048,\n  \"longitude\": 55.2708,\n  \"infoAr\": \"مدينة عضو في المعهد العربي لإنماء المدن\",\n  \"infoEn\": \"Member city of AUDI\",\n  \"imageUrl\": \"https://cdn.example.com/cities/dubai.jpg\",\n  \"isActive\": true,\n  \"createdAt\": \"2026-06-18T12:00:00Z\",\n  \"updatedAt\": \"2026-06-18T12:00:00Z\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update City",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nameAr\": \"دبي\",\n  \"latitude\": 25.2048,\n  \"longitude\": 55.2708,\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/member-cities/cities/{{cityId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "member-cities", "cities", "{{cityId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete City",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/member-cities/cities/{{cityId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "member-cities", "cities", "{{cityId}}"]
+            },
+            "description": "يفضل **soft delete** (`isActive=false`) بدل الحذف الفعلي للحفاظ على السجلات."
+          },
+          "response": []
+        },
+        {
+          "name": "Bulk Import Cities (CSV/JSON)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cities\": [\n    {\n      \"countryCode\": \"SA\",\n      \"nameAr\": \"الرياض\",\n      \"nameEn\": \"Riyadh\",\n      \"latitude\": 24.7136,\n      \"longitude\": 46.6753,\n      \"isActive\": true\n    },\n    {\n      \"countryCode\": \"EG\",\n      \"nameAr\": \"القاهرة\",\n      \"nameEn\": \"Cairo\",\n      \"latitude\": 30.0444,\n      \"longitude\": 31.2357,\n      \"isActive\": true\n    }\n  ],\n  \"upsertBy\": [\"countryCode\", \"nameEn\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/member-cities/cities/import",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "member-cities", "cities", "import"]
+            },
+            "description": "اختياري — لاستيراد دفعة من المدن (مثلاً من ملف GeoJSON الحالي `member-cities.geojson`)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin - Countries (مرجع)",
+      "description": "حدود الدول (`arab-countries.geojson`) ملف مرجعي ثابت (~20k سطر). عادة **لا يُدار من الأدمن**.\n\nالأدمن يختار فقط `countryCode` عند إضافة مدينة.\n\nاختياري: endpoint لقائمة الدول العربية المدعومة (بدون geometry).",
+      "item": [
+        {
+          "name": "List Supported Countries (no geometry)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/member-cities/countries",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "member-cities", "countries"]
+            },
+            "description": "للـ dropdown في فورم إضافة مدينة — بدون إحداثيات المضلعات."
+          },
+          "response": [
+            {
+              "name": "200 - Countries List",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [],
+              "body": "{\n  \"data\": [\n    { \"codeA2\": \"AE\", \"codeA3\": \"ARE\", \"nameEn\": \"United Arab Emirates\", \"nameAr\": \"الإمارات العربية المتحدة\" },\n    { \"codeA2\": \"SA\", \"codeA3\": \"SAU\", \"nameEn\": \"Saudi Arabia\", \"nameAr\": \"المملكة العربية السعودية\" },\n    { \"codeA2\": \"EG\", \"codeA3\": \"EGY\", \"nameEn\": \"Egypt\", \"nameAr\": \"مصر\" }\n  ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Reference - DB Schema (اقتراح)",
+      "description": "اقتراح جداول — للمناقشة مع فريق الباك اند",
+      "item": [
+        {
+          "name": "(Doc) Tables Overview",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/docs/member-cities-schema",
+              "host": ["{{baseUrl}}"],
+              "path": ["docs", "member-cities-schema"]
+            },
+            "description": "## member_city_stats\n| column | type | notes |\n|--------|------|-------|\n| key | enum(countries,cities,members) | PK |\n| value | int nullable | null if auto_calculate |\n| label_ar, label_en | varchar | |\n| unit_ar, unit_en | varchar | |\n| auto_calculate | boolean | |\n\n## member_cities\n| column | type | notes |\n|--------|------|-------|\n| id | bigint | PK |\n| country_code | char(2) | FK → countries.code_a2 |\n| name_ar | varchar | |\n| name_en | varchar | |\n| latitude | decimal(9,6) | |\n| longitude | decimal(9,6) | |\n| info_ar, info_en | text | nullable |\n| image_url | varchar | nullable |\n| is_active | boolean | default true |\n| created_at, updated_at | timestamp | |\n\n## countries (reference — من GeoJSON)\n| column | type | notes |\n|--------|------|-------|\n| code_a2 | char(2) | PK |\n| code_a3 | char(3) | |\n| name_en | varchar | |\n| name_ar | varchar | nullable |\n| geojson | jsonb | MultiPolygon — أو ملف ثابت على CDN |\n\n## تدفق الأدمن\n1. أدمن يفتح «إضافة مدينة»\n2. يختار الدولة من `/api/admin/member-cities/countries`\n3. يدخل الاسم + يحدد الموقع على خريطة (lat/lng)\n4. POST `/api/admin/member-cities/cities`\n5. الموقع العام يجلب `/api/v1/home/member-cities` ويعرض النقطة الجديدة\n\n## ربط الـ Frontend الحالي\nعند جاهزية الـ API، يُستبدل في `member-cities-map.tsx`:\n```ts\nfetch('/data/arab-countries.geojson')\nfetch('/data/member-cities.geojson')\n```\nبـ:\n```ts\nfetch(`${API}/api/v1/home/member-cities`)\n// أو endpointين منفصلين\n```"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

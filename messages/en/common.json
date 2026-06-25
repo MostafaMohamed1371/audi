@@ -1,0 +1,83 @@
+{
+  "siteName": "Arab Urban Development Institute",
+  "siteNameEn": "Arab Urban Development Inst.",
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "aboutInstitute": "About the Institute",
+    "aboutVisionMission": "Vision & Mission",
+    "aboutPresidentSpeech": "President's Speech",
+    "aboutDirectorMessage": "Director General's Message",
+    "aboutAdvisoryBoard": "Advisory Board Members",
+    "aboutTeam": "Our Team",
+    "aboutStructure": "Operational Structure",
+    "aboutPartners": "Our Partners",
+    "strategy": "Institute Strategy",
+    "strategy2025": "Institute Strategy 2026",
+    "strategyFocusAreas": "Institute Focus Areas",
+    "programs": "Our Programs",
+    "programsUrbanPolicies": "Urban Policies",
+    "programsTraining": "Training & Capacity Building",
+    "programsPartnerships": "Partnerships",
+    "resources": "Our Resources",
+    "media": "Media Center",
+    "mediaNews": "News",
+    "mediaEvents": "Events",
+    "contact": "Contact Us",
+    "menu": "Menu",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "languageSwitcher": {
+    "label": "En",
+    "ar": "العربية",
+    "en": "English"
+  },
+  "footer": {
+    "followUs": "Follow us on",
+    "backToTop": "Back to top",
+    "copyright": "© AUDI – All Rights Reserved {year}",
+    "about": {
+      "title": "About Us",
+      "aboutInstitute": "About the Institute",
+      "visionMission": "Vision & Mission",
+      "structure": "Operational Structure"
+    },
+    "strategy": {
+      "title": "Institute Strategy",
+      "strategy2025": "Institute Strategy 2026",
+      "focusAreas": "Institute Focus Areas"
+    },
+    "programs": {
+      "title": "Our Programs",
+      "urbanPolicies": "Urban Policies",
+      "training": "Training & Capacity Building",
+      "partnerships": "Partnerships"
+    },
+    "media": {
+      "title": "Media Center",
+      "news": "News",
+      "newsletter": "Our Cities Newsletter",
+      "cityMeetings": "City Movement Meetings",
+      "secretarySpeaks": "The Secretary Speaks"
+    },
+    "community": {
+      "title": "Institute Community",
+      "joinUs": "Join Us",
+      "workWithUs": "Work with Us"
+    },
+    "quickLinks": {
+      "title": "Quick Links",
+      "terms": "Terms & Conditions",
+      "privacy": "Privacy Policy",
+      "faq": "FAQs"
+    },
+    "newsletter": {
+      "title": "Subscribe to our newsletter",
+      "placeholder": "Your email",
+      "submit": "Subscribe",
+      "success": "Successfully subscribed.",
+      "error": "Could not subscribe. Please try again."
+    }
+  }
+}

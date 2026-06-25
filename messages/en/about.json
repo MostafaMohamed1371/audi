@@ -1,0 +1,323 @@
+{
+  "pages": {
+    "placeholder": "Content coming soon.",
+    "institute": "About the Institute",
+    "visionMission": "Vision & Mission",
+    "presidentSpeech": "Speech of His Highness the President",
+    "directorMessage": "Director General's Message",
+    "advisoryBoard": "Advisory Board Members",
+    "team": "Our Team",
+    "structure": "Operational Structure",
+    "partners": "Our Partners"
+  },
+  "institute": {
+    "heading": "Arab Urban Development Institute",
+    "paragraph1": "Founded in 1980 and headquartered in Riyadh, the Arab Urban Development Institute is a non-profit organization dedicated to research and training in urban development, supporting Arab cities and municipalities in meeting the challenges of sustainable urban growth.",
+    "paragraph2": "The Institute delivers specialized programs, research, and cooperative initiatives that strengthen urban institutions across the Arab world and build bridges between cities and development partners locally, regionally, and internationally.",
+    "headquartersTitle": "Institute Headquarters"
+  },
+  "stats": {
+    "title": "Our Numbers"
+  },
+  "visionMission": {
+    "visionTitle": "Our Vision",
+    "visionText": "A leading global institution contributing to building a better urban future based on innovation and partnership between cities and development entities in the Arab world.",
+    "missionTitle": "Our Mission",
+    "missionText": "Supporting Arab cities and municipalities in facing urban development challenges through studies, training programs, and promoting a culture of cooperation and shared learning.",
+    "readMore": "Read More"
+  },
+  "presidentSpeech": {
+    "honorific": "His Royal Highness Prince",
+    "name": "Dr. Faisal bin Abdulaziz bin Ayyaf",
+    "position": "Mayor of Riyadh Region, Chairman of the Institute",
+    "quote": "Our Arab cities are undergoing major economic, social, and urban transformations",
+    "imageAlt": "His Royal Highness Prince Dr. Faisal bin Abdulaziz bin Ayyaf",
+    "paragraphs": [
+      "During this phase, they seek to keep pace with the aspirations of their residents by providing services, developing infrastructure, and raising the quality of life in ways that achieve the development goals of their governments and the ambitions of their leadership.",
+      "At the same time, our Arab cities are rich in many comparative advantages and civilizational heritage that enhance opportunities to develop those assets into an economic resource supporting the prosperity of those cities.",
+      "Within this context, the Arab Urban Development Institute works to support all member cities of the Organization of Arab Cities by preparing specialized studies and reports on urban development, building institutional capacities, and activating partnerships between cities, universities, and international and regional organizations in projects and agreements that benefit the Institute's partners.",
+      "The Institute recognizes that the needs of cities and their development aspirations differ according to the current stage, which requires Arab cities to make greater efforts to address challenges amid limited resources and innovative solutions. Therefore, it was necessary to build the AUDI 2025 strategic plan to help the Institute transform its roles and fields to be more responsive and supportive of member cities. This change was accompanied by the appointment of new leadership, reliance on regional and international expertise, and organizing a survey on development challenges, opportunities, and cities' aspirations regarding the Institute's role, in which most cities and municipalities participated.",
+      "In addition to the strategic plan, colleagues have worked on developing the Institute's identity and implementing several initiatives and projects whose positive impact will become clear during this year and the coming years, God willing. From here, I invite all partners from member cities and municipalities, international organizations, universities, and those interested in urban development fields to communicate and participate in the Institute's programs and activities. We pray to God that the coming years will be times of goodness, construction, and prosperity in all our Arab cities, and that the Institute and its partners will provide the desired benefit and positive impact on the path of urban development."
+    ]
+  },
+  "directorMessage": {
+    "name": "Dr. Anas Al-Mughairy",
+    "position": "Director General of the Arab Urban Development Institute",
+    "quote": "The Institute seeks to enhance its role as a leading and influential think tank supporting cities",
+    "imageAlt": "Dr. Anas Al-Mughairy - Director General of the Arab Urban Development Institute",
+    "paragraphs": [
+      "Amid the development shifts facing our Arab cities, the Arab Urban Development Institute seeks to strengthen its role as a leading and influential think tank that supports cities in addressing these changes by sharing advanced ideas and practices in urban development policies, contributing to building institutional capacities in municipalities and cities, and serving as a platform for effective communication and the exchange of expertise among cities, municipalities, universities, and regional and international organizations of shared interest.",
+      "Since the second half of the fourth quarter of 2022, the Institute has taken many important steps toward achieving a comprehensive and systematic transformation based on an institutional strategic plan (AUDI 2025) grounded in an understanding of the diverse development challenges and opportunities in Arab cities and municipalities and their need to align with modern directions in urban development. The strategic plan aims to restructure the Institute's programs and activities to respond to the needs of partners and beneficiaries from members of the Organization of Arab Cities.",
+      "The transformation focuses on developing communication channels with partners by updating the Institute's website and establishing a mechanism for publishing content and activities on social media, in addition to forming a number of regional and international partnerships to implement projects within the new strategic framework. On the institutional level, we have worked on developing the Institute's operational structure to raise the level of efficiency and effectiveness in performing tasks in light of key performance indicators that the team monitors and evaluates periodically. The Institute's human resources have also been strengthened with qualified competencies in urban development fields to support the implementation of programs and activities and achieve the desired impact and qualitative level.",
+      "Accompanying these changes is the development of the work environment with a modern design and distribution of office spaces that motivate the team to collaborate and enjoy what the building design offers in connection with the environment through natural lighting and greenery. This website represents one of the main communication channels between the Institute and its partners from government and non-profit institutions, universities, experts, and the general public. We have designed its content to be diverse and of high knowledge value for all visitors. From here, we invite everyone to contribute to shaping a promising future for our Arab cities by communicating with us and participating in the Institute's activities and programs. I wish you times full of benefit and enjoyment while browsing our website, and we look forward to your support through communication and participation."
+    ]
+  },
+  "tasks": {
+    "title": "Institute Tasks",
+    "items": [
+      {
+        "description": "Providing cities with the necessary technical support through designing specialized training and consulting programs tailored to their needs"
+      },
+      {
+        "description": "Strengthening relations between Arab cities through holding conferences and meetings of common interest"
+      },
+      {
+        "description": "Preserving the memory and identity of cities and urban development practices in the Arab region"
+      },
+      {
+        "description": "Contributing to improving urban development in Arab cities through qualitative research"
+      },
+      {
+        "description": "Documenting the reality and prospects of urban development in Arab cities through written, visual, and audio content production"
+      }
+    ]
+  },
+  "goals": {
+    "title": "Goals",
+    "items": [
+      {
+        "description": "Providing cities with the necessary technical support through designing specialized training and consulting programs tailored to their needs"
+      },
+      {
+        "description": "Strengthening relations between Arab cities through holding conferences and meetings of common interest"
+      },
+      {
+        "description": "Preserving the memory and identity of cities and urban development practices in the Arab region"
+      },
+      {
+        "description": "Contributing to improving urban development in Arab cities through qualitative research"
+      },
+      {
+        "description": "Documenting the reality and prospects of urban development in Arab cities through written, visual, and audio content production"
+      }
+    ]
+  },
+  "values": {
+    "title": "Values",
+    "items": [
+      {
+        "title": "Reliability",
+        "description": "The Institute aims to provide reliable data and analyses that help bridge knowledge gaps in fields and geographic regions characterized by scarce information"
+      },
+      {
+        "title": "Impact",
+        "description": "Helping cities address current urban challenges is the true driver of the Institute's work, as positive and transformative impact serves as the compass that defines its priorities, directions, and evaluation of its programs and activities"
+      },
+      {
+        "title": "Collaboration",
+        "description": "The Institute brings together creativity and expertise across a wide range of institutions and individuals, reflected in our partnerships and the diversity of perspectives and professional experience within our team"
+      },
+      {
+        "title": "Innovation",
+        "description": "The Institute relies on unconventional thinking and team dynamism to develop collaborations with innovative goals, directions, and approaches to addressing contemporary urban challenges"
+      }
+    ]
+  },
+  "advisoryBoard": {
+    "readMore": "Read More",
+    "members": [
+      {
+        "id": "1",
+        "featured": true,
+        "role": "Chairman of the Board",
+        "name": "Dr. Faisal bin Abdulaziz bin Ayyaf",
+        "image": "1.png",
+        "bio": "He chairs the Advisory Board of the Arab Urban Development Institute and contributes to guiding its strategic direction and supporting Arab cities in addressing urban development challenges."
+      },
+      {
+        "id": "2",
+        "role": "Director General",
+        "name": "Dr. Anas Al-Mughairy",
+        "image": "2.png",
+        "bio": "He leads the executive work of the Arab Urban Development Institute and oversees the implementation of its strategic plan, programs, and activities to serve Arab cities and municipalities."
+      },
+      {
+        "id": "3",
+        "role": "Advisory Board Member",
+        "name": "Dr. Badr Al-Olayat",
+        "image": "3.png",
+        "bio": "A member of the Advisory Board of the Arab Urban Development Institute, contributing his expertise to support the Institute's programs and studies in urban development."
+      },
+      {
+        "id": "4",
+        "role": "Advisory Board Member",
+        "name": "Dr. Mohammed bin Abdullah Al-Shehri",
+        "image": "4.png",
+        "bio": "A member of the Advisory Board of the Arab Urban Development Institute, supporting the Institute's efforts to strengthen partnerships and develop institutional capacities in Arab cities."
+      },
+      {
+        "id": "5",
+        "role": "Advisory Board Member",
+        "name": "Dr. Fahad bin Saad Al-Madi",
+        "image": "5.png",
+        "bio": "A member of the Advisory Board of the Arab Urban Development Institute, contributing to strategic discussions and supporting the Institute's urban development initiatives."
+      },
+      {
+        "id": "6",
+        "role": "Advisory Board Member",
+        "name": "Dr. Sultan bin Abdulrahman Al-Otaibi",
+        "image": "6.png",
+        "bio": "A member of the Advisory Board of the Arab Urban Development Institute, supporting the Institute's directions in research, training, and knowledge exchange among Arab cities."
+      }
+    ]
+  },
+  "team": {
+    "readMore": "Read More",
+    "sections": [
+      {
+        "id": "management",
+        "title": "Management",
+        "members": [
+          {
+            "id": "mgmt-1",
+            "role": "Director General of the Institute",
+            "name": "Dr. Anas bin Mufreh Al-Mughairi",
+            "image": "2.png",
+            "bio": "He leads the executive management of the Arab Urban Development Institute and oversees the implementation of strategic plans and programs to serve Arab cities and municipalities."
+          },
+          {
+            "id": "mgmt-2",
+            "role": "Programs Director",
+            "name": "Dr. Ziad Ahmed Alam El-Din",
+            "image": "7.png",    
+            "bio": "He supervises the planning and implementation of the Institute's training and consulting programs in ways that meet the needs of member cities and municipalities."
+          },
+          {
+            "id": "mgmt-3",
+            "role": "Director of Institutional Development and Training",
+            "name": "Dr. Montaser Al-Hayari",
+            "image": "8.png",
+            "bio": "He manages institutional development and training programs at the Institute and works to raise institutional performance and build capacities."
+          }
+        ]
+      },
+      {
+        "id": "researchers",
+        "title": "Researchers and Experts",
+        "members": [
+          {
+            "id": "res-1",
+            "role": "Urban Expert in Arab City Development",
+            "name": "Eng. Mohammed bin Ibrahim Al-Kharif",
+            "image": "9.png", 
+            "bio": "He provides technical expertise in urban development and supports the preparation of studies and projects related to cities in the Arab region."
+          },
+          {
+            "id": "res-2",
+            "role": "Urban Planning Specialist",
+            "name": "Ms. Lama Al-Khashman",
+            "image": "5.png",
+            "bio": "She contributes to preparing urban studies and research and supports cities on planning and urban development topics."
+          },
+          {
+            "id": "res-3",
+            "role": "Project Coordinator in Urban Policies",
+            "name": "Eng. Michelle Ejaz",
+            "image": "6.png",
+            "bio": "She coordinates urban policy projects and contributes to preparing specialized studies and reports on urban development."
+          },
+          {
+            "id": "res-4",
+            "role": "Project Coordinator in Policies",
+            "name": "Eng. Abdulrahman Al-Zoubi",
+            "image": "12.png",
+            "bio": "He coordinates urban policy projects and supports work teams in implementing research programs and activities."
+          },
+          {
+            "id": "res-5",
+            "role": "International Relations Officer",
+            "name": "Ms. Alba Fernandez Collado",
+            "image": "13.png",
+            "bio": "She supports building and activating international relations and managing partnerships and joint projects with partner institutions."
+          },
+          {
+            "id": "res-6",
+            "role": "Researcher",
+            "name": "Mr. Khaled Khairy",
+            "image": "14.png",
+            "bio": "He contributes to preparing research and studies related to urban development and supports the Institute's research programs."
+          }
+        ]
+      },
+      {
+        "id": "shared-services",
+        "title": "Shared Services",
+        "members": [
+          {
+            "id": "shared-1",
+            "role": "Administrative Assistant",
+            "name": "Mr. Mohammed Majed Al-Ghalib",
+            "image": "15.png",
+            "bio": "He supports the Institute's daily administrative work and helps coordinate shared tasks among work teams."
+          }
+        ]
+      }
+    ]
+  },
+  "structure": {
+    "imageAlt": "Operational structure of the Arab Urban Development Institute"
+  },
+  "partners": {
+    "heroDescription": "Founded in 1980 and headquartered in Riyadh, the Arab Urban Development Institute is a non-profit organization dedicated to research and training in urban development, supporting Arab cities and municipalities in meeting the challenges of sustainable urban growth.",
+    "featured": [
+      { "image": "1.png", "name": "Zahran Company" },
+      { "image": "2.png", "name": "Saudi Water Authority" },
+      { "image": "3.png", "name": "Tahakom" },
+      { "image": "4.png", "name": "Royal Commission for Jubail and Yanbu" },
+      { "image": "5.png", "name": "Thiqah" },
+      { "image": "6.png", "name": "Zakat, Tax and Customs Authority" },
+      { "image": "7.png", "name": "Shared Services Program" },
+      { "image": "8.png", "name": "Saudi Tadawul Group" },
+      { "image": "9.png", "name": "The Helicopter Company" },
+      { "image": "10.png", "name": "Partner" },
+      { "image": "11.png", "name": "Partner" },
+      { "image": "12.png", "name": "Partner" }
+    ],
+    "categories": [
+      {
+        "id": "international",
+        "title": "International and Urban Institutions",
+        "logos": [
+          { "image": "1.png", "name": "AGFUND" },
+          { "image": "2.png", "name": "GLTN" },
+          { "image": "3.png", "name": "Connective Cities" },
+          { "image": "4.png", "name": "UCLG" },
+          { "image": "5.png", "name": "UN-Habitat" },
+          { "image": "6.png", "name": "ICLEI" },
+          { "image": "7.png", "name": "C40 Cities" },
+          { "image": "8.png", "name": "Metropolis" },
+          { "image": "9.png", "name": "GIZ" },
+          { "image": "10.png", "name": "World Bank" },
+          { "image": "11.png", "name": "UNDP" },
+          { "image": "12.png", "name": "OECD" },
+          { "image": "1.png", "name": "IsDB" },
+          { "image": "2.png", "name": "AFD" }
+        ]
+      },
+      {
+        "id": "research",
+        "title": "Research and Training Institutions",
+        "logos": [
+          { "image": "3.png", "name": "Berkeley" },
+          { "image": "4.png", "name": "MIT" },
+          { "image": "5.png", "name": "Project Management Institute" },
+          { "image": "6.png", "name": "Harvard" },
+          { "image": "7.png", "name": "Oxford" },
+          { "image": "8.png", "name": "Cambridge" }
+        ]
+      },
+      {
+        "id": "cities",
+        "title": "Cities",
+        "logos": [
+          { "image": "9.png", "name": "Riyadh" },
+          { "image": "10.png", "name": "Jeddah" },
+          { "image": "11.png", "name": "Dammam" },
+          { "image": "12.png", "name": "Makkah" },
+          { "image": "1.png", "name": "Madinah" },
+          { "image": "2.png", "name": "Khobar" }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,355 @@
+{
+  "pages": {
+    "placeholder": "Content coming soon.",
+    "urbanPolicies": "Urban Policy Research",
+    "training": "Training & Capacity Building",
+    "partnerships": "Partnerships",
+    "programLabel": "Program"
+  },
+  "training": {
+    "back": "Back",
+    "heroIntro": "The City Support Center aims to meet the needs of Arab municipalities through training programs and technical consultations that strengthen institutional capacities and facilitate knowledge exchange among cities.",
+    "sectionsLabel": "Program Sections",
+    "tabs": {
+      "trainingPrograms": "Training Programs",
+      "consulting": "Technical Consultations & Knowledge Transfer",
+      "executive": "Executive Program",
+      "experts": "Support Center Experts"
+    },
+    "trainingPrograms": {
+      "title": "Training Programs",
+      "intro": "The City Support Center aims to meet the needs and requirements of municipalities for developing technical capacities by raising the efficiency of municipal employees, building problem-solving skills, and keeping pace with technological developments in the field. It provides a suite of services including training programs aligned with global changes to improve the quality of work.",
+      "formatsTitle": "These training programs are delivered through:",
+      "formats": [
+        "Training courses (in-person and remote).",
+        "Specialized workshops tailored to Arab municipalities, enriched with practical examples from municipal work",
+        "Municipal training platform (MOOC)."
+      ],
+      "coursesTitle": "Training Programs 2023 – 2024",
+      "courses": [
+        {
+          "title": "Urban Planning and Development",
+          "count": "3 training courses"
+        },
+        {
+          "title": "Municipal Leadership Development",
+          "count": "3 training courses"
+        },
+        {
+          "title": "Investment in the Municipal Sector",
+          "count": "3 training courses"
+        },
+        {
+          "title": "Urban Planning and Development",
+          "count": "3 training courses"
+        },
+        {
+          "title": "Municipal Leadership Development",
+          "count": "3 training courses"
+        },
+        {
+          "title": "Investment in the Municipal Sector",
+          "count": "3 training courses"
+        }
+      ]
+    },
+    "consulting": {
+      "title": "Technical Consultations & Knowledge Transfer",
+      "intro": "The City Support Center is committed to providing technical support to municipalities in managing and implementing municipal projects, improving the quality of procedures and services, and learning from best practices in municipalities.",
+      "nav": [
+        "Engineering and administrative consultations",
+        "City experience sharing",
+        "Individual knowledge exchange"
+      ],
+      "sections": [
+        {
+          "title": "Engineering and administrative consultations",
+          "description": "These consultations enhance Arab cities' capacities in various urban fields and their ability to prepare and implement studies and projects related to urban development. Technical consultations include preparing technical documents and reference specifications for urban projects, and representing municipalities by reviewing work and reports of consulting entities."
+        },
+        {
+          "title": "City experience sharing",
+          "description": "Meetings aimed at highlighting best initiatives and practices to address urban challenges faced by member cities, forming an interactive development community that allows municipalities to discover shared urban interests and needs."
+        },
+        {
+          "title": "Individual knowledge exchange",
+          "description": "Meetings aimed at highlighting best initiatives and practices to address urban challenges faced by member cities, forming an interactive development community that allows municipalities to discover shared urban interests and needs."
+        }
+      ]
+    },
+    "executive": {
+      "title": "Executive Program",
+      "intro": "An executive program specialized in urban development resulting from cooperation between the Center and international universities. Executive programs are designed to enhance municipal staff with global skills and knowledge, familiarity with the latest theories and practices in municipal work, and opportunities to learn how to employ technology in urban problem-solving.",
+      "offersTitle": "The executive program offers",
+      "programs": [
+        "Executive Master's in Municipal Development",
+        "International Program in Innovation and Urban Management"
+      ],
+      "topicsTitle": "The executive program offers",
+      "topics": [
+        { "title": "Climate Change", "image": "p1.png" },
+        { "title": "Circular Economy", "image": "p2.png" },
+        { "title": "Smart Mobility", "image": "p3.png" }
+      ]
+    },
+    "experts": {
+      "title": "Support Center Experts",
+      "experts": [
+        {
+          "name": "Dr. Ibrahim Baher El-Din",
+          "specialty": "Urban Design and Participatory Planning",
+          "image": "/emp/1.png"
+        },
+        {
+          "name": "Dr. Khaled Al-Wazni",
+          "specialty": "Economic Development Policies",
+          "image": "/emp/2.png"
+        },
+        {
+          "name": "Thomas Murphy",
+          "specialty": "Former Mayor of Pittsburgh",
+          "image": "/emp/3.png"
+        }
+      ]
+    }
+  },
+  "urbanPolicies": {
+    "back": "Back",
+    "heroIntro": "The Urban Development Index in Arab cities consists of a series of surveys conducted every six months, with unified analytical reports published from the results. The index aims to monitor urban development trends and the evolution of Arab cities over time.",
+    "sectionsLabel": "Program Sections",
+    "tabs": {
+      "developmentPortal": "Arab Urban Development Portal",
+      "developmentIndex": "Urban Development Index in Arab Cities",
+      "innovationLab": "Urban Innovation Lab for Arab Cities",
+      "practiceReports": "Urban Practices and Policies Reports"
+    },
+    "developmentPortal": {
+      "title": "Arab Urban Development Portal",
+      "paragraphs": [
+        "The Arab Urban Development Portal is a platform for collecting and sharing data and information on cities, projects, organizations, and publications related to urban development in the Arab region.",
+        "The portal aims to strengthen knowledge exchange among Arab cities and facilitate access to reliable information sources that support urban policy and practice."
+      ],
+      "contributeTitle": "Contribute by providing information about",
+      "contributeDescription": "You can help enrich the portal by sharing information about cities, organizations, or publications related to urban development. All submissions are reviewed according to the Institute's methodology before publication.",
+      "email": "infohub@araburban.org",
+      "image": "/urban-policies/1.gif",
+      "ctaTitle": "Choose the type of contribution",
+      "ctaDisclaimer": "The inclusion of any project or organization in the portal does not necessarily imply endorsement by the Institute.",
+      "contributionTypes": [
+        { "id": "publications", "label": "Publications" },
+        { "id": "cities", "label": "Cities" },
+        { "id": "organizations", "label": "Organizations" }
+      ],
+      "contributionForm": {
+        "openLabel": "Submit a contribution online",
+        "typeLabel": "Contribution type",
+        "types": {
+          "publications": "Publications",
+          "cities": "Cities",
+          "organizations": "Organizations"
+        },
+        "emailLabel": "Email",
+        "emailPlaceholder": "your@email.com",
+        "titleLabel": "Title",
+        "titlePlaceholder": "Title of the city, organization, or publication",
+        "detailsLabel": "Details",
+        "detailsPlaceholder": "Describe the information you would like to contribute...",
+        "submit": "Submit Contribution",
+        "success": "Your contribution was submitted successfully.",
+        "error": "An error occurred while submitting. Please try again."
+      },
+      "directory": {
+        "video": "/urban-policies/audi-infohub-inst-2.mp4",
+        "title": "Directory of Arab Cities",
+        "subtitle": "The Institute seeks to collect and document data, statistics, and information related to Arab cities and conduct urban research, providing a unified reference for researchers and decision-makers in urban development.",
+        "filtersTitle": "Classification",
+        "countryLabel": "Country",
+        "cityLabel": "City",
+        "citySizeLabel": "City Size",
+        "resetLabel": "Reset",
+        "searchLabel": "Search",
+        "viewListLabel": "List",
+        "viewMapLabel": "Map",
+        "mapPlaceholder": "Map view coming soon",
+        "seeMoreLabel": "See More",
+        "tabs": [
+          { "id": "cities", "label": "Cities" },
+          { "id": "projects", "label": "Projects" },
+          { "id": "organizations", "label": "Organizations" },
+          { "id": "publications", "label": "Publications" }
+        ],
+        "columns": {
+          "cities": {
+            "number": "No.",
+            "name": "City Name",
+            "details": "Details"
+          },
+          "projects": {
+            "number": "Project No.",
+            "city": "City",
+            "country": "Country",
+            "startDate": "Start Date",
+            "endDate": "End Date"
+          }
+        },
+        "rows": {
+          "cities": [
+            {
+              "number": "01",
+              "name": "Al Baha, Saudi Arabia",
+              "description": "Small or medium-sized city"
+            },
+            {
+              "number": "02",
+              "name": "Riyadh, Saudi Arabia",
+              "description": "Large city"
+            },
+            {
+              "number": "03",
+              "name": "Jeddah, Saudi Arabia",
+              "description": "Large city"
+            },
+            {
+              "number": "04",
+              "name": "Cairo, Egypt",
+              "description": "Large city"
+            },
+            {
+              "number": "05",
+              "name": "Amman, Jordan",
+              "description": "Medium-sized city"
+            },
+            {
+              "number": "06",
+              "name": "Beirut, Lebanon",
+              "description": "Large city"
+            }
+          ],
+          "projects": [
+            {
+              "number": "01",
+              "city": "Cairo",
+              "country": "Egypt",
+              "startDate": "2020",
+              "endDate": "2024"
+            },
+            {
+              "number": "02",
+              "city": "Riyadh",
+              "country": "Saudi Arabia",
+              "startDate": "2019",
+              "endDate": "2023"
+            },
+            {
+              "number": "03",
+              "city": "Kuwait City",
+              "country": "Kuwait",
+              "startDate": "2018",
+              "endDate": "Ongoing"
+            },
+            {
+              "number": "04",
+              "city": "Dubai",
+              "country": "UAE",
+              "startDate": "2021",
+              "endDate": "2025"
+            },
+            {
+              "number": "05",
+              "city": "Tunis",
+              "country": "Tunisia",
+              "startDate": "2017",
+              "endDate": "2022"
+            },
+            {
+              "number": "06",
+              "city": "Manama",
+              "country": "Bahrain",
+              "startDate": "2020",
+              "endDate": "Ongoing"
+            }
+          ],
+          "organizations": [
+            {
+              "number": "01",
+              "name": "Organization of Arab Cities",
+              "description": "Regional intergovernmental organization"
+            },
+            {
+              "number": "02",
+              "name": "UN-Habitat",
+              "description": "International organization"
+            },
+            {
+              "number": "03",
+              "name": "Union of Arab Municipalities",
+              "description": "Municipal organization"
+            }
+          ],
+          "publications": [
+            {
+              "number": "01",
+              "name": "Arab Urban Development Report 2024",
+              "description": "Annual report"
+            },
+            {
+              "number": "02",
+              "name": "Urban Policy Guide",
+              "description": "Reference publication"
+            },
+            {
+              "number": "03",
+              "name": "Smart Cities Study in the Arab World",
+              "description": "Research study"
+            }
+          ]
+        }
+      }
+    },
+    "developmentIndex": {
+      "title": "Urban Development Index in Arab Cities",
+      "intro": "A specialized scientific tool for monitoring urban development pathways and trends, comparing them among Arab cities, and tracking the stability and sustainability of economic growth, demographic change, and social and cultural data at the urban level.",
+      "image": "/urban-policies/2.gif"
+    },
+    "innovationLab": {
+      "title": "Urban Innovation Lab for Arab Cities",
+      "intro": "An experimental space for developing innovative solutions to urban challenges by connecting Arab cities with global expertise and encouraging the adoption of modern technologies and practices in urban planning and management.",
+      "image": "/urban-policies/3.gif"
+    },
+    "practiceReports": {
+      "title": "Urban Practices and Policies Reports",
+      "intro": "A series of applied reports and studies documenting best urban practices and policies in Arab cities, with practical recommendations to support decision-makers in municipalities.",
+      "image": "/urban-policies/4.gif"
+    }
+  },
+  "partnerships": {
+    "back": "Back",
+    "heroIntro": "Amid the development shifts facing Arab cities, the Arab Urban Development Institute seeks to strengthen its role as a leading think tank supporting cities through sharing advanced ideas and practices, building institutional capacities in municipalities, and serving as a platform for effective communication and knowledge exchange among cities, universities, and regional and international organizations.",
+    "sectionsLabel": "Program Sections",
+    "tabs": {
+      "euroArabDialogue": "Euro-Arab Cities Dialogue",
+      "secretarySpeaks": "The Secretary-General Speaks",
+      "urbanAwards": "Arab Cities Urban Development Awards",
+      "partnersGuide": "Urban Development Partners Guide"
+    },
+    "euroArabDialogue": {
+      "title": "Euro-Arab Cities Dialogue",
+      "intro": "An expanded dialogue platform bringing together decision-makers and city leaders from Arab and European cities to exchange expertise and practices in urban development, and discuss shared challenges and cooperation opportunities in urban planning, sustainability, and innovation.",
+      "image": "/partnerships/euro-arab-dialogue.png"
+    },
+    "secretarySpeaks": {
+      "title": "The Secretary-General Speaks",
+      "intro": "A series of meetings and dialogues with the Secretary-General of the Organization of Arab Cities and municipal leaders, highlighting the visions and experiences of Arab cities in addressing urban challenges and strengthening partnerships for sustainable development.",
+      "image": "/partnerships/secretary-speaks.png"
+    },
+    "urbanAwards": {
+      "title": "Arab Cities Urban Development Awards",
+      "intro": "A recognition initiative encouraging Arab cities to adopt best practices in urban development, and highlighting outstanding initiatives in planning, municipal management, and environmental sustainability.",
+      "image": "/partnerships/urban-awards.png"
+    },
+    "partnersGuide": {
+      "title": "Urban Development Partners Guide",
+      "intro": "A comprehensive reference featuring the Institute's partner network of government institutions, universities, and international and regional organizations, providing information on cooperation areas and partnership mechanisms to support urban development in Arab cities.",
+      "image": "/partnerships/partners-guide.png"
+    }
+  }
+}

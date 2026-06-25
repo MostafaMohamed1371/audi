@@ -1,0 +1,311 @@
+{
+  "pages": {
+    "title": "Media Center",
+    "subtitle": "The Media Center produces and publishes audiovisual materials that highlight the Institute's efforts and its partner network in advancing urban development practices across the Arab world."
+  },
+  "tabs": {
+    "news": "News",
+    "newsletter": "Mudununa Newsletter",
+    "cityMeetings": "City Movement Meetings",
+    "secretarySpeaks": "Secretary Speaks"
+  },
+  "news": {
+    "items": [
+      {
+        "slug": "director-dialogue-session",
+        "title": "Institute Director Participates in Al-Futtaim Dialogue on Urban Development",
+        "description": "The Director General of the Arab Urban Development Institute participated in a dialogue session organized by Al-Futtaim Group on the future of urban development.",
+        "date": "DEC 29, 2025",
+        "image": "1.png",
+        "body": [
+          "The Director General of the Arab Urban Development Institute participated in a dialogue session organized by Al-Futtaim Group, attended by leading experts and decision-makers in urban development.",
+          "The session discussed key challenges facing Arab cities amid global transformations, and ways to strengthen public-private partnerships for sustainable urban development.",
+          "The Institute emphasized the importance of exchanging expertise among Arab cities and its role as a regional platform supporting urban planning and policies."
+        ],
+        "key": "director-dialogue-session"
+      },
+      {
+        "slug": "uae-contractors-league",
+        "title": "UAE Urban Contractors League Opens with Municipal Leadership",
+        "description": "The UAE Urban Contractors League launched with broad participation from municipal leaders and urban development specialists.",
+        "date": "22 JAN 2025",
+        "image": "2.png",
+        "body": [
+          "The UAE Urban Contractors League launched with broad participation from municipal leaders and specialists in urban development.",
+          "The league aims to enhance quality practices in the construction sector and exchange expertise among Arab cities in infrastructure and urban planning."
+        ],
+        "key": "uae-contractors-league"
+      },
+      {
+        "slug": "municipal-cooperation-network",
+        "title": "Institute Holds Annual Arab Municipal Cooperation Network Meeting",
+        "description": "The Institute held its annual meeting of the Arab Municipal Cooperation Network to discuss strengthening integration among Arab cities.",
+        "date": "15 FEB 2025",
+        "image": "3.png",
+        "body": [
+          "The Arab Urban Development Institute held its annual meeting of the Arab Municipal Cooperation Network, with representatives from more than 650 Arab cities.",
+          "The meeting focused on strengthening cooperation mechanisms among Arab municipalities and exchanging best practices in municipal governance and sustainable urban development."
+        ],
+        "key": "municipal-cooperation-network"
+      },
+      {
+        "slug": "sustainable-urban-planning",
+        "title": "New Initiative to Support Sustainable Urban Planning in Arab Cities",
+        "description": "The Institute announced a new initiative to strengthen Arab municipalities' capacities in sustainable urban planning.",
+        "date": "08 MAR 2025",
+        "image": "4.png",
+        "body": [
+          "The Arab Urban Development Institute announced a new initiative to strengthen Arab municipalities' capacities in sustainable urban planning.",
+          "The initiative includes specialized training programs, workshops, and knowledge exchange platforms among Arab cities in planning and urban policy."
+        ],
+        "key": "sustainable-urban-planning"
+      },
+      {
+        "slug": "municipal-governance-workshop",
+        "title": "Workshop on Good Municipal Governance with International Experts",
+        "description": "The Institute organized a specialized workshop on good municipal governance with experts from across the Arab region.",
+        "date": "20 APR 2025",
+        "image": "1.png",
+        "body": [
+          "The Institute organized a specialized workshop on good municipal governance with experts and specialists from across the Arab region.",
+          "The workshop addressed mechanisms for enhancing transparency and accountability in municipalities, and the role of technology in improving municipal services."
+        ],
+        "key": "municipal-governance-workshop"
+      },
+      {
+        "slug": "urban-development-conference",
+        "title": "Urban Development Conference 2025 Discusses the Future of Arab Cities",
+        "description": "The Institute hosted the Urban Development Conference with leading experts and decision-makers discussing key challenges and opportunities in Arab cities.",
+        "date": "10 MAY 2025",
+        "image": "2.png",
+        "body": [
+          "The Arab Urban Development Institute hosted the Urban Development Conference 2025, with leading experts and decision-makers from across the Arab region.",
+          "The conference addressed multiple themes including urban resilience, local economic development, municipal governance, and innovation in urban policy."
+        ],
+        "key": "urban-development-conference"
+      }
+    ]
+  },
+  "newsletter": {
+    "intro": {
+      "brand": "Mudununa",
+      "brandEn": "MUDUNUNA",
+      "description": "A bi-monthly publication in Arabic and English, serving as a communication channel for key issues and topics related to urban development in Arab cities.",
+      "bullets": [
+        "Issue Interview",
+        "Urban Visions",
+        "City Movement",
+        "Institute News"
+      ]
+    },
+    "viewIssue": "View Issue",
+    "downloadPdf": "Download PDF",
+    "items": [
+      {
+        "slug": "green-infrastructure",
+        "title": "Green Infrastructure Towards an Integrated Green System in Arab Cities",
+        "date": "DEC 29, 2025",
+        "image": "1.png",
+        "pdfHref": "#",
+        "body": [
+          "This issue of Mudununa explores green infrastructure as a fundamental pillar of sustainable urban development in Arab cities.",
+          "The issue reviews successful experiences from Arab cities in urban greening, green space management, and integrating green infrastructure with urban planning."
+        ],
+        "key": "green-infrastructure"
+      },
+      {
+        "slug": "urban-tourism",
+        "title": "The City as a Destination for Urban Tourism in the Arab Region",
+        "date": "OCT 15, 2025",
+        "image": "2.png",
+        "pdfHref": "#",
+        "body": [
+          "This issue focuses on urban tourism as one of the drivers of local economic development in Arab cities.",
+          "It includes interviews with urban tourism experts and case studies from Arab cities that have successfully developed distinctive urban tourism products."
+        ],
+        "key": "urban-tourism"
+      },
+      {
+        "slug": "solid-waste-management",
+        "title": "Solid Waste Management in Arab Cities",
+        "date": "AUG 20, 2025",
+        "image": "3.png",
+        "pdfHref": "#",
+        "body": [
+          "This issue addresses the challenges of solid waste management in Arab cities and innovative solutions adopted by some municipalities.",
+          "It reviews best practices in waste sorting, recycling, and the transition towards a circular economy in Arab cities."
+        ],
+        "key": "solid-waste-management"
+      },
+      {
+        "slug": "smart-cities",
+        "title": "Smart Cities: Opportunities and Challenges in the Arab World",
+        "date": "JUN 10, 2025",
+        "image": "4.png",
+        "pdfHref": "#",
+        "body": [
+          "This issue explores the concept of smart cities and its applications in the Arab context.",
+          "It includes analyses of smart city policies and experiences of Arab municipalities in using technology to improve municipal services."
+        ],
+        "key": "smart-cities"
+      },
+      {
+        "slug": "urban-resilience",
+        "title": "Urban Resilience: How Arab Cities Prepare for Crises",
+        "date": "APR 5, 2025",
+        "image": "1.png",
+        "pdfHref": "#",
+        "body": [
+          "This issue focuses on the concept of urban resilience and its importance in facing climate, social, and economic challenges.",
+          "It provides a practical framework for Arab municipalities to enhance their capacity to respond to and recover from crises."
+        ],
+        "key": "urban-resilience"
+      },
+      {
+        "slug": "local-economic-development",
+        "title": "Local Economic Development in Arab Cities",
+        "date": "FEB 18, 2025",
+        "image": "2.png",
+        "pdfHref": "#",
+        "body": [
+          "This issue addresses local economic development strategies in Arab cities.",
+          "It reviews successful models for supporting small and medium enterprises and promoting urban entrepreneurship."
+        ],
+        "key": "local-economic-development"
+      }
+    ]
+  },
+  "cityMeetings": {
+    "intro": {
+      "brand": "City Movement",
+      "description": "A series of monthly meetings organized by the Arab Urban Development Institute, aimed at exchanging expertise and knowledge in urban development and planning."
+    },
+    "watch": "Watch",
+    "items": [
+      {
+        "slug": "smart-sustainable-lighting",
+        "title": "Smart and Sustainable Lighting for Future Urban Environments",
+        "image": "1.png",
+        "authors": [
+          "Dr. Abdulrahman Ahmed Nasser",
+          "Dr. Abdullah Daif"
+        ],
+        "date": "24/11/2025",
+        "time": "6:00 PM - 7:00 PM",
+        "body": [
+          "The Institute organized the nineteenth City Movement meeting on smart and sustainable lighting for future urban environments.",
+          "The meeting discussed the latest technologies in sustainable urban lighting and their impact on quality of life in cities, with presentations from Arab and international cities."
+        ],
+        "key": "smart-sustainable-lighting"
+      },
+      {
+        "slug": "city-resilience",
+        "title": "City Resilience: Building Smart Cities Capable of Facing Crises",
+        "image": "2.png",
+        "authors": [
+          "Dr. Fatima Al-Zahra",
+          "Dr. Mohammed Al-Ali"
+        ],
+        "date": "24/10/2025",
+        "time": "6:00 PM - 7:00 PM",
+        "body": [
+          "This meeting discussed the concept of city resilience and building smart cities capable of facing various crises.",
+          "Experts from different specializations participated to provide insights on enhancing urban resilience in Arab cities."
+        ],
+        "key": "city-resilience"
+      },
+      {
+        "slug": "riyadh-15-minute-city",
+        "title": "How Far is the City from its Residents? The Cognitive City and the 15-Minute Index: A Reading of the Riyadh Region Municipality Experience",
+        "image": "3.png",
+        "authors": [
+          "Dr. Anas AlMugairi",
+          "Dr. Riyadh Al Shaikh"
+        ],
+        "date": "03/12/2026",
+        "time": "6:00 PM - 7:00 PM",
+        "body": [
+          "The Institute held the twentieth City Movement meeting on the cognitive city and the 15-minute index, with a reading of the Riyadh Region Municipality experience.",
+          "The meeting discussed the 15-minute city concept and how to measure proximity of services to residents, showcasing the Riyadh experience as a model for Arab cities.",
+          "Prof. Greg Clark, Dr. Anas AlMugairi, and Dr. Riyadh Al Shaikh participated, exchanging views on the future of urban planning in the region."
+        ],
+        "key": "riyadh-15-minute-city"
+      },
+      {
+        "slug": "urban-governance",
+        "title": "Good Urban Governance: Experiences and Practices from Arab Cities",
+        "image": "4.png",
+        "authors": [
+          "Dr. Sami Al-Harbi",
+          "Dr. Layla Al-Mansour"
+        ],
+        "date": "24/09/2025",
+        "time": "6:00 PM - 7:00 PM",
+        "body": [
+          "This meeting addressed good urban governance, showcasing successful experiences from Arab cities in enhancing transparency and municipal accountability."
+        ],
+        "key": "urban-governance"
+      },
+      {
+        "slug": "economic-localization",
+        "title": "Localizing the Local Economy: Development Opportunities in Arab Cities",
+        "image": "1.png",
+        "authors": [
+          "Dr. Khalid Al-Saad",
+          "Dr. Noura Al-Shammari"
+        ],
+        "date": "24/08/2025",
+        "time": "6:00 PM - 7:00 PM",
+        "body": [
+          "The meeting discussed strategies for localizing the local economy in Arab cities and the role of municipalities in supporting local projects and SMEs."
+        ],
+        "key": "economic-localization"
+      },
+      {
+        "slug": "climate-adaptation",
+        "title": "Climate Adaptation: Urban Policies for Arab Cities",
+        "image": "2.png",
+        "authors": [
+          "Dr. Youssef Al-Hammadi",
+          "Dr. Mariam Al-Kaabi"
+        ],
+        "date": "24/07/2025",
+        "time": "6:00 PM - 7:00 PM",
+        "body": [
+          "This meeting focused on climate adaptation policies in Arab cities, presenting action plans from leading municipalities in this field."
+        ],
+        "key": "climate-adaptation"
+      }
+    ]
+  },
+  "detail": {
+    "back": "Back",
+    "readMore": "Read More"
+  },
+  "pagination": {
+    "prev": "Previous",
+    "next": "Next"
+  },
+  "filters": {
+    "year": "Year",
+    "month": "Month",
+    "search": "Search",
+    "reset": "Reset"
+  },
+  "secretarySpeaks": {
+    "items": [
+      {
+        "slug": "secretary-general-on-the-future-of-arab-cities",
+        "title": "The Secretary-General on the Future of Arab Cities",
+        "description": "The Secretary-General's vision on the challenges and opportunities for Arab cities.",
+        "date": "JUN 24, 2025",
+        "image": "1.png",
+        "body": [
+          "Arab cities are undergoing rapid transformations that require an integrated development vision.",
+          "The institute emphasizes the importance of sustainable urban planning."
+        ],
+        "key": "secretary-speaks-1"
+      }
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "pages": {
+    "title": "مصادرنا",
+    "sectionTitle": "المصادر"
+  },
+  "filters": {
+    "resourceType": "نوع المصدر",
+    "focusArea": "مجال التركيز",
+    "year": "السنة",
+    "search": "بحث",
+    "reset": "إعادة تعيين"
+  },
+  "download": "تنزيل",
+  "items": [
+    {
+      "slug": "city-partnerships",
+      "title": "مد جسور التواصل وبناء المستقبل الشراكات بين المدن",
+      "date": "DEC 29, 2025",
+      "image": "1.png",
+      "downloadHref": "#",
+      "buttonVariant": "primary"
+    },
+    {
+      "slug": "urban-heritage",
+      "title": "إدارة التراث الحضري في المدن العربية",
+      "date": "MAY 29, 2025",
+      "image": "2.png",
+      "downloadHref": "#",
+      "buttonVariant": "primary"
+    },
+    {
+      "slug": "urban-greening",
+      "title": "60 مشروع تخضير حضري",
+      "date": "MAY 29, 2025",
+      "image": "3.png",
+      "downloadHref": "#",
+      "buttonVariant": "secondary"
+    },
+    {
+      "slug": "green-infrastructure",
+      "title": "البنية التحتية الخضراء نحو منظومة خضراء متكاملة في المدن العربية",
+      "date": "DEC 29, 2025",
+      "image": "4.png",
+      "downloadHref": "#",
+      "buttonVariant": "light"
+    }
+  ]
+}
