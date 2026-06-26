@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\ReorderSortRequest;
 use App\Models\Expert;
+use App\Support\ImageUrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -123,7 +124,7 @@ class ExpertController extends Controller
             'nameEn' => $expert->name_en,
             'specialtyAr' => $expert->specialty_ar,
             'specialtyEn' => $expert->specialty_en,
-            'imageUrl' => $expert->image_url,
+            'imageUrl' => ImageUrl::api($expert->image_url),
             'sortOrder' => $expert->sort_order,
             'createdAt' => $expert->created_at?->toIso8601String(),
             'updatedAt' => $expert->updated_at?->toIso8601String(),

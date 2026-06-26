@@ -1365,7 +1365,7 @@
         },
         {
             "name": "لوحة التحكم — Admin /api/admin",
-            "description": "واجهة الإدارة — تخزين حقول *Ar/*En. راجع ADMIN-API.md للتوثيق الكامل. جميع الطلبات ترسل Accept-Language: {{locale}}.",
+            "description": "واجهة الإدارة — تخزين حقول *Ar/*En. راجع docs/postman/ADMIN-API.md. جميع الطلبات ترسل Accept-Language: {{locale}}.",
             "item": [
                 {
                     "name": "المصادقة — Auth",

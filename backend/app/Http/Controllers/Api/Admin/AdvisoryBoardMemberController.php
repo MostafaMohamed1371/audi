@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\ReorderSortRequest;
 use App\Models\AdvisoryBoardMember;
+use App\Support\ImageUrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -159,7 +160,7 @@ class AdvisoryBoardMemberController extends Controller
             'roleEn' => $member->role_en,
             'bioAr' => $member->bio_ar,
             'bioEn' => $member->bio_en,
-            'imageUrl' => $member->image_url,
+            'imageUrl' => ImageUrl::api($member->image_url),
             'isFeatured' => $member->is_featured,
             'sortOrder' => $member->sort_order,
             'createdAt' => $member->created_at?->toIso8601String(),

@@ -26,7 +26,7 @@ class ResourceItemResource extends JsonResource
             'title' => $isAr ? $this->title_ar : $this->title_en,
             'date' => PublishedDateFormatter::format($this->published_date, $locale),
             'image' => ImageUrl::public($this->image_url),
-            'downloadHref' => $this->file_url ?? '#',
+            'downloadHref' => ImageUrl::public($this->file_url) ?? '#',
             'buttonVariant' => $this->buttonVariant(),
             'resourceType' => $this->resource_type,
             'year' => $this->year,

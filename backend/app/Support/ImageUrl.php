@@ -20,9 +20,15 @@ final class ImageUrl
             return $url;
         }
 
+        if ($url === '#') {
+            return $url;
+        }
+
         if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
             return $url;
         }
+
+        $url = self::normalizeStoredPath($url);
 
         if (! str_starts_with($url, '/')) {
             return $url;
@@ -42,8 +48,59 @@ final class ImageUrl
     }
 
     /**
-     * Prefix a bare filename with a public asset directory (for seeders / migrations).
+     * Normalize DB-stored paths to root-relative form before resolving.
      */
+    public static function normalizeStoredPath(string $url): string
+    {
+        $url = trim($url);
+
+        if (str_starts_with($url, 'storage/')) {
+            return '/'.$url;
+        }
+
+        if (str_starts_with($url, 'uploads/')) {
+            return '/storage/'.$url;
+        }
+
+        return $url;
+    }
+
+    /**
+     * Resolve file/image paths in nested JSON (e.g. about-content bodyAr/bodyEn).
+     *
+     * @param  array<string, mixed>|null  $data
+     * @return array<string, mixed>|null
+     */
+    public static function mapBodyPaths(?array $data): ?array
+    {
+        if ($data === null) {
+            return null;
+        }
+
+        $pathKeys = [
+            'imageUrl', 'visionImage', 'missionImage', 'image', 'logoUrl',
+            'listImage', 'detailImage', 'listImageUrl', 'detailImageUrl',
+            'fileUrl', 'pdfUrl', 'pdfHref', 'downloadHref', 'cvUrl',
+        ];
+
+        foreach ($data as $key => $value) {
+            if (is_string($value) && in_array($key, $pathKeys, true)) {
+                $data[$key] = self::public($value);
+            } elseif (is_array($value)) {
+                $data[$key] = self::mapBodyPaths($value);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Alias for API responses (public + admin) — absolute URL when configured.
+     */
+    public static function api(?string $url): ?string
+    {
+        return self::public($url);
+    }
     public static function publicAsset(?string $path, string $directory): ?string
     {
         if ($path === null || $path === '') {
@@ -70,6 +127,7 @@ final class ImageUrl
             return $url;
         }
 
+        $url = self::normalizeStoredPath($url);
         $base = rtrim((string) config('app.url'), '/');
 
         return $base.'/'.ltrim($url, '/');

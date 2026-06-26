@@ -57,7 +57,7 @@ Public GET:      { "title": "..." }  ← حسب Accept-Language
 
 ## لوحة التحكم — Admin /api/admin
 
-واجهة الإدارة — تخزين حقول *Ar/*En. راجع ADMIN-API.md للتوثيق الكامل. جميع الطلبات ترسل Accept-Language: {{locale}}.
+واجهة الإدارة — تخزين حقول *Ar/*En. راجع docs/postman/ADMIN-API.md. جميع الطلبات ترسل Accept-Language: {{locale}}.
 
 ### المصادقة — Auth
 

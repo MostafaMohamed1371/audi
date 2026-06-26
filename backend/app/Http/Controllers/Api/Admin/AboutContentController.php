@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AboutContent;
 use App\Support\AboutContentBodyRules;
+use App\Support\ImageUrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -113,9 +114,9 @@ class AboutContentController extends Controller
             'sectionKey' => $content->section_key,
             'titleAr' => $content->title_ar,
             'titleEn' => $content->title_en,
-            'bodyAr' => $content->body_ar,
-            'bodyEn' => $content->body_en,
-            'imageUrl' => $content->image_url,
+            'bodyAr' => ImageUrl::mapBodyPaths($content->body_ar),
+            'bodyEn' => ImageUrl::mapBodyPaths($content->body_en),
+            'imageUrl' => ImageUrl::api($content->image_url),
             'createdAt' => $content->created_at?->toIso8601String(),
             'updatedAt' => $content->updated_at?->toIso8601String(),
         ];

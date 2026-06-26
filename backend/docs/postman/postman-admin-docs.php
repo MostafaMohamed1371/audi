@@ -558,6 +558,7 @@ function postmanGenerateApiReadmeMarkdown(): string
 |-------|--------|
 | **[PUBLIC-API.md](./PUBLIC-API.md)** | الواجهة العامة `/api/v1/*` — للموقع والزوار |
 | **[ADMIN-API.md](./ADMIN-API.md)** | واجهة الإدارة `/api/admin/*` — لوحة التحكم |
+| **[API-ERRORS.md](./API-ERRORS.md)** | أخطاء API — صيغة 400, 401, 404, 422, 500… |
 | **[AUDI-API.postman_collection.json](./AUDI-API.postman_collection.json)** | مجموعة Postman كاملة (Public + Admin) |
 
 ---
@@ -598,7 +599,7 @@ Content-Type: application/json
 php docs/postman/generate-audi-api-collection.php
 ```
 
-يُحدّث: Postman collection + `PUBLIC-API.md` + `ADMIN-API.md` + `API.md`
+يُحدّث: Postman collection + `PUBLIC-API.md` + `ADMIN-API.md` + `API-ERRORS.md` + `API.md`
 MD;
 }
 

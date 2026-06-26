@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Enums\JobApplicationStatus;
 use App\Http\Controllers\Controller;
 use App\Models\JobApplication;
+use App\Support\ImageUrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -72,7 +73,7 @@ class JobApplicationController extends Controller
             'email' => $a->email,
             'phone' => $a->phone,
             'coverLetter' => $a->cover_letter,
-            'cvUrl' => $a->cv_url,
+            'cvUrl' => ImageUrl::api($a->cv_url),
             'status' => $a->status instanceof JobApplicationStatus ? $a->status->value : $a->status,
             'createdAt' => $a->created_at?->toIso8601String(),
         ];

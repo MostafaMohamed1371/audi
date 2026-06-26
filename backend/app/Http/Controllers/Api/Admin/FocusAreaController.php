@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\ReorderSortRequest;
 use App\Models\FocusArea;
+use App\Support\ImageUrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -193,8 +194,8 @@ class FocusAreaController extends Controller
             'tagsEn' => $area->tags_en,
             'descriptionAr' => $area->description_ar,
             'descriptionEn' => $area->description_en,
-            'listImageUrl' => $area->list_image_url,
-            'detailImageUrl' => $area->detail_image_url,
+            'listImageUrl' => ImageUrl::api($area->list_image_url),
+            'detailImageUrl' => ImageUrl::api($area->detail_image_url),
             'isPublished' => $area->is_published,
             'sortOrder' => $area->sort_order,
             'createdAt' => $area->created_at?->toIso8601String(),

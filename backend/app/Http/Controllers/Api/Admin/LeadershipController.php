@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Enums\LeadershipType;
 use App\Http\Controllers\Controller;
 use App\Models\LeadershipMessage;
+use App\Support\ImageUrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -164,7 +165,7 @@ class LeadershipController extends Controller
             'quoteEn' => $message->quote_en,
             'paragraphsAr' => $message->paragraphs_ar,
             'paragraphsEn' => $message->paragraphs_en,
-            'imageUrl' => $message->image_url,
+            'imageUrl' => ImageUrl::api($message->image_url),
             'imageAltAr' => $message->image_alt_ar,
             'imageAltEn' => $message->image_alt_en,
             'createdAt' => $message->created_at?->toIso8601String(),

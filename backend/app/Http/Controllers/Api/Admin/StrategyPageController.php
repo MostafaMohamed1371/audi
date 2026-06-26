@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\StrategyPage;
+use App\Support\ImageUrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -81,7 +82,7 @@ class StrategyPageController extends Controller
             'slug' => $page->slug,
             'bookletTitleAr' => $page->booklet_title_ar,
             'bookletTitleEn' => $page->booklet_title_en,
-            'bookletPdfUrl' => $page->booklet_pdf_url,
+            'bookletPdfUrl' => ImageUrl::api($page->booklet_pdf_url),
             'introTitleAr' => $page->intro_title_ar,
             'introTitleEn' => $page->intro_title_en,
             'introSubtitleAr' => $page->intro_subtitle_ar,

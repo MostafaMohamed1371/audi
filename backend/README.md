@@ -81,6 +81,7 @@ Import from `docs/postman/`:
 |------|---------|
 | `AUDI-API.postman_collection.json` | **Full API** — all modules (public + admin) |
 | `API.md` | **Documentation index** — links to Public + Admin references |
+| `API-ERRORS.md` | **API error responses** — unified JSON for 400, 401, 404, 422, 500, etc. |
 | `PUBLIC-API.md` | **Public API reference** — purpose, descriptions, parameters (Arabic + English) |
 | `ADMIN-API.md` | **Admin API reference** — purpose, descriptions, parameters (Arabic + English) |
 | `AUDI-Member-Cities.postman_collection.json` | Member cities map (detailed GeoJSON spec) |

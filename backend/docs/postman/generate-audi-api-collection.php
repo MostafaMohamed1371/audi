@@ -14,9 +14,11 @@ $output = $baseDir . '/docs/postman/AUDI-API.postman_collection.json';
 $adminDocsOutput = $baseDir . '/docs/postman/ADMIN-API.md';
 $publicDocsOutput = $baseDir . '/docs/postman/PUBLIC-API.md';
 $apiReadmeOutput = $baseDir . '/docs/postman/API.md';
+$apiErrorsOutput = $baseDir . '/docs/postman/API-ERRORS.md';
 
 require __DIR__ . '/postman-arabic-helpers.php';
 require __DIR__ . '/postman-admin-docs.php';
+require __DIR__ . '/postman-api-errors-docs.php';
 
 function req(string $name, string $method, string $path, array $opts = []): array
 {
@@ -1443,3 +1445,7 @@ echo "Written: {$adminDocsOutput}\n";
 $apiReadme = postmanGenerateApiReadmeMarkdown();
 file_put_contents($apiReadmeOutput, $apiReadme);
 echo "Written: {$apiReadmeOutput}\n";
+
+$apiErrorsMarkdown = postmanGenerateApiErrorsMarkdown();
+file_put_contents($apiErrorsOutput, $apiErrorsMarkdown);
+echo "Written: {$apiErrorsOutput}\n";

@@ -41,7 +41,7 @@ class MediaArticleDetailResource extends JsonResource
         }
 
         if ($category === MediaCategory::Newsletter) {
-            $payload['pdfHref'] = $this->pdf_url ?? '#';
+            $payload['pdfHref'] = ImageUrl::public($this->pdf_url) ?? '#';
         }
 
         if ($category === MediaCategory::CityMeetings) {

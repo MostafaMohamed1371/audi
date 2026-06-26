@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\ReorderSortRequest;
 use App\Models\HomeHeroSlide;
+use App\Support\ImageUrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -121,7 +122,7 @@ class HeroSlideController extends Controller
             'id' => $slide->id,
             'titleAr' => $slide->title_ar,
             'titleEn' => $slide->title_en,
-            'imageUrl' => $slide->image_url,
+            'imageUrl' => ImageUrl::api($slide->image_url),
             'sortOrder' => $slide->sort_order,
             'isActive' => $slide->is_active,
         ];

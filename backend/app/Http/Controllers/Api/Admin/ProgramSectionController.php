@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\ReorderSortRequest;
 use App\Models\ProgramSection;
+use App\Support\ImageUrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -178,7 +179,7 @@ class ProgramSectionController extends Controller
             'introEn' => $section->intro_en,
             'bodyAr' => $section->body_ar,
             'bodyEn' => $section->body_en,
-            'imageUrl' => $section->image_url,
+            'imageUrl' => ImageUrl::api($section->image_url),
             'sortOrder' => $section->sort_order,
             'createdAt' => $section->created_at?->toIso8601String(),
             'updatedAt' => $section->updated_at?->toIso8601String(),

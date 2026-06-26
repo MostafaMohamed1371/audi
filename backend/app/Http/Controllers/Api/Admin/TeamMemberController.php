@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\ReorderSortRequest;
 use App\Models\TeamMember;
+use App\Support\ImageUrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -161,7 +162,7 @@ class TeamMemberController extends Controller
             'roleEn' => $member->role_en,
             'bioAr' => $member->bio_ar,
             'bioEn' => $member->bio_en,
-            'imageUrl' => $member->image_url,
+            'imageUrl' => ImageUrl::api($member->image_url),
             'sortOrder' => $member->sort_order,
             'createdAt' => $member->created_at?->toIso8601String(),
             'updatedAt' => $member->updated_at?->toIso8601String(),

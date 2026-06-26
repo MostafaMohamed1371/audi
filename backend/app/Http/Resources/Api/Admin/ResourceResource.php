@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Api\Admin;
 
+use App\Support\ImageUrl;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -21,8 +22,8 @@ class ResourceResource extends JsonResource
             'titleAr' => $this->title_ar,
             'titleEn' => $this->title_en,
             'publishedDate' => $this->published_date?->format('Y-m-d'),
-            'imageUrl' => $this->image_url,
-            'fileUrl' => $this->file_url,
+            'imageUrl' => ImageUrl::api($this->image_url),
+            'fileUrl' => ImageUrl::api($this->file_url),
             'resourceType' => $this->resource_type,
             'focusAreaId' => $this->focus_area_id,
             'year' => $this->year,

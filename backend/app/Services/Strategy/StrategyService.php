@@ -55,7 +55,7 @@ class StrategyService
             'introSubtitle' => $isAr ? $page?->intro_subtitle_ar : $page?->intro_subtitle_en,
             'booklet' => [
                 'title' => $isAr ? $page?->booklet_title_ar : $page?->booklet_title_en,
-                'pdfUrl' => $page?->booklet_pdf_url,
+                'pdfUrl' => ImageUrl::public($page?->booklet_pdf_url),
                 'href' => '#strategy-booklet',
             ],
             'pillars' => $pillars,

@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\ReorderSortRequest;
 use App\Models\Partner;
+use App\Support\ImageUrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -141,7 +142,7 @@ class PartnerController extends Controller
             'partnerCategoryId' => $partner->partner_category_id,
             'nameAr' => $partner->name_ar,
             'nameEn' => $partner->name_en,
-            'logoUrl' => $partner->logo_url,
+            'logoUrl' => ImageUrl::api($partner->logo_url),
             'isFeatured' => $partner->is_featured,
             'sortOrder' => $partner->sort_order,
             'createdAt' => $partner->created_at?->toIso8601String(),

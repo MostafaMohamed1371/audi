@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Api\Admin;
 
+use App\Support\ImageUrl;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -28,8 +29,8 @@ class MediaArticleResource extends JsonResource
             'bodyAr' => $this->body_ar,
             'bodyEn' => $this->body_en,
             'publishedDate' => $this->published_date?->format('Y-m-d'),
-            'imageUrl' => $this->image_url,
-            'pdfUrl' => $this->pdf_url,
+            'imageUrl' => ImageUrl::api($this->image_url),
+            'pdfUrl' => ImageUrl::api($this->pdf_url),
             'authorsAr' => $this->authors_ar,
             'authorsEn' => $this->authors_en,
             'eventTime' => $this->event_time,
