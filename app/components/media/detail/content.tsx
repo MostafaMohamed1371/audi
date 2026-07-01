@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { ArrowRight } from "lucide-react";
 import type { MediaArticle } from "@/lib/media";
+import { resolveImageSrc } from "@/lib/image-src";
 
 type Props = {
   article: MediaArticle;
@@ -86,7 +87,7 @@ export function MediaDetailContent({ article, backLabel, isRtl }: Props) {
 
       <div className="relative mb-10 aspect-[16/9] overflow-hidden rounded-2xl">
         <Image
-          src={`/blog/${article.image}`}
+          src={resolveImageSrc(article.image, "/blog")}
           alt={article.title}
           fill
           className="object-cover"

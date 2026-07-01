@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             GlobalSettingsSeeder::class,
             MemberCitiesGeoJsonSeeder::class,
             MediaArticlesSeeder::class,
+            KnowledgeCategoriesSeeder::class,
             ResourcesSeeder::class,
             AboutAndStrategySeeder::class,
             ProgramsSeeder::class,

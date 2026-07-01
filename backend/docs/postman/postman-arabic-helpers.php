@@ -107,6 +107,7 @@ function postmanArabicFieldMap(): array
         'programId' => 'معرّف البرنامج (FK)',
         'teamSectionId' => 'معرّف قسم الفريق (FK)',
         'partnerCategoryId' => 'معرّف تصنيف الشريك (FK)',
+        'knowledgeCategoryId' => 'معرّف تصنيف مركز المعرفة (FK) — اربط البطاقة بالتصنيف',
         'focusAreaId' => 'معرّف مجال التركيز (FK)',
         'jobOpeningId' => 'معرّف الوظيفة (اختياري)',
         'sortOrder' => 'ترتيب العرض (0 = الأول)',

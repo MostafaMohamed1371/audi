@@ -16,6 +16,9 @@ export function ConsultingPanel({
   backLabel,
   onBack,
 }: Props) {
+  const heroImage = content.image ?? "/projects/p2.png";
+  const detailImage = content.detailImage ?? "/projects/consulting-presenter.png";
+
   return (
     <div className="space-y-0">
       <PanelWrapper backLabel={backLabel} onBack={onBack} isRtl={isRtl}>
@@ -40,7 +43,7 @@ export function ConsultingPanel({
               )}
             >
               <Image
-                src="/projects/p2.png"
+                src={heroImage}
                 alt=""
                 width={955}
                 height={394}
@@ -86,7 +89,7 @@ export function ConsultingPanel({
           >
             <div className="mx-auto w-full max-w-[380px] overflow-hidden rounded-[24px] bg-white shadow-[1px_1px_18px_0px_#111F4214] lg:col-span-5 lg:mx-0 lg:row-span-3">
               <Image
-                src="/projects/consulting-presenter.png"
+                src={detailImage}
                 alt=""
                 width={380}
                 height={520}

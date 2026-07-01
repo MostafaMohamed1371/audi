@@ -5,6 +5,9 @@ export type TrainingProgramsContent = {
   formats: string[];
   coursesTitle: string;
   courses: { title: string; count: string }[];
+  image?: string;
+  heroImage?: string;
+  coursesImage?: string;
 };
 
 export type ConsultingContent = {
@@ -12,6 +15,8 @@ export type ConsultingContent = {
   intro: string;
   nav: string[];
   sections: { title: string; description: string }[];
+  image?: string;
+  detailImage?: string;
 };
 
 export type ExecutiveContent = {
@@ -21,6 +26,7 @@ export type ExecutiveContent = {
   programs: string[];
   topicsTitle: string;
   topics: { title: string; image: string }[];
+  heroVideo?: string;
 };
 
 export type ExpertsContent = {

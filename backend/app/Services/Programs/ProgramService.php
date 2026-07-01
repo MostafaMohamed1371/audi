@@ -39,6 +39,7 @@ class ProgramService
         foreach ($sections as $section) {
             $body = $isAr ? ($section->body_ar ?? []) : ($section->body_en ?? []);
             $body = is_array($body) ? $body : [];
+            $body = ImageUrl::mapBodyPaths($body) ?? [];
 
             if ($section->tab_key === 'trainingPrograms') {
                 $body['courses'] = $this->mapTrainingCourses($isAr);

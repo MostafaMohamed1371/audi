@@ -10,6 +10,7 @@ use App\Http\Resources\Api\V1\ResourceItemResource;
 use App\Models\AboutContent;
 use App\Models\HomeHeroSlide;
 use App\Models\HomeStat;
+use App\Models\KnowledgeCategory;
 use App\Models\MediaArticle;
 use App\Models\Program;
 use App\Models\Resource;
@@ -188,6 +189,68 @@ class HomeService
         $content = $this->content('home_knowledge_center');
         $body = $isAr ? ($content?->body_ar ?? []) : ($content?->body_en ?? []);
 
+        $request = Request::create('/', 'GET');
+        $request->attributes->set('locale', $locale);
+
+        $categories = KnowledgeCategory::query()
+            ->ordered()
+            ->with(['resources' => function ($query) {
+                $query
+                    ->where('is_published', true)
+                    ->orderByDesc('published_date')
+                    ->orderBy('sort_order')
+                    ->orderBy('id');
+            }])
+            ->get()
+            ->map(function (KnowledgeCategory $category) use ($request, $isAr) {
+                $items = $category->resources
+                    ->map(function (Resource $resource) use ($request) {
+                        $row = (new ResourceItemResource($resource))->toArray($request);
+
+                        return [
+                            'slug' => $row['slug'],
+                            'title' => $row['title'],
+                            'date' => $row['date'],
+                            'href' => '/resources',
+                            'pdfHref' => $row['downloadHref'] ?? '#',
+                            'image' => $row['image'] ?? '',
+                        ];
+                    })
+                    ->values()
+                    ->all();
+
+                return [
+                    'id' => $category->id,
+                    'slug' => $category->slug,
+                    'title' => $isAr ? $category->title_ar : $category->title_en,
+                    'description' => $isAr ? ($category->description_ar ?? '') : ($category->description_en ?? ''),
+                    'items' => $items,
+                ];
+            })
+            ->values()
+            ->all();
+
+        if ($categories !== []) {
+            $headerSlides = array_map(static fn (array $category) => [
+                'id' => $category['id'],
+                'slug' => $category['slug'],
+                'title' => $category['title'],
+                'description' => $category['description'],
+            ], $categories);
+
+            $firstItems = $categories[0]['items'] ?? [];
+
+            return [
+                'viewIssue' => $body['viewIssue'] ?? '',
+                'downloadPdf' => $body['downloadPdf'] ?? '',
+                'categories' => $categories,
+                'headerSlides' => $headerSlides,
+                'items' => $firstItems,
+            ];
+        }
+
+        $legacySlides = $body['headerSlides'] ?? [];
+
         $resources = Resource::query()
             ->where('is_published', true)
             ->orderByDesc('published_date')
@@ -195,9 +258,6 @@ class HomeService
             ->orderBy('id')
             ->limit(3)
             ->get();
-
-        $request = Request::create('/', 'GET');
-        $request->attributes->set('locale', $locale);
 
         $items = $resources
             ->map(function (Resource $resource) use ($request) {
@@ -218,7 +278,8 @@ class HomeService
         return [
             'viewIssue' => $body['viewIssue'] ?? '',
             'downloadPdf' => $body['downloadPdf'] ?? '',
-            'headerSlides' => $body['headerSlides'] ?? [],
+            'categories' => [],
+            'headerSlides' => $legacySlides,
             'items' => $items,
         ];
     }

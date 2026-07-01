@@ -23,6 +23,7 @@ export function ExecutivePanel({
 }: Props) {
   const [current, setCurrent] = useState(1);
   const total = content.topics.length;
+  const heroVideo = content.heroVideo ?? "/icons/program/executive.mp4";
 
   const goTo = useCallback(
     (index: number) => setCurrent((index + total) % total),
@@ -46,7 +47,7 @@ export function ExecutivePanel({
                 className="size-full object-cover"
                 aria-hidden
               >
-                <source src="/icons/program/executive.mp4" type="video/mp4" />
+                <source src={heroVideo} type="video/mp4" />
               </video>
             </div>
           </div>

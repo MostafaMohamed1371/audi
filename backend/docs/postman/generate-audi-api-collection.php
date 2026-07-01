@@ -15,10 +15,16 @@ $adminDocsOutput = $baseDir . '/docs/postman/ADMIN-API.md';
 $publicDocsOutput = $baseDir . '/docs/postman/PUBLIC-API.md';
 $apiReadmeOutput = $baseDir . '/docs/postman/API.md';
 $apiErrorsOutput = $baseDir . '/docs/postman/API-ERRORS.md';
+$homepageGuideOutput = $baseDir . '/docs/postman/HOMEPAGE-ADMIN-GUIDE.md';
+$programsGuideOutput = $baseDir . '/docs/postman/PROGRAMS-ADMIN-GUIDE.md';
 
 require __DIR__ . '/postman-arabic-helpers.php';
 require __DIR__ . '/postman-admin-docs.php';
 require __DIR__ . '/postman-api-errors-docs.php';
+require __DIR__ . '/postman-home-examples.php';
+require __DIR__ . '/postman-homepage-guide-docs.php';
+require __DIR__ . '/postman-program-examples.php';
+require __DIR__ . '/postman-programs-guide-docs.php';
 
 function req(string $name, string $method, string $path, array $opts = []): array
 {
@@ -285,6 +291,7 @@ Canonical examples in this collection use these paths. Public requests include t
 
 | File | Content |
 |------|---------|
+| **`docs/postman/HOMEPAGE-ADMIN-GUIDE.md`** | Homepage build guide — 30 admin steps for /ar |
 | **`docs/postman/API.md`** | Index — links to Public + Admin docs |
 | **`docs/postman/PUBLIC-API.md`** | Public `/api/v1` — purpose, parameters (Arabic) |
 | **`docs/postman/ADMIN-API.md`** | Admin `/api/admin` — purpose, parameters (Arabic) |
@@ -665,135 +672,352 @@ $adminSettingsGroup = postmanAdminFolder('الإعدادات', 'Settings', [
         ]),
         req('تحديث — Update Contact Info', 'PUT', '/api/admin/contact-info', [
             'auth' => true,
-            'body' => [
-                'titleAr' => 'تواصل معنا',
-                'titleEn' => 'Contact Us',
-                'subtitleAr' => 'نسعد بالتواصل معكم والإجابة على استفساراتكم.',
-                'subtitleEn' => 'We are happy to hear from you and answer your questions.',
-                'addressLabelAr' => 'الموقع على الخارطة:',
-                'addressLabelEn' => 'Location on map:',
-                'addressAr' => 'شارع عبدالله بن حذافة السهمي، الحي الدبلوماسي، الرياض',
-                'addressEn' => 'Abdullah bin Hudhafah Al-Sahmi St., Diplomatic Quarter, Riyadh',
-                'mapTitleAr' => 'موقع المعهد العربي لإنماء المدن',
-                'mapTitleEn' => 'Arab Urban Development Institute location',
-                'mapEmbedUrlAr' => 'https://maps.google.com/maps?q=Arab+Urban+Development+Institute,+Riyadh&output=embed',
-                'mapEmbedUrlEn' => 'https://maps.google.com/maps?q=Arab+Urban+Development+Institute,+Riyadh&output=embed',
-                'itemsAr' => [
-                    ['label' => 'البريد الإلكتروني:', 'value' => 'info@araburban.org', 'type' => 'email', 'href' => 'mailto:info@araburban.org'],
-                    ['label' => 'رقم التواصل:', 'value' => '+966 114802555', 'type' => 'phone', 'href' => 'tel:+966114802555'],
-                    ['label' => 'رقم الفاكس:', 'value' => '+966 114802666', 'type' => 'fax'],
-                ],
-                'itemsEn' => [
-                    ['label' => 'Email:', 'value' => 'info@araburban.org', 'type' => 'email', 'href' => 'mailto:info@araburban.org'],
-                    ['label' => 'Phone:', 'value' => '+966 114802555', 'type' => 'phone', 'href' => 'tel:+966114802555'],
-                    ['label' => 'Fax:', 'value' => '+966 114802666', 'type' => 'fax'],
-                ],
-            ],
-            'description' => publicMatch('/api/v1/contact', 'واجهة الإدارة المفضّلة لصفحة التواصل وتذييل الرئيسية.'),
+            'body' => postmanHomeContactInfoBody(),
+            'description' => publicMatch('/api/v1/contact', 'واجهة الإدارة المفضّلة لصفحة التواصل وتذييل الرئيسية. Same body in Home → عضوية وتواصل.'),
         ]),
     ]),
 ], publicMatch('/api/v1/settings'));
 
 // --- Home (matches Public GET /api/v1/home) ---
-$adminHomeGroup = postmanAdminFolder('الرئيسية', 'Home', [
-    postmanAdminFolder('شرائح الهيرو', 'Hero Slides', adminCrud('hero-slides', 'Hero Slide', [
-        'titleAr' => 'تطوير تقني للمدن العربية',
-        'titleEn' => 'Technical Development for Arab Cities',
-        'imageUrl' => '/slider/1.png',
-        'sortOrder' => 0,
-        'isActive' => true,
-    ], ['publicPath' => '/api/v1/home', 'labelAr' => 'شريحة الهيرو'])),
-    postmanAdminFolder('إحصائيات الرئيسية', 'Home Stats', adminCrud('home-stats', 'Home Stat', [
-        'value' => '+25',
-        'labelAr' => 'اتفاقية',
-        'labelEn' => 'agreements',
-        'descriptionAr' => 'الاتفاقيات والشراكات',
-        'descriptionEn' => 'Agreements and partnerships',
-        'sortOrder' => 0,
-    ], ['publicPath' => '/api/v1/home', 'labelAr' => 'إحصائية'])),
-    postmanAdminFolder('محتوى أقسام الرئيسية', 'Home About Content', array_merge(
-        adminCrud('about-content', 'About Section', [
-            'sectionKey' => 'home_about_intro',
-            'titleAr' => 'عن المعهد',
-            'titleEn' => 'About the Institute',
-            'bodyAr' => [
-                'description' => 'المعهد العربي لإنماء المدن مؤسسة عربية متخصصة في التنمية الحضرية المستدامة.',
-                'cta' => 'اقرأ المزيد',
-                'mission' => [
-                    'title' => 'رسالتنا',
-                    'description' => 'تعزيز قدرات المدن العربية على التنمية المستدامة.',
-                    'readMore' => 'اقرأ المزيد',
-                ],
-                'vision' => [
-                    'title' => 'رؤيتنا',
-                    'description' => 'مدن عربية مزدهرة ومستدامة.',
-                    'readMore' => 'اقرأ المزيد',
-                ],
-            ],
-            'bodyEn' => [
-                'description' => 'The Arab Urban Development Institute is a specialized Arab institution for sustainable urban development.',
-                'cta' => 'Read more',
-                'mission' => [
-                    'title' => 'Our Mission',
-                    'description' => 'Enhancing Arab cities capacity for sustainable development.',
-                    'readMore' => 'Read more',
-                ],
-                'vision' => [
-                    'title' => 'Our Vision',
-                    'description' => 'Thriving and sustainable Arab cities.',
-                    'readMore' => 'Read more',
-                ],
-            ],
-        ], ['withReorder' => false, 'publicPath' => '/api/v1/home', 'labelAr' => 'قسم محتوى']),
+$homeHeroSlideExamples = array_map(
+    fn (array $slide, int $index) => req(
+        'إنشاء شريحة '.($index + 1).' — Create Hero Slide '.($index + 1),
+        'POST',
+        '/api/admin/hero-slides',
         [
+            'auth' => true,
+            'body' => array_merge($slide, ['isActive' => true]),
+            'description' => publicMatch('/api/v1/home', 'Homepage hero slider item → `slider[]`.'),
+        ],
+    ),
+    postmanHomeHeroSlides(),
+    array_keys(postmanHomeHeroSlides()),
+);
+
+$homeStatExamples = array_map(
+    fn (array $stat, int $index) => req(
+        'إنشاء إحصائية '.($index + 1).' — Create Home Stat '.($index + 1),
+        'POST',
+        '/api/admin/home-stats',
+        [
+            'auth' => true,
+            'body' => $stat,
+            'description' => publicMatch('/api/v1/home', 'Counter in «المعهد في أرقام» → `stats.items[]`. Pair with `home_stats` about-content for title/subtitle.'),
+        ],
+    ),
+    postmanHomeStatItems(),
+    array_keys(postmanHomeStatItems()),
+);
+
+$homeProgramExamples = array_map(
+    fn (array $program) => req(
+        'إنشاء برنامج '.$program['slug'].' — Create Program '.$program['slug'],
+        'POST',
+        '/api/admin/programs',
+        [
+            'auth' => true,
+            'body' => $program,
+            'description' => publicMatch('/api/v1/home', 'Homepage program card → `programs.items[]`. Full page: `GET /api/v1/programs/{slug}`.'),
+        ],
+    ),
+    postmanHomeProgramCards(),
+);
+
+$homeKnowledgeResourceExamples = array_map(
+    fn (array $resource, int $index) => req(
+        'إنشاء مصدر مركز المعرفة '.($index + 1).' — Create Knowledge Center Resource '.($index + 1),
+        'POST',
+        '/api/admin/resources',
+        [
+            'auth' => true,
+            'body' => $resource,
+            'description' => publicMatch('/api/v1/home', 'Homepage card → `knowledgeCenter.categories[].items[]`. Set `knowledgeCategoryId` from `POST /api/admin/knowledge-categories`.'),
+        ],
+    ),
+    postmanHomeKnowledgeCenterResources(),
+    array_keys(postmanHomeKnowledgeCenterResources()),
+);
+
+$homeMediaNewsExamples = array_map(
+    fn (array $article) => req(
+        'إنشاء '.$article['labelAr'].' — Create News '.$article['name'],
+        'POST',
+        '/api/admin/media',
+        [
+            'auth' => true,
+            'body' => $article['body'],
+            'description' => publicMatch(
+                '/api/v1/home',
+                $article['homePlacement'].' Full news page: `GET /api/v1/media/news`. **Always** `"category": "news"`.',
+            ),
+        ],
+    ),
+    postmanHomeMediaNewsArticles(),
+);
+
+$homepageSetupRequests = array_merge(
+    array_map(
+        fn (array $slide, int $index) => req(
+            sprintf('%02d — شريحة هيرو %d', $index + 1, $index + 1),
+            'POST',
+            '/api/admin/hero-slides',
+            [
+                'auth' => true,
+                'body' => array_merge($slide, ['isActive' => true]),
+                'description' => publicMatch('/api/v1/home', 'Step '.($index + 1).': Hero slider → `slider[]`.'),
+            ],
+        ),
+        postmanHomeHeroSlides(),
+        array_keys(postmanHomeHeroSlides()),
+    ),
+    [
+        req('05 — عن المعهد — home_about_intro', 'POST', '/api/admin/about-content', [
+            'auth' => true,
+            'body' => postmanHomeAboutIntroBody(),
+            'description' => publicMatch('/api/v1/home', 'Step 5: About block → `aboutIntro`.'),
+        ]),
+        req('06 — المعهد في أرقام (عنوان) — home_stats', 'POST', '/api/admin/about-content', [
+            'auth' => true,
+            'body' => postmanHomeStatsBody(),
+            'description' => publicMatch('/api/v1/home', 'Step 6: Stats title/subtitle. Counters: steps 07–10.'),
+        ]),
+    ],
+    array_map(
+        fn (array $stat, int $index) => req(
+            sprintf('%02d — إحصائية %d', 7 + $index, $index + 1),
+            'POST',
+            '/api/admin/home-stats',
+            [
+                'auth' => true,
+                'body' => $stat,
+                'description' => publicMatch('/api/v1/home', 'Step '.(7 + $index).': Counter → `stats.items[]`.'),
+            ],
+        ),
+        postmanHomeStatItems(),
+        array_keys(postmanHomeStatItems()),
+    ),
+    [
+        req('11 — المدن الأعضاء (عنوان) — home_member_cities', 'POST', '/api/admin/about-content', [
+            'auth' => true,
+            'body' => postmanHomeMemberCitiesBody(),
+            'description' => publicMatch('/api/v1/home', 'Step 11: Member cities title → `memberCities.title`.'),
+        ]),
+        req('12 — إحصائيات المدن — member-cities/stats', 'PUT', '/api/admin/member-cities/stats', [
+            'auth' => true,
+            'body' => postmanHomeMemberCityStatsBody(),
+            'description' => publicMatch('/api/v1/home', 'Step 12: 12 دولة / 400 مدينة / 1240 عضو → `memberCities.stats[]`.'),
+        ]),
+        req('13 — مدينة على الخريطة (مثال الرياض) — member city', 'POST', '/api/admin/member-cities/cities', [
+            'auth' => true,
+            'body' => postmanHomeMemberCityExample(),
+            'description' => publicMatch('/api/v1/home/member-cities', 'Step 13: Sample map pin. Repeat or use bulk import for all cities.'),
+        ]),
+        req('14 — برامجنا (عنوان) — home_programs', 'POST', '/api/admin/about-content', [
+            'auth' => true,
+            'body' => postmanHomeProgramsBody(),
+            'description' => publicMatch('/api/v1/home', 'Step 14: Programs section title + CTA. Cards: steps 15–17.'),
+        ]),
+    ],
+    array_map(
+        fn (array $program, int $index) => req(
+            sprintf('%02d — برنامج %s', 15 + $index, $program['slug']),
+            'POST',
+            '/api/admin/programs',
+            [
+                'auth' => true,
+                'body' => $program,
+                'description' => publicMatch('/api/v1/home', 'Step '.(15 + $index).': Program card → `programs.items[]`.'),
+            ],
+        ),
+        postmanHomeProgramCards(),
+        array_keys(postmanHomeProgramCards()),
+    ),
+    [
+        req('18 — المركز الإعلامي (عناوين) — home_media_center', 'POST', '/api/admin/about-content', [
+            'auth' => true,
+            'body' => postmanHomeMediaCenterBody(),
+            'description' => publicMatch('/api/v1/home', 'Step 18: Media section labels. News items: steps 19–24.'),
+        ]),
+    ],
+    array_map(
+        fn (array $article, int $index) => req(
+            sprintf('%02d — خبر %s', 19 + $index, $article['name']),
+            'POST',
+            '/api/admin/media',
+            [
+                'auth' => true,
+                'body' => $article['body'],
+                'description' => publicMatch('/api/v1/home', 'Step '.(19 + $index).': News → `mediaCenter.featured` / `items`.'),
+            ],
+        ),
+        array_slice(postmanHomeMediaNewsArticles(), 0, 6),
+        array_keys(array_slice(postmanHomeMediaNewsArticles(), 0, 6)),
+    ),
+    [
+        req('25 — مركز المعرفة (أزرار) — home_knowledge_center labels', 'POST', '/api/admin/about-content', [
+            'auth' => true,
+            'body' => postmanHomeKnowledgeCenterBody(),
+            'description' => publicMatch('/api/v1/home', 'Step 25: Button labels (عرض الإصدار / تنزيل PDF). Categories: steps 26–28. Cards: steps 29–31.'),
+        ]),
+    ],
+    array_map(
+        fn (array $category, int $index) => req(
+            sprintf('%02d — تصنيف %s', 26 + $index, $category['slug']),
+            'POST',
+            '/api/admin/knowledge-categories',
+            [
+                'auth' => true,
+                'body' => $category,
+                'description' => publicMatch('/api/v1/home', 'Step '.(26 + $index).': Category → `knowledgeCenter.categories[]`. Save response `id` (first category = 1 for steps 29–31).'),
+            ],
+        ),
+        postmanHomeKnowledgeCategories(),
+        array_keys(postmanHomeKnowledgeCategories()),
+    ),
+    array_map(
+        fn (array $resource, int $index) => req(
+            sprintf('%02d — مصدر %s', 29 + $index, $resource['slug']),
+            'POST',
+            '/api/admin/resources',
+            [
+                'auth' => true,
+                'body' => $resource,
+                'description' => publicMatch('/api/v1/home', 'Step '.(29 + $index).': Card linked via `knowledgeCategoryId` → `categories[].items[]`.'),
+            ],
+        ),
+        postmanHomeKnowledgeCenterResources(),
+        array_keys(postmanHomeKnowledgeCenterResources()),
+    ),
+    [
+        req('32 — عضوية المعهد — home_membership_contact', 'POST', '/api/admin/about-content', [
+            'auth' => true,
+            'body' => postmanHomeMembershipContactBody(),
+            'description' => publicMatch('/api/v1/home', 'Step 32: Membership block → `membershipContact.membership`.'),
+        ]),
+        req('33 — تواصل معنا (هاتف/عنوان) — contact-info', 'PUT', '/api/admin/contact-info', [
+            'auth' => true,
+            'body' => postmanHomeContactInfoBody(),
+            'description' => publicMatch('/api/v1/home', 'Step 33: Phone, fax, email, address, map → `membershipContact.contact`. Verify: `GET /api/v1/home`.'),
+        ]),
+    ],
+);
+
+$adminHomeGroup = postmanAdminFolder('الرئيسية', 'Home', [
+    postmanAdminFolder('00 — بناء الصفحة الرئيسية', '00 — Build Full Homepage', $homepageSetupRequests, <<<'MD'
+Run **01 → 33** in order after Login. Bodies match https://audi-ten.vercel.app/ar.
+
+Then verify: `GET /api/v1/home` with `Accept-Language: ar`.
+MD),
+    postmanAdminFolder('شرائح الهيرو', 'Hero Slides', array_merge(
+        adminCrud('hero-slides', 'Hero Slide', array_merge(postmanHomeHeroSlides()[0], ['isActive' => true]), [
+            'publicPath' => '/api/v1/home',
+            'labelAr' => 'شريحة الهيرو',
+            'description' => 'Homepage hero slider. See also the 4 example create requests below (matches https://audi-ten.vercel.app/ar).',
+        ]),
+        $homeHeroSlideExamples,
+    )),
+    postmanAdminFolder('إحصائيات الرئيسية', 'Home Stats', array_merge(
+        adminCrud('home-stats', 'Home Stat', postmanHomeStatItems()[0], [
+            'publicPath' => '/api/v1/home',
+            'labelAr' => 'إحصائية',
+            'description' => '«المعهد في أرقام» counters. Title/subtitle: `home_stats` in about-content.',
+        ]),
+        $homeStatExamples,
+    )),
+    postmanAdminFolder('محتوى أقسام الرئيسية', 'Home About Content', array_merge(
+        adminCrud('about-content', 'About Section', postmanHomeAboutIntroBody(), [
+            'withReorder' => false,
+            'publicPath' => '/api/v1/home',
+            'labelAr' => 'قسم محتوى',
+            'description' => 'Homepage intro block → `aboutIntro`.',
+        ]),
+        [
+            req('إنشاء قسم home_about_intro — Create home_about_intro', 'POST', '/api/admin/about-content', [
+                'auth' => true,
+                'body' => postmanHomeAboutIntroBody(),
+                'description' => publicMatch('/api/v1/home', 'About block under hero: title, description, mission, vision → `aboutIntro`.'),
+            ]),
             req('إنشاء قسم home_stats — Create home_stats', 'POST', '/api/admin/about-content', [
                 'auth' => true,
-                'body' => [
-                    'sectionKey' => 'home_stats',
-                    'titleAr' => 'إنجازات المعهد',
-                    'titleEn' => 'Institute Achievements',
-                    'bodyAr' => ['subtitle' => 'أرقام تعكس مسيرة المعهد'],
-                    'bodyEn' => ['subtitle' => 'Numbers reflecting the institute journey'],
-                ],
-                'description' => 'Feeds public home.stats.title/subtitle.',
+                'body' => postmanHomeStatsBody(),
+                'description' => publicMatch('/api/v1/home', 'Section title «المعهد في أرقام» + subtitle. Counters: `home-stats` CRUD.'),
+            ]),
+            req('إنشاء قسم home_member_cities — Create home_member_cities', 'POST', '/api/admin/about-content', [
+                'auth' => true,
+                'body' => postmanHomeMemberCitiesBody(),
+                'description' => publicMatch('/api/v1/home', 'Section title «المدن الأعضاء». Stats values: `PUT /api/admin/member-cities/stats`.'),
             ]),
             req('إنشاء قسم home_programs — Create home_programs', 'POST', '/api/admin/about-content', [
                 'auth' => true,
-                'body' => [
-                    'sectionKey' => 'home_programs',
-                    'titleAr' => 'برامجنا',
-                    'titleEn' => 'Our Programs',
-                    'bodyAr' => [
-                        'cta' => 'استكشف البرامج',
-                    ],
-                    'bodyEn' => [
-                        'cta' => 'Explore programs',
-                    ],
-                ],
-                'description' => 'Section title + CTA only. Card items come from admin `programs` (`cardDescription*`, `sortOrder`) → public `GET /api/v1/home` → `programs.items`.',
+                'body' => postmanHomeProgramsBody(),
+                'description' => publicMatch('/api/v1/home', 'Section title + CTA only. Cards: `POST /api/admin/programs` → `programs.items[]`.'),
             ]),
             req('إنشاء قسم home_media_center — Create home_media_center', 'POST', '/api/admin/about-content', [
                 'auth' => true,
-                'body' => [
-                    'sectionKey' => 'home_media_center',
-                    'titleAr' => 'المركز الإعلامي',
-                    'titleEn' => 'Media Center',
-                    'bodyAr' => [
-                        'subtitle' => 'آخر الأخبار والفعاليات',
-                        'readMore' => 'اقرأ المزيد',
-                        'viewAll' => 'عرض الكل',
-                    ],
-                    'bodyEn' => [
-                        'subtitle' => 'Latest news and events',
-                        'readMore' => 'Read more',
-                        'viewAll' => 'View all',
-                    ],
-                ],
-                'description' => 'Feeds public home.mediaCenter labels.',
+                'body' => postmanHomeMediaCenterBody(),
+                'description' => publicMatch('/api/v1/home', 'Section title + subtitle + قراءة المزيد + عرض الكل. **News cards:** use folder «بطاقات المركز الإعلامي» → `POST /api/admin/media` (`category: news`).'),
+            ]),
+            req('إنشاء قسم home_knowledge_center — Create home_knowledge_center', 'POST', '/api/admin/about-content', [
+                'auth' => true,
+                'body' => postmanHomeKnowledgeCenterBody(),
+                'description' => publicMatch('/api/v1/home', 'Button labels (عرض الإصدار / تنزيل PDF). **Categories:** `POST /api/admin/knowledge-categories`. **Cards:** `POST /api/admin/resources` with `knowledgeCategoryId`.'),
+            ]),
+            req('إنشاء قسم home_membership_contact — Create home_membership_contact', 'POST', '/api/admin/about-content', [
+                'auth' => true,
+                'body' => postmanHomeMembershipContactBody(),
+                'description' => publicMatch('/api/v1/home', 'Membership block labels. Contact data: folder «عضوية وتواصل» → `PUT /api/admin/contact-info`.'),
             ]),
         ],
     )),
-], publicMatch('/api/v1/home'));
+    postmanAdminFolder('بطاقات برامج الرئيسية', 'Home Program Cards', $homeProgramExamples),
+    postmanAdminFolder('بطاقات المركز الإعلامي', 'Home Media Center News', $homeMediaNewsExamples),
+    postmanAdminFolder('تصنيفات مركز المعرفة', 'Home Knowledge Categories', array_merge(
+        adminCrud('knowledge-categories', 'Knowledge Category', postmanHomeKnowledgeCategories()[0], [
+            'publicPath' => '/api/v1/home',
+            'labelAr' => 'تصنيف مركز المعرفة',
+            'description' => 'Carousel tabs: مركز المعرفة / مدننا / منصة الاجتماعات → `knowledgeCenter.categories[]`.',
+        ]),
+        array_map(
+            fn (array $category, int $index) => req(
+                'إنشاء تصنيف '.($category['titleAr'] ?? $category['slug']).' — Create '.$category['slug'],
+                'POST',
+                '/api/admin/knowledge-categories',
+                [
+                    'auth' => true,
+                    'body' => $category,
+                    'description' => publicMatch('/api/v1/home', 'Category '.($index + 1).' of 3. Link resources with `knowledgeCategoryId` = response `id`.'),
+                ],
+            ),
+            postmanHomeKnowledgeCategories(),
+            array_keys(postmanHomeKnowledgeCategories()),
+        ),
+    )),
+    postmanAdminFolder('بطاقات مركز المعرفة', 'Home Knowledge Center Cards', $homeKnowledgeResourceExamples),
+    postmanAdminFolder('المدن الأعضاء — إعداد الخريطة', 'Home Member Cities Setup', [
+        req('تحديث إحصائيات المدن — Update Member Cities Stats', 'PUT', '/api/admin/member-cities/stats', [
+            'auth' => true,
+            'body' => postmanHomeMemberCityStatsBody(),
+            'description' => publicMatch('/api/v1/home', '12 دولة / 400 مدينة / 1240 عضو on homepage.'),
+        ]),
+        req('إنشاء مدينة (الرياض) — Create Sample City Riyadh', 'POST', '/api/admin/member-cities/cities', [
+            'auth' => true,
+            'body' => postmanHomeMemberCityExample(),
+            'description' => publicMatch('/api/v1/home/member-cities', 'One map pin. For full map use `استيراد جماعي` in المدن الأعضاء folder.'),
+        ]),
+    ]),
+    postmanAdminFolder('عضوية وتواصل', 'Home Membership & Contact', [
+        req('إنشاء عضوية وتواصل — home_membership_contact', 'POST', '/api/admin/about-content', [
+            'auth' => true,
+            'body' => postmanHomeMembershipContactBody(),
+            'description' => publicMatch('/api/v1/home', 'انضم الى عضوية المعهد + تواصل معنا labels.'),
+        ]),
+        req('تحديث بيانات التواصل — Update Contact Info', 'PUT', '/api/admin/contact-info', [
+            'auth' => true,
+            'body' => postmanHomeContactInfoBody(),
+            'description' => publicMatch('/api/v1/home', 'الهاتف، فاكس، ايميل، كود، العنوان، الخريطة → `membershipContact.contact`.'),
+        ]),
+    ]),
+], publicMatch('/api/v1/home', postmanHomepageSectionGuide()));
 
 // --- About (matches Public /api/v1/about/*) ---
 $adminAboutGroup = postmanAdminFolder('من نحن', 'About', [
@@ -998,54 +1222,134 @@ $adminStrategyGroup = postmanAdminFolder('الاستراتيجية', 'Strategy',
 ], publicMatch('/api/v1/strategy/strategy-2025'));
 
 // --- Programs ---
+$trainingProgramBuildSteps = [
+    req('01 — برنامج التدريب — training program', 'POST', '/api/admin/programs', [
+        'auth' => true,
+        'body' => postmanTrainingProgramBody(),
+        'description' => publicMatch('/api/v1/programs/training', 'Step 1: Program category. Save response `id` (usually 2). URL: /ar/برامجنا/مركز-دعم-المدن'),
+    ]),
+    req('02 — تسميات الصفحة — program_training labels', 'POST', '/api/admin/about-content', [
+        'auth' => true,
+        'body' => postmanProgramTrainingLabelsBody(),
+        'description' => publicMatch('/api/v1/programs/training', 'Step 2: back + sectionsLabel (اقسام البرنامج).'),
+    ]),
+];
+
+foreach (postmanTrainingProgramSections() as $index => $section) {
+    $trainingProgramBuildSteps[] = req(
+        sprintf('0%d — قسم %s — %s', 3 + $index, $section['body']['tabKey'], $section['name']),
+        'POST',
+        '/api/admin/program-sections',
+        [
+            'auth' => true,
+            'body' => $section['body'],
+            'description' => publicMatch('/api/v1/programs/training', 'Step '.(3 + $index).': `?tab='.$section['body']['tabKey'].'` → `sections.'.$section['body']['tabKey'].'`. Requires `programId` from step 1.'),
+        ],
+    );
+}
+
+foreach (postmanTrainingCourses() as $index => $course) {
+    $step = 7 + $index;
+    $trainingProgramBuildSteps[] = req(
+        sprintf('%02d — دورة تدريبية — %s', $step, $course['titleAr']),
+        'POST',
+        '/api/admin/training-courses',
+        [
+            'auth' => true,
+            'body' => $course,
+            'description' => publicMatch('/api/v1/programs/training', 'Step '.$step.': Course row on ?tab=trainingPrograms (البرامج التدريبية ٢٠٢٣–٢٠٢٤ grid). Merged into `sections.trainingPrograms.courses[]`.'),
+        ],
+    );
+}
+
+foreach (postmanTrainingExperts() as $index => $expert) {
+    $step = 13 + $index;
+    $trainingProgramBuildSteps[] = req(
+        sprintf('%02d — خبير — %s', $step, $expert['nameAr']),
+        'POST',
+        '/api/admin/experts',
+        [
+            'auth' => true,
+            'body' => $expert,
+            'description' => publicMatch('/api/v1/programs/training', 'Step '.$step.': Expert card on ?tab=experts carousel. Merged into `sections.experts.experts[]`.'),
+        ],
+    );
+}
+
 $adminProgramsGroup = postmanAdminFolder('البرامج', 'Programs', [
-    postmanAdminFolder('البرامج', 'Programs CRUD', adminCrud('programs', 'Program', [
-        'slug' => 'training',
-        'titleAr' => 'برنامج التدريب',
-        'titleEn' => 'Training Program',
-        'heroIntroAr' => 'يقدم المعهد برامج تدريبية متخصصة في التنمية الحضرية للعاملين في القطاع البلدي.',
-        'heroIntroEn' => 'The institute offers specialized training programs in urban development for municipal sector professionals.',
-        'cardDescriptionAr' => 'برامج تدريبية متخصصة لبناء قدرات العاملين في البلديات والمؤسسات الحضرية في العالم العربي.',
-        'cardDescriptionEn' => 'Specialized training programs to build the capacity of municipal and urban institution staff across the Arab world.',
-        'sortOrder' => 1,
-    ], ['withReorder' => false, 'publicPath' => '/api/v1/home', 'labelAr' => 'برنامج', 'description' => 'يغذي أيضاً home.programs.items. التفاصيل: GET /api/v1/programs/{slug}.'])),
-    postmanAdminFolder('أقسام البرنامج', 'Program Sections', adminCrud('program-sections', 'Program Section', [
-        'programId' => 1,
-        'tabKey' => 'trainingPrograms',
-        'titleAr' => 'البرامج التدريبية',
-        'titleEn' => 'Training Programs',
-        'introAr' => 'مجموعة من البرامج التدريبية المتخصصة في مختلف مجالات التنمية الحضرية.',
-        'introEn' => 'A set of specialized training programs in various urban development fields.',
-        'bodyAr' => [
-            'labels' => [
-                'courses' => 'الدورات',
-                'duration' => 'المدة',
-            ],
-        ],
-        'bodyEn' => [
-            'labels' => [
-                'courses' => 'Courses',
-                'duration' => 'Duration',
-            ],
-        ],
-        'imageUrl' => '/programs/training/training-programs.png',
-        'sortOrder' => 0,
-    ], ['publicPath' => '/api/v1/programs/training', 'labelAr' => 'قسم برنامج'])),
-    postmanAdminFolder('الدورات التدريبية', 'Training Courses', adminCrud('training-courses', 'Training Course', [
-        'titleAr' => 'التخطيط الحضري المتكامل',
-        'titleEn' => 'Integrated Urban Planning',
-        'countAr' => '3 دورات',
-        'countEn' => '3 courses',
-        'sortOrder' => 0,
-    ], ['publicPath' => '/api/v1/programs/training', 'labelAr' => 'دورة تدريبية'])),
-    postmanAdminFolder('الخبراء', 'Experts', adminCrud('experts', 'Expert', [
-        'nameAr' => 'د. إبراهيم الحسن',
-        'nameEn' => 'Dr. Ibrahim Al-Hassan',
-        'specialtyAr' => 'التصميم الحضري والعمارة',
-        'specialtyEn' => 'Urban Design and Architecture',
-        'imageUrl' => '/emp/expert-1.png',
-        'sortOrder' => 0,
-    ], ['publicPath' => '/api/v1/programs/training', 'labelAr' => 'خبير'])),
+    postmanAdminFolder('00 — بناء برنامج التدريب', '00 — Build Training Program', $trainingProgramBuildSteps, <<<'MD'
+Build [مركز دعم المدن / training](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن) to match live tab pages:
+
+01 program → 02 labels → **03–06** four `program-sections` (with `imageUrl` + image fields in `bodyAr`) → **07–12** six `training-courses` → **13–15** three `experts` (each with `imageUrl`).
+
+Verify: `GET /api/v1/programs/training`.
+MD),
+    postmanAdminFolder('البرامج', 'Programs CRUD', adminCrud('programs', 'Program', postmanHomeProgramCards()[0], [
+        'withReorder' => false,
+        'publicPath' => '/api/v1/home',
+        'labelAr' => 'برنامج',
+        'description' => 'يغذي أيضاً home.programs.items. See «بطاقات برامج الرئيسية» for all 3 homepage programs. التفاصيل: GET /api/v1/programs/{slug}.',
+    ])),
+    postmanAdminFolder('أقسام البرنامج', 'Program Sections', array_merge(
+        adminCrud('program-sections', 'Program Section', postmanTrainingProgramSections()[0]['body'], [
+            'publicPath' => '/api/v1/programs/training',
+            'labelAr' => 'قسم برنامج',
+            'description' => 'Link section to program via **`programId`**. Training tabs: trainingPrograms, consulting, executive, experts.',
+        ]),
+        array_map(
+            fn (array $section) => req(
+                'إنشاء قسم '.$section['body']['tabKey'].' — Create '.$section['name'],
+                'POST',
+                '/api/admin/program-sections',
+                [
+                    'auth' => true,
+                    'body' => $section['body'],
+                    'description' => publicMatch('/api/v1/programs/training', 'Example for tab `'.$section['body']['tabKey'].'`. Set `programId` from program create response.'),
+                ],
+            ),
+            postmanTrainingProgramSections(),
+        ),
+    )),
+    postmanAdminFolder('الدورات التدريبية', 'Training Courses', array_merge(
+        adminCrud('training-courses', 'Training Course', postmanTrainingCourses()[0], [
+            'publicPath' => '/api/v1/programs/training',
+            'labelAr' => 'دورة تدريبية',
+            'description' => 'Rows under `coursesTitle` on ?tab=trainingPrograms. See folder «00 — بناء برنامج التدريب» steps 07–12.',
+        ]),
+        array_map(
+            fn (array $course) => req(
+                'إنشاء دورة — '.$course['titleAr'],
+                'POST',
+                '/api/admin/training-courses',
+                [
+                    'auth' => true,
+                    'body' => $course,
+                    'description' => publicMatch('/api/v1/programs/training', 'Example course for trainingPrograms tab grid.'),
+                ],
+            ),
+            postmanTrainingCourses(),
+        ),
+    )),
+    postmanAdminFolder('الخبراء', 'Experts', array_merge(
+        adminCrud('experts', 'Expert', postmanTrainingExperts()[0], [
+            'publicPath' => '/api/v1/programs/training',
+            'labelAr' => 'خبير',
+            'description' => 'Carousel cards on ?tab=experts. See folder «00 — بناء برنامج التدريب» steps 13–15.',
+        ]),
+        array_map(
+            fn (array $expert) => req(
+                'إنشاء خبير — '.$expert['nameAr'],
+                'POST',
+                '/api/admin/experts',
+                [
+                    'auth' => true,
+                    'body' => $expert,
+                    'description' => publicMatch('/api/v1/programs/training', 'Example expert for experts tab carousel.'),
+                ],
+            ),
+            postmanTrainingExperts(),
+        ),
+    )),
     postmanAdminFolder('دليل المدن', 'Directory Cities', adminCrud('directory/cities', 'Directory City', [
         'number' => '01',
         'nameAr' => 'الرياض، المملكة العربية السعودية',
@@ -1084,60 +1388,27 @@ $adminProgramsGroup = postmanAdminFolder('البرامج', 'Programs', [
     ], ['publicPath' => '/api/v1/programs/urban-policies/directory', 'labelAr' => 'منشور'])),
     req('إنشاء program_training — Create program_training labels', 'POST', '/api/admin/about-content', [
         'auth' => true,
-        'body' => [
-            'sectionKey' => 'program_training',
-            'bodyAr' => ['back' => 'العودة للبرامج', 'sectionsLabel' => 'أقسام البرنامج'],
-            'bodyEn' => ['back' => 'Back to programs', 'sectionsLabel' => 'Program sections'],
-        ],
-        'description' => publicMatch('/api/v1/programs/training', 'Navigation labels for program page.'),
+        'body' => postmanProgramTrainingLabelsBody(),
+        'description' => publicMatch('/api/v1/programs/training', 'Navigation labels: back + sectionsLabel (اقسام البرنامج).'),
     ]),
 ], publicMatch('/api/v1/programs/training'));
 
 // --- Resources ---
 $adminResourcesGroup = postmanAdminFolder('المصادر', 'Resources', [
-    postmanAdminFolder('المصادر', 'Resources CRUD', adminCrud('resources', 'Resource', [
-        'slug' => 'urban-greening-projects',
-        'titleAr' => '60 مشروع تخضير حضري في المدن العربية',
-        'titleEn' => '60 Urban Greening Projects in Arab Cities',
-        'publishedDate' => '2025-05-29',
-        'imageUrl' => '/our-sources/1.png',
-        'fileUrl' => '/storage/resources/urban-greening.pdf',
-        'resourceType' => 'report',
-        'focusAreaId' => 1,
-        'year' => 2025,
-        'isPublished' => true,
-        'sortOrder' => 0,
-    ], ['publicPath' => '/api/v1/resources', 'labelAr' => 'مصدر'])),
+    postmanAdminFolder('المصادر', 'Resources CRUD', adminCrud('resources', 'Resource', postmanHomeKnowledgeCenterResources()[2], [
+        'publicPath' => '/api/v1/resources',
+        'labelAr' => 'مصدر',
+        'description' => 'Resources page + homepage knowledge center cards per category. See «تصنيفات مركز المعرفة» + «بطاقات مركز المعرفة» under Home.',
+    ])),
 ], publicMatch('/api/v1/resources'));
 
 // --- Media ---
 $adminMediaGroup = postmanAdminFolder('المركز الإعلامي', 'Media', [
-    postmanAdminFolder('المقالات الإعلامية', 'Media Articles', adminCrud('media', 'Media Article', [
-        'category' => 'news',
-        'key' => 'director-dialogue-session',
-        'slugAr' => 'مدير-عام-المعهد-يشارك-في-جلسة-حوارية',
-        'slugEn' => 'director-participates-in-dialogue-session',
-        'titleAr' => 'مدير عام المعهد يشارك في جلسة حوارية حول التنمية الحضرية',
-        'titleEn' => 'Director General participates in dialogue session on urban development',
-        'descriptionAr' => 'شارك د. أنس المغيري في جلسة حوارية ناقشت مستقبل المدن العربية.',
-        'descriptionEn' => 'Dr. Anas AlMugairi participated in a dialogue session discussing the future of Arab cities.',
-        'bodyAr' => [
-            'شارك مدير عام المعهد العربي لإنماء المدن في جلسة حوارية مهمة.',
-            'ناقشت الجلسة التحديات والفرص في التنمية الحضرية المستدامة.',
-        ],
-        'bodyEn' => [
-            'The Director General of AUDI participated in an important dialogue session.',
-            'The session discussed challenges and opportunities in sustainable urban development.',
-        ],
-        'publishedDate' => '2025-12-29',
-        'imageUrl' => '/blog/1.png',
-        'pdfUrl' => null,
-        'authorsAr' => null,
-        'authorsEn' => null,
-        'eventTime' => null,
-        'isPublished' => true,
-        'sortOrder' => 0,
-    ], ['publicPath' => '/api/v1/media/news', 'labelAr' => 'مقال إعلامي'])),
+    postmanAdminFolder('المقالات الإعلامية', 'Media Articles', adminCrud('media', 'Media Article', postmanHomeMediaNewsArticles()[0]['body'], [
+        'publicPath' => '/api/v1/media/news',
+        'labelAr' => 'مقال إعلامي',
+        'description' => 'Homepage news: see «بطاقات المركز الإعلامي» under Home for all 6 example bodies from https://audi-ten.vercel.app/ar.',
+    ])),
     req('إنشاء نشرة — Create Newsletter Article', 'POST', '/api/admin/media', [
         'auth' => true,
         'body' => [
@@ -1278,32 +1549,8 @@ $adminMemberCities = postmanAdminFolder('المدن الأعضاء', 'Member Cit
     ]),
     req('تحديث الإحصائيات — Update Stats', 'PUT', '/api/admin/member-cities/stats', [
         'auth' => true,
-        'body' => [
-            'items' => [
-                [
-                    'key' => 'countries',
-                    'value' => 22,
-                    'autoCalculate' => false,
-                    'label' => ['ar' => 'دولة', 'en' => 'Countries'],
-                    'unit' => ['ar' => '', 'en' => ''],
-                ],
-                [
-                    'key' => 'cities',
-                    'value' => null,
-                    'autoCalculate' => true,
-                    'label' => ['ar' => 'مدينة', 'en' => 'Cities'],
-                    'unit' => ['ar' => '', 'en' => ''],
-                ],
-                [
-                    'key' => 'members',
-                    'value' => 1240,
-                    'autoCalculate' => false,
-                    'label' => ['ar' => 'عضو', 'en' => 'Members'],
-                    'unit' => ['ar' => '', 'en' => ''],
-                ],
-            ],
-        ],
-        'description' => publicMatch('/api/v1/home/member-cities', 'Stats use nested label.ar/en and unit.ar/en (not *Ar/*En suffix).'),
+        'body' => postmanHomeMemberCityStatsBody(),
+        'description' => publicMatch('/api/v1/home/member-cities', 'Homepage «المدن الأعضاء»: 12 دولة / 400 مدينة / 1240 عضو. Stats use nested label.ar/en and unit.ar/en.'),
     ]),
     req('عرض الدول — List Countries', 'GET', '/api/admin/member-cities/countries', ['auth' => true]),
     req('استيراد جماعي — Bulk Import Cities', 'POST', '/api/admin/member-cities/cities/import', [
@@ -1449,3 +1696,11 @@ echo "Written: {$apiReadmeOutput}\n";
 $apiErrorsMarkdown = postmanGenerateApiErrorsMarkdown();
 file_put_contents($apiErrorsOutput, $apiErrorsMarkdown);
 echo "Written: {$apiErrorsOutput}\n";
+
+$homepageGuideMarkdown = postmanGenerateHomepageAdminGuideMarkdown();
+file_put_contents($homepageGuideOutput, $homepageGuideMarkdown);
+echo "Written: {$homepageGuideOutput}\n";
+
+$programsGuideMarkdown = postmanGenerateProgramsAdminGuideMarkdown();
+file_put_contents($programsGuideOutput, $programsGuideMarkdown);
+echo "Written: {$programsGuideOutput}\n";

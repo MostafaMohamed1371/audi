@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\Admin\DirectoryCityController;
 use App\Http\Controllers\Api\Admin\DirectoryProjectController;
 use App\Http\Controllers\Api\Admin\DirectoryOrganizationController;
 use App\Http\Controllers\Api\Admin\DirectoryPublicationController;
+use App\Http\Controllers\Api\Admin\KnowledgeCategoryController;
 use App\Http\Controllers\Api\Admin\PartnerCategoryController;
 use App\Http\Controllers\Api\Admin\PartnerController;
 use App\Http\Controllers\Api\Admin\ResourceController;
@@ -206,6 +207,13 @@ Route::prefix('admin')->group(function () {
         Route::get('partners/{partner}', [PartnerController::class, 'show']);
         Route::put('partners/{partner}', [PartnerController::class, 'update']);
         Route::delete('partners/{partner}', [PartnerController::class, 'destroy']);
+
+        Route::get('knowledge-categories', [KnowledgeCategoryController::class, 'index']);
+        Route::post('knowledge-categories', [KnowledgeCategoryController::class, 'store']);
+        Route::post('knowledge-categories/reorder', [KnowledgeCategoryController::class, 'reorder']);
+        Route::get('knowledge-categories/{knowledgeCategory}', [KnowledgeCategoryController::class, 'show']);
+        Route::put('knowledge-categories/{knowledgeCategory}', [KnowledgeCategoryController::class, 'update']);
+        Route::delete('knowledge-categories/{knowledgeCategory}', [KnowledgeCategoryController::class, 'destroy']);
 
         Route::get('strategy', [StrategyPageController::class, 'showDefault']);
         Route::put('strategy', [StrategyPageController::class, 'updateDefault']);

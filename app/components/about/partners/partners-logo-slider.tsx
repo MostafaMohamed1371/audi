@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Marquee from "react-fast-marquee";
+import { resolveImageSrc } from "@/lib/image-src";
 
 type PartnerLogo = {
   image: string;
@@ -17,7 +18,7 @@ function LogoItem({ logo }: { logo: PartnerLogo }) {
   return (
     <div className="mx-5 flex h-28 w-48 shrink-0 items-center justify-center ">
       <Image
-        src={`/client/${logo.image}`}
+        src={resolveImageSrc(logo.image, "/client")}
         alt={logo.name}
         width={240}
         height={120}

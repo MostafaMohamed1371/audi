@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { resolveImageSrc } from "@/lib/image-src";
 import Image from "next/image";
 
 type PartnerLogo = {
@@ -21,7 +22,7 @@ function PartnerLogoCard({ logo }: { logo: PartnerLogo }) {
   return (
     <article className="flex aspect-4/3 items-center justify-center rounded-xl border border-primary/20 bg-white p-4 shadow-[0_2px_12px_rgba(17,31,66,0.04)] sm:rounded-2xl sm:p-5">
       <Image
-        src={`/client/${logo.image}`}
+        src={resolveImageSrc(logo.image, "/client")}
         alt={logo.name}
         width={120}
         height={72}

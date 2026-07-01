@@ -22,6 +22,7 @@ class Resource extends Model
   'file_url',
   'resource_type',
   'focus_area_id',
+  'knowledge_category_id',
   'year',
   'is_published',
   'sort_order',
@@ -39,5 +40,10 @@ class Resource extends Model
     public function focusArea(): BelongsTo
     {
         return $this->belongsTo(FocusArea::class, 'focus_area_id');
+    }
+
+    public function knowledgeCategory(): BelongsTo
+    {
+        return $this->belongsTo(KnowledgeCategory::class, 'knowledge_category_id');
     }
 }

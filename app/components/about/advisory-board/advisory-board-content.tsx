@@ -1,5 +1,6 @@
 import { AdvisoryBoardSection } from "@/app/components/about/advisory-board/advisory-board-section";
 import { fetchAboutAdvisoryBoard } from "@/lib/api";
+import { resolveImageSrc } from "@/lib/image-src";
 import { getLocale, getTranslations } from "next-intl/server";
 
 export async function AdvisoryBoardContent() {
@@ -18,7 +19,7 @@ export async function AdvisoryBoardContent() {
 
   const members = (apiData?.members ?? fallbackMembers).map((member) => ({
     ...member,
-    image: `/emp/${member.image}`,
+    image: resolveImageSrc(member.image, "/emp"),
   }));
 
   return (

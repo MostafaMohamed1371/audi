@@ -29,6 +29,10 @@ class ResourceController extends Controller
             $query->where('resource_type', $type);
         }
 
+        if ($categoryId = $request->query('knowledgeCategoryId', $request->query('knowledge_category_id'))) {
+            $query->where('knowledge_category_id', $categoryId);
+        }
+
         if ($request->has('isPublished')) {
             $query->where('is_published', filter_var($request->query('isPublished'), FILTER_VALIDATE_BOOLEAN));
         }

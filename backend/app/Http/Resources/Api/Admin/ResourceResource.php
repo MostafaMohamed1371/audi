@@ -26,6 +26,7 @@ class ResourceResource extends JsonResource
             'fileUrl' => ImageUrl::api($this->file_url),
             'resourceType' => $this->resource_type,
             'focusAreaId' => $this->focus_area_id,
+            'knowledgeCategoryId' => $this->knowledge_category_id,
             'year' => $this->year,
             'isPublished' => $this->is_published,
             'sortOrder' => $this->sort_order,

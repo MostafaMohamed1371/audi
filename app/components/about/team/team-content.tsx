@@ -1,5 +1,6 @@
 import { TeamSection } from "@/app/components/about/team/team-section";
 import { fetchAboutTeam } from "@/lib/api";
+import { resolveImageSrc } from "@/lib/image-src";
 import { getLocale, getTranslations } from "next-intl/server";
 
 export async function TeamContent() {
@@ -23,7 +24,7 @@ export async function TeamContent() {
     ...section,
     members: section.members.map((member) => ({
       ...member,
-      image: `/emp/${member.image}`,
+      image: resolveImageSrc(member.image, "/emp"),
     })),
   }));
 

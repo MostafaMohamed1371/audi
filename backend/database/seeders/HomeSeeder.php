@@ -109,12 +109,10 @@ class HomeSeeder extends Seeder
             'body_ar' => [
                 'viewIssue' => $ar['knowledgeCenter']['viewIssue'] ?? '',
                 'downloadPdf' => $ar['knowledgeCenter']['downloadPdf'] ?? '',
-                'headerSlides' => $ar['knowledgeCenter']['headerSlides'] ?? [],
             ],
             'body_en' => [
                 'viewIssue' => $en['knowledgeCenter']['viewIssue'] ?? '',
                 'downloadPdf' => $en['knowledgeCenter']['downloadPdf'] ?? '',
-                'headerSlides' => $en['knowledgeCenter']['headerSlides'] ?? [],
             ],
         ]);
 

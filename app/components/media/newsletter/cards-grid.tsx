@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { mediaArticleHref } from "@/lib/hrefs";
 import { cn } from "@/lib/utils";
+import { resolveImageSrc } from "@/lib/image-src";
 import { MediaPagination } from "@/app/components/media/media-pagination";
 
 type NewsletterItem = {
@@ -41,7 +42,7 @@ export function NewsletterCardsGrid({
           >
             <div className="relative aspect-[4/3] overflow-hidden">
               <Image
-                src={`/blog/${item.image}`}
+                src={resolveImageSrc(item.image, "/blog")}
                 alt={item.title}
                 fill
                 className="object-cover"

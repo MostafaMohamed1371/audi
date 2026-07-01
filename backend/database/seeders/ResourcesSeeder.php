@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\KnowledgeCategory;
 use App\Models\Resource;
 use App\Support\ImageUrl;
 use Carbon\Carbon;
@@ -19,6 +20,9 @@ class ResourcesSeeder extends Seeder
         $enItems = collect($en['items'] ?? [])->keyBy('slug');
 
         $imported = 0;
+        $knowledgeCenterCategoryId = KnowledgeCategory::query()
+            ->where('slug', 'knowledge-center')
+            ->value('id');
 
         foreach ($arItems as $slug => $arItem) {
             $enItem = $enItems->get($slug, $arItem);
@@ -34,6 +38,7 @@ class ResourcesSeeder extends Seeder
                     'file_url' => $this->normalizeUrl($arItem['downloadHref'] ?? null),
                     'resource_type' => null,
                     'focus_area_id' => null,
+                    'knowledge_category_id' => $knowledgeCenterCategoryId,
                     'year' => $publishedDate ? (int) Carbon::parse($publishedDate)->format('Y') : null,
                     'is_published' => true,
                     'sort_order' => $imported,

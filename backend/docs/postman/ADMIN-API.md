@@ -525,18 +525,18 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 |-------|--------|------|
 | `titleAr` | العنوان بالعربية | "تواصل معنا" |
 | `titleEn` | العنوان بالإنجليزية | "Contact Us" |
-| `subtitleAr` | العنوان الفرعي بالعربية | "نسعد بالتواصل معكم والإجابة على استفساراتكم." |
-| `subtitleEn` | العنوان الفرعي بالإنجليزية | "We are happy to hear from you and answer your … |
-| `addressLabelAr` | تسمية العنوان بالعربية | "الموقع على الخارطة:" |
-| `addressLabelEn` | تسمية العنوان بالإنجليزية | "Location on map:" |
-| `addressAr` | العنوان الكامل بالعربية | "شارع عبدالله بن حذافة السهمي، الحي الدبلوماسي،… |
-| `addressEn` | العنوان الكامل بالإنجليزية | "Abdullah bin Hudhafah Al-Sahmi St., Diplomatic… |
+| `subtitleAr` | العنوان الفرعي بالعربية | "" |
+| `subtitleEn` | العنوان الفرعي بالإنجليزية | "" |
+| `addressLabelAr` | تسمية العنوان بالعربية | "العنوان" |
+| `addressLabelEn` | تسمية العنوان بالإنجليزية | "Address" |
+| `addressAr` | العنوان الكامل بالعربية | "شارع عبدالله بن حذافة السهمي، الحي الدبلوماسي … |
+| `addressEn` | العنوان الكامل بالإنجليزية | "Abdullah bin Hudhafa Al-Sahmi Street, Diplomat… |
 | `mapTitleAr` | عنوان الخريطة بالعربية | "موقع المعهد العربي لإنماء المدن" |
 | `mapTitleEn` | عنوان الخريطة بالإنجليزية | "Arab Urban Development Institute location" |
 | `mapEmbedUrlAr` | رابط تضمين خريطة Google (عربي) | "https:\/\/maps.google.com\/maps?q=Arab+Urban+D… |
 | `mapEmbedUrlEn` | رابط تضمين خريطة Google (إنجليزي) | "https:\/\/maps.google.com\/maps?q=Arab+Urban+D… |
-| `itemsAr` | عناصر التواصل بالعربية [{label, value, type, href}] | [{"label":"البريد الإلكتروني:","value":"info@ar… |
-| `itemsEn` | عناصر التواصل بالإنجليزية | [{"label":"Email:","value":"info@araburban.org"… |
+| `itemsAr` | عناصر التواصل بالعربية [{label, value, type, href}] | [{"label":"الهاتف","value":"+966 114802555","ty… |
+| `itemsEn` | عناصر التواصل بالإنجليزية | [{"label":"Phone","value":"+966 114802555","typ… |
 
 #### Notes | ملاحظات
 
@@ -544,7 +544,7 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-واجهة الإدارة المفضّلة لصفحة التواصل وتذييل الرئيسية.
+واجهة الإدارة المفضّلة لصفحة التواصل وتذييل الرئيسية. Same body in Home → عضوية وتواصل.
 
 ---
 
@@ -557,6 +557,1078 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 **Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+## Homepage map | خريطة الصفحة الرئيسية
+
+Matches live site: https://audi-ten.vercel.app/ar → public `GET /api/v1/home`
+
+| Section on site | Admin folder / endpoint | Public field |
+|-----------------|-------------------------|--------------|
+| Hero slider (تطوير تقني…) | `شرائح الهيرو` → `POST /api/admin/hero-slides` | `slider[]` |
+| About intro + mission/vision | `محتوى أقسام الرئيسية` → `home_about_intro` | `aboutIntro` |
+| المعهد في أرقام (title/subtitle) | `home_stats` in about-content | `stats.title`, `stats.subtitle` |
+| المعهد في أرقام (4 counters) | `إحصائيات الرئيسية` → `POST /api/admin/home-stats` | `stats.items[]` |
+| المدن الأعضاء (title) | `home_member_cities` in about-content | `memberCities.title` |
+| المدن الأعضاء (12 / 400 / 1240) | `المدن الأعضاء` → `PUT /api/admin/member-cities/stats` | `memberCities.stats[]` |
+| برامجنا (title + CTA) | `home_programs` in about-content | `programs.title`, `programs.cta` |
+| برامجنا (3 cards) | `البرامج` → `POST /api/admin/programs` | `programs.items[]` |
+| المركز الإعلامي (labels) | `محتوى أقسام الرئيسية` → `home_media_center` | `mediaCenter.title`, `subtitle`, `readMore`, `viewAll` |
+| المركز الإعلامي (news cards) | `بطاقات المركز الإعلامي` → `POST /api/admin/media` (`category: news`) | `mediaCenter.featured[]` (newest 4) + `mediaCenter.items[]` (next 4) |
+| مركز المعرفة (carousel + labels) | `تصنيفات مركز المعرفة` → `POST /api/admin/knowledge-categories` | `knowledgeCenter.categories[]`, `headerSlides[]` |
+| مركز المعرفة (3 cards) | `المصادر` → `POST /api/admin/resources` (`knowledgeCategoryId`) | `knowledgeCenter.categories[].items[]` |
+| عضوية + تواصل (labels) | `عضوية وتواصل` → `home_membership_contact` | `membershipContact.membership`, `contact.title` |
+| تواصل (phone, fax, email, address, map) | `عضوية وتواصل` → `PUT /api/admin/contact-info` | `membershipContact.contact` |
+
+**Quick start:** run requests in folder `00 — بناء الصفحة الرئيسية` top to bottom (matches https://audi-ten.vercel.app/ar).
+
+**Note:** Stats icons (`/icons/num1.svg`…), knowledge carousel logos (`/knowledgeCenter/icon*.png`), and hero images (`/slider/*.png`) are static frontend assets.
+
+#### 00 — بناء الصفحة الرئيسية — 00 — Build Full Homepage
+
+Run **01 → 33** in order after Login. Bodies match https://audi-ten.vercel.app/ar.
+
+Then verify: `GET /api/v1/home` with `Accept-Language: ar`.
+
+#### POST `/api/admin/hero-slides`
+
+**الاسم | Name:** 01 — شريحة هيرو 1
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "تطوير تقني" |
+| `titleEn` | العنوان بالإنجليزية | "Technical Development" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/slider\/1.png" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+| `isActive` | نشط؟ (true/false) | true |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 1: Hero slider → `slider[]`.
+
+---
+
+#### POST `/api/admin/hero-slides`
+
+**الاسم | Name:** 02 — شريحة هيرو 2
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "تنمية عمرانية" |
+| `titleEn` | العنوان بالإنجليزية | "Urban Development" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/slider\/2.png" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+| `isActive` | نشط؟ (true/false) | true |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 2: Hero slider → `slider[]`.
+
+---
+
+#### POST `/api/admin/hero-slides`
+
+**الاسم | Name:** 03 — شريحة هيرو 3
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "شراكات مستدامة" |
+| `titleEn` | العنوان بالإنجليزية | "Sustainable Partnerships" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/slider\/3.png" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+| `isActive` | نشط؟ (true/false) | true |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 3: Hero slider → `slider[]`.
+
+---
+
+#### POST `/api/admin/hero-slides`
+
+**الاسم | Name:** 04 — شريحة هيرو 4
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "بحوث ومبادرات" |
+| `titleEn` | العنوان بالإنجليزية | "Research and Initiatives" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/slider\/4.png" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 3 |
+| `isActive` | نشط؟ (true/false) | true |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 4: Hero slider → `slider[]`.
+
+---
+
+#### POST `/api/admin/about-content`
+
+**الاسم | Name:** 05 — عن المعهد — home_about_intro
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "home_about_intro" |
+| `titleAr` | العنوان بالعربية | "المعهد العربي لإنماء المدن" |
+| `titleEn` | العنوان بالإنجليزية | "Arab Urban Development Institute" |
+| `bodyAr.description` | description | "تأسس المعهد العربي لإنماء المدن عام 1980، ومقر… |
+| `bodyAr.cta` | cta | "المزيد" |
+| `bodyAr.mission.title` | العنوان | "رسالتنا" |
+| `bodyAr.mission.description` | description | "مؤسسة عالمية رائدة تسهم في خلق مستقبل عمراني أ… |
+| `bodyAr.mission.readMore` | readMore | "قراءة المزيد" |
+| `bodyAr.vision.title` | العنوان | "رؤيتنا" |
+| `bodyAr.vision.description` | description | "دعم المدن والبلديات العربية لمواجهة تحديات الت… |
+| `bodyAr.vision.readMore` | readMore | "قراءة المزيد" |
+| `bodyEn.description` | description | "Founded in 1980 and headquartered in Riyadh, t… |
+| `bodyEn.cta` | cta | "Learn More" |
+| `bodyEn.mission.title` | العنوان | "Our Mission" |
+| `bodyEn.mission.description` | description | "A leading global institution contributing to a… |
+| `bodyEn.mission.readMore` | readMore | "Read More" |
+| `bodyEn.vision.title` | العنوان | "Our Vision" |
+| `bodyEn.vision.description` | description | "Supporting Arab cities and municipalities in f… |
+| `bodyEn.vision.readMore` | readMore | "Read More" |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 5: About block → `aboutIntro`.
+
+---
+
+#### POST `/api/admin/about-content`
+
+**الاسم | Name:** 06 — المعهد في أرقام (عنوان) — home_stats
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "home_stats" |
+| `titleAr` | العنوان بالعربية | "المعهد في أرقام" |
+| `titleEn` | العنوان بالإنجليزية | "The Institute in Numbers" |
+| `bodyAr.subtitle` | subtitle | "مؤسسة عالمية رائدة تساهم في صنع مستقبل حضري أف… |
+| `bodyEn.subtitle` | subtitle | "A leading global institution contributing to c… |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 6: Stats title/subtitle. Counters: steps 07–10.
+
+---
+
+#### POST `/api/admin/home-stats`
+
+**الاسم | Name:** 07 — إحصائية 1
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `value` | القيمة الرقمية أو النصية (+25) | "+25" |
+| `labelAr` | تسمية الإحصائية بالعربية | "اتفاقية" |
+| `labelEn` | تسمية الإحصائية بالإنجليزية | "Agreements" |
+| `descriptionAr` | الوصف بالعربية | "الاتفاقيات" |
+| `descriptionEn` | الوصف بالإنجليزية | "Partnership agreements" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 7: Counter → `stats.items[]`.
+
+---
+
+#### POST `/api/admin/home-stats`
+
+**الاسم | Name:** 08 — إحصائية 2
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `value` | القيمة الرقمية أو النصية (+25) | "+10" |
+| `labelAr` | تسمية الإحصائية بالعربية | "نشرة" |
+| `labelEn` | تسمية الإحصائية بالإنجليزية | "Newsletters" |
+| `descriptionAr` | الوصف بالعربية | "نشرة مدننا" |
+| `descriptionEn` | الوصف بالإنجليزية | "Our Cities Newsletter" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 8: Counter → `stats.items[]`.
+
+---
+
+#### POST `/api/admin/home-stats`
+
+**الاسم | Name:** 09 — إحصائية 3
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `value` | القيمة الرقمية أو النصية (+25) | "+500" |
+| `labelAr` | تسمية الإحصائية بالعربية | "مشارك" |
+| `labelEn` | تسمية الإحصائية بالإنجليزية | "Participants" |
+| `descriptionAr` | الوصف بالعربية | "المشاركين في برامج القيادات البلدية" |
+| `descriptionEn` | الوصف بالإنجليزية | "Participants in municipal leadership programs" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 9: Counter → `stats.items[]`.
+
+---
+
+#### POST `/api/admin/home-stats`
+
+**الاسم | Name:** 10 — إحصائية 4
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `value` | القيمة الرقمية أو النصية (+25) | "+400" |
+| `labelAr` | تسمية الإحصائية بالعربية | "مشروع" |
+| `labelEn` | تسمية الإحصائية بالإنجليزية | "Projects" |
+| `descriptionAr` | الوصف بالعربية | "مشروع في تقارير السياسات الحضرية" |
+| `descriptionEn` | الوصف بالإنجليزية | "Projects in urban policy reports" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 3 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 10: Counter → `stats.items[]`.
+
+---
+
+#### POST `/api/admin/about-content`
+
+**الاسم | Name:** 11 — المدن الأعضاء (عنوان) — home_member_cities
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "home_member_cities" |
+| `titleAr` | العنوان بالعربية | "المدن الأعضاء" |
+| `titleEn` | العنوان بالإنجليزية | "Member Cities" |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 11: Member cities title → `memberCities.title`.
+
+---
+
+#### PUT `/api/admin/member-cities/stats`
+
+**الاسم | Name:** 12 — إحصائيات المدن — member-cities/stats
+
+**الغرض | Purpose:** استبدال/تحديث بيانات كاملة.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `items` | قائمة العناصر (إعادة ترتيب أو إحصائيات) | [{"key":"countries","value":12,"autoCalculate":… |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 12: 12 دولة / 400 مدينة / 1240 عضو → `memberCities.stats[]`.
+
+---
+
+#### POST `/api/admin/member-cities/cities`
+
+**الاسم | Name:** 13 — مدينة على الخريطة (مثال الرياض) — member city
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `countryCode` | رمز الدولة | "SA" |
+| `nameAr` | الاسم بالعربية | "الرياض" |
+| `nameEn` | الاسم بالإنجليزية | "Riyadh" |
+| `latitude` | خط العرض | 24.7136 |
+| `longitude` | خط الطول | 46.6753 |
+| `infoAr` | معلومات إضافية بالعربية | "عاصمة المملكة العربية السعودية" |
+| `infoEn` | معلومات إضافية بالإنجليزية | "Capital of Saudi Arabia" |
+| `isActive` | نشط؟ (true/false) | true |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home/member-cities` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 13: Sample map pin. Repeat or use bulk import for all cities.
+
+---
+
+#### POST `/api/admin/about-content`
+
+**الاسم | Name:** 14 — برامجنا (عنوان) — home_programs
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "home_programs" |
+| `titleAr` | العنوان بالعربية | "برامجنا" |
+| `titleEn` | العنوان بالإنجليزية | "Our Programs" |
+| `bodyAr.cta` | cta | "استكشف" |
+| `bodyEn.cta` | cta | "Explore" |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 14: Programs section title + CTA. Cards: steps 15–17.
+
+---
+
+#### POST `/api/admin/programs`
+
+**الاسم | Name:** 15 — برنامج urban-policies
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "urban-policies" |
+| `titleAr` | العنوان بالعربية | "السياسات الحضرية" |
+| `titleEn` | العنوان بالإنجليزية | "Urban Policies" |
+| `cardDescriptionAr` | وصف بطاقة البرنامج في الرئيسية (عربي) | "إعداد دراسات وتقارير سياسات حضرية تدعم صناع ال… |
+| `cardDescriptionEn` | وصف بطاقة البرنامج في الرئيسية (إنجليزي) | "Developing urban policy studies and reports th… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 15: Program card → `programs.items[]`.
+
+---
+
+#### POST `/api/admin/programs`
+
+**الاسم | Name:** 16 — برنامج training
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "training" |
+| `titleAr` | العنوان بالعربية | "التدريب و تطوير القدرات" |
+| `titleEn` | العنوان بالإنجليزية | "Training & Capacity Building" |
+| `cardDescriptionAr` | وصف بطاقة البرنامج في الرئيسية (عربي) | "برامج تدريبية متخصصة لبناء قدرات العاملين في ا… |
+| `cardDescriptionEn` | وصف بطاقة البرنامج في الرئيسية (إنجليزي) | "Specialized training programs to build the cap… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 16: Program card → `programs.items[]`.
+
+---
+
+#### POST `/api/admin/programs`
+
+**الاسم | Name:** 17 — برنامج partnerships
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "partnerships" |
+| `titleAr` | العنوان بالعربية | "الشراكات" |
+| `titleEn` | العنوان بالإنجليزية | "Partnerships" |
+| `cardDescriptionAr` | وصف بطاقة البرنامج في الرئيسية (عربي) | "معاً لنصنع مستقبل حضري أفضل: تعرف كيف نبني جسو… |
+| `cardDescriptionEn` | وصف بطاقة البرنامج في الرئيسية (إنجليزي) | "Building strategic partnerships with cities an… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 17: Program card → `programs.items[]`.
+
+---
+
+#### POST `/api/admin/about-content`
+
+**الاسم | Name:** 18 — المركز الإعلامي (عناوين) — home_media_center
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "home_media_center" |
+| `titleAr` | العنوان بالعربية | "المركز الإعلامي" |
+| `titleEn` | العنوان بالإنجليزية | "Media Center" |
+| `bodyAr.subtitle` | subtitle | "تعرف على أخبارنا ونشرتنا الدورية ومنشوراتنا ال… |
+| `bodyAr.readMore` | readMore | "قراءة المزيد" |
+| `bodyAr.viewAll` | viewAll | "عرض الكل" |
+| `bodyEn.subtitle` | subtitle | "Explore our news, periodic newsletter, and aud… |
+| `bodyEn.readMore` | readMore | "Read more" |
+| `bodyEn.viewAll` | viewAll | "View all" |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 18: Media section labels. News items: steps 19–24.
+
+---
+
+#### POST `/api/admin/media`
+
+**الاسم | Name:** 19 — خبر director-dialogue-session
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `category` | التصنيف (news, newsletter, city_meetings, membership, …) | "news" |
+| `key` | المفتاح الفريد للسجل | "director-dialogue-session" |
+| `slugAr` | الرابط العربي (slug) | "جلسة-حوارية-التنمية-الحضرية" |
+| `slugEn` | الرابط الإنجليزي (slug) | "director-dialogue-session" |
+| `titleAr` | العنوان بالعربية | "مدير عام المعهد يشارك في جلسة حوارية للفطيم حو… |
+| `titleEn` | العنوان بالإنجليزية | "Institute Director Participates in Al-Futtaim … |
+| `descriptionAr` | الوصف بالعربية | "شارك مدير عام المعهد العربي لإنماء المدن في جل… |
+| `descriptionEn` | الوصف بالإنجليزية | "The Director General of the Arab Urban Develop… |
+| `bodyAr` | محتوى JSON بالعربية (فقرات، تسميات، أقسام) | ["شارك مدير عام المعهد العربي لإنماء المدن في ج… |
+| `bodyEn` | محتوى JSON بالإنجليزية | ["The Director General of the Arab Urban Develo… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-12-29" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/blog\/1.png" |
+| `pdfUrl` | رابط PDF للمقال أو النشرة | null |
+| `authorsAr` | المؤلفون بالعربية (مصفوفة) | null |
+| `authorsEn` | المؤلفون بالإنجليزية (مصفوفة) | null |
+| `eventTime` | وقت الفعالية (مثل: 10:00 - 14:00) | null |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 19: News → `mediaCenter.featured` / `items`.
+
+---
+
+#### POST `/api/admin/media`
+
+**الاسم | Name:** 20 — خبر uae-contractors-league
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `category` | التصنيف (news, newsletter, city_meetings, membership, …) | "news" |
+| `key` | المفتاح الفريد للسجل | "uae-contractors-league" |
+| `slugAr` | الرابط العربي (slug) | "دوري-المقاولين-الإماراتي" |
+| `slugEn` | الرابط الإنجليزي (slug) | "uae-contractors-league" |
+| `titleAr` | العنوان بالعربية | "الدوري الإماراتي لمقاولي العمران يفتتح بمشاركة… |
+| `titleEn` | العنوان بالإنجليزية | "UAE Urban Contractors League Opens with Munici… |
+| `descriptionAr` | الوصف بالعربية | "انطلقت فعاليات الدوري الإماراتي لمقاولي العمرا… |
+| `descriptionEn` | الوصف بالإنجليزية | "The UAE Urban Contractors League launched with… |
+| `bodyAr` | محتوى JSON بالعربية (فقرات، تسميات، أقسام) | ["انطلقت فعاليات الدوري الإماراتي لمقاولي العمر… |
+| `bodyEn` | محتوى JSON بالإنجليزية | ["The UAE Urban Contractors League launched wit… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-01-22" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/blog\/2.png" |
+| `pdfUrl` | رابط PDF للمقال أو النشرة | null |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 20: News → `mediaCenter.featured` / `items`.
+
+---
+
+#### POST `/api/admin/media`
+
+**الاسم | Name:** 21 — خبر municipal-cooperation-network
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `category` | التصنيف (news, newsletter, city_meetings, membership, …) | "news" |
+| `key` | المفتاح الفريد للسجل | "municipal-cooperation-network" |
+| `slugAr` | الرابط العربي (slug) | "شبكة-التعاون-البلدي-العربية" |
+| `slugEn` | الرابط الإنجليزي (slug) | "municipal-cooperation-network" |
+| `titleAr` | العنوان بالعربية | "المعهد العربي ينظم الاجتماع السنوي لشبكة التعا… |
+| `titleEn` | العنوان بالإنجليزية | "Institute Holds Annual Arab Municipal Cooperat… |
+| `descriptionAr` | الوصف بالعربية | "عقد المعهد العربي لإنماء المدن اجتماعه السنوي … |
+| `descriptionEn` | الوصف بالإنجليزية | "The Institute held its annual meeting of the A… |
+| `bodyAr` | محتوى JSON بالعربية (فقرات، تسميات، أقسام) | ["عقد المعهد العربي لإنماء المدن اجتماعه السنوي… |
+| `bodyEn` | محتوى JSON بالإنجليزية | ["The Arab Urban Development Institute held its… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-02-15" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/blog\/3.png" |
+| `pdfUrl` | رابط PDF للمقال أو النشرة | null |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 21: News → `mediaCenter.featured` / `items`.
+
+---
+
+#### POST `/api/admin/media`
+
+**الاسم | Name:** 22 — خبر sustainable-urban-planning
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `category` | التصنيف (news, newsletter, city_meetings, membership, …) | "news" |
+| `key` | المفتاح الفريد للسجل | "sustainable-urban-planning" |
+| `slugAr` | الرابط العربي (slug) | "التخطيط-الحضري-المستدام" |
+| `slugEn` | الرابط الإنجليزي (slug) | "sustainable-urban-planning" |
+| `titleAr` | العنوان بالعربية | "إطلاق مبادرة جديدة لدعم التخطيط الحضري المستدا… |
+| `titleEn` | العنوان بالإنجليزية | "New Initiative to Support Sustainable Urban Pl… |
+| `descriptionAr` | الوصف بالعربية | "أعلن المعهد العربي لإنماء المدن عن مبادرة جديد… |
+| `descriptionEn` | الوصف بالإنجليزية | "The Institute announced a new initiative to st… |
+| `bodyAr` | محتوى JSON بالعربية (فقرات، تسميات، أقسام) | ["أعلن المعهد العربي لإنماء المدن عن مبادرة جدي… |
+| `bodyEn` | محتوى JSON بالإنجليزية | ["The Arab Urban Development Institute announce… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-03-08" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/blog\/4.png" |
+| `pdfUrl` | رابط PDF للمقال أو النشرة | null |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 3 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 22: News → `mediaCenter.featured` / `items`.
+
+---
+
+#### POST `/api/admin/media`
+
+**الاسم | Name:** 23 — خبر municipal-governance-workshop
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `category` | التصنيف (news, newsletter, city_meetings, membership, …) | "news" |
+| `key` | المفتاح الفريد للسجل | "municipal-governance-workshop" |
+| `slugAr` | الرابط العربي (slug) | "ورشة-الحوكمة-البلدية" |
+| `slugEn` | الرابط الإنجليزي (slug) | "municipal-governance-workshop" |
+| `titleAr` | العنوان بالعربية | "ورشة عمل حول الحوكمة البلدية الرشيدة بمشاركة خ… |
+| `titleEn` | العنوان بالإنجليزية | "Workshop on Good Municipal Governance with Int… |
+| `descriptionAr` | الوصف بالعربية | "نظم المعهد ورشة عمل متخصصة حول الحوكمة البلدية… |
+| `descriptionEn` | الوصف بالإنجليزية | "The Institute organized a specialized workshop… |
+| `bodyAr` | محتوى JSON بالعربية (فقرات، تسميات، أقسام) | ["نظم المعهد ورشة عمل متخصصة حول الحوكمة البلدي… |
+| `bodyEn` | محتوى JSON بالإنجليزية | ["The Institute organized a specialized worksho… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-04-20" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/blog\/1.png" |
+| `pdfUrl` | رابط PDF للمقال أو النشرة | null |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 4 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 23: News → `mediaCenter.featured` / `items`.
+
+---
+
+#### POST `/api/admin/media`
+
+**الاسم | Name:** 24 — خبر urban-development-conference
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `category` | التصنيف (news, newsletter, city_meetings, membership, …) | "news" |
+| `key` | المفتاح الفريد للسجل | "urban-development-conference" |
+| `slugAr` | الرابط العربي (slug) | "مؤتمر-التنمية-الحضرية-2025" |
+| `slugEn` | الرابط الإنجليزي (slug) | "urban-development-conference" |
+| `titleAr` | العنوان بالعربية | "مؤتمر التنمية الحضرية 2025 يناقش مستقبل المدن … |
+| `titleEn` | العنوان بالإنجليزية | "Urban Development Conference 2025 Discusses th… |
+| `descriptionAr` | الوصف بالعربية | "استضاف المعهد مؤتمر التنمية الحضرية بمشاركة نخ… |
+| `descriptionEn` | الوصف بالإنجليزية | "The Institute hosted the Urban Development Con… |
+| `bodyAr` | محتوى JSON بالعربية (فقرات، تسميات، أقسام) | ["استضاف المعهد العربي لإنماء المدن مؤتمر التنم… |
+| `bodyEn` | محتوى JSON بالإنجليزية | ["The Arab Urban Development Institute hosted t… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-05-10" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/blog\/2.png" |
+| `pdfUrl` | رابط PDF للمقال أو النشرة | null |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 5 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 24: News → `mediaCenter.featured` / `items`.
+
+---
+
+#### POST `/api/admin/about-content`
+
+**الاسم | Name:** 25 — مركز المعرفة (أزرار) — home_knowledge_center labels
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "home_knowledge_center" |
+| `bodyAr.viewIssue` | viewIssue | "عرض الإصدار" |
+| `bodyAr.downloadPdf` | downloadPdf | "تنزيل نسخة PDF" |
+| `bodyEn.viewIssue` | viewIssue | "View Issue" |
+| `bodyEn.downloadPdf` | downloadPdf | "Download PDF" |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 25: Button labels (عرض الإصدار / تنزيل PDF). Categories: steps 26–28. Cards: steps 29–31.
+
+---
+
+#### POST `/api/admin/knowledge-categories`
+
+**الاسم | Name:** 26 — تصنيف knowledge-center
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "knowledge-center" |
+| `titleAr` | العنوان بالعربية | "مركز المعرفة" |
+| `titleEn` | العنوان بالإنجليزية | "Knowledge Center" |
+| `descriptionAr` | الوصف بالعربية | "منصة تجمع كل إصدارات المعهد الرقمية والصوتية، … |
+| `descriptionEn` | الوصف بالإنجليزية | "A platform bringing together all of the Instit… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 26: Category → `knowledgeCenter.categories[]`. Save response `id` (first category = 1 for steps 29–31).
+
+---
+
+#### POST `/api/admin/knowledge-categories`
+
+**الاسم | Name:** 27 — تصنيف mudununa
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "mudununa" |
+| `titleAr` | العنوان بالعربية | "مدننا" |
+| `titleEn` | العنوان بالإنجليزية | "Mudununa" |
+| `descriptionAr` | الوصف بالعربية | "نشرة دورية تصدر عن المعهد العربي لإنماء المدن،… |
+| `descriptionEn` | الوصف بالإنجليزية | "A periodic newsletter published by the Arab Ur… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 27: Category → `knowledgeCenter.categories[]`. Save response `id` (first category = 1 for steps 29–31).
+
+---
+
+#### POST `/api/admin/knowledge-categories`
+
+**الاسم | Name:** 28 — تصنيف meetings-platform
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "meetings-platform" |
+| `titleAr` | العنوان بالعربية | "منصة الاجتماعات" |
+| `titleEn` | العنوان بالإنجليزية | "Meetings Platform" |
+| `descriptionAr` | الوصف بالعربية | "أرشيف رقمي لفعاليات واجتماعات المعهد، يوثق الن… |
+| `descriptionEn` | الوصف بالإنجليزية | "A digital archive of the Institute's events an… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 28: Category → `knowledgeCenter.categories[]`. Save response `id` (first category = 1 for steps 29–31).
+
+---
+
+#### POST `/api/admin/resources`
+
+**الاسم | Name:** 29 — مصدر solid-waste-management
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "solid-waste-management" |
+| `titleAr` | العنوان بالعربية | "إدارة النفايات الصلبة في المدن العربية" |
+| `titleEn` | العنوان بالإنجليزية | "Solid Waste Management in Arab Cities" |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-12-29" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/our-sources\/1.png" |
+| `fileUrl` | رابط ملف PDF أو مرفق | "\/storage\/resources\/solid-waste-management.pdf" |
+| `knowledgeCategoryId` | معرّف تصنيف مركز المعرفة (FK) — اربط البطاقة بالتصنيف | 1 |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 29: Card linked via `knowledgeCategoryId` → `categories[].items[]`.
+
+---
+
+#### POST `/api/admin/resources`
+
+**الاسم | Name:** 30 — مصدر urban-tourism
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "urban-tourism" |
+| `titleAr` | العنوان بالعربية | "المدينة، وجهة تكتشف السياحة الحضرية في المنطقة… |
+| `titleEn` | العنوان بالإنجليزية | "The City: Discovering Urban Tourism in the Ara… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-12-29" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/our-sources\/2.png" |
+| `fileUrl` | رابط ملف PDF أو مرفق | "\/storage\/resources\/urban-tourism.pdf" |
+| `knowledgeCategoryId` | معرّف تصنيف مركز المعرفة (FK) — اربط البطاقة بالتصنيف | 1 |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 30: Card linked via `knowledgeCategoryId` → `categories[].items[]`.
+
+---
+
+#### POST `/api/admin/resources`
+
+**الاسم | Name:** 31 — مصدر green-infrastructure
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "green-infrastructure" |
+| `titleAr` | العنوان بالعربية | "البنية التحتية الخضراء نحو منظومة خضراء متكامل… |
+| `titleEn` | العنوان بالإنجليزية | "Green Infrastructure Toward an Integrated Gree… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-12-29" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/our-sources\/4.png" |
+| `fileUrl` | رابط ملف PDF أو مرفق | "\/storage\/resources\/green-infrastructure.pdf" |
+| `knowledgeCategoryId` | معرّف تصنيف مركز المعرفة (FK) — اربط البطاقة بالتصنيف | 1 |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 31: Card linked via `knowledgeCategoryId` → `categories[].items[]`.
+
+---
+
+#### POST `/api/admin/about-content`
+
+**الاسم | Name:** 32 — عضوية المعهد — home_membership_contact
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "home_membership_contact" |
+| `bodyAr.membership.title` | العنوان | "انضم الى عضوية المعهد" |
+| `bodyAr.membership.subtitle` | subtitle | "لنتشارك في صنع مستقبل واعد لمدننا العربية" |
+| `bodyAr.membership.cta` | cta | "انضم الآن" |
+| `bodyAr.membership.href` | رابط اختياري (mailto:, tel:) | "\/contact#membership" |
+| `bodyAr.contact.title` | العنوان | "تواصل معنا" |
+| `bodyAr.contact.addressTitle` | addressTitle | "العنوان" |
+| `bodyEn.membership.title` | العنوان | "Join the Institute's Membership" |
+| `bodyEn.membership.subtitle` | subtitle | "Let's work together to build a promising futur… |
+| `bodyEn.membership.cta` | cta | "Join Now" |
+| `bodyEn.membership.href` | رابط اختياري (mailto:, tel:) | "\/contact#membership" |
+| `bodyEn.contact.title` | العنوان | "Contact Us" |
+| `bodyEn.contact.addressTitle` | addressTitle | "Address" |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 32: Membership block → `membershipContact.membership`.
+
+---
+
+#### PUT `/api/admin/contact-info`
+
+**الاسم | Name:** 33 — تواصل معنا (هاتف/عنوان) — contact-info
+
+**الغرض | Purpose:** استبدال/تحديث بيانات كاملة.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "تواصل معنا" |
+| `titleEn` | العنوان بالإنجليزية | "Contact Us" |
+| `subtitleAr` | العنوان الفرعي بالعربية | "" |
+| `subtitleEn` | العنوان الفرعي بالإنجليزية | "" |
+| `addressLabelAr` | تسمية العنوان بالعربية | "العنوان" |
+| `addressLabelEn` | تسمية العنوان بالإنجليزية | "Address" |
+| `addressAr` | العنوان الكامل بالعربية | "شارع عبدالله بن حذافة السهمي، الحي الدبلوماسي … |
+| `addressEn` | العنوان الكامل بالإنجليزية | "Abdullah bin Hudhafa Al-Sahmi Street, Diplomat… |
+| `mapTitleAr` | عنوان الخريطة بالعربية | "موقع المعهد العربي لإنماء المدن" |
+| `mapTitleEn` | عنوان الخريطة بالإنجليزية | "Arab Urban Development Institute location" |
+| `mapEmbedUrlAr` | رابط تضمين خريطة Google (عربي) | "https:\/\/maps.google.com\/maps?q=Arab+Urban+D… |
+| `mapEmbedUrlEn` | رابط تضمين خريطة Google (إنجليزي) | "https:\/\/maps.google.com\/maps?q=Arab+Urban+D… |
+| `itemsAr` | عناصر التواصل بالعربية [{label, value, type, href}] | [{"label":"الهاتف","value":"+966 114802555","ty… |
+| `itemsEn` | عناصر التواصل بالإنجليزية | [{"label":"Phone","value":"+966 114802555","typ… |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 33: Phone, fax, email, address, map → `membershipContact.contact`. Verify: `GET /api/v1/home`.
+
+---
 
 #### شرائح الهيرو — Hero Slides
 
@@ -582,7 +1654,7 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
+Homepage hero slider. See also the 4 example create requests below (matches https://audi-ten.vercel.app/ar).قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
 
 ---
 
@@ -598,8 +1670,8 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 
 | الحقل | الوصف | مثال |
 |-------|--------|------|
-| `titleAr` | العنوان بالعربية | "تطوير تقني للمدن العربية" |
-| `titleEn` | العنوان بالإنجليزية | "Technical Development for Arab Cities" |
+| `titleAr` | العنوان بالعربية | "تطوير تقني" |
+| `titleEn` | العنوان بالإنجليزية | "Technical Development" |
 | `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/slider\/1.png" |
 | `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 | `isActive` | نشط؟ (true/false) | true |
@@ -610,7 +1682,7 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
+Homepage hero slider. See also the 4 example create requests below (matches https://audi-ten.vercel.app/ar).**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
 
 ---
 
@@ -628,6 +1700,8 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
+Homepage hero slider. See also the 4 example create requests below (matches https://audi-ten.vercel.app/ar).
+
 ---
 
 #### PUT `/api/admin/hero-slides/{{id}}`
@@ -642,8 +1716,8 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 
 | الحقل | الوصف | مثال |
 |-------|--------|------|
-| `titleAr` | العنوان بالعربية | "تطوير تقني للمدن العربية" |
-| `titleEn` | العنوان بالإنجليزية | "Technical Development for Arab Cities" |
+| `titleAr` | العنوان بالعربية | "تطوير تقني" |
+| `titleEn` | العنوان بالإنجليزية | "Technical Development" |
 | `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/slider\/1.png" |
 | `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 | `isActive` | نشط؟ (true/false) | true |
@@ -654,7 +1728,7 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-**جسم التحديث كامل** — نفس حقول الإنشاء.
+Homepage hero slider. See also the 4 example create requests below (matches https://audi-ten.vercel.app/ar).**جسم التحديث كامل** — نفس حقول الإنشاء.
 
 ---
 
@@ -671,6 +1745,8 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 **Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Homepage hero slider. See also the 4 example create requests below (matches https://audi-ten.vercel.app/ar).
 
 ---
 
@@ -691,6 +1767,118 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 #### Notes | ملاحظات
 
 إعادة ترتيب العناصر — `items[].id` + `items[].sortOrder`.
+
+---
+
+#### POST `/api/admin/hero-slides`
+
+**الاسم | Name:** إنشاء شريحة 1 — Create Hero Slide 1
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "تطوير تقني" |
+| `titleEn` | العنوان بالإنجليزية | "Technical Development" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/slider\/1.png" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+| `isActive` | نشط؟ (true/false) | true |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Homepage hero slider item → `slider[]`.
+
+---
+
+#### POST `/api/admin/hero-slides`
+
+**الاسم | Name:** إنشاء شريحة 2 — Create Hero Slide 2
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "تنمية عمرانية" |
+| `titleEn` | العنوان بالإنجليزية | "Urban Development" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/slider\/2.png" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+| `isActive` | نشط؟ (true/false) | true |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Homepage hero slider item → `slider[]`.
+
+---
+
+#### POST `/api/admin/hero-slides`
+
+**الاسم | Name:** إنشاء شريحة 3 — Create Hero Slide 3
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "شراكات مستدامة" |
+| `titleEn` | العنوان بالإنجليزية | "Sustainable Partnerships" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/slider\/3.png" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+| `isActive` | نشط؟ (true/false) | true |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Homepage hero slider item → `slider[]`.
+
+---
+
+#### POST `/api/admin/hero-slides`
+
+**الاسم | Name:** إنشاء شريحة 4 — Create Hero Slide 4
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "بحوث ومبادرات" |
+| `titleEn` | العنوان بالإنجليزية | "Research and Initiatives" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/slider\/4.png" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 3 |
+| `isActive` | نشط؟ (true/false) | true |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Homepage hero slider item → `slider[]`.
 
 ---
 
@@ -718,7 +1906,7 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
+«المعهد في أرقام» counters. Title/subtitle: `home_stats` in about-content.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
 
 ---
 
@@ -736,9 +1924,9 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 |-------|--------|------|
 | `value` | القيمة الرقمية أو النصية (+25) | "+25" |
 | `labelAr` | تسمية الإحصائية بالعربية | "اتفاقية" |
-| `labelEn` | تسمية الإحصائية بالإنجليزية | "agreements" |
-| `descriptionAr` | الوصف بالعربية | "الاتفاقيات والشراكات" |
-| `descriptionEn` | الوصف بالإنجليزية | "Agreements and partnerships" |
+| `labelEn` | تسمية الإحصائية بالإنجليزية | "Agreements" |
+| `descriptionAr` | الوصف بالعربية | "الاتفاقيات" |
+| `descriptionEn` | الوصف بالإنجليزية | "Partnership agreements" |
 | `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 
 #### Notes | ملاحظات
@@ -747,7 +1935,7 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
+«المعهد في أرقام» counters. Title/subtitle: `home_stats` in about-content.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
 
 ---
 
@@ -765,6 +1953,8 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
+«المعهد في أرقام» counters. Title/subtitle: `home_stats` in about-content.
+
 ---
 
 #### PUT `/api/admin/home-stats/{{id}}`
@@ -781,9 +1971,9 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 |-------|--------|------|
 | `value` | القيمة الرقمية أو النصية (+25) | "+25" |
 | `labelAr` | تسمية الإحصائية بالعربية | "اتفاقية" |
-| `labelEn` | تسمية الإحصائية بالإنجليزية | "agreements" |
-| `descriptionAr` | الوصف بالعربية | "الاتفاقيات والشراكات" |
-| `descriptionEn` | الوصف بالإنجليزية | "Agreements and partnerships" |
+| `labelEn` | تسمية الإحصائية بالإنجليزية | "Agreements" |
+| `descriptionAr` | الوصف بالعربية | "الاتفاقيات" |
+| `descriptionEn` | الوصف بالإنجليزية | "Partnership agreements" |
 | `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 
 #### Notes | ملاحظات
@@ -792,7 +1982,7 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-**جسم التحديث كامل** — نفس حقول الإنشاء.
+«المعهد في أرقام» counters. Title/subtitle: `home_stats` in about-content.**جسم التحديث كامل** — نفس حقول الإنشاء.
 
 ---
 
@@ -809,6 +1999,8 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 **Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+«المعهد في أرقام» counters. Title/subtitle: `home_stats` in about-content.
 
 ---
 
@@ -829,6 +2021,122 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 #### Notes | ملاحظات
 
 إعادة ترتيب العناصر — `items[].id` + `items[].sortOrder`.
+
+---
+
+#### POST `/api/admin/home-stats`
+
+**الاسم | Name:** إنشاء إحصائية 1 — Create Home Stat 1
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `value` | القيمة الرقمية أو النصية (+25) | "+25" |
+| `labelAr` | تسمية الإحصائية بالعربية | "اتفاقية" |
+| `labelEn` | تسمية الإحصائية بالإنجليزية | "Agreements" |
+| `descriptionAr` | الوصف بالعربية | "الاتفاقيات" |
+| `descriptionEn` | الوصف بالإنجليزية | "Partnership agreements" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Counter in «المعهد في أرقام» → `stats.items[]`. Pair with `home_stats` about-content for title/subtitle.
+
+---
+
+#### POST `/api/admin/home-stats`
+
+**الاسم | Name:** إنشاء إحصائية 2 — Create Home Stat 2
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `value` | القيمة الرقمية أو النصية (+25) | "+10" |
+| `labelAr` | تسمية الإحصائية بالعربية | "نشرة" |
+| `labelEn` | تسمية الإحصائية بالإنجليزية | "Newsletters" |
+| `descriptionAr` | الوصف بالعربية | "نشرة مدننا" |
+| `descriptionEn` | الوصف بالإنجليزية | "Our Cities Newsletter" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Counter in «المعهد في أرقام» → `stats.items[]`. Pair with `home_stats` about-content for title/subtitle.
+
+---
+
+#### POST `/api/admin/home-stats`
+
+**الاسم | Name:** إنشاء إحصائية 3 — Create Home Stat 3
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `value` | القيمة الرقمية أو النصية (+25) | "+500" |
+| `labelAr` | تسمية الإحصائية بالعربية | "مشارك" |
+| `labelEn` | تسمية الإحصائية بالإنجليزية | "Participants" |
+| `descriptionAr` | الوصف بالعربية | "المشاركين في برامج القيادات البلدية" |
+| `descriptionEn` | الوصف بالإنجليزية | "Participants in municipal leadership programs" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Counter in «المعهد في أرقام» → `stats.items[]`. Pair with `home_stats` about-content for title/subtitle.
+
+---
+
+#### POST `/api/admin/home-stats`
+
+**الاسم | Name:** إنشاء إحصائية 4 — Create Home Stat 4
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `value` | القيمة الرقمية أو النصية (+25) | "+400" |
+| `labelAr` | تسمية الإحصائية بالعربية | "مشروع" |
+| `labelEn` | تسمية الإحصائية بالإنجليزية | "Projects" |
+| `descriptionAr` | الوصف بالعربية | "مشروع في تقارير السياسات الحضرية" |
+| `descriptionEn` | الوصف بالإنجليزية | "Projects in urban policy reports" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 3 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Counter in «المعهد في أرقام» → `stats.items[]`. Pair with `home_stats` about-content for title/subtitle.
 
 ---
 
@@ -856,7 +2164,7 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
+Homepage intro block → `aboutIntro`.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
 
 ---
 
@@ -873,24 +2181,24 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 | الحقل | الوصف | مثال |
 |-------|--------|------|
 | `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "home_about_intro" |
-| `titleAr` | العنوان بالعربية | "عن المعهد" |
-| `titleEn` | العنوان بالإنجليزية | "About the Institute" |
-| `bodyAr.description` | description | "المعهد العربي لإنماء المدن مؤسسة عربية متخصصة … |
-| `bodyAr.cta` | cta | "اقرأ المزيد" |
+| `titleAr` | العنوان بالعربية | "المعهد العربي لإنماء المدن" |
+| `titleEn` | العنوان بالإنجليزية | "Arab Urban Development Institute" |
+| `bodyAr.description` | description | "تأسس المعهد العربي لإنماء المدن عام 1980، ومقر… |
+| `bodyAr.cta` | cta | "المزيد" |
 | `bodyAr.mission.title` | العنوان | "رسالتنا" |
-| `bodyAr.mission.description` | description | "تعزيز قدرات المدن العربية على التنمية المستدامة." |
-| `bodyAr.mission.readMore` | readMore | "اقرأ المزيد" |
+| `bodyAr.mission.description` | description | "مؤسسة عالمية رائدة تسهم في خلق مستقبل عمراني أ… |
+| `bodyAr.mission.readMore` | readMore | "قراءة المزيد" |
 | `bodyAr.vision.title` | العنوان | "رؤيتنا" |
-| `bodyAr.vision.description` | description | "مدن عربية مزدهرة ومستدامة." |
-| `bodyAr.vision.readMore` | readMore | "اقرأ المزيد" |
-| `bodyEn.description` | description | "The Arab Urban Development Institute is a spec… |
-| `bodyEn.cta` | cta | "Read more" |
+| `bodyAr.vision.description` | description | "دعم المدن والبلديات العربية لمواجهة تحديات الت… |
+| `bodyAr.vision.readMore` | readMore | "قراءة المزيد" |
+| `bodyEn.description` | description | "Founded in 1980 and headquartered in Riyadh, t… |
+| `bodyEn.cta` | cta | "Learn More" |
 | `bodyEn.mission.title` | العنوان | "Our Mission" |
-| `bodyEn.mission.description` | description | "Enhancing Arab cities capacity for sustainable… |
-| `bodyEn.mission.readMore` | readMore | "Read more" |
+| `bodyEn.mission.description` | description | "A leading global institution contributing to a… |
+| `bodyEn.mission.readMore` | readMore | "Read More" |
 | `bodyEn.vision.title` | العنوان | "Our Vision" |
-| `bodyEn.vision.description` | description | "Thriving and sustainable Arab cities." |
-| `bodyEn.vision.readMore` | readMore | "Read more" |
+| `bodyEn.vision.description` | description | "Supporting Arab cities and municipalities in f… |
+| `bodyEn.vision.readMore` | readMore | "Read More" |
 
 #### Notes | ملاحظات
 
@@ -898,7 +2206,7 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
+Homepage intro block → `aboutIntro`.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
 
 ---
 
@@ -916,6 +2224,8 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
+Homepage intro block → `aboutIntro`.
+
 ---
 
 #### PUT `/api/admin/about-content/{{id}}`
@@ -931,24 +2241,24 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 | الحقل | الوصف | مثال |
 |-------|--------|------|
 | `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "home_about_intro" |
-| `titleAr` | العنوان بالعربية | "عن المعهد" |
-| `titleEn` | العنوان بالإنجليزية | "About the Institute" |
-| `bodyAr.description` | description | "المعهد العربي لإنماء المدن مؤسسة عربية متخصصة … |
-| `bodyAr.cta` | cta | "اقرأ المزيد" |
+| `titleAr` | العنوان بالعربية | "المعهد العربي لإنماء المدن" |
+| `titleEn` | العنوان بالإنجليزية | "Arab Urban Development Institute" |
+| `bodyAr.description` | description | "تأسس المعهد العربي لإنماء المدن عام 1980، ومقر… |
+| `bodyAr.cta` | cta | "المزيد" |
 | `bodyAr.mission.title` | العنوان | "رسالتنا" |
-| `bodyAr.mission.description` | description | "تعزيز قدرات المدن العربية على التنمية المستدامة." |
-| `bodyAr.mission.readMore` | readMore | "اقرأ المزيد" |
+| `bodyAr.mission.description` | description | "مؤسسة عالمية رائدة تسهم في خلق مستقبل عمراني أ… |
+| `bodyAr.mission.readMore` | readMore | "قراءة المزيد" |
 | `bodyAr.vision.title` | العنوان | "رؤيتنا" |
-| `bodyAr.vision.description` | description | "مدن عربية مزدهرة ومستدامة." |
-| `bodyAr.vision.readMore` | readMore | "اقرأ المزيد" |
-| `bodyEn.description` | description | "The Arab Urban Development Institute is a spec… |
-| `bodyEn.cta` | cta | "Read more" |
+| `bodyAr.vision.description` | description | "دعم المدن والبلديات العربية لمواجهة تحديات الت… |
+| `bodyAr.vision.readMore` | readMore | "قراءة المزيد" |
+| `bodyEn.description` | description | "Founded in 1980 and headquartered in Riyadh, t… |
+| `bodyEn.cta` | cta | "Learn More" |
 | `bodyEn.mission.title` | العنوان | "Our Mission" |
-| `bodyEn.mission.description` | description | "Enhancing Arab cities capacity for sustainable… |
-| `bodyEn.mission.readMore` | readMore | "Read more" |
+| `bodyEn.mission.description` | description | "A leading global institution contributing to a… |
+| `bodyEn.mission.readMore` | readMore | "Read More" |
 | `bodyEn.vision.title` | العنوان | "Our Vision" |
-| `bodyEn.vision.description` | description | "Thriving and sustainable Arab cities." |
-| `bodyEn.vision.readMore` | readMore | "Read more" |
+| `bodyEn.vision.description` | description | "Supporting Arab cities and municipalities in f… |
+| `bodyEn.vision.readMore` | readMore | "Read More" |
 
 #### Notes | ملاحظات
 
@@ -956,7 +2266,7 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-**جسم التحديث كامل** — نفس حقول الإنشاء.
+Homepage intro block → `aboutIntro`.**جسم التحديث كامل** — نفس حقول الإنشاء.
 
 ---
 
@@ -974,6 +2284,50 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
+Homepage intro block → `aboutIntro`.
+
+---
+
+#### POST `/api/admin/about-content`
+
+**الاسم | Name:** إنشاء قسم home_about_intro — Create home_about_intro
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "home_about_intro" |
+| `titleAr` | العنوان بالعربية | "المعهد العربي لإنماء المدن" |
+| `titleEn` | العنوان بالإنجليزية | "Arab Urban Development Institute" |
+| `bodyAr.description` | description | "تأسس المعهد العربي لإنماء المدن عام 1980، ومقر… |
+| `bodyAr.cta` | cta | "المزيد" |
+| `bodyAr.mission.title` | العنوان | "رسالتنا" |
+| `bodyAr.mission.description` | description | "مؤسسة عالمية رائدة تسهم في خلق مستقبل عمراني أ… |
+| `bodyAr.mission.readMore` | readMore | "قراءة المزيد" |
+| `bodyAr.vision.title` | العنوان | "رؤيتنا" |
+| `bodyAr.vision.description` | description | "دعم المدن والبلديات العربية لمواجهة تحديات الت… |
+| `bodyAr.vision.readMore` | readMore | "قراءة المزيد" |
+| `bodyEn.description` | description | "Founded in 1980 and headquartered in Riyadh, t… |
+| `bodyEn.cta` | cta | "Learn More" |
+| `bodyEn.mission.title` | العنوان | "Our Mission" |
+| `bodyEn.mission.description` | description | "A leading global institution contributing to a… |
+| `bodyEn.mission.readMore` | readMore | "Read More" |
+| `bodyEn.vision.title` | العنوان | "Our Vision" |
+| `bodyEn.vision.description` | description | "Supporting Arab cities and municipalities in f… |
+| `bodyEn.vision.readMore` | readMore | "Read More" |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+About block under hero: title, description, mission, vision → `aboutIntro`.
+
 ---
 
 #### POST `/api/admin/about-content`
@@ -989,14 +2343,44 @@ Use the returned **absolute** `data.url` in admin `imageUrl`, `logoUrl`, `fileUr
 | الحقل | الوصف | مثال |
 |-------|--------|------|
 | `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "home_stats" |
-| `titleAr` | العنوان بالعربية | "إنجازات المعهد" |
-| `titleEn` | العنوان بالإنجليزية | "Institute Achievements" |
-| `bodyAr.subtitle` | subtitle | "أرقام تعكس مسيرة المعهد" |
-| `bodyEn.subtitle` | subtitle | "Numbers reflecting the institute journey" |
+| `titleAr` | العنوان بالعربية | "المعهد في أرقام" |
+| `titleEn` | العنوان بالإنجليزية | "The Institute in Numbers" |
+| `bodyAr.subtitle` | subtitle | "مؤسسة عالمية رائدة تساهم في صنع مستقبل حضري أف… |
+| `bodyEn.subtitle` | subtitle | "A leading global institution contributing to c… |
 
 #### Notes | ملاحظات
 
-Feeds public home.stats.title/subtitle.
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Section title «المعهد في أرقام» + subtitle. Counters: `home-stats` CRUD.
+
+---
+
+#### POST `/api/admin/about-content`
+
+**الاسم | Name:** إنشاء قسم home_member_cities — Create home_member_cities
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "home_member_cities" |
+| `titleAr` | العنوان بالعربية | "المدن الأعضاء" |
+| `titleEn` | العنوان بالإنجليزية | "Member Cities" |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Section title «المدن الأعضاء». Stats values: `PUT /api/admin/member-cities/stats`.
 
 ---
 
@@ -1015,12 +2399,16 @@ Feeds public home.stats.title/subtitle.
 | `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "home_programs" |
 | `titleAr` | العنوان بالعربية | "برامجنا" |
 | `titleEn` | العنوان بالإنجليزية | "Our Programs" |
-| `bodyAr.cta` | cta | "استكشف البرامج" |
-| `bodyEn.cta` | cta | "Explore programs" |
+| `bodyAr.cta` | cta | "استكشف" |
+| `bodyEn.cta` | cta | "Explore" |
 
 #### Notes | ملاحظات
 
-Section title + CTA only. Card items come from admin `programs` (`cardDescription*`, `sortOrder`) → public `GET /api/v1/home` → `programs.items`.
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Section title + CTA only. Cards: `POST /api/admin/programs` → `programs.items[]`.
 
 ---
 
@@ -1039,16 +2427,865 @@ Section title + CTA only. Card items come from admin `programs` (`cardDescriptio
 | `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "home_media_center" |
 | `titleAr` | العنوان بالعربية | "المركز الإعلامي" |
 | `titleEn` | العنوان بالإنجليزية | "Media Center" |
-| `bodyAr.subtitle` | subtitle | "آخر الأخبار والفعاليات" |
-| `bodyAr.readMore` | readMore | "اقرأ المزيد" |
+| `bodyAr.subtitle` | subtitle | "تعرف على أخبارنا ونشرتنا الدورية ومنشوراتنا ال… |
+| `bodyAr.readMore` | readMore | "قراءة المزيد" |
 | `bodyAr.viewAll` | viewAll | "عرض الكل" |
-| `bodyEn.subtitle` | subtitle | "Latest news and events" |
+| `bodyEn.subtitle` | subtitle | "Explore our news, periodic newsletter, and aud… |
 | `bodyEn.readMore` | readMore | "Read more" |
 | `bodyEn.viewAll` | viewAll | "View all" |
 
 #### Notes | ملاحظات
 
-Feeds public home.mediaCenter labels.
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Section title + subtitle + قراءة المزيد + عرض الكل. **News cards:** use folder «بطاقات المركز الإعلامي» → `POST /api/admin/media` (`category: news`).
+
+---
+
+#### POST `/api/admin/about-content`
+
+**الاسم | Name:** إنشاء قسم home_knowledge_center — Create home_knowledge_center
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "home_knowledge_center" |
+| `bodyAr.viewIssue` | viewIssue | "عرض الإصدار" |
+| `bodyAr.downloadPdf` | downloadPdf | "تنزيل نسخة PDF" |
+| `bodyEn.viewIssue` | viewIssue | "View Issue" |
+| `bodyEn.downloadPdf` | downloadPdf | "Download PDF" |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Button labels (عرض الإصدار / تنزيل PDF). **Categories:** `POST /api/admin/knowledge-categories`. **Cards:** `POST /api/admin/resources` with `knowledgeCategoryId`.
+
+---
+
+#### POST `/api/admin/about-content`
+
+**الاسم | Name:** إنشاء قسم home_membership_contact — Create home_membership_contact
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "home_membership_contact" |
+| `bodyAr.membership.title` | العنوان | "انضم الى عضوية المعهد" |
+| `bodyAr.membership.subtitle` | subtitle | "لنتشارك في صنع مستقبل واعد لمدننا العربية" |
+| `bodyAr.membership.cta` | cta | "انضم الآن" |
+| `bodyAr.membership.href` | رابط اختياري (mailto:, tel:) | "\/contact#membership" |
+| `bodyAr.contact.title` | العنوان | "تواصل معنا" |
+| `bodyAr.contact.addressTitle` | addressTitle | "العنوان" |
+| `bodyEn.membership.title` | العنوان | "Join the Institute's Membership" |
+| `bodyEn.membership.subtitle` | subtitle | "Let's work together to build a promising futur… |
+| `bodyEn.membership.cta` | cta | "Join Now" |
+| `bodyEn.membership.href` | رابط اختياري (mailto:, tel:) | "\/contact#membership" |
+| `bodyEn.contact.title` | العنوان | "Contact Us" |
+| `bodyEn.contact.addressTitle` | addressTitle | "Address" |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Membership block labels. Contact data: folder «عضوية وتواصل» → `PUT /api/admin/contact-info`.
+
+---
+
+#### بطاقات برامج الرئيسية — Home Program Cards
+
+#### POST `/api/admin/programs`
+
+**الاسم | Name:** إنشاء برنامج urban-policies — Create Program urban-policies
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "urban-policies" |
+| `titleAr` | العنوان بالعربية | "السياسات الحضرية" |
+| `titleEn` | العنوان بالإنجليزية | "Urban Policies" |
+| `cardDescriptionAr` | وصف بطاقة البرنامج في الرئيسية (عربي) | "إعداد دراسات وتقارير سياسات حضرية تدعم صناع ال… |
+| `cardDescriptionEn` | وصف بطاقة البرنامج في الرئيسية (إنجليزي) | "Developing urban policy studies and reports th… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Homepage program card → `programs.items[]`. Full page: `GET /api/v1/programs/{slug}`.
+
+---
+
+#### POST `/api/admin/programs`
+
+**الاسم | Name:** إنشاء برنامج training — Create Program training
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "training" |
+| `titleAr` | العنوان بالعربية | "التدريب و تطوير القدرات" |
+| `titleEn` | العنوان بالإنجليزية | "Training & Capacity Building" |
+| `cardDescriptionAr` | وصف بطاقة البرنامج في الرئيسية (عربي) | "برامج تدريبية متخصصة لبناء قدرات العاملين في ا… |
+| `cardDescriptionEn` | وصف بطاقة البرنامج في الرئيسية (إنجليزي) | "Specialized training programs to build the cap… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Homepage program card → `programs.items[]`. Full page: `GET /api/v1/programs/{slug}`.
+
+---
+
+#### POST `/api/admin/programs`
+
+**الاسم | Name:** إنشاء برنامج partnerships — Create Program partnerships
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "partnerships" |
+| `titleAr` | العنوان بالعربية | "الشراكات" |
+| `titleEn` | العنوان بالإنجليزية | "Partnerships" |
+| `cardDescriptionAr` | وصف بطاقة البرنامج في الرئيسية (عربي) | "معاً لنصنع مستقبل حضري أفضل: تعرف كيف نبني جسو… |
+| `cardDescriptionEn` | وصف بطاقة البرنامج في الرئيسية (إنجليزي) | "Building strategic partnerships with cities an… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Homepage program card → `programs.items[]`. Full page: `GET /api/v1/programs/{slug}`.
+
+---
+
+#### بطاقات المركز الإعلامي — Home Media Center News
+
+#### POST `/api/admin/media`
+
+**الاسم | Name:** إنشاء خبر 1 — جلسة حوارية الفطيم (الكاروسيل) — Create News director-dialogue-session
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `category` | التصنيف (news, newsletter, city_meetings, membership, …) | "news" |
+| `key` | المفتاح الفريد للسجل | "director-dialogue-session" |
+| `slugAr` | الرابط العربي (slug) | "جلسة-حوارية-التنمية-الحضرية" |
+| `slugEn` | الرابط الإنجليزي (slug) | "director-dialogue-session" |
+| `titleAr` | العنوان بالعربية | "مدير عام المعهد يشارك في جلسة حوارية للفطيم حو… |
+| `titleEn` | العنوان بالإنجليزية | "Institute Director Participates in Al-Futtaim … |
+| `descriptionAr` | الوصف بالعربية | "شارك مدير عام المعهد العربي لإنماء المدن في جل… |
+| `descriptionEn` | الوصف بالإنجليزية | "The Director General of the Arab Urban Develop… |
+| `bodyAr` | محتوى JSON بالعربية (فقرات، تسميات، أقسام) | ["شارك مدير عام المعهد العربي لإنماء المدن في ج… |
+| `bodyEn` | محتوى JSON بالإنجليزية | ["The Director General of the Arab Urban Develo… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-12-29" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/blog\/1.png" |
+| `pdfUrl` | رابط PDF للمقال أو النشرة | null |
+| `authorsAr` | المؤلفون بالعربية (مصفوفة) | null |
+| `authorsEn` | المؤلفون بالإنجليزية (مصفوفة) | null |
+| `eventTime` | وقت الفعالية (مثل: 10:00 - 14:00) | null |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Large featured carousel slide on homepage. Newest `publishedDate` → first in `mediaCenter.featured[]`. Full news page: `GET /api/v1/media/news`. **Always** `"category": "news"`.
+
+---
+
+#### POST `/api/admin/media`
+
+**الاسم | Name:** إنشاء خبر 2 — الدوري الإماراتي لمقاولي العمران — Create News uae-contractors-league
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `category` | التصنيف (news, newsletter, city_meetings, membership, …) | "news" |
+| `key` | المفتاح الفريد للسجل | "uae-contractors-league" |
+| `slugAr` | الرابط العربي (slug) | "دوري-المقاولين-الإماراتي" |
+| `slugEn` | الرابط الإنجليزي (slug) | "uae-contractors-league" |
+| `titleAr` | العنوان بالعربية | "الدوري الإماراتي لمقاولي العمران يفتتح بمشاركة… |
+| `titleEn` | العنوان بالإنجليزية | "UAE Urban Contractors League Opens with Munici… |
+| `descriptionAr` | الوصف بالعربية | "انطلقت فعاليات الدوري الإماراتي لمقاولي العمرا… |
+| `descriptionEn` | الوصف بالإنجليزية | "The UAE Urban Contractors League launched with… |
+| `bodyAr` | محتوى JSON بالعربية (فقرات، تسميات، أقسام) | ["انطلقت فعاليات الدوري الإماراتي لمقاولي العمر… |
+| `bodyEn` | محتوى JSON بالإنجليزية | ["The UAE Urban Contractors League launched wit… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-01-22" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/blog\/2.png" |
+| `pdfUrl` | رابط PDF للمقال أو النشرة | null |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+News card on homepage grid → `mediaCenter.featured[]` or `mediaCenter.items[]` depending on publish order. Full news page: `GET /api/v1/media/news`. **Always** `"category": "news"`.
+
+---
+
+#### POST `/api/admin/media`
+
+**الاسم | Name:** إنشاء خبر 3 — شبكة التعاون البلدي العربية — Create News municipal-cooperation-network
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `category` | التصنيف (news, newsletter, city_meetings, membership, …) | "news" |
+| `key` | المفتاح الفريد للسجل | "municipal-cooperation-network" |
+| `slugAr` | الرابط العربي (slug) | "شبكة-التعاون-البلدي-العربية" |
+| `slugEn` | الرابط الإنجليزي (slug) | "municipal-cooperation-network" |
+| `titleAr` | العنوان بالعربية | "المعهد العربي ينظم الاجتماع السنوي لشبكة التعا… |
+| `titleEn` | العنوان بالإنجليزية | "Institute Holds Annual Arab Municipal Cooperat… |
+| `descriptionAr` | الوصف بالعربية | "عقد المعهد العربي لإنماء المدن اجتماعه السنوي … |
+| `descriptionEn` | الوصف بالإنجليزية | "The Institute held its annual meeting of the A… |
+| `bodyAr` | محتوى JSON بالعربية (فقرات، تسميات، أقسام) | ["عقد المعهد العربي لإنماء المدن اجتماعه السنوي… |
+| `bodyEn` | محتوى JSON بالإنجليزية | ["The Arab Urban Development Institute held its… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-02-15" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/blog\/3.png" |
+| `pdfUrl` | رابط PDF للمقال أو النشرة | null |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+News card on homepage → `mediaCenter.items[]` when 5+ published news articles exist. Full news page: `GET /api/v1/media/news`. **Always** `"category": "news"`.
+
+---
+
+#### POST `/api/admin/media`
+
+**الاسم | Name:** إنشاء خبر 4 — مبادرة التخطيط الحضري المستدام — Create News sustainable-urban-planning
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `category` | التصنيف (news, newsletter, city_meetings, membership, …) | "news" |
+| `key` | المفتاح الفريد للسجل | "sustainable-urban-planning" |
+| `slugAr` | الرابط العربي (slug) | "التخطيط-الحضري-المستدام" |
+| `slugEn` | الرابط الإنجليزي (slug) | "sustainable-urban-planning" |
+| `titleAr` | العنوان بالعربية | "إطلاق مبادرة جديدة لدعم التخطيط الحضري المستدا… |
+| `titleEn` | العنوان بالإنجليزية | "New Initiative to Support Sustainable Urban Pl… |
+| `descriptionAr` | الوصف بالعربية | "أعلن المعهد العربي لإنماء المدن عن مبادرة جديد… |
+| `descriptionEn` | الوصف بالإنجليزية | "The Institute announced a new initiative to st… |
+| `bodyAr` | محتوى JSON بالعربية (فقرات، تسميات، أقسام) | ["أعلن المعهد العربي لإنماء المدن عن مبادرة جدي… |
+| `bodyEn` | محتوى JSON بالإنجليزية | ["The Arab Urban Development Institute announce… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-03-08" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/blog\/4.png" |
+| `pdfUrl` | رابط PDF للمقال أو النشرة | null |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 3 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+News card on homepage grid. Create after labels (`home_media_center`). Full news page: `GET /api/v1/media/news`. **Always** `"category": "news"`.
+
+---
+
+#### POST `/api/admin/media`
+
+**الاسم | Name:** إنشاء خبر 5 — ورشة الحوكمة البلدية — Create News municipal-governance-workshop
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `category` | التصنيف (news, newsletter, city_meetings, membership, …) | "news" |
+| `key` | المفتاح الفريد للسجل | "municipal-governance-workshop" |
+| `slugAr` | الرابط العربي (slug) | "ورشة-الحوكمة-البلدية" |
+| `slugEn` | الرابط الإنجليزي (slug) | "municipal-governance-workshop" |
+| `titleAr` | العنوان بالعربية | "ورشة عمل حول الحوكمة البلدية الرشيدة بمشاركة خ… |
+| `titleEn` | العنوان بالإنجليزية | "Workshop on Good Municipal Governance with Int… |
+| `descriptionAr` | الوصف بالعربية | "نظم المعهد ورشة عمل متخصصة حول الحوكمة البلدية… |
+| `descriptionEn` | الوصف بالإنجليزية | "The Institute organized a specialized workshop… |
+| `bodyAr` | محتوى JSON بالعربية (فقرات، تسميات، أقسام) | ["نظم المعهد ورشة عمل متخصصة حول الحوكمة البلدي… |
+| `bodyEn` | محتوى JSON بالإنجليزية | ["The Institute organized a specialized worksho… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-04-20" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/blog\/1.png" |
+| `pdfUrl` | رابط PDF للمقال أو النشرة | null |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 4 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Fills `mediaCenter.items[]` row (small cards + عرض الكل). Need 5–8 published news articles to fill both carousel and grid. Full news page: `GET /api/v1/media/news`. **Always** `"category": "news"`.
+
+---
+
+#### POST `/api/admin/media`
+
+**الاسم | Name:** إنشاء خبر 6 — مؤتمر التنمية الحضرية 2025 — Create News urban-development-conference
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `category` | التصنيف (news, newsletter, city_meetings, membership, …) | "news" |
+| `key` | المفتاح الفريد للسجل | "urban-development-conference" |
+| `slugAr` | الرابط العربي (slug) | "مؤتمر-التنمية-الحضرية-2025" |
+| `slugEn` | الرابط الإنجليزي (slug) | "urban-development-conference" |
+| `titleAr` | العنوان بالعربية | "مؤتمر التنمية الحضرية 2025 يناقش مستقبل المدن … |
+| `titleEn` | العنوان بالإنجليزية | "Urban Development Conference 2025 Discusses th… |
+| `descriptionAr` | الوصف بالعربية | "استضاف المعهد مؤتمر التنمية الحضرية بمشاركة نخ… |
+| `descriptionEn` | الوصف بالإنجليزية | "The Institute hosted the Urban Development Con… |
+| `bodyAr` | محتوى JSON بالعربية (فقرات، تسميات، أقسام) | ["استضاف المعهد العربي لإنماء المدن مؤتمر التنم… |
+| `bodyEn` | محتوى JSON بالإنجليزية | ["The Arab Urban Development Institute hosted t… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-05-10" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/blog\/2.png" |
+| `pdfUrl` | رابط PDF للمقال أو النشرة | null |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 5 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Optional 6th article — helps fill `mediaCenter.items[]` (articles 5–8 by newest `publishedDate`). Full news page: `GET /api/v1/media/news`. **Always** `"category": "news"`.
+
+---
+
+#### تصنيفات مركز المعرفة — Home Knowledge Categories
+
+#### GET `/api/admin/knowledge-categories?page=1&limit=20`
+
+**الاسم | Name:** عرض القائمة — List Knowledge Category
+
+**الغرض | Purpose:** عرض قائمة paginated مع حقول ثنائية اللغة (*Ar/*En).
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Query Parameters | معاملات الرابط
+
+| المعامل | الوصف | مثال |
+|---------|--------|------|
+| `page` | رقم الصفحة | `1` |
+| `limit` | عدد النتائج في الصفحة | `20` |
+| `search` | بحث نصي | `` |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Carousel tabs: مركز المعرفة / مدننا / منصة الاجتماعات → `knowledgeCenter.categories[]`.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
+
+---
+
+#### POST `/api/admin/knowledge-categories`
+
+**الاسم | Name:** إنشاء — Create تصنيف مركز المعرفة
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "knowledge-center" |
+| `titleAr` | العنوان بالعربية | "مركز المعرفة" |
+| `titleEn` | العنوان بالإنجليزية | "Knowledge Center" |
+| `descriptionAr` | الوصف بالعربية | "منصة تجمع كل إصدارات المعهد الرقمية والصوتية، … |
+| `descriptionEn` | الوصف بالإنجليزية | "A platform bringing together all of the Instit… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Carousel tabs: مركز المعرفة / مدننا / منصة الاجتماعات → `knowledgeCenter.categories[]`.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
+
+---
+
+#### GET `/api/admin/knowledge-categories/{{id}}`
+
+**الاسم | Name:** عرض — Show تصنيف مركز المعرفة
+
+**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Carousel tabs: مركز المعرفة / مدننا / منصة الاجتماعات → `knowledgeCenter.categories[]`.
+
+---
+
+#### PUT `/api/admin/knowledge-categories/{{id}}`
+
+**الاسم | Name:** تحديث — Update تصنيف مركز المعرفة
+
+**الغرض | Purpose:** تحديث سجل موجود (PUT/PATCH).
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "knowledge-center" |
+| `titleAr` | العنوان بالعربية | "مركز المعرفة" |
+| `titleEn` | العنوان بالإنجليزية | "Knowledge Center" |
+| `descriptionAr` | الوصف بالعربية | "منصة تجمع كل إصدارات المعهد الرقمية والصوتية، … |
+| `descriptionEn` | الوصف بالإنجليزية | "A platform bringing together all of the Instit… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Carousel tabs: مركز المعرفة / مدننا / منصة الاجتماعات → `knowledgeCenter.categories[]`.**جسم التحديث كامل** — نفس حقول الإنشاء.
+
+---
+
+#### DELETE `/api/admin/knowledge-categories/{{id}}`
+
+**الاسم | Name:** حذف — Delete تصنيف مركز المعرفة
+
+**الغرض | Purpose:** حذف سجل نهائياً.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Carousel tabs: مركز المعرفة / مدننا / منصة الاجتماعات → `knowledgeCenter.categories[]`.
+
+---
+
+#### POST `/api/admin/knowledge-categories/reorder`
+
+**الاسم | Name:** إعادة الترتيب — Reorder تصنيف مركز المعرفة
+
+**الغرض | Purpose:** تغيير ترتيب العرض عبر sortOrder.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `items` | قائمة العناصر (إعادة ترتيب أو إحصائيات) | [{"id":1,"sortOrder":0},{"id":2,"sortOrder":1}] |
+
+#### Notes | ملاحظات
+
+إعادة ترتيب العناصر — `items[].id` + `items[].sortOrder`.
+
+---
+
+#### POST `/api/admin/knowledge-categories`
+
+**الاسم | Name:** إنشاء تصنيف مركز المعرفة — Create knowledge-center
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "knowledge-center" |
+| `titleAr` | العنوان بالعربية | "مركز المعرفة" |
+| `titleEn` | العنوان بالإنجليزية | "Knowledge Center" |
+| `descriptionAr` | الوصف بالعربية | "منصة تجمع كل إصدارات المعهد الرقمية والصوتية، … |
+| `descriptionEn` | الوصف بالإنجليزية | "A platform bringing together all of the Instit… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Category 1 of 3. Link resources with `knowledgeCategoryId` = response `id`.
+
+---
+
+#### POST `/api/admin/knowledge-categories`
+
+**الاسم | Name:** إنشاء تصنيف مدننا — Create mudununa
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "mudununa" |
+| `titleAr` | العنوان بالعربية | "مدننا" |
+| `titleEn` | العنوان بالإنجليزية | "Mudununa" |
+| `descriptionAr` | الوصف بالعربية | "نشرة دورية تصدر عن المعهد العربي لإنماء المدن،… |
+| `descriptionEn` | الوصف بالإنجليزية | "A periodic newsletter published by the Arab Ur… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Category 2 of 3. Link resources with `knowledgeCategoryId` = response `id`.
+
+---
+
+#### POST `/api/admin/knowledge-categories`
+
+**الاسم | Name:** إنشاء تصنيف منصة الاجتماعات — Create meetings-platform
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "meetings-platform" |
+| `titleAr` | العنوان بالعربية | "منصة الاجتماعات" |
+| `titleEn` | العنوان بالإنجليزية | "Meetings Platform" |
+| `descriptionAr` | الوصف بالعربية | "أرشيف رقمي لفعاليات واجتماعات المعهد، يوثق الن… |
+| `descriptionEn` | الوصف بالإنجليزية | "A digital archive of the Institute's events an… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Category 3 of 3. Link resources with `knowledgeCategoryId` = response `id`.
+
+---
+
+#### بطاقات مركز المعرفة — Home Knowledge Center Cards
+
+#### POST `/api/admin/resources`
+
+**الاسم | Name:** إنشاء مصدر مركز المعرفة 1 — Create Knowledge Center Resource 1
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "solid-waste-management" |
+| `titleAr` | العنوان بالعربية | "إدارة النفايات الصلبة في المدن العربية" |
+| `titleEn` | العنوان بالإنجليزية | "Solid Waste Management in Arab Cities" |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-12-29" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/our-sources\/1.png" |
+| `fileUrl` | رابط ملف PDF أو مرفق | "\/storage\/resources\/solid-waste-management.pdf" |
+| `knowledgeCategoryId` | معرّف تصنيف مركز المعرفة (FK) — اربط البطاقة بالتصنيف | 1 |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Homepage card → `knowledgeCenter.categories[].items[]`. Set `knowledgeCategoryId` from `POST /api/admin/knowledge-categories`.
+
+---
+
+#### POST `/api/admin/resources`
+
+**الاسم | Name:** إنشاء مصدر مركز المعرفة 2 — Create Knowledge Center Resource 2
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "urban-tourism" |
+| `titleAr` | العنوان بالعربية | "المدينة، وجهة تكتشف السياحة الحضرية في المنطقة… |
+| `titleEn` | العنوان بالإنجليزية | "The City: Discovering Urban Tourism in the Ara… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-12-29" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/our-sources\/2.png" |
+| `fileUrl` | رابط ملف PDF أو مرفق | "\/storage\/resources\/urban-tourism.pdf" |
+| `knowledgeCategoryId` | معرّف تصنيف مركز المعرفة (FK) — اربط البطاقة بالتصنيف | 1 |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Homepage card → `knowledgeCenter.categories[].items[]`. Set `knowledgeCategoryId` from `POST /api/admin/knowledge-categories`.
+
+---
+
+#### POST `/api/admin/resources`
+
+**الاسم | Name:** إنشاء مصدر مركز المعرفة 3 — Create Knowledge Center Resource 3
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "green-infrastructure" |
+| `titleAr` | العنوان بالعربية | "البنية التحتية الخضراء نحو منظومة خضراء متكامل… |
+| `titleEn` | العنوان بالإنجليزية | "Green Infrastructure Toward an Integrated Gree… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-12-29" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/our-sources\/4.png" |
+| `fileUrl` | رابط ملف PDF أو مرفق | "\/storage\/resources\/green-infrastructure.pdf" |
+| `knowledgeCategoryId` | معرّف تصنيف مركز المعرفة (FK) — اربط البطاقة بالتصنيف | 1 |
+| `isPublished` | منشور للعامة؟ (true/false) | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Homepage card → `knowledgeCenter.categories[].items[]`. Set `knowledgeCategoryId` from `POST /api/admin/knowledge-categories`.
+
+---
+
+#### المدن الأعضاء — إعداد الخريطة — Home Member Cities Setup
+
+#### PUT `/api/admin/member-cities/stats`
+
+**الاسم | Name:** تحديث إحصائيات المدن — Update Member Cities Stats
+
+**الغرض | Purpose:** تحديث سجل موجود (PUT/PATCH).
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `items` | قائمة العناصر (إعادة ترتيب أو إحصائيات) | [{"key":"countries","value":12,"autoCalculate":… |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+12 دولة / 400 مدينة / 1240 عضو on homepage.
+
+---
+
+#### POST `/api/admin/member-cities/cities`
+
+**الاسم | Name:** إنشاء مدينة (الرياض) — Create Sample City Riyadh
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `countryCode` | رمز الدولة | "SA" |
+| `nameAr` | الاسم بالعربية | "الرياض" |
+| `nameEn` | الاسم بالإنجليزية | "Riyadh" |
+| `latitude` | خط العرض | 24.7136 |
+| `longitude` | خط الطول | 46.6753 |
+| `infoAr` | معلومات إضافية بالعربية | "عاصمة المملكة العربية السعودية" |
+| `infoEn` | معلومات إضافية بالإنجليزية | "Capital of Saudi Arabia" |
+| `isActive` | نشط؟ (true/false) | true |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home/member-cities` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+One map pin. For full map use `استيراد جماعي` in المدن الأعضاء folder.
+
+---
+
+#### عضوية وتواصل — Home Membership & Contact
+
+#### POST `/api/admin/about-content`
+
+**الاسم | Name:** إنشاء عضوية وتواصل — home_membership_contact
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "home_membership_contact" |
+| `bodyAr.membership.title` | العنوان | "انضم الى عضوية المعهد" |
+| `bodyAr.membership.subtitle` | subtitle | "لنتشارك في صنع مستقبل واعد لمدننا العربية" |
+| `bodyAr.membership.cta` | cta | "انضم الآن" |
+| `bodyAr.membership.href` | رابط اختياري (mailto:, tel:) | "\/contact#membership" |
+| `bodyAr.contact.title` | العنوان | "تواصل معنا" |
+| `bodyAr.contact.addressTitle` | addressTitle | "العنوان" |
+| `bodyEn.membership.title` | العنوان | "Join the Institute's Membership" |
+| `bodyEn.membership.subtitle` | subtitle | "Let's work together to build a promising futur… |
+| `bodyEn.membership.cta` | cta | "Join Now" |
+| `bodyEn.membership.href` | رابط اختياري (mailto:, tel:) | "\/contact#membership" |
+| `bodyEn.contact.title` | العنوان | "Contact Us" |
+| `bodyEn.contact.addressTitle` | addressTitle | "Address" |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+انضم الى عضوية المعهد + تواصل معنا labels.
+
+---
+
+#### PUT `/api/admin/contact-info`
+
+**الاسم | Name:** تحديث بيانات التواصل — Update Contact Info
+
+**الغرض | Purpose:** تحديث سجل موجود (PUT/PATCH).
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "تواصل معنا" |
+| `titleEn` | العنوان بالإنجليزية | "Contact Us" |
+| `subtitleAr` | العنوان الفرعي بالعربية | "" |
+| `subtitleEn` | العنوان الفرعي بالإنجليزية | "" |
+| `addressLabelAr` | تسمية العنوان بالعربية | "العنوان" |
+| `addressLabelEn` | تسمية العنوان بالإنجليزية | "Address" |
+| `addressAr` | العنوان الكامل بالعربية | "شارع عبدالله بن حذافة السهمي، الحي الدبلوماسي … |
+| `addressEn` | العنوان الكامل بالإنجليزية | "Abdullah bin Hudhafa Al-Sahmi Street, Diplomat… |
+| `mapTitleAr` | عنوان الخريطة بالعربية | "موقع المعهد العربي لإنماء المدن" |
+| `mapTitleEn` | عنوان الخريطة بالإنجليزية | "Arab Urban Development Institute location" |
+| `mapEmbedUrlAr` | رابط تضمين خريطة Google (عربي) | "https:\/\/maps.google.com\/maps?q=Arab+Urban+D… |
+| `mapEmbedUrlEn` | رابط تضمين خريطة Google (إنجليزي) | "https:\/\/maps.google.com\/maps?q=Arab+Urban+D… |
+| `itemsAr` | عناصر التواصل بالعربية [{label, value, type, href}] | [{"label":"الهاتف","value":"+966 114802555","ty… |
+| `itemsEn` | عناصر التواصل بالإنجليزية | [{"label":"Phone","value":"+966 114802555","typ… |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+الهاتف، فاكس، ايميل، كود، العنوان، الخريطة → `membershipContact.contact`.
 
 ---
 
@@ -2603,6 +4840,478 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
+#### 00 — بناء برنامج التدريب — 00 — Build Training Program
+
+Build [مركز دعم المدن / training](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن) to match live tab pages:
+
+01 program → 02 labels → **03–06** four `program-sections` (with `imageUrl` + image fields in `bodyAr`) → **07–12** six `training-courses` → **13–15** three `experts` (each with `imageUrl`).
+
+Verify: `GET /api/v1/programs/training`.
+
+#### POST `/api/admin/programs`
+
+**الاسم | Name:** 01 — برنامج التدريب — training program
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "training" |
+| `titleAr` | العنوان بالعربية | "التدريب و تطوير القدرات" |
+| `titleEn` | العنوان بالإنجليزية | "Training & Capacity Building" |
+| `heroIntroAr` | مقدمة صفحة البرنامج بالعربية | "يهدف مركز دعم المدن إلى تلبية احتياجات الأمانا… |
+| `heroIntroEn` | مقدمة صفحة البرنامج بالإنجليزية | "The City Support Center aims to meet the needs… |
+| `cardDescriptionAr` | وصف بطاقة البرنامج في الرئيسية (عربي) | "برامج تدريبية متخصصة لبناء قدرات العاملين في ا… |
+| `cardDescriptionEn` | وصف بطاقة البرنامج في الرئيسية (إنجليزي) | "Specialized training programs to build the cap… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 1: Program category. Save response `id` (usually 2). URL: /ar/برامجنا/مركز-دعم-المدن
+
+---
+
+#### POST `/api/admin/about-content`
+
+**الاسم | Name:** 02 — تسميات الصفحة — program_training labels
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "program_training" |
+| `bodyAr.back` | back | "رجوع" |
+| `bodyAr.sectionsLabel` | sectionsLabel | "اقسام البرنامج" |
+| `bodyEn.back` | back | "Back" |
+| `bodyEn.sectionsLabel` | sectionsLabel | "Program Sections" |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 2: back + sectionsLabel (اقسام البرنامج).
+
+---
+
+#### POST `/api/admin/program-sections`
+
+**الاسم | Name:** 03 — قسم trainingPrograms — trainingPrograms
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `programId` | معرّف البرنامج (FK) | 2 |
+| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | "trainingPrograms" |
+| `titleAr` | العنوان بالعربية | "البرامج التدريبية" |
+| `titleEn` | العنوان بالإنجليزية | "Training Programs" |
+| `introAr` | المقدمة بالعربية | "هدف مركز دعم المدن لتلبية احتياجات ومتطلبات ال… |
+| `introEn` | المقدمة بالإنجليزية | "The City Support Center aims to meet the needs… |
+| `bodyAr.formatsTitle` | formatsTitle | "حيث يتم تقديم هذه البرامج التدريبية على شكل:" |
+| `bodyAr.formats` | formats | ["دورات تدريبية (حضورية وعن بعد).","ورش عمل متخ… |
+| `bodyAr.coursesTitle` | coursesTitle | "البرامج التدريبية ٢٠٢٣ – ٢٠٢٤" |
+| `bodyAr.heroImage` | heroImage | "\/icons\/program\/6.gif" |
+| `bodyAr.coursesImage` | coursesImage | "\/icons\/program\/7.png" |
+| `bodyEn.formatsTitle` | formatsTitle | "These training programs are delivered through:" |
+| `bodyEn.formats` | formats | ["Training courses (in-person and remote).","Sp… |
+| `bodyEn.coursesTitle` | coursesTitle | "Training Programs 2023 – 2024" |
+| `bodyEn.heroImage` | heroImage | "\/icons\/program\/6.gif" |
+| `bodyEn.coursesImage` | coursesImage | "\/icons\/program\/7.png" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/icons\/program\/6.gif" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 3: `?tab=trainingPrograms` → `sections.trainingPrograms`. Requires `programId` from step 1.
+
+---
+
+#### POST `/api/admin/program-sections`
+
+**الاسم | Name:** 04 — قسم consulting — consulting
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `programId` | معرّف البرنامج (FK) | 2 |
+| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | "consulting" |
+| `titleAr` | العنوان بالعربية | "الاستشارات الفنية ونقل الخبرات" |
+| `titleEn` | العنوان بالإنجليزية | "Technical Consultations & Knowledge Transfer" |
+| `introAr` | المقدمة بالعربية | "يحرص مركز دعم المدن على تقديم الدعم الفني للبل… |
+| `introEn` | المقدمة بالإنجليزية | "The City Support Center is committed to provid… |
+| `bodyAr.nav` | nav | ["استشارات هندسية وإدارية","مشاركة التجارب بين … |
+| `bodyAr.detailImage` | detailImage | "\/projects\/consulting-presenter.png" |
+| `bodyAr.sections` | sections | [{"title":"استشارات هندسية وإدارية","descriptio… |
+| `bodyEn.nav` | nav | ["Engineering and administrative consultations"… |
+| `bodyEn.detailImage` | detailImage | "\/projects\/consulting-presenter.png" |
+| `bodyEn.sections` | sections | [{"title":"Engineering and administrative consu… |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/projects\/p2.png" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 4: `?tab=consulting` → `sections.consulting`. Requires `programId` from step 1.
+
+---
+
+#### POST `/api/admin/program-sections`
+
+**الاسم | Name:** 05 — قسم executive — executive
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `programId` | معرّف البرنامج (FK) | 2 |
+| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | "executive" |
+| `titleAr` | العنوان بالعربية | "البرنامج التنفيذي" |
+| `titleEn` | العنوان بالإنجليزية | "Executive Program" |
+| `introAr` | المقدمة بالعربية | "برنامج تنفيذي متخصص في التنمية الحضرية ناتج عن… |
+| `introEn` | المقدمة بالإنجليزية | "An executive program specialized in urban deve… |
+| `bodyAr.offersTitle` | offersTitle | "يقدم البرنامج التنفيذي" |
+| `bodyAr.programs` | programs | ["الماجستير التنفيذي في التطوير البلدي","البرنا… |
+| `bodyAr.topicsTitle` | topicsTitle | "يقدم البرنامج التنفيذي" |
+| `bodyAr.heroVideo` | heroVideo | "\/icons\/program\/executive.mp4" |
+| `bodyAr.topics` | topics | [{"title":"التغير المناخي","image":"p1.png"},{"… |
+| `bodyEn.offersTitle` | offersTitle | "The executive program offers" |
+| `bodyEn.programs` | programs | ["Executive Master's in Municipal Development",… |
+| `bodyEn.topicsTitle` | topicsTitle | "The executive program offers" |
+| `bodyEn.heroVideo` | heroVideo | "\/icons\/program\/executive.mp4" |
+| `bodyEn.topics` | topics | [{"title":"Climate Change","image":"p1.png"},{"… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 5: `?tab=executive` → `sections.executive`. Requires `programId` from step 1.
+
+---
+
+#### POST `/api/admin/program-sections`
+
+**الاسم | Name:** 06 — قسم experts — experts
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `programId` | معرّف البرنامج (FK) | 2 |
+| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | "experts" |
+| `titleAr` | العنوان بالعربية | "خبراء مركز الدعم" |
+| `titleEn` | العنوان بالإنجليزية | "Support Center Experts" |
+| `introAr` | المقدمة بالعربية | null |
+| `introEn` | المقدمة بالإنجليزية | null |
+| `bodyAr.title` | العنوان | "خبراء مركز الدعم" |
+| `bodyEn.title` | العنوان | "Support Center Experts" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 3 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 6: `?tab=experts` → `sections.experts`. Requires `programId` from step 1.
+
+---
+
+#### POST `/api/admin/training-courses`
+
+**الاسم | Name:** 07 — دورة تدريبية — التخطيط والتطوير الحضري
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "التخطيط والتطوير الحضري" |
+| `titleEn` | العنوان بالإنجليزية | "Urban Planning and Development" |
+| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | "3 دورات تدريبية" |
+| `countEn` | العدد/التعداد بالإنجليزية | "3 training courses" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 7: Course row on ?tab=trainingPrograms (البرامج التدريبية ٢٠٢٣–٢٠٢٤ grid). Merged into `sections.trainingPrograms.courses[]`.
+
+---
+
+#### POST `/api/admin/training-courses`
+
+**الاسم | Name:** 08 — دورة تدريبية — التخطيط والتطوير الحضري
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "التخطيط والتطوير الحضري" |
+| `titleEn` | العنوان بالإنجليزية | "Urban Planning and Development" |
+| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | "3 دورات تدريبية" |
+| `countEn` | العدد/التعداد بالإنجليزية | "3 training courses" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 3 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 8: Course row on ?tab=trainingPrograms (البرامج التدريبية ٢٠٢٣–٢٠٢٤ grid). Merged into `sections.trainingPrograms.courses[]`.
+
+---
+
+#### POST `/api/admin/training-courses`
+
+**الاسم | Name:** 09 — دورة تدريبية — تطوير العمل البلدي للقيادات
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "تطوير العمل البلدي للقيادات" |
+| `titleEn` | العنوان بالإنجليزية | "Municipal Leadership Development" |
+| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | "3 دورات تدريبية" |
+| `countEn` | العدد/التعداد بالإنجليزية | "3 training courses" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 9: Course row on ?tab=trainingPrograms (البرامج التدريبية ٢٠٢٣–٢٠٢٤ grid). Merged into `sections.trainingPrograms.courses[]`.
+
+---
+
+#### POST `/api/admin/training-courses`
+
+**الاسم | Name:** 10 — دورة تدريبية — تطوير العمل البلدي للقيادات
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "تطوير العمل البلدي للقيادات" |
+| `titleEn` | العنوان بالإنجليزية | "Municipal Leadership Development" |
+| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | "3 دورات تدريبية" |
+| `countEn` | العدد/التعداد بالإنجليزية | "3 training courses" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 4 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 10: Course row on ?tab=trainingPrograms (البرامج التدريبية ٢٠٢٣–٢٠٢٤ grid). Merged into `sections.trainingPrograms.courses[]`.
+
+---
+
+#### POST `/api/admin/training-courses`
+
+**الاسم | Name:** 11 — دورة تدريبية — الاستثمار في القطاع البلدي
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "الاستثمار في القطاع البلدي" |
+| `titleEn` | العنوان بالإنجليزية | "Investment in the Municipal Sector" |
+| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | "3 دورات تدريبية" |
+| `countEn` | العدد/التعداد بالإنجليزية | "3 training courses" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 11: Course row on ?tab=trainingPrograms (البرامج التدريبية ٢٠٢٣–٢٠٢٤ grid). Merged into `sections.trainingPrograms.courses[]`.
+
+---
+
+#### POST `/api/admin/training-courses`
+
+**الاسم | Name:** 12 — دورة تدريبية — الاستثمار في القطاع البلدي
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "الاستثمار في القطاع البلدي" |
+| `titleEn` | العنوان بالإنجليزية | "Investment in the Municipal Sector" |
+| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | "3 دورات تدريبية" |
+| `countEn` | العدد/التعداد بالإنجليزية | "3 training courses" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 5 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 12: Course row on ?tab=trainingPrograms (البرامج التدريبية ٢٠٢٣–٢٠٢٤ grid). Merged into `sections.trainingPrograms.courses[]`.
+
+---
+
+#### POST `/api/admin/experts`
+
+**الاسم | Name:** 13 — خبير — د. إبراهيم باهر الدين
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `nameAr` | الاسم بالعربية | "د. إبراهيم باهر الدين" |
+| `nameEn` | الاسم بالإنجليزية | "Dr. Ibrahim Baher El-Din" |
+| `specialtyAr` | specialtyAr | "التصميم الحضري والتخطيط التشاركي" |
+| `specialtyEn` | specialtyEn | "Urban Design and Participatory Planning" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/emp\/1.png" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 13: Expert card on ?tab=experts carousel. Merged into `sections.experts.experts[]`.
+
+---
+
+#### POST `/api/admin/experts`
+
+**الاسم | Name:** 14 — خبير — د. خالد الوزني
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `nameAr` | الاسم بالعربية | "د. خالد الوزني" |
+| `nameEn` | الاسم بالإنجليزية | "Dr. Khaled Al-Wazni" |
+| `specialtyAr` | specialtyAr | "سياسات التنمية الاقتصادية" |
+| `specialtyEn` | specialtyEn | "Economic Development Policies" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/emp\/2.png" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 14: Expert card on ?tab=experts carousel. Merged into `sections.experts.experts[]`.
+
+---
+
+#### POST `/api/admin/experts`
+
+**الاسم | Name:** 15 — خبير — توماس ميرفي
+
+**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `nameAr` | الاسم بالعربية | "توماس ميرفي" |
+| `nameEn` | الاسم بالإنجليزية | "Thomas Murphy" |
+| `specialtyAr` | specialtyAr | "عمدة سابق لمدينة بيتسبرغ" |
+| `specialtyEn` | specialtyEn | "Former Mayor of Pittsburgh" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/emp\/3.png" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Step 15: Expert card on ?tab=experts carousel. Merged into `sections.experts.experts[]`.
+
+---
+
 #### البرامج — Programs CRUD
 
 #### GET `/api/admin/programs?page=1&limit=20`
@@ -2627,7 +5336,7 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-يغذي أيضاً home.programs.items. التفاصيل: GET /api/v1/programs/{slug}.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
+يغذي أيضاً home.programs.items. See «بطاقات برامج الرئيسية» for all 3 homepage programs. التفاصيل: GET /api/v1/programs/{slug}.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
 
 ---
 
@@ -2643,14 +5352,12 @@ Page chrome labels for focus areas list/detail.
 
 | الحقل | الوصف | مثال |
 |-------|--------|------|
-| `slug` | المعرّف اللatinي للرابط (مثل: training) | "training" |
-| `titleAr` | العنوان بالعربية | "برنامج التدريب" |
-| `titleEn` | العنوان بالإنجليزية | "Training Program" |
-| `heroIntroAr` | مقدمة صفحة البرنامج بالعربية | "يقدم المعهد برامج تدريبية متخصصة في التنمية ال… |
-| `heroIntroEn` | مقدمة صفحة البرنامج بالإنجليزية | "The institute offers specialized training prog… |
-| `cardDescriptionAr` | وصف بطاقة البرنامج في الرئيسية (عربي) | "برامج تدريبية متخصصة لبناء قدرات العاملين في ا… |
-| `cardDescriptionEn` | وصف بطاقة البرنامج في الرئيسية (إنجليزي) | "Specialized training programs to build the cap… |
-| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "urban-policies" |
+| `titleAr` | العنوان بالعربية | "السياسات الحضرية" |
+| `titleEn` | العنوان بالإنجليزية | "Urban Policies" |
+| `cardDescriptionAr` | وصف بطاقة البرنامج في الرئيسية (عربي) | "إعداد دراسات وتقارير سياسات حضرية تدعم صناع ال… |
+| `cardDescriptionEn` | وصف بطاقة البرنامج في الرئيسية (إنجليزي) | "Developing urban policy studies and reports th… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 
 #### Notes | ملاحظات
 
@@ -2658,7 +5365,7 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-يغذي أيضاً home.programs.items. التفاصيل: GET /api/v1/programs/{slug}.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
+يغذي أيضاً home.programs.items. See «بطاقات برامج الرئيسية» for all 3 homepage programs. التفاصيل: GET /api/v1/programs/{slug}.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
 
 ---
 
@@ -2676,7 +5383,7 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-يغذي أيضاً home.programs.items. التفاصيل: GET /api/v1/programs/{slug}.
+يغذي أيضاً home.programs.items. See «بطاقات برامج الرئيسية» for all 3 homepage programs. التفاصيل: GET /api/v1/programs/{slug}.
 
 ---
 
@@ -2692,14 +5399,12 @@ Page chrome labels for focus areas list/detail.
 
 | الحقل | الوصف | مثال |
 |-------|--------|------|
-| `slug` | المعرّف اللatinي للرابط (مثل: training) | "training" |
-| `titleAr` | العنوان بالعربية | "برنامج التدريب" |
-| `titleEn` | العنوان بالإنجليزية | "Training Program" |
-| `heroIntroAr` | مقدمة صفحة البرنامج بالعربية | "يقدم المعهد برامج تدريبية متخصصة في التنمية ال… |
-| `heroIntroEn` | مقدمة صفحة البرنامج بالإنجليزية | "The institute offers specialized training prog… |
-| `cardDescriptionAr` | وصف بطاقة البرنامج في الرئيسية (عربي) | "برامج تدريبية متخصصة لبناء قدرات العاملين في ا… |
-| `cardDescriptionEn` | وصف بطاقة البرنامج في الرئيسية (إنجليزي) | "Specialized training programs to build the cap… |
-| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "urban-policies" |
+| `titleAr` | العنوان بالعربية | "السياسات الحضرية" |
+| `titleEn` | العنوان بالإنجليزية | "Urban Policies" |
+| `cardDescriptionAr` | وصف بطاقة البرنامج في الرئيسية (عربي) | "إعداد دراسات وتقارير سياسات حضرية تدعم صناع ال… |
+| `cardDescriptionEn` | وصف بطاقة البرنامج في الرئيسية (إنجليزي) | "Developing urban policy studies and reports th… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 
 #### Notes | ملاحظات
 
@@ -2707,7 +5412,7 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-يغذي أيضاً home.programs.items. التفاصيل: GET /api/v1/programs/{slug}.**جسم التحديث كامل** — نفس حقول الإنشاء.
+يغذي أيضاً home.programs.items. See «بطاقات برامج الرئيسية» for all 3 homepage programs. التفاصيل: GET /api/v1/programs/{slug}.**جسم التحديث كامل** — نفس حقول الإنشاء.
 
 ---
 
@@ -2725,7 +5430,7 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-يغذي أيضاً home.programs.items. التفاصيل: GET /api/v1/programs/{slug}.
+يغذي أيضاً home.programs.items. See «بطاقات برامج الرئيسية» for all 3 homepage programs. التفاصيل: GET /api/v1/programs/{slug}.
 
 ---
 
@@ -2753,7 +5458,7 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
+Link section to program via **`programId`**. Training tabs: trainingPrograms, consulting, executive, experts.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
 
 ---
 
@@ -2769,17 +5474,23 @@ Page chrome labels for focus areas list/detail.
 
 | الحقل | الوصف | مثال |
 |-------|--------|------|
-| `programId` | معرّف البرنامج (FK) | 1 |
+| `programId` | معرّف البرنامج (FK) | 2 |
 | `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | "trainingPrograms" |
 | `titleAr` | العنوان بالعربية | "البرامج التدريبية" |
 | `titleEn` | العنوان بالإنجليزية | "Training Programs" |
-| `introAr` | المقدمة بالعربية | "مجموعة من البرامج التدريبية المتخصصة في مختلف … |
-| `introEn` | المقدمة بالإنجليزية | "A set of specialized training programs in vari… |
-| `bodyAr.labels.courses` | courses | "الدورات" |
-| `bodyAr.labels.duration` | duration | "المدة" |
-| `bodyEn.labels.courses` | courses | "Courses" |
-| `bodyEn.labels.duration` | duration | "Duration" |
-| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/programs\/training\/training-programs.png" |
+| `introAr` | المقدمة بالعربية | "هدف مركز دعم المدن لتلبية احتياجات ومتطلبات ال… |
+| `introEn` | المقدمة بالإنجليزية | "The City Support Center aims to meet the needs… |
+| `bodyAr.formatsTitle` | formatsTitle | "حيث يتم تقديم هذه البرامج التدريبية على شكل:" |
+| `bodyAr.formats` | formats | ["دورات تدريبية (حضورية وعن بعد).","ورش عمل متخ… |
+| `bodyAr.coursesTitle` | coursesTitle | "البرامج التدريبية ٢٠٢٣ – ٢٠٢٤" |
+| `bodyAr.heroImage` | heroImage | "\/icons\/program\/6.gif" |
+| `bodyAr.coursesImage` | coursesImage | "\/icons\/program\/7.png" |
+| `bodyEn.formatsTitle` | formatsTitle | "These training programs are delivered through:" |
+| `bodyEn.formats` | formats | ["Training courses (in-person and remote).","Sp… |
+| `bodyEn.coursesTitle` | coursesTitle | "Training Programs 2023 – 2024" |
+| `bodyEn.heroImage` | heroImage | "\/icons\/program\/6.gif" |
+| `bodyEn.coursesImage` | coursesImage | "\/icons\/program\/7.png" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/icons\/program\/6.gif" |
 | `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 
 #### Notes | ملاحظات
@@ -2788,7 +5499,7 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
+Link section to program via **`programId`**. Training tabs: trainingPrograms, consulting, executive, experts.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
 
 ---
 
@@ -2806,6 +5517,8 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
+Link section to program via **`programId`**. Training tabs: trainingPrograms, consulting, executive, experts.
+
 ---
 
 #### PUT `/api/admin/program-sections/{{id}}`
@@ -2820,17 +5533,23 @@ Page chrome labels for focus areas list/detail.
 
 | الحقل | الوصف | مثال |
 |-------|--------|------|
-| `programId` | معرّف البرنامج (FK) | 1 |
+| `programId` | معرّف البرنامج (FK) | 2 |
 | `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | "trainingPrograms" |
 | `titleAr` | العنوان بالعربية | "البرامج التدريبية" |
 | `titleEn` | العنوان بالإنجليزية | "Training Programs" |
-| `introAr` | المقدمة بالعربية | "مجموعة من البرامج التدريبية المتخصصة في مختلف … |
-| `introEn` | المقدمة بالإنجليزية | "A set of specialized training programs in vari… |
-| `bodyAr.labels.courses` | courses | "الدورات" |
-| `bodyAr.labels.duration` | duration | "المدة" |
-| `bodyEn.labels.courses` | courses | "Courses" |
-| `bodyEn.labels.duration` | duration | "Duration" |
-| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/programs\/training\/training-programs.png" |
+| `introAr` | المقدمة بالعربية | "هدف مركز دعم المدن لتلبية احتياجات ومتطلبات ال… |
+| `introEn` | المقدمة بالإنجليزية | "The City Support Center aims to meet the needs… |
+| `bodyAr.formatsTitle` | formatsTitle | "حيث يتم تقديم هذه البرامج التدريبية على شكل:" |
+| `bodyAr.formats` | formats | ["دورات تدريبية (حضورية وعن بعد).","ورش عمل متخ… |
+| `bodyAr.coursesTitle` | coursesTitle | "البرامج التدريبية ٢٠٢٣ – ٢٠٢٤" |
+| `bodyAr.heroImage` | heroImage | "\/icons\/program\/6.gif" |
+| `bodyAr.coursesImage` | coursesImage | "\/icons\/program\/7.png" |
+| `bodyEn.formatsTitle` | formatsTitle | "These training programs are delivered through:" |
+| `bodyEn.formats` | formats | ["Training courses (in-person and remote).","Sp… |
+| `bodyEn.coursesTitle` | coursesTitle | "Training Programs 2023 – 2024" |
+| `bodyEn.heroImage` | heroImage | "\/icons\/program\/6.gif" |
+| `bodyEn.coursesImage` | coursesImage | "\/icons\/program\/7.png" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/icons\/program\/6.gif" |
 | `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 
 #### Notes | ملاحظات
@@ -2839,7 +5558,7 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-**جسم التحديث كامل** — نفس حقول الإنشاء.
+Link section to program via **`programId`**. Training tabs: trainingPrograms, consulting, executive, experts.**جسم التحديث كامل** — نفس حقول الإنشاء.
 
 ---
 
@@ -2856,6 +5575,8 @@ Page chrome labels for focus areas list/detail.
 **Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Link section to program via **`programId`**. Training tabs: trainingPrograms, consulting, executive, experts.
 
 ---
 
@@ -2876,6 +5597,156 @@ Page chrome labels for focus areas list/detail.
 #### Notes | ملاحظات
 
 إعادة ترتيب العناصر — `items[].id` + `items[].sortOrder`.
+
+---
+
+#### POST `/api/admin/program-sections`
+
+**الاسم | Name:** إنشاء قسم trainingPrograms — Create trainingPrograms
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `programId` | معرّف البرنامج (FK) | 2 |
+| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | "trainingPrograms" |
+| `titleAr` | العنوان بالعربية | "البرامج التدريبية" |
+| `titleEn` | العنوان بالإنجليزية | "Training Programs" |
+| `introAr` | المقدمة بالعربية | "هدف مركز دعم المدن لتلبية احتياجات ومتطلبات ال… |
+| `introEn` | المقدمة بالإنجليزية | "The City Support Center aims to meet the needs… |
+| `bodyAr.formatsTitle` | formatsTitle | "حيث يتم تقديم هذه البرامج التدريبية على شكل:" |
+| `bodyAr.formats` | formats | ["دورات تدريبية (حضورية وعن بعد).","ورش عمل متخ… |
+| `bodyAr.coursesTitle` | coursesTitle | "البرامج التدريبية ٢٠٢٣ – ٢٠٢٤" |
+| `bodyAr.heroImage` | heroImage | "\/icons\/program\/6.gif" |
+| `bodyAr.coursesImage` | coursesImage | "\/icons\/program\/7.png" |
+| `bodyEn.formatsTitle` | formatsTitle | "These training programs are delivered through:" |
+| `bodyEn.formats` | formats | ["Training courses (in-person and remote).","Sp… |
+| `bodyEn.coursesTitle` | coursesTitle | "Training Programs 2023 – 2024" |
+| `bodyEn.heroImage` | heroImage | "\/icons\/program\/6.gif" |
+| `bodyEn.coursesImage` | coursesImage | "\/icons\/program\/7.png" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/icons\/program\/6.gif" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Example for tab `trainingPrograms`. Set `programId` from program create response.
+
+---
+
+#### POST `/api/admin/program-sections`
+
+**الاسم | Name:** إنشاء قسم consulting — Create consulting
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `programId` | معرّف البرنامج (FK) | 2 |
+| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | "consulting" |
+| `titleAr` | العنوان بالعربية | "الاستشارات الفنية ونقل الخبرات" |
+| `titleEn` | العنوان بالإنجليزية | "Technical Consultations & Knowledge Transfer" |
+| `introAr` | المقدمة بالعربية | "يحرص مركز دعم المدن على تقديم الدعم الفني للبل… |
+| `introEn` | المقدمة بالإنجليزية | "The City Support Center is committed to provid… |
+| `bodyAr.nav` | nav | ["استشارات هندسية وإدارية","مشاركة التجارب بين … |
+| `bodyAr.detailImage` | detailImage | "\/projects\/consulting-presenter.png" |
+| `bodyAr.sections` | sections | [{"title":"استشارات هندسية وإدارية","descriptio… |
+| `bodyEn.nav` | nav | ["Engineering and administrative consultations"… |
+| `bodyEn.detailImage` | detailImage | "\/projects\/consulting-presenter.png" |
+| `bodyEn.sections` | sections | [{"title":"Engineering and administrative consu… |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/projects\/p2.png" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Example for tab `consulting`. Set `programId` from program create response.
+
+---
+
+#### POST `/api/admin/program-sections`
+
+**الاسم | Name:** إنشاء قسم executive — Create executive
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `programId` | معرّف البرنامج (FK) | 2 |
+| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | "executive" |
+| `titleAr` | العنوان بالعربية | "البرنامج التنفيذي" |
+| `titleEn` | العنوان بالإنجليزية | "Executive Program" |
+| `introAr` | المقدمة بالعربية | "برنامج تنفيذي متخصص في التنمية الحضرية ناتج عن… |
+| `introEn` | المقدمة بالإنجليزية | "An executive program specialized in urban deve… |
+| `bodyAr.offersTitle` | offersTitle | "يقدم البرنامج التنفيذي" |
+| `bodyAr.programs` | programs | ["الماجستير التنفيذي في التطوير البلدي","البرنا… |
+| `bodyAr.topicsTitle` | topicsTitle | "يقدم البرنامج التنفيذي" |
+| `bodyAr.heroVideo` | heroVideo | "\/icons\/program\/executive.mp4" |
+| `bodyAr.topics` | topics | [{"title":"التغير المناخي","image":"p1.png"},{"… |
+| `bodyEn.offersTitle` | offersTitle | "The executive program offers" |
+| `bodyEn.programs` | programs | ["Executive Master's in Municipal Development",… |
+| `bodyEn.topicsTitle` | topicsTitle | "The executive program offers" |
+| `bodyEn.heroVideo` | heroVideo | "\/icons\/program\/executive.mp4" |
+| `bodyEn.topics` | topics | [{"title":"Climate Change","image":"p1.png"},{"… |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Example for tab `executive`. Set `programId` from program create response.
+
+---
+
+#### POST `/api/admin/program-sections`
+
+**الاسم | Name:** إنشاء قسم experts — Create experts
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `programId` | معرّف البرنامج (FK) | 2 |
+| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | "experts" |
+| `titleAr` | العنوان بالعربية | "خبراء مركز الدعم" |
+| `titleEn` | العنوان بالإنجليزية | "Support Center Experts" |
+| `introAr` | المقدمة بالعربية | null |
+| `introEn` | المقدمة بالإنجليزية | null |
+| `bodyAr.title` | العنوان | "خبراء مركز الدعم" |
+| `bodyEn.title` | العنوان | "Support Center Experts" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 3 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Example for tab `experts`. Set `programId` from program create response.
 
 ---
 
@@ -2903,7 +5774,7 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
+Rows under `coursesTitle` on ?tab=trainingPrograms. See folder «00 — بناء برنامج التدريب» steps 07–12.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
 
 ---
 
@@ -2919,10 +5790,10 @@ Page chrome labels for focus areas list/detail.
 
 | الحقل | الوصف | مثال |
 |-------|--------|------|
-| `titleAr` | العنوان بالعربية | "التخطيط الحضري المتكامل" |
-| `titleEn` | العنوان بالإنجليزية | "Integrated Urban Planning" |
-| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | "3 دورات" |
-| `countEn` | العدد/التعداد بالإنجليزية | "3 courses" |
+| `titleAr` | العنوان بالعربية | "التخطيط والتطوير الحضري" |
+| `titleEn` | العنوان بالإنجليزية | "Urban Planning and Development" |
+| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | "3 دورات تدريبية" |
+| `countEn` | العدد/التعداد بالإنجليزية | "3 training courses" |
 | `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 
 #### Notes | ملاحظات
@@ -2931,7 +5802,7 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
+Rows under `coursesTitle` on ?tab=trainingPrograms. See folder «00 — بناء برنامج التدريب» steps 07–12.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
 
 ---
 
@@ -2949,6 +5820,8 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
+Rows under `coursesTitle` on ?tab=trainingPrograms. See folder «00 — بناء برنامج التدريب» steps 07–12.
+
 ---
 
 #### PUT `/api/admin/training-courses/{{id}}`
@@ -2963,10 +5836,10 @@ Page chrome labels for focus areas list/detail.
 
 | الحقل | الوصف | مثال |
 |-------|--------|------|
-| `titleAr` | العنوان بالعربية | "التخطيط الحضري المتكامل" |
-| `titleEn` | العنوان بالإنجليزية | "Integrated Urban Planning" |
-| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | "3 دورات" |
-| `countEn` | العدد/التعداد بالإنجليزية | "3 courses" |
+| `titleAr` | العنوان بالعربية | "التخطيط والتطوير الحضري" |
+| `titleEn` | العنوان بالإنجليزية | "Urban Planning and Development" |
+| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | "3 دورات تدريبية" |
+| `countEn` | العدد/التعداد بالإنجليزية | "3 training courses" |
 | `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 
 #### Notes | ملاحظات
@@ -2975,7 +5848,7 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-**جسم التحديث كامل** — نفس حقول الإنشاء.
+Rows under `coursesTitle` on ?tab=trainingPrograms. See folder «00 — بناء برنامج التدريب» steps 07–12.**جسم التحديث كامل** — نفس حقول الإنشاء.
 
 ---
 
@@ -2992,6 +5865,8 @@ Page chrome labels for focus areas list/detail.
 **Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Rows under `coursesTitle` on ?tab=trainingPrograms. See folder «00 — بناء برنامج التدريب» steps 07–12.
 
 ---
 
@@ -3012,6 +5887,174 @@ Page chrome labels for focus areas list/detail.
 #### Notes | ملاحظات
 
 إعادة ترتيب العناصر — `items[].id` + `items[].sortOrder`.
+
+---
+
+#### POST `/api/admin/training-courses`
+
+**الاسم | Name:** إنشاء دورة — التخطيط والتطوير الحضري
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "التخطيط والتطوير الحضري" |
+| `titleEn` | العنوان بالإنجليزية | "Urban Planning and Development" |
+| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | "3 دورات تدريبية" |
+| `countEn` | العدد/التعداد بالإنجليزية | "3 training courses" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Example course for trainingPrograms tab grid.
+
+---
+
+#### POST `/api/admin/training-courses`
+
+**الاسم | Name:** إنشاء دورة — التخطيط والتطوير الحضري
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "التخطيط والتطوير الحضري" |
+| `titleEn` | العنوان بالإنجليزية | "Urban Planning and Development" |
+| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | "3 دورات تدريبية" |
+| `countEn` | العدد/التعداد بالإنجليزية | "3 training courses" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 3 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Example course for trainingPrograms tab grid.
+
+---
+
+#### POST `/api/admin/training-courses`
+
+**الاسم | Name:** إنشاء دورة — تطوير العمل البلدي للقيادات
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "تطوير العمل البلدي للقيادات" |
+| `titleEn` | العنوان بالإنجليزية | "Municipal Leadership Development" |
+| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | "3 دورات تدريبية" |
+| `countEn` | العدد/التعداد بالإنجليزية | "3 training courses" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Example course for trainingPrograms tab grid.
+
+---
+
+#### POST `/api/admin/training-courses`
+
+**الاسم | Name:** إنشاء دورة — تطوير العمل البلدي للقيادات
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "تطوير العمل البلدي للقيادات" |
+| `titleEn` | العنوان بالإنجليزية | "Municipal Leadership Development" |
+| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | "3 دورات تدريبية" |
+| `countEn` | العدد/التعداد بالإنجليزية | "3 training courses" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 4 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Example course for trainingPrograms tab grid.
+
+---
+
+#### POST `/api/admin/training-courses`
+
+**الاسم | Name:** إنشاء دورة — الاستثمار في القطاع البلدي
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "الاستثمار في القطاع البلدي" |
+| `titleEn` | العنوان بالإنجليزية | "Investment in the Municipal Sector" |
+| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | "3 دورات تدريبية" |
+| `countEn` | العدد/التعداد بالإنجليزية | "3 training courses" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Example course for trainingPrograms tab grid.
+
+---
+
+#### POST `/api/admin/training-courses`
+
+**الاسم | Name:** إنشاء دورة — الاستثمار في القطاع البلدي
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `titleAr` | العنوان بالعربية | "الاستثمار في القطاع البلدي" |
+| `titleEn` | العنوان بالإنجليزية | "Investment in the Municipal Sector" |
+| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | "3 دورات تدريبية" |
+| `countEn` | العدد/التعداد بالإنجليزية | "3 training courses" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 5 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Example course for trainingPrograms tab grid.
 
 ---
 
@@ -3039,7 +6082,7 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
+Carousel cards on ?tab=experts. See folder «00 — بناء برنامج التدريب» steps 13–15.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
 
 ---
 
@@ -3055,11 +6098,11 @@ Page chrome labels for focus areas list/detail.
 
 | الحقل | الوصف | مثال |
 |-------|--------|------|
-| `nameAr` | الاسم بالعربية | "د. إبراهيم الحسن" |
-| `nameEn` | الاسم بالإنجليزية | "Dr. Ibrahim Al-Hassan" |
-| `specialtyAr` | specialtyAr | "التصميم الحضري والعمارة" |
-| `specialtyEn` | specialtyEn | "Urban Design and Architecture" |
-| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/emp\/expert-1.png" |
+| `nameAr` | الاسم بالعربية | "د. إبراهيم باهر الدين" |
+| `nameEn` | الاسم بالإنجليزية | "Dr. Ibrahim Baher El-Din" |
+| `specialtyAr` | specialtyAr | "التصميم الحضري والتخطيط التشاركي" |
+| `specialtyEn` | specialtyEn | "Urban Design and Participatory Planning" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/emp\/1.png" |
 | `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 
 #### Notes | ملاحظات
@@ -3068,7 +6111,7 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
+Carousel cards on ?tab=experts. See folder «00 — بناء برنامج التدريب» steps 13–15.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
 
 ---
 
@@ -3086,6 +6129,8 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
+Carousel cards on ?tab=experts. See folder «00 — بناء برنامج التدريب» steps 13–15.
+
 ---
 
 #### PUT `/api/admin/experts/{{id}}`
@@ -3100,11 +6145,11 @@ Page chrome labels for focus areas list/detail.
 
 | الحقل | الوصف | مثال |
 |-------|--------|------|
-| `nameAr` | الاسم بالعربية | "د. إبراهيم الحسن" |
-| `nameEn` | الاسم بالإنجليزية | "Dr. Ibrahim Al-Hassan" |
-| `specialtyAr` | specialtyAr | "التصميم الحضري والعمارة" |
-| `specialtyEn` | specialtyEn | "Urban Design and Architecture" |
-| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/emp\/expert-1.png" |
+| `nameAr` | الاسم بالعربية | "د. إبراهيم باهر الدين" |
+| `nameEn` | الاسم بالإنجليزية | "Dr. Ibrahim Baher El-Din" |
+| `specialtyAr` | specialtyAr | "التصميم الحضري والتخطيط التشاركي" |
+| `specialtyEn` | specialtyEn | "Urban Design and Participatory Planning" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/emp\/1.png" |
 | `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 
 #### Notes | ملاحظات
@@ -3113,7 +6158,7 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-**جسم التحديث كامل** — نفس حقول الإنشاء.
+Carousel cards on ?tab=experts. See folder «00 — بناء برنامج التدريب» steps 13–15.**جسم التحديث كامل** — نفس حقول الإنشاء.
 
 ---
 
@@ -3130,6 +6175,8 @@ Page chrome labels for focus areas list/detail.
 **Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Carousel cards on ?tab=experts. See folder «00 — بناء برنامج التدريب» steps 13–15.
 
 ---
 
@@ -3150,6 +6197,93 @@ Page chrome labels for focus areas list/detail.
 #### Notes | ملاحظات
 
 إعادة ترتيب العناصر — `items[].id` + `items[].sortOrder`.
+
+---
+
+#### POST `/api/admin/experts`
+
+**الاسم | Name:** إنشاء خبير — د. إبراهيم باهر الدين
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `nameAr` | الاسم بالعربية | "د. إبراهيم باهر الدين" |
+| `nameEn` | الاسم بالإنجليزية | "Dr. Ibrahim Baher El-Din" |
+| `specialtyAr` | specialtyAr | "التصميم الحضري والتخطيط التشاركي" |
+| `specialtyEn` | specialtyEn | "Urban Design and Participatory Planning" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/emp\/1.png" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Example expert for experts tab carousel.
+
+---
+
+#### POST `/api/admin/experts`
+
+**الاسم | Name:** إنشاء خبير — د. خالد الوزني
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `nameAr` | الاسم بالعربية | "د. خالد الوزني" |
+| `nameEn` | الاسم بالإنجليزية | "Dr. Khaled Al-Wazni" |
+| `specialtyAr` | specialtyAr | "سياسات التنمية الاقتصادية" |
+| `specialtyEn` | specialtyEn | "Economic Development Policies" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/emp\/2.png" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Example expert for experts tab carousel.
+
+---
+
+#### POST `/api/admin/experts`
+
+**الاسم | Name:** إنشاء خبير — توماس ميرفي
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `nameAr` | الاسم بالعربية | "توماس ميرفي" |
+| `nameEn` | الاسم بالإنجليزية | "Thomas Murphy" |
+| `specialtyAr` | specialtyAr | "عمدة سابق لمدينة بيتسبرغ" |
+| `specialtyEn` | specialtyEn | "Former Mayor of Pittsburgh" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/emp\/3.png" |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Example expert for experts tab carousel.
 
 ---
 
@@ -3726,10 +6860,10 @@ Page chrome labels for focus areas list/detail.
 | الحقل | الوصف | مثال |
 |-------|--------|------|
 | `sectionKey` | مفتاح القسم (مثل: home_about_intro, institute) | "program_training" |
-| `bodyAr.back` | back | "العودة للبرامج" |
-| `bodyAr.sectionsLabel` | sectionsLabel | "أقسام البرنامج" |
-| `bodyEn.back` | back | "Back to programs" |
-| `bodyEn.sectionsLabel` | sectionsLabel | "Program sections" |
+| `bodyAr.back` | back | "رجوع" |
+| `bodyAr.sectionsLabel` | sectionsLabel | "اقسام البرنامج" |
+| `bodyEn.back` | back | "Back" |
+| `bodyEn.sectionsLabel` | sectionsLabel | "Program Sections" |
 
 #### Notes | ملاحظات
 
@@ -3737,7 +6871,7 @@ Page chrome labels for focus areas list/detail.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Navigation labels for program page.
+Navigation labels: back + sectionsLabel (اقسام البرنامج).
 
 ---
 
@@ -3775,7 +6909,7 @@ Navigation labels for program page.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
+Resources page + homepage knowledge center cards per category. See «تصنيفات مركز المعرفة» + «بطاقات مركز المعرفة» under Home.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
 
 ---
 
@@ -3791,17 +6925,15 @@ Navigation labels for program page.
 
 | الحقل | الوصف | مثال |
 |-------|--------|------|
-| `slug` | المعرّف اللatinي للرابط (مثل: training) | "urban-greening-projects" |
-| `titleAr` | العنوان بالعربية | "60 مشروع تخضير حضري في المدن العربية" |
-| `titleEn` | العنوان بالإنجليزية | "60 Urban Greening Projects in Arab Cities" |
-| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-05-29" |
-| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/our-sources\/1.png" |
-| `fileUrl` | رابط ملف PDF أو مرفق | "\/storage\/resources\/urban-greening.pdf" |
-| `resourceType` | نوع المورد (report, study, …) | "report" |
-| `focusAreaId` | معرّف مجال التركيز (FK) | 1 |
-| `year` | السنة | 2025 |
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "green-infrastructure" |
+| `titleAr` | العنوان بالعربية | "البنية التحتية الخضراء نحو منظومة خضراء متكامل… |
+| `titleEn` | العنوان بالإنجليزية | "Green Infrastructure Toward an Integrated Gree… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-12-29" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/our-sources\/4.png" |
+| `fileUrl` | رابط ملف PDF أو مرفق | "\/storage\/resources\/green-infrastructure.pdf" |
+| `knowledgeCategoryId` | معرّف تصنيف مركز المعرفة (FK) — اربط البطاقة بالتصنيف | 1 |
 | `isPublished` | منشور للعامة؟ (true/false) | true |
-| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
 
 #### Notes | ملاحظات
 
@@ -3809,7 +6941,7 @@ Navigation labels for program page.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
+Resources page + homepage knowledge center cards per category. See «تصنيفات مركز المعرفة» + «بطاقات مركز المعرفة» under Home.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
 
 ---
 
@@ -3827,6 +6959,8 @@ Navigation labels for program page.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
+Resources page + homepage knowledge center cards per category. See «تصنيفات مركز المعرفة» + «بطاقات مركز المعرفة» under Home.
+
 ---
 
 #### PUT `/api/admin/resources/{{id}}`
@@ -3841,17 +6975,15 @@ Navigation labels for program page.
 
 | الحقل | الوصف | مثال |
 |-------|--------|------|
-| `slug` | المعرّف اللatinي للرابط (مثل: training) | "urban-greening-projects" |
-| `titleAr` | العنوان بالعربية | "60 مشروع تخضير حضري في المدن العربية" |
-| `titleEn` | العنوان بالإنجليزية | "60 Urban Greening Projects in Arab Cities" |
-| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-05-29" |
-| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/our-sources\/1.png" |
-| `fileUrl` | رابط ملف PDF أو مرفق | "\/storage\/resources\/urban-greening.pdf" |
-| `resourceType` | نوع المورد (report, study, …) | "report" |
-| `focusAreaId` | معرّف مجال التركيز (FK) | 1 |
-| `year` | السنة | 2025 |
+| `slug` | المعرّف اللatinي للرابط (مثل: training) | "green-infrastructure" |
+| `titleAr` | العنوان بالعربية | "البنية التحتية الخضراء نحو منظومة خضراء متكامل… |
+| `titleEn` | العنوان بالإنجليزية | "Green Infrastructure Toward an Integrated Gree… |
+| `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-12-29" |
+| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/our-sources\/4.png" |
+| `fileUrl` | رابط ملف PDF أو مرفق | "\/storage\/resources\/green-infrastructure.pdf" |
+| `knowledgeCategoryId` | معرّف تصنيف مركز المعرفة (FK) — اربط البطاقة بالتصنيف | 1 |
 | `isPublished` | منشور للعامة؟ (true/false) | true |
-| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |
 
 #### Notes | ملاحظات
 
@@ -3859,7 +6991,7 @@ Navigation labels for program page.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-**جسم التحديث كامل** — نفس حقول الإنشاء.
+Resources page + homepage knowledge center cards per category. See «تصنيفات مركز المعرفة» + «بطاقات مركز المعرفة» under Home.**جسم التحديث كامل** — نفس حقول الإنشاء.
 
 ---
 
@@ -3876,6 +7008,8 @@ Navigation labels for program page.
 **Public match:** `GET /api/v1/resources` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Resources page + homepage knowledge center cards per category. See «تصنيفات مركز المعرفة» + «بطاقات مركز المعرفة» under Home.
 
 ---
 
@@ -3933,7 +7067,7 @@ Navigation labels for program page.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
+Homepage news: see «بطاقات المركز الإعلامي» under Home for all 6 example bodies from https://audi-ten.vercel.app/ar.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
 
 ---
 
@@ -3951,14 +7085,14 @@ Navigation labels for program page.
 |-------|--------|------|
 | `category` | التصنيف (news, newsletter, city_meetings, membership, …) | "news" |
 | `key` | المفتاح الفريد للسجل | "director-dialogue-session" |
-| `slugAr` | الرابط العربي (slug) | "مدير-عام-المعهد-يشارك-في-جلسة-حوارية" |
-| `slugEn` | الرابط الإنجليزي (slug) | "director-participates-in-dialogue-session" |
-| `titleAr` | العنوان بالعربية | "مدير عام المعهد يشارك في جلسة حوارية حول التنم… |
-| `titleEn` | العنوان بالإنجليزية | "Director General participates in dialogue sess… |
-| `descriptionAr` | الوصف بالعربية | "شارك د. أنس المغيري في جلسة حوارية ناقشت مستقب… |
-| `descriptionEn` | الوصف بالإنجليزية | "Dr. Anas AlMugairi participated in a dialogue … |
+| `slugAr` | الرابط العربي (slug) | "جلسة-حوارية-التنمية-الحضرية" |
+| `slugEn` | الرابط الإنجليزي (slug) | "director-dialogue-session" |
+| `titleAr` | العنوان بالعربية | "مدير عام المعهد يشارك في جلسة حوارية للفطيم حو… |
+| `titleEn` | العنوان بالإنجليزية | "Institute Director Participates in Al-Futtaim … |
+| `descriptionAr` | الوصف بالعربية | "شارك مدير عام المعهد العربي لإنماء المدن في جل… |
+| `descriptionEn` | الوصف بالإنجليزية | "The Director General of the Arab Urban Develop… |
 | `bodyAr` | محتوى JSON بالعربية (فقرات، تسميات، أقسام) | ["شارك مدير عام المعهد العربي لإنماء المدن في ج… |
-| `bodyEn` | محتوى JSON بالإنجليزية | ["The Director General of AUDI participated in … |
+| `bodyEn` | محتوى JSON بالإنجليزية | ["The Director General of the Arab Urban Develo… |
 | `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-12-29" |
 | `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/blog\/1.png" |
 | `pdfUrl` | رابط PDF للمقال أو النشرة | null |
@@ -3974,7 +7108,7 @@ Navigation labels for program page.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
+Homepage news: see «بطاقات المركز الإعلامي» under Home for all 6 example bodies from https://audi-ten.vercel.app/ar.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
 
 ---
 
@@ -3992,6 +7126,8 @@ Navigation labels for program page.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
+Homepage news: see «بطاقات المركز الإعلامي» under Home for all 6 example bodies from https://audi-ten.vercel.app/ar.
+
 ---
 
 #### PUT `/api/admin/media/{{id}}`
@@ -4008,14 +7144,14 @@ Navigation labels for program page.
 |-------|--------|------|
 | `category` | التصنيف (news, newsletter, city_meetings, membership, …) | "news" |
 | `key` | المفتاح الفريد للسجل | "director-dialogue-session" |
-| `slugAr` | الرابط العربي (slug) | "مدير-عام-المعهد-يشارك-في-جلسة-حوارية" |
-| `slugEn` | الرابط الإنجليزي (slug) | "director-participates-in-dialogue-session" |
-| `titleAr` | العنوان بالعربية | "مدير عام المعهد يشارك في جلسة حوارية حول التنم… |
-| `titleEn` | العنوان بالإنجليزية | "Director General participates in dialogue sess… |
-| `descriptionAr` | الوصف بالعربية | "شارك د. أنس المغيري في جلسة حوارية ناقشت مستقب… |
-| `descriptionEn` | الوصف بالإنجليزية | "Dr. Anas AlMugairi participated in a dialogue … |
+| `slugAr` | الرابط العربي (slug) | "جلسة-حوارية-التنمية-الحضرية" |
+| `slugEn` | الرابط الإنجليزي (slug) | "director-dialogue-session" |
+| `titleAr` | العنوان بالعربية | "مدير عام المعهد يشارك في جلسة حوارية للفطيم حو… |
+| `titleEn` | العنوان بالإنجليزية | "Institute Director Participates in Al-Futtaim … |
+| `descriptionAr` | الوصف بالعربية | "شارك مدير عام المعهد العربي لإنماء المدن في جل… |
+| `descriptionEn` | الوصف بالإنجليزية | "The Director General of the Arab Urban Develop… |
 | `bodyAr` | محتوى JSON بالعربية (فقرات، تسميات، أقسام) | ["شارك مدير عام المعهد العربي لإنماء المدن في ج… |
-| `bodyEn` | محتوى JSON بالإنجليزية | ["The Director General of AUDI participated in … |
+| `bodyEn` | محتوى JSON بالإنجليزية | ["The Director General of the Arab Urban Develo… |
 | `publishedDate` | تاريخ النشر (YYYY-MM-DD) | "2025-12-29" |
 | `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | "\/blog\/1.png" |
 | `pdfUrl` | رابط PDF للمقال أو النشرة | null |
@@ -4031,7 +7167,7 @@ Navigation labels for program page.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-**جسم التحديث كامل** — نفس حقول الإنشاء.
+Homepage news: see «بطاقات المركز الإعلامي» under Home for all 6 example bodies from https://audi-ten.vercel.app/ar.**جسم التحديث كامل** — نفس حقول الإنشاء.
 
 ---
 
@@ -4048,6 +7184,8 @@ Navigation labels for program page.
 **Public match:** `GET /api/v1/media/news` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Homepage news: see «بطاقات المركز الإعلامي» under Home for all 6 example bodies from https://audi-ten.vercel.app/ar.
 
 ---
 
@@ -4725,7 +7863,7 @@ Returns bilingual label/unit per stat key.
 
 | الحقل | الوصف | مثال |
 |-------|--------|------|
-| `items` | قائمة العناصر (إعادة ترتيب أو إحصائيات) | [{"key":"countries","value":22,"autoCalculate":… |
+| `items` | قائمة العناصر (إعادة ترتيب أو إحصائيات) | [{"key":"countries","value":12,"autoCalculate":… |
 
 #### Notes | ملاحظات
 
@@ -4733,7 +7871,7 @@ Returns bilingual label/unit per stat key.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Stats use nested label.ar/en and unit.ar/en (not *Ar/*En suffix).
+Homepage «المدن الأعضاء»: 12 دولة / 400 مدينة / 1240 عضو. Stats use nested label.ar/en and unit.ar/en.
 
 ---
 

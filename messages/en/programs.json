@@ -18,6 +18,7 @@
     },
     "trainingPrograms": {
       "title": "Training Programs",
+      "image": "/icons/program/6.gif",
       "intro": "The City Support Center aims to meet the needs and requirements of municipalities for developing technical capacities by raising the efficiency of municipal employees, building problem-solving skills, and keeping pace with technological developments in the field. It provides a suite of services including training programs aligned with global changes to improve the quality of work.",
       "formatsTitle": "These training programs are delivered through:",
       "formats": [
@@ -26,6 +27,8 @@
         "Municipal training platform (MOOC)."
       ],
       "coursesTitle": "Training Programs 2023 – 2024",
+      "heroImage": "/icons/program/6.gif",
+      "coursesImage": "/icons/program/7.png",
       "courses": [
         {
           "title": "Urban Planning and Development",
@@ -55,12 +58,14 @@
     },
     "consulting": {
       "title": "Technical Consultations & Knowledge Transfer",
+      "image": "/projects/p2.png",
       "intro": "The City Support Center is committed to providing technical support to municipalities in managing and implementing municipal projects, improving the quality of procedures and services, and learning from best practices in municipalities.",
       "nav": [
         "Engineering and administrative consultations",
         "City experience sharing",
         "Individual knowledge exchange"
       ],
+      "detailImage": "/projects/consulting-presenter.png",
       "sections": [
         {
           "title": "Engineering and administrative consultations",
@@ -85,6 +90,7 @@
         "International Program in Innovation and Urban Management"
       ],
       "topicsTitle": "The executive program offers",
+      "heroVideo": "/icons/program/executive.mp4",
       "topics": [
         { "title": "Climate Change", "image": "p1.png" },
         { "title": "Circular Economy", "image": "p2.png" },

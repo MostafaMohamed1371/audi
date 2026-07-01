@@ -128,7 +128,21 @@ export type HomePayload = {
   knowledgeCenter: {
     viewIssue: string;
     downloadPdf: string;
-    headerSlides: { title: string; description: string }[];
+    categories: {
+      id: number;
+      slug: string;
+      title: string;
+      description: string;
+      items: {
+        slug: string;
+        title: string;
+        date: string;
+        href: string;
+        pdfHref: string;
+        image?: string;
+      }[];
+    }[];
+    headerSlides: { id?: number; slug?: string; title: string; description: string }[];
     items: {
       slug: string;
       title: string;

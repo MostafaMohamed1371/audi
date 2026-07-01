@@ -80,6 +80,7 @@ final class ImageUrl
         $pathKeys = [
             'imageUrl', 'visionImage', 'missionImage', 'image', 'logoUrl',
             'listImage', 'detailImage', 'listImageUrl', 'detailImageUrl',
+            'heroImage', 'coursesImage', 'heroVideo',
             'fileUrl', 'pdfUrl', 'pdfHref', 'downloadHref', 'cvUrl',
         ];
 

@@ -13,23 +13,30 @@ type HeaderSlide = {
 type Props = {
   slides: HeaderSlide[];
   isRtl: boolean;
+  activeIndex?: number;
 };
 
 const INTERVAL_MS = 2000;
 
-export function KnowledgeCenterHeader({ slides, isRtl }: Props) {
-  const [current, setCurrent] = useState(0);
+export function KnowledgeCenterHeader({
+  slides,
+  isRtl,
+  activeIndex: controlledIndex,
+}: Props) {
+  const [internalIndex, setInternalIndex] = useState(0);
+  const isControlled = controlledIndex !== undefined;
+  const current = isControlled ? controlledIndex : internalIndex;
   const total = slides.length;
 
   useEffect(() => {
-    if (total <= 1) return;
+    if (isControlled || total <= 1) return;
 
     const id = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % total);
+      setInternalIndex((prev) => (prev + 1) % total);
     }, INTERVAL_MS);
 
     return () => clearInterval(id);
-  }, [total]);
+  }, [isControlled, total]);
 
   if (total === 0) return null;
 

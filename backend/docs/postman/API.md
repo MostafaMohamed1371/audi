@@ -12,6 +12,8 @@
 | **[PUBLIC-API.md](./PUBLIC-API.md)** | الواجهة العامة `/api/v1/*` — للموقع والزوار |
 | **[ADMIN-API.md](./ADMIN-API.md)** | واجهة الإدارة `/api/admin/*` — لوحة التحكم |
 | **[API-ERRORS.md](./API-ERRORS.md)** | أخطاء API — صيغة 400, 401, 404, 422, 500… |
+| **[HOMEPAGE-ADMIN-GUIDE.md](./HOMEPAGE-ADMIN-GUIDE.md)** | دليل بناء الصفحة الرئيسية — 33 خطوة Postman Admin |
+| **[PROGRAMS-ADMIN-GUIDE.md](./PROGRAMS-ADMIN-GUIDE.md)** | دليل بناء صفحات البرامج — program + sections (`programId`) |
 | **[AUDI-API.postman_collection.json](./AUDI-API.postman_collection.json)** | مجموعة Postman كاملة (Public + Admin) |
 
 ---

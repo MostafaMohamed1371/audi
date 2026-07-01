@@ -17,6 +17,9 @@ export function TrainingProgramsPanel({
   backLabel,
   onBack,
 }: Props) {
+  const heroImage = content.heroImage ?? content.image ?? "/icons/program/6.gif";
+  const coursesImage = content.coursesImage ?? "/icons/program/7.png";
+
   return (
     <div className="space-y-0">
       <PanelWrapper backLabel={backLabel} onBack={onBack} isRtl={isRtl}>
@@ -28,7 +31,7 @@ export function TrainingProgramsPanel({
             <div className="aspect-[614/538] overflow-hidden rounded-2xl border border-primary/30 bg-white">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/icons/program/6.gif"
+                src={heroImage}
                 alt=""
                 className="size-full object-cover"
               />
@@ -65,7 +68,7 @@ export function TrainingProgramsPanel({
 
             <div className="mx-auto aspect-[454/402] w-full max-w-[454px] overflow-hidden rounded-[24px]">
               <Image
-                src="/icons/program/7.png"
+                src={coursesImage}
                 alt=""
                 width={454}
                 height={402}

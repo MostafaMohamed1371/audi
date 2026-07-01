@@ -72,7 +72,7 @@ export function MediaFeaturedCarousel({ slides, readMore, isRtl }: Props) {
         <div className="relative order-1 aspect-[16/10] overflow-hidden rounded-2xl sm:aspect-[4/3] sm:rounded-[20px] lg:order-1 lg:aspect-auto lg:h-[320px] xl:h-[360px]">
           <Image
             key={item.image}
-            src={`/blog/${item.image}`}
+            src={item.image}
             alt={item.title}
             fill
             className="object-cover transition-opacity duration-500"

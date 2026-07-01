@@ -7,6 +7,7 @@ import { ButtonLink } from "@/app/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { MediaFeaturedCarousel } from "@/app/components/home/media-center/media-featured-carousel";
 import type { HomePayload } from "@/lib/api";
+import { resolveImageSrc } from "@/lib/image-src";
 
 const blogImages = ["1.png", "2.png", "3.png", "4.png"] as const;
 
@@ -56,7 +57,9 @@ export async function MediaCenterSection({
     title: String(item.title ?? ""),
     description: String(item.description ?? ""),
     date: String(item.date ?? ""),
-    image: String(item.image ?? blogImages[index] ?? blogImages[0]),
+    image:
+      resolveImageSrc(String(item.image ?? "")) ||
+      `/blog/${blogImages[index] ?? blogImages[0]}`,
     href: item.slug
       ? mediaArticleHref(String(item.slug), "news")
       : mediaArticleHref(slugFallback[index] ?? slugFallback[0], "news"),
@@ -115,7 +118,7 @@ export async function MediaCenterSection({
             >
               <div className="relative m-4 aspect-[16/10] w-auto shrink-0 overflow-hidden rounded-2xl sm:m-5 sm:me-0 sm:aspect-4/5 sm:w-[42%] sm:min-w-[140px] sm:self-stretch sm:rounded-[16px]">
                 <Image
-                  src={`/blog/${item.image}`}
+                  src={item.image}
                   alt={item.title}
                   fill
                   className="object-cover"

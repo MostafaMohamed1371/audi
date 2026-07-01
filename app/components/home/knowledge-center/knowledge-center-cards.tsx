@@ -36,7 +36,7 @@ function KnowledgeCard({
     <article className="flex h-full flex-col">
       <div className="relative mb-4 aspect-4/3 overflow-hidden rounded-[20px]">
         <Image
-          src={`/knowledgeCenter/${item.image}`}
+          src={item.image}
           alt={item.title}
           fill
           className="object-cover"

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Calendar, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { resolveImageSrc } from "@/lib/image-src";
 
 export type ResourceItem = {
   slug: string;
@@ -38,7 +39,7 @@ export function ResourcesCardsGrid({
         >
           <div className="relative aspect-[3/4] overflow-hidden">
             <Image
-              src={`/our-sources/${item.image}`}
+              src={resolveImageSrc(item.image, "/our-sources")}
               alt={item.title}
               fill
               className="object-cover"

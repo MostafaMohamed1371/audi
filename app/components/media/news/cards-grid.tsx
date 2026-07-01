@@ -6,6 +6,7 @@ import { mediaArticleHref } from "@/lib/hrefs";
 import type { MediaArticleCategory } from "@/lib/media";
 import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { resolveImageSrc } from "@/lib/image-src";
 import { MediaPagination } from "@/app/components/media/media-pagination";
 
 type NewsItem = {
@@ -45,7 +46,7 @@ export function NewsCardsGrid({
           >
             <div className="relative aspect-[4/3] overflow-hidden">
               <Image
-                src={`/blog/${item.image}`}
+                src={resolveImageSrc(item.image, "/blog")}
                 alt={item.title}
                 fill
                 className="object-cover"
