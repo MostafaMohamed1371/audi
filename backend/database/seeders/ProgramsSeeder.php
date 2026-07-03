@@ -10,8 +10,10 @@ use App\Models\DirectoryPublication;
 use App\Models\Expert;
 use App\Models\Program;
 use App\Models\ProgramSection;
+use App\Models\ProgramSectionDetail;
 use App\Models\TrainingCourse;
 use App\Support\ImageUrl;
+use App\Support\ProgramContentKey;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 
@@ -71,19 +73,21 @@ class ProgramsSeeder extends Seeder
             ],
         );
 
-        AboutContent::query()->updateOrCreate(
-            ['section_key' => 'program_'.$slug],
-            [
-                'body_ar' => [
-                    'back' => $arProgram['back'] ?? null,
-                    'sectionsLabel' => $arProgram['sectionsLabel'] ?? null,
+        if ($slug === 'urban-policies') {
+            AboutContent::query()->updateOrCreate(
+                ['section_key' => 'program_'.$slug],
+                [
+                    'body_ar' => [
+                        'back' => $arProgram['back'] ?? null,
+                        'sectionsLabel' => $arProgram['sectionsLabel'] ?? null,
+                    ],
+                    'body_en' => [
+                        'back' => $enProgram['back'] ?? null,
+                        'sectionsLabel' => $enProgram['sectionsLabel'] ?? null,
+                    ],
                 ],
-                'body_en' => [
-                    'back' => $enProgram['back'] ?? null,
-                    'sectionsLabel' => $enProgram['sectionsLabel'] ?? null,
-                ],
-            ],
-        );
+            );
+        }
 
         $program = Program::query()->where('slug', $slug)->firstOrFail();
         $tabs = self::SECTION_TABS[$slug] ?? [];
@@ -108,7 +112,7 @@ class ProgramsSeeder extends Seeder
                 unset($arBody['directory']['rows'], $enBody['directory']['rows']);
             }
 
-            ProgramSection::query()->updateOrCreate(
+            $section = ProgramSection::query()->updateOrCreate(
                 [
                     'program_id' => $program->id,
                     'tab_key' => $tabKey,
@@ -116,12 +120,18 @@ class ProgramsSeeder extends Seeder
                 [
                     'title_ar' => $arSection['title'] ?? ($arProgram['tabs'][$tabKey] ?? $tabKey),
                     'title_en' => $enSection['title'] ?? ($enProgram['tabs'][$tabKey] ?? $tabKey),
-                    'intro_ar' => $arSection['intro'] ?? null,
-                    'intro_en' => $enSection['intro'] ?? null,
-                    'body_ar' => $arBody,
-                    'body_en' => $enBody,
                     'image_url' => $arSection['image'] ?? null,
                     'sort_order' => $index,
+                ],
+            );
+
+            ProgramSectionDetail::query()->updateOrCreate(
+                ['program_section_id' => $section->id],
+                [
+                    'intro_ar' => $arSection['intro'] ?? null,
+                    'intro_en' => $enSection['intro'] ?? null,
+                    'body_ar' => $arBody ?: null,
+                    'body_en' => $enBody ?: null,
                 ],
             );
         }

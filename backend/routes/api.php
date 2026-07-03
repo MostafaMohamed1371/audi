@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\Admin\MembershipApplicationController;
 use App\Http\Controllers\Api\Admin\PortalContributionController as AdminPortalContributionController;
 use App\Http\Controllers\Api\Admin\ProgramController as AdminProgramController;
 use App\Http\Controllers\Api\Admin\ProgramSectionController;
+use App\Http\Controllers\Api\Admin\ProgramSectionDetailController;
 use App\Http\Controllers\Api\Admin\TrainingCourseController;
 use App\Http\Controllers\Api\Admin\ExpertController;
 use App\Http\Controllers\Api\Admin\FocusAreaController;
@@ -251,6 +252,12 @@ Route::prefix('admin')->group(function () {
         Route::get('program-sections/{programSection}', [ProgramSectionController::class, 'show']);
         Route::put('program-sections/{programSection}', [ProgramSectionController::class, 'update']);
         Route::delete('program-sections/{programSection}', [ProgramSectionController::class, 'destroy']);
+
+        Route::get('program-section-details', [ProgramSectionDetailController::class, 'index']);
+        Route::post('program-section-details', [ProgramSectionDetailController::class, 'store']);
+        Route::get('program-section-details/{programSectionDetail}', [ProgramSectionDetailController::class, 'show']);
+        Route::put('program-section-details/{programSectionDetail}', [ProgramSectionDetailController::class, 'update']);
+        Route::delete('program-section-details/{programSectionDetail}', [ProgramSectionDetailController::class, 'destroy']);
 
         Route::get('training-courses', [TrainingCourseController::class, 'index']);
         Route::post('training-courses', [TrainingCourseController::class, 'store']);

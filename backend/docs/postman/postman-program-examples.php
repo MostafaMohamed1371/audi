@@ -3,218 +3,211 @@
 declare(strict_types=1);
 
 /**
- * Example admin bodies for program pages — matches messages/{ar,en}/programs.json
- * and https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن (slug: training).
+ * Example admin bodies for program pages — loaded from messages/{ar,en}/programs.json
+ * (same source as https://audi-ten.vercel.app/ar program pages).
  */
+
+/**
+ * @return array<string, mixed>
+ */
+function postmanLoadProgramsJson(string $locale): array
+{
+    static $cache = [];
+    if (! isset($cache[$locale])) {
+        $path = dirname(__DIR__, 3).'/messages/'.$locale.'/programs.json';
+        $cache[$locale] = json_decode((string) file_get_contents($path), true, 512, JSON_THROW_ON_ERROR);
+    }
+
+    return $cache[$locale];
+}
+
+function postmanProgramJsonKey(string $slug): string
+{
+    return match ($slug) {
+        'urban-policies' => 'urbanPolicies',
+        'training' => 'training',
+        'partnerships' => 'partnerships',
+        default => $slug,
+    };
+}
+
+/**
+ * @return list<string>
+ */
+function postmanProgramTabKeys(string $slug): array
+{
+    return match ($slug) {
+        'training' => ['trainingPrograms', 'consulting', 'executive', 'experts'],
+        'urban-policies' => ['developmentPortal', 'developmentIndex', 'innovationLab', 'practiceReports'],
+        'partnerships' => ['euroArabDialogue', 'secretarySpeaks', 'urbanAwards', 'partnersGuide'],
+        default => [],
+    };
+}
+
+/**
+ * @return array<int, array{name: string, tabKey: string, sortOrder: int}>
+ */
+function postmanProgramSectionPairs(string $slug): array
+{
+    return array_map(
+        fn (string $tabKey, int $index) => ['name' => $tabKey, 'tabKey' => $tabKey, 'sortOrder' => $index],
+        postmanProgramTabKeys($slug),
+        array_keys(postmanProgramTabKeys($slug)),
+    );
+}
+
+/**
+ * Body fields stored in program_section_details (matches ProgramsSeeder).
+ *
+ * @param  array<string, mixed>  $section
+ * @return array<string, mixed>
+ */
+function postmanSectionBodyFromProgramsJson(array $section, string $tabKey): array
+{
+    if ($tabKey === 'experts') {
+        return ['title' => $section['title'] ?? ''];
+    }
+
+    $body = $section;
+    unset($body['title'], $body['intro'], $body['image']);
+
+    if ($tabKey === 'trainingPrograms') {
+        unset($body['courses']);
+    }
+
+    if ($tabKey === 'developmentPortal' && isset($body['directory']) && is_array($body['directory'])) {
+        unset($body['directory']['rows']);
+    }
+
+    return $body;
+}
+
+/**
+ * Full section row split into shell / about / details layers.
+ *
+ * @return array<string, mixed>
+ */
+function postmanSectionLegacyFromJson(string $slug, string $tabKey, int $sortOrder): array
+{
+    $jsonKey = postmanProgramJsonKey($slug);
+    $arSection = postmanLoadProgramsJson('ar')[$jsonKey][$tabKey] ?? [];
+    $enSection = postmanLoadProgramsJson('en')[$jsonKey][$tabKey] ?? [];
+
+    return [
+        'programId' => '{{programId}}',
+        'tabKey' => $tabKey,
+        'sortOrder' => $sortOrder,
+        'titleAr' => $arSection['title'] ?? null,
+        'titleEn' => $enSection['title'] ?? null,
+        'introAr' => $arSection['intro'] ?? null,
+        'introEn' => $enSection['intro'] ?? null,
+        'imageUrl' => $arSection['image'] ?? null,
+        'bodyAr' => postmanSectionBodyFromProgramsJson($arSection, $tabKey),
+        'bodyEn' => postmanSectionBodyFromProgramsJson($enSection, $tabKey),
+    ];
+}
+
+/**
+ * @return array<string, mixed>
+ */
+function postmanProgramBodyFromJson(string $slug, int $sortOrder): array
+{
+    $jsonKey = postmanProgramJsonKey($slug);
+    $pageKey = postmanProgramJsonKey($slug);
+    $ar = postmanLoadProgramsJson('ar');
+    $en = postmanLoadProgramsJson('en');
+    $arProgram = $ar[$jsonKey] ?? [];
+    $enProgram = $en[$jsonKey] ?? [];
+
+    $cards = [
+        'urban-policies' => [
+            'cardDescriptionAr' => 'إعداد دراسات وتقارير سياسات حضرية تدعم صناع القرار في المدن العربية، وتعزز التخطيط الحضري المستدام.',
+            'cardDescriptionEn' => 'Developing urban policy studies and reports that support decision-makers in Arab cities and promote sustainable urban planning.',
+        ],
+        'training' => [
+            'cardDescriptionAr' => 'برامج تدريبية متخصصة لبناء قدرات العاملين في البلديات والمؤسسات الحضرية في العالم العربي.',
+            'cardDescriptionEn' => 'Specialized training programs to build the capabilities of municipal staff and urban institutions across the Arab world.',
+        ],
+        'partnerships' => [
+            'cardDescriptionAr' => 'معاً لنصنع مستقبل حضري أفضل: تعرف كيف نبني جسور التواصل بين المدن وشركاء التنمية.',
+            'cardDescriptionEn' => 'Building strategic partnerships with cities and regional and international institutions to support shared urban development.',
+        ],
+    ];
+
+    $card = $cards[$slug] ?? ['cardDescriptionAr' => null, 'cardDescriptionEn' => null];
+
+    return array_merge([
+        'slug' => $slug,
+        'titleAr' => $ar['pages'][$pageKey] ?? $slug,
+        'titleEn' => $en['pages'][$pageKey] ?? $slug,
+        'heroIntroAr' => $arProgram['heroIntro'] ?? null,
+        'heroIntroEn' => $enProgram['heroIntro'] ?? null,
+        'sortOrder' => $sortOrder,
+    ], $card);
+}
 
 /**
  * @return array<string, mixed>
  */
 function postmanTrainingProgramBody(): array
 {
-    return [
-        'slug' => 'training',
-        'titleAr' => 'التدريب و تطوير القدرات',
-        'titleEn' => 'Training & Capacity Building',
-        'heroIntroAr' => 'يهدف مركز دعم المدن إلى تلبية احتياجات الأمانات والبلديات العربية من خلال برامج تدريبية واستشارات فنية تعزز القدرات المؤسسية وتنقل الخبرات بين المدن.',
-        'heroIntroEn' => 'The City Support Center aims to meet the needs of Arab municipalities through training programs and technical consultations that strengthen institutional capacities and facilitate knowledge exchange among cities.',
-        'cardDescriptionAr' => 'برامج تدريبية متخصصة لبناء قدرات العاملين في البلديات والمؤسسات الحضرية في العالم العربي.',
-        'cardDescriptionEn' => 'Specialized training programs to build the capabilities of municipal staff and urban institutions across the Arab world.',
-        'sortOrder' => 1,
-    ];
+    return postmanProgramBodyFromJson('training', 1);
 }
 
 /**
- * @return array<string, mixed>
- */
-function postmanProgramTrainingLabelsBody(): array
-{
-    return [
-        'sectionKey' => 'program_training',
-        'bodyAr' => [
-            'back' => 'رجوع',
-            'sectionsLabel' => 'اقسام البرنامج',
-        ],
-        'bodyEn' => [
-            'back' => 'Back',
-            'sectionsLabel' => 'Program Sections',
-        ],
-    ];
-}
-
-/**
- * Full tab content for ?tab=trainingPrograms — intro, formats, coursesTitle live in program-section;
- * course rows (screenshot 2) come from POST /api/admin/training-courses (steps 07–12).
+ * Full tab content for ?tab=trainingPrograms — from programs.json.
  *
  * @return array<string, mixed>
  */
 function postmanTrainingProgramsSectionBody(): array
 {
-    return [
-        'programId' => 2,
-        'tabKey' => 'trainingPrograms',
-        'titleAr' => 'البرامج التدريبية',
-        'titleEn' => 'Training Programs',
-        'introAr' => 'هدف مركز دعم المدن لتلبية احتياجات ومتطلبات الامانات والبلديات لتطوير القدرات الفنية من خلال رفع كفاءة العاملين في الأمانات والبلديات، القدرة على حل المشكلات والتحديات الوظيفية، ومواكبة التطورات التكنولوجية في مجال العمل. لذلك يوفر منظومة من الخدمات تتضمن سلسلة برامج تدريبية تواكب التغيرات العالمية الحديثة لرفع مستوى جودة الاعمال.',
-        'introEn' => 'The City Support Center aims to meet the needs and requirements of municipalities for developing technical capacities by raising the efficiency of municipal employees, building problem-solving skills, and keeping pace with technological developments in the field. It provides a suite of services including training programs aligned with global changes to improve the quality of work.',
-        'bodyAr' => [
-            'formatsTitle' => 'حيث يتم تقديم هذه البرامج التدريبية على شكل:',
-            'formats' => [
-                'دورات تدريبية (حضورية وعن بعد).',
-                'ورش عمل متخصصة بطبيعة البلديات في المدن العربية معززة بأمثلة تطبيقية من واقع العمل البلدي',
-                'منصة تدريب بلدي (MOOC).',
-            ],
-            'coursesTitle' => 'البرامج التدريبية ٢٠٢٣ – ٢٠٢٤',
-            'heroImage' => '/icons/program/6.gif',
-            'coursesImage' => '/icons/program/7.png',
-        ],
-        'bodyEn' => [
-            'formatsTitle' => 'These training programs are delivered through:',
-            'formats' => [
-                'Training courses (in-person and remote).',
-                'Specialized workshops tailored to Arab municipalities, enriched with practical examples from municipal work',
-                'Municipal training platform (MOOC).',
-            ],
-            'coursesTitle' => 'Training Programs 2023 – 2024',
-            'heroImage' => '/icons/program/6.gif',
-            'coursesImage' => '/icons/program/7.png',
-        ],
-        'imageUrl' => '/icons/program/6.gif',
-        'sortOrder' => 0,
-    ];
+    return postmanSectionLegacyFromJson('training', 'trainingPrograms', 0);
 }
 
 /**
- * ?tab=consulting — nav pills + detail sections (screenshots 3–4).
+ * ?tab=consulting — from programs.json.
  *
  * @return array<string, mixed>
  */
 function postmanConsultingSectionBody(): array
 {
-    return [
-        'programId' => 2,
-        'tabKey' => 'consulting',
-        'titleAr' => 'الاستشارات الفنية ونقل الخبرات',
-        'titleEn' => 'Technical Consultations & Knowledge Transfer',
-        'introAr' => 'يحرص مركز دعم المدن على تقديم الدعم الفني للبلديات في إدارة وتنفيذ المشاريع البلدية، رفع جودة الإجراءات والخدمات التي تقدمها البلديات، والاطلاع على الممارسات الفضلى في الأمانات والبلديات.',
-        'introEn' => 'The City Support Center is committed to providing technical support to municipalities in managing and implementing municipal projects, improving the quality of procedures and services, and learning from best practices in municipalities.',
-        'bodyAr' => [
-            'nav' => [
-                'استشارات هندسية وإدارية',
-                'مشاركة التجارب بين المدن',
-                'تبادل الخبرات بين الافراد',
-            ],
-            'detailImage' => '/projects/consulting-presenter.png',
-            'sections' => [
-                [
-                    'title' => 'استشارات هندسية وإدارية',
-                    'description' => 'تعزز هذه الاستشارات قدرات المدن العربية بالمجالات الحضرية المختلفة، وقدرتها على اعداد وتنفيذ الدراسات والمشاريع المتعلقة بالتنمية والتطوير الحضري. وتشمل الاستشارات الفنية اعداد الوثائق الفنية والشروط المرجعية للمشاريع الحضرية، وتمثيل الامانات والبلديات من خلال مراجعة اعمال وتقارير الجهات الاستشارية المنفذة لتلك المشاريع.',
-                ],
-                [
-                    'title' => 'مشاركة التجارب بين المدن',
-                    'description' => 'لقاءات تهدف إلى إبراز المبادرات والممارسات المثلى ليتم الاستفادة منها في حل مشكلات حضرية قد تعاني منها أي من المدن الأعضاء. حيث يتشكل من هذه اللقاءات مجتمع تنموي تفاعلي يسمح للبلديات اكتشاف الاهتمامات والاحتياجات الحضرية المشتركة.',
-                ],
-                [
-                    'title' => 'تبادل الخبرات بين الافراد',
-                    'description' => 'لقاءات تهدف إلى إبراز المبادرات والممارسات المثلى ليتم الاستفادة منها في حل مشكلات حضرية قد تعاني منها أي من المدن الأعضاء. حيث يتشكل من هذه اللقاءات مجتمع تنموي تفاعلي يسمح للبلديات اكتشاف الاهتمامات والاحتياجات الحضرية المشتركة.',
-                ],
-            ],
-        ],
-        'bodyEn' => [
-            'nav' => [
-                'Engineering and administrative consultations',
-                'City experience sharing',
-                'Individual knowledge exchange',
-            ],
-            'detailImage' => '/projects/consulting-presenter.png',
-            'sections' => [
-                [
-                    'title' => 'Engineering and administrative consultations',
-                    'description' => 'These consultations enhance Arab cities\' capacities in various urban fields and their ability to prepare and implement studies and projects related to urban development. Technical consultations include preparing technical documents and reference specifications for urban projects, and representing municipalities by reviewing work and reports of consulting entities.',
-                ],
-                [
-                    'title' => 'City experience sharing',
-                    'description' => 'Meetings aimed at highlighting best initiatives and practices to address urban challenges faced by member cities, forming an interactive development community that allows municipalities to discover shared urban interests and needs.',
-                ],
-                [
-                    'title' => 'Individual knowledge exchange',
-                    'description' => 'Meetings aimed at highlighting best initiatives and practices to address urban challenges faced by member cities, forming an interactive development community that allows municipalities to discover shared urban interests and needs.',
-                ],
-            ],
-        ],
-        'imageUrl' => '/projects/p2.png',
-        'sortOrder' => 1,
-    ];
+    return postmanSectionLegacyFromJson('training', 'consulting', 1);
 }
 
 /**
- * ?tab=executive — offers list + topics carousel (screenshots 5–6).
+ * ?tab=executive — from programs.json.
  *
  * @return array<string, mixed>
  */
 function postmanExecutiveSectionBody(): array
 {
-    return [
-        'programId' => 2,
-        'tabKey' => 'executive',
-        'titleAr' => 'البرنامج التنفيذي',
-        'titleEn' => 'Executive Program',
-        'introAr' => 'برنامج تنفيذي متخصص في التنمية الحضرية ناتج عن تعاون بين المركز وجامعات عالمية. وتم تصميم البرامج التنفيذية بهدف تعزيز منسوبي الامانات والبلديات بالمهارات والمعارف العالمية والإلمام بأحدث النظريات والممارسات في العمل البلدي كما تتاح لهم فرص الاطلاع على كيفية توظيف التكنولوجيا في حلول المشاكل الحضرية.',
-        'introEn' => 'An executive program specialized in urban development resulting from cooperation between the Center and international universities. Executive programs are designed to enhance municipal staff with global skills and knowledge, familiarity with the latest theories and practices in municipal work, and opportunities to learn how to employ technology in urban problem-solving.',
-        'bodyAr' => [
-            'offersTitle' => 'يقدم البرنامج التنفيذي',
-            'programs' => [
-                'الماجستير التنفيذي في التطوير البلدي',
-                'البرنامج الدولي في الابتكار والإدارة الحضرية',
-            ],
-            'topicsTitle' => 'يقدم البرنامج التنفيذي',
-            'heroVideo' => '/icons/program/executive.mp4',
-            'topics' => [
-                ['title' => 'التغير المناخي', 'image' => 'p1.png'],
-                ['title' => 'الاقتصاد الدائري', 'image' => 'p2.png'],
-                ['title' => 'التنقل الذكي', 'image' => 'p3.png'],
-            ],
-        ],
-        'bodyEn' => [
-            'offersTitle' => 'The executive program offers',
-            'programs' => [
-                'Executive Master\'s in Municipal Development',
-                'International Program in Innovation and Urban Management',
-            ],
-            'topicsTitle' => 'The executive program offers',
-            'heroVideo' => '/icons/program/executive.mp4',
-            'topics' => [
-                ['title' => 'Climate Change', 'image' => 'p1.png'],
-                ['title' => 'Circular Economy', 'image' => 'p2.png'],
-                ['title' => 'Smart Mobility', 'image' => 'p3.png'],
-            ],
-        ],
-        'sortOrder' => 2,
-    ];
+    return postmanSectionLegacyFromJson('training', 'executive', 2);
 }
 
 /**
- * ?tab=experts — title only in section; expert cards (screenshot 7) from POST /api/admin/experts (steps 13–15).
+ * ?tab=experts — from programs.json.
  *
  * @return array<string, mixed>
  */
 function postmanExpertsSectionBody(): array
 {
-    return [
-        'programId' => 2,
-        'tabKey' => 'experts',
-        'titleAr' => 'خبراء مركز الدعم',
-        'titleEn' => 'Support Center Experts',
-        'introAr' => null,
-        'introEn' => null,
-        'bodyAr' => [
-            'title' => 'خبراء مركز الدعم',
-        ],
-        'bodyEn' => [
-            'title' => 'Support Center Experts',
-        ],
-        'sortOrder' => 3,
-    ];
+    return postmanSectionLegacyFromJson('training', 'experts', 3);
+}
+
+/**
+ * @return array<string, mixed>
+ */
+function postmanUrbanPoliciesProgramBody(): array
+{
+    return postmanProgramBodyFromJson('urban-policies', 0);
+}
+
+/**
+ * @return array<string, mixed>
+ */
+function postmanDevelopmentPortalSectionBody(): array
+{
+    return postmanSectionLegacyFromJson('urban-policies', 'developmentPortal', 0);
 }
 
 /**
@@ -282,12 +275,227 @@ function postmanTrainingExperts(): array
  */
 function postmanTrainingProgramSections(): array
 {
-    return [
-        ['name' => 'trainingPrograms', 'body' => postmanTrainingProgramsSectionBody()],
-        ['name' => 'consulting', 'body' => postmanConsultingSectionBody()],
-        ['name' => 'executive', 'body' => postmanExecutiveSectionBody()],
-        ['name' => 'experts', 'body' => postmanExpertsSectionBody()],
+    return array_map(
+        fn (array $section) => [
+            'name' => $section['name'],
+            'body' => postmanSectionLegacyFromJson('training', $section['tabKey'], $section['sortOrder']),
+        ],
+        postmanProgramSectionPairs('training'),
+    );
+}
+
+/**
+ * @return array<int, array{name: string, body: array<string, mixed>}>
+ */
+function postmanUrbanPoliciesProgramSections(): array
+{
+    return array_map(
+        fn (array $section) => [
+            'name' => $section['name'],
+            'body' => postmanSectionLegacyFromJson('urban-policies', $section['tabKey'], $section['sortOrder']),
+        ],
+        postmanProgramSectionPairs('urban-policies'),
+    );
+}
+
+/**
+ * Create section — programId + tabKey + title + image in ONE request.
+ *
+ * @param  array<string, mixed>  $legacy
+ * @return array<string, mixed>
+ */
+function postmanSectionCreateBody(array $legacy): array
+{
+    $body = [
+        'programId' => '{{programId}}',
+        'tabKey' => $legacy['tabKey'],
+        'sortOrder' => $legacy['sortOrder'],
+        'titleAr' => $legacy['titleAr'] ?? null,
+        'titleEn' => $legacy['titleEn'] ?? null,
     ];
+
+    if (! empty($legacy['imageUrl'])) {
+        $body['imageUrl'] = $legacy['imageUrl'];
+    }
+
+    return $body;
+}
+
+/** @deprecated Use postmanSectionCreateBody */
+function postmanSectionShellBody(array $legacy): array
+{
+    return postmanSectionCreateBody($legacy);
+}
+
+/**
+ * Section title + image — FK programSectionId.
+ *
+ * @param  array<string, mixed>  $legacy
+ * @return array<string, mixed>
+ */
+function postmanSectionAboutBodyFromLegacy(array $legacy): array
+{
+    $body = [
+        'programSectionId' => '{{programSectionId}}',
+        'titleAr' => $legacy['titleAr'] ?? null,
+        'titleEn' => $legacy['titleEn'] ?? null,
+    ];
+
+    if (! empty($legacy['imageUrl'])) {
+        $body['imageUrl'] = $legacy['imageUrl'];
+    }
+
+    return $body;
+}
+
+/**
+ * Section details — intro, body, optional detail title/image (can differ from section).
+ *
+ * @param  array<string, mixed>  $legacy
+ * @return array<string, mixed>
+ */
+function postmanSectionDetailsBodyFromLegacy(array $legacy): array
+{
+    $body = [
+        'programSectionId' => '{{programSectionId}}',
+        'introAr' => $legacy['introAr'] ?? null,
+        'introEn' => $legacy['introEn'] ?? null,
+    ];
+
+    if (! empty($legacy['detailTitleAr'])) {
+        $body['titleAr'] = $legacy['detailTitleAr'];
+    }
+    if (! empty($legacy['detailTitleEn'])) {
+        $body['titleEn'] = $legacy['detailTitleEn'];
+    }
+    if (! empty($legacy['detailImageUrl'])) {
+        $body['imageUrl'] = $legacy['detailImageUrl'];
+    }
+
+    $bodyAr = $legacy['bodyAr'] ?? [];
+    $bodyEn = $legacy['bodyEn'] ?? [];
+
+    if (is_array($bodyAr) && $bodyAr !== []) {
+        $body['bodyAr'] = $bodyAr;
+    }
+    if (is_array($bodyEn) && $bodyEn !== []) {
+        $body['bodyEn'] = $bodyEn;
+    }
+
+    return $body;
+}
+
+/**
+ * All program-section-details example bodies (training + partnerships).
+ *
+ * @return array<int, array{name: string, body: array<string, mixed>}>
+ */
+function postmanAllProgramSectionDetailExamples(): array
+{
+    $examples = [];
+
+    foreach (['urban-policies', 'training', 'partnerships'] as $slug) {
+        foreach (postmanProgramSectionPairs($slug) as $section) {
+            $legacy = postmanSectionLegacyFromJson($slug, $section['tabKey'], $section['sortOrder']);
+            $examples[] = [
+                'name' => $slug.' — '.$section['tabKey'],
+                'body' => postmanSectionDetailsBodyFromLegacy($legacy),
+                'publicPath' => '/api/v1/programs/'.$slug,
+            ];
+        }
+    }
+
+    return $examples;
+}
+
+/**
+ * @return array<string, mixed>
+ */
+function postmanPartnershipsProgramBody(): array
+{
+    return postmanProgramBodyFromJson('partnerships', 2);
+}
+
+/**
+ * Postman test script lines — save created id to a collection variable.
+ *
+ * @return list<string>
+ */
+function postmanSaveCollectionIdTests(string $variable): array
+{
+    return [
+        "pm.test('save {$variable}', function () {",
+        '    pm.expect(pm.response.code).to.be.oneOf([200, 201]);',
+        '    const data = pm.response.json().data;',
+        '    pm.expect(data.id).to.be.a(\'number\');',
+        "    pm.collectionVariables.set('{$variable}', String(data.id));",
+        '});',
+    ];
+}
+
+/**
+ * Create section row linked to category via programId (dynamic FK).
+ *
+ * @return array<string, mixed>
+ */
+function postmanPartnershipsSectionShellBody(string $tabKey, int $sortOrder): array
+{
+    return postmanSectionCreateBody(
+        postmanSectionLegacyFromJson('partnerships', $tabKey, $sortOrder),
+    );
+}
+
+/** @deprecated Section title+image are in postmanSectionCreateBody — not about-content */
+function postmanPartnershipsSectionAboutBody(string $tabKey): array
+{
+    return postmanSectionCreateBody(
+        postmanSectionLegacyFromJson('partnerships', $tabKey, (int) (array_search($tabKey, postmanProgramTabKeys('partnerships'), true) ?: 0)),
+    );
+}
+
+/**
+ * Step 3 per section — detail text via program-section-details (FK programSectionId).
+ *
+ * @return array<string, mixed>
+ */
+function postmanPartnershipsSectionDetailsBody(string $tabKey, int $sortOrder): array
+{
+    return postmanSectionDetailsBodyFromLegacy(
+        postmanSectionLegacyFromJson('partnerships', $tabKey, $sortOrder),
+    );
+}
+
+/**
+ * @return array<int, array{name: string, tabKey: string, sortOrder: int}>
+ */
+function postmanPartnershipsProgramSectionPairs(): array
+{
+    return postmanProgramSectionPairs('partnerships');
+}
+
+/**
+ * Partnership section details for CRUD examples.
+ *
+ * @return array<int, array{name: string, body: array<string, mixed>}>
+ */
+function postmanPartnershipsProgramSections(): array
+{
+    return array_map(
+        fn (array $section) => [
+            'name' => $section['name'],
+            'body' => postmanPartnershipsSectionDetailsBody($section['tabKey'], $section['sortOrder']),
+        ],
+        postmanPartnershipsProgramSectionPairs(),
+    );
+}
+
+/** @deprecated Use postmanPartnershipsSectionAboutBody + postmanPartnershipsSectionDetailsBody */
+function postmanPartnershipsSectionBody(string $tabKey, int $sortOrder): array
+{
+    return array_merge(
+        postmanPartnershipsSectionAboutBody($tabKey),
+        postmanPartnershipsSectionDetailsBody($tabKey, $sortOrder),
+    );
 }
 
 function postmanProgramsTabContentGuide(): string
@@ -330,17 +538,30 @@ function postmanProgramsSectionGuide(): string
 | [/برامجنا/مركز-دعم-المدن](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن) | `training` | `GET /api/v1/programs/training` |
 | [/برامجنا/الشراكات](https://audi-ten.vercel.app/ar/برامجنا/الشراكات) | `partnerships` | `GET /api/v1/programs/partnerships` |
 
-**Category (program)** → `programs` table → `POST /api/admin/programs`  
-**Items (sections/tabs)** → `program_sections` table → `POST /api/admin/program-sections` with **`programId`**
+**Category (program)** → `programs` table → `POST /api/admin/programs` → save **`{{programId}}`**  
+**Section (tab)** → `program_sections` → `POST /api/admin/program-sections` with **`programId`**, **`tabKey`**, **`titleAr/En`**, **`imageUrl`** → save **`{{programSectionId}}`**  
+**Section details (intro/body)** → `program_section_details` → `POST /api/admin/program-section-details` with **`programSectionId`**
 
-### Training page sections (اقسام البرنامج)
+### Partnerships page sections (اقسام البرنامج)
 
-| Tab on site | `tabKey` | Section step | Extra steps for full tab page |
-|-------------|----------|--------------|-------------------------------|
-| البرامج التدريبية | `trainingPrograms` | **03** | **07–12** `training-courses` (6 rows) |
-| الاستشارات الفنية | `consulting` | **04** | full `bodyAr.nav` + `bodyAr.sections` in step 04 |
-| البرنامج التنفيذي | `executive` | **05** | full `bodyAr.programs` + `bodyAr.topics` in step 05 |
-| خبراء مركز الدعم | `experts` | **06** | **13–15** `experts` (3 cards) |
+| Tab on site | `tabKey` | Step A: program-sections | Step B: program-section-details |
+|-------------|----------|--------------------------|--------------------------------|
+| حوار المدن العربية الأوروبية | `euroArabDialogue` | `programId`, `tabKey`, title, image | `programSectionId`, `introAr/En` |
+| الأمين يتحدث | `secretarySpeaks` | same | same |
+| جوائز التنمية الحضرية | `urbanAwards` | same | same |
+| دليل شركاء التنمية الحضرية | `partnersGuide` | same | same |
+
+**Program page labels** (`back`, `sectionsLabel`) for **training** and **partnerships**: frontend i18n only — `messages/{locale}/programs.json`. **Not** an admin API step.
+
+Update: `PUT /api/admin/programs/{{programId}}`, `PUT /api/admin/program-sections/{{programSectionId}}`, `PUT /api/admin/program-section-details/{{programSectionDetailId}}`.
+
+### CRUD folders (Postman)
+
+| Resource | Folder | Endpoints |
+|----------|--------|-----------|
+| Category | `01 — مرجع CRUD` → `البرامج` | GET list, POST, GET show, PUT, DELETE |
+| Section | `01 — مرجع CRUD` → `أقسام البرنامج` | GET list (`?programId=`), POST, GET/PUT/DELETE `{{programSectionId}}`, reorder |
+| Details | `01 — مرجع CRUD` → `تفاصيل أقسام البرنامج` | GET list (`?programId=&programSectionId=`), POST, GET/PUT/DELETE `{{programSectionDetailId}}` |
 
 ## Tab item pages (`?tab=` — frontend only)
 
@@ -354,9 +575,9 @@ Accept-Language: ar
 
 | Live tab URL | `?tab=` value | API field | Admin to edit content |
 |--------------|---------------|-----------|------------------------|
-| […?tab=trainingPrograms](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=trainingPrograms) | `trainingPrograms` | `sections.trainingPrograms` | steps 03 + 07–12 |
-| […?tab=consulting](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=consulting) | `consulting` | `sections.consulting` | step 04 |
-| […?tab=executive](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=executive) | `executive` | `sections.executive` | step 05 |
-| […?tab=experts](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=experts) | `experts` | `sections.experts` | steps 06 + 13–15 |
+| […?tab=trainingPrograms](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=trainingPrograms) | `trainingPrograms` | `sections.trainingPrograms` | steps 02–03 + 10–15 |
+| […?tab=consulting](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=consulting) | `consulting` | `sections.consulting` | steps 04–05 |
+| […?tab=executive](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=executive) | `executive` | `sections.executive` | steps 06–07 |
+| […?tab=experts](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=experts) | `experts` | `sections.experts` | steps 08–09 + 16–18 |
 MD;
 }

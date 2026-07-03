@@ -12,15 +12,21 @@
 
 | الطبقة | الجدول | Admin endpoint | الربط |
 |--------|--------|----------------|-------|
-| **Program** | `programs` | `POST /api/admin/programs` | `slug`: `training`, `urban-policies`, `partnerships` |
-| **Section tab** | `program_sections` | `POST /api/admin/program-sections` | **`programId`** + `tabKey` |
-| **Page labels** | `about_content` | `POST /api/admin/about-content` | `sectionKey`: `program_{slug}` |
+| **Program (category)** | `programs` | `POST /api/admin/programs` | `slug` — save **`{{programId}}`** |
+| **Section shell (tab)** | `program_sections` | `POST /api/admin/program-sections` | **`programId`** + `tabKey` + `titleAr/En` + `imageUrl` — save **`{{programSectionId}}`** |
+| **Section details (intro/body)** | `program_section_details` | `POST /api/admin/program-section-details` | **`programSectionId`** |
+| **Page labels** (`back`, `sectionsLabel`) | — | **Frontend i18n** | `messages/{locale}/programs.json` — **not** admin API for training/partnerships |
+| **Page labels** (urban-policies only) | `about_content` | `POST /api/admin/about-content` | `sectionKey`: `program_urban-policies` (optional; frontend falls back to i18n) |
 | **Training courses** | `training_courses` | `POST /api/admin/training-courses` | تظهر في tab `trainingPrograms` |
 | **Experts** | `experts` | `POST /api/admin/experts` | تظهر في tab `experts` |
 
-**Postman folder:** `Admin` → `البرامج — Programs` → `00 — بناء برنامج التدريب` (15 steps)
+**Postman folders:**
+- `Admin` → `البرامج — Programs` → `00 — أدلة البناء` → `بناء برنامج التدريب` (18 steps)
+- `Admin` → `البرامج — Programs` → `00 — أدلة البناء` → `بناء برنامج الشراكات` (9 steps)
 
-**Verify:** `GET /api/v1/programs/training` with `Accept-Language: ar`
+**All section bodies are loaded from `messages/{ar,en}/programs.json`** — the same source as [audi-ten.vercel.app/ar](https://audi-ten.vercel.app/ar).
+
+**Verify:** `GET /api/v1/programs/training` or `GET /api/v1/programs/partnerships` with `Accept-Language: ar`
 
 ### Why section Postman bodies looked different from the live tab pages
 
@@ -57,17 +63,30 @@ Each `?tab=` page is built from **multiple admin sources**, not only `program-se
 | [/برامجنا/مركز-دعم-المدن](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن) | `training` | `GET /api/v1/programs/training` |
 | [/برامجنا/الشراكات](https://audi-ten.vercel.app/ar/برامجنا/الشراكات) | `partnerships` | `GET /api/v1/programs/partnerships` |
 
-**Category (program)** → `programs` table → `POST /api/admin/programs`  
-**Items (sections/tabs)** → `program_sections` table → `POST /api/admin/program-sections` with **`programId`**
+**Category (program)** → `programs` table → `POST /api/admin/programs` → save **`{{programId}}`**  
+**Section (tab)** → `program_sections` → `POST /api/admin/program-sections` with **`programId`**, **`tabKey`**, **`titleAr/En`**, **`imageUrl`** → save **`{{programSectionId}}`**  
+**Section details (intro/body)** → `program_section_details` → `POST /api/admin/program-section-details` with **`programSectionId`**
 
-### Training page sections (اقسام البرنامج)
+### Partnerships page sections (اقسام البرنامج)
 
-| Tab on site | `tabKey` | Section step | Extra steps for full tab page |
-|-------------|----------|--------------|-------------------------------|
-| البرامج التدريبية | `trainingPrograms` | **03** | **07–12** `training-courses` (6 rows) |
-| الاستشارات الفنية | `consulting` | **04** | full `bodyAr.nav` + `bodyAr.sections` in step 04 |
-| البرنامج التنفيذي | `executive` | **05** | full `bodyAr.programs` + `bodyAr.topics` in step 05 |
-| خبراء مركز الدعم | `experts` | **06** | **13–15** `experts` (3 cards) |
+| Tab on site | `tabKey` | Step A: program-sections | Step B: program-section-details |
+|-------------|----------|--------------------------|--------------------------------|
+| حوار المدن العربية الأوروبية | `euroArabDialogue` | `programId`, `tabKey`, title, image | `programSectionId`, `introAr/En` |
+| الأمين يتحدث | `secretarySpeaks` | same | same |
+| جوائز التنمية الحضرية | `urbanAwards` | same | same |
+| دليل شركاء التنمية الحضرية | `partnersGuide` | same | same |
+
+**Program page labels** (`back`, `sectionsLabel`) for **training** and **partnerships**: frontend i18n only — `messages/{locale}/programs.json`. **Not** an admin API step.
+
+Update: `PUT /api/admin/programs/{{programId}}`, `PUT /api/admin/program-sections/{{programSectionId}}`, `PUT /api/admin/program-section-details/{{programSectionDetailId}}`.
+
+### CRUD folders (Postman)
+
+| Resource | Folder | Endpoints |
+|----------|--------|-----------|
+| Category | `01 — مرجع CRUD` → `البرامج` | GET list, POST, GET show, PUT, DELETE |
+| Section | `01 — مرجع CRUD` → `أقسام البرنامج` | GET list (`?programId=`), POST, GET/PUT/DELETE `{{programSectionId}}`, reorder |
+| Details | `01 — مرجع CRUD` → `تفاصيل أقسام البرنامج` | GET list (`?programId=&programSectionId=`), POST, GET/PUT/DELETE `{{programSectionDetailId}}` |
 
 ## Tab item pages (`?tab=` — frontend only)
 
@@ -81,10 +100,10 @@ Accept-Language: ar
 
 | Live tab URL | `?tab=` value | API field | Admin to edit content |
 |--------------|---------------|-----------|------------------------|
-| […?tab=trainingPrograms](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=trainingPrograms) | `trainingPrograms` | `sections.trainingPrograms` | steps 03 + 07–12 |
-| […?tab=consulting](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=consulting) | `consulting` | `sections.consulting` | step 04 |
-| […?tab=executive](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=executive) | `executive` | `sections.executive` | step 05 |
-| […?tab=experts](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=experts) | `experts` | `sections.experts` | steps 06 + 13–15 |
+| […?tab=trainingPrograms](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=trainingPrograms) | `trainingPrograms` | `sections.trainingPrograms` | steps 02–03 + 10–15 |
+| […?tab=consulting](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=consulting) | `consulting` | `sections.consulting` | steps 04–05 |
+| […?tab=executive](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=executive) | `executive` | `sections.executive` | steps 06–07 |
+| […?tab=experts](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=experts) | `experts` | `sections.experts` | steps 08–09 + 16–18 |
 
 ---
 
@@ -125,35 +144,20 @@ POST /api/admin/programs
 
 **Arabic URL** `/برامجنا/مركز-دعم-المدن` is frontend routing; API uses slug **`training`**.
 
-### Step 2 — Page labels (اقسام البرنامج)
+> **Page labels:** `back` and `sectionsLabel` are **not** created via admin API. The site uses `messages/ar/programs.json` and `messages/en/programs.json` (same as partnerships).
 
-```http
-POST /api/admin/about-content
-```
+### Steps 02–09 — Per tab: section → details
 
-```json
-{
-  "sectionKey": "program_training",
-  "bodyAr": { "back": "رجوع", "sectionsLabel": "اقسام البرنامج" }
-}
-```
+Each tab uses **two** requests. Bodies match `messages/ar/programs.json` and `messages/en/programs.json`.
 
-### Steps 03–06 — Create sections (one per `?tab=`)
+| Steps | tabKey | Notes |
+|-------|--------|-------|
+| 02–03 | `trainingPrograms` | `program-sections` (title+image) → `program-section-details` (`formats`, `coursesTitle`, …) |
+| 04–05 | `consulting` | section → details (`nav[]`, `sections[]`, …) |
+| 06–07 | `executive` | section → details (`programs[]`, `topics[]`, …) |
+| 08–09 | `experts` | section → details (`title` only — cards in steps 16–18) |
 
-```http
-POST /api/admin/program-sections
-```
-
-| Step | tabKey | Live URL | What the body must include |
-|------|--------|----------|----------------------------|
-| 03 | `trainingPrograms` | [?tab=trainingPrograms](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=trainingPrograms) | `introAr`, `imageUrl`, `bodyAr.heroImage`, `bodyAr.formats[]`, `bodyAr.coursesTitle`, `bodyAr.coursesImage` |
-| 04 | `consulting` | [?tab=consulting](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=consulting) | `introAr`, `imageUrl`, `bodyAr.nav[]`, `bodyAr.detailImage`, `bodyAr.sections[]` |
-| 05 | `executive` | [?tab=executive](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=executive) | `introAr`, `bodyAr.heroVideo`, `bodyAr.programs[]`, `bodyAr.topics[]` |
-| 06 | `experts` | [?tab=experts](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=experts) | `bodyAr.title` — expert photos in steps **13–15** (`imageUrl`: `/emp/1.png`…) |
-
-Use full Arabic text from Postman step bodies (matches `messages/ar/programs.json`).
-
-### Steps 07–12 — Training courses (trainingPrograms grid)
+### Steps 10–15 — Training courses (trainingPrograms grid)
 
 ```http
 POST /api/admin/training-courses
@@ -161,13 +165,107 @@ POST /api/admin/training-courses
 
 Six rows (3 unique titles × 2) for the **البرامج التدريبية ٢٠٢٣ – ٢٠٢٤** list. Merged into `sections.trainingPrograms.courses[]`.
 
-### Steps 13–15 — Experts (experts carousel)
+### Steps 16–18 — Experts (experts carousel)
 
 ```http
 POST /api/admin/experts
 ```
 
 Three expert cards with `nameAr`, `specialtyAr`, `imageUrl`. Merged into `sections.experts.experts[]`.
+
+---
+
+## بناء برنامج الشراكات — Step by step
+
+Live page: [برامجنا/الشراكات](https://audi-ten.vercel.app/ar/برامجنا/الشراكات)
+
+### Step 1 — Create / update program (category)
+
+```http
+POST /api/admin/programs
+```
+
+```json
+{
+  "slug": "partnerships",
+  "titleAr": "الشراكات",
+  "titleEn": "Partnerships",
+  "heroIntroAr": "في ظل المتغيرات التنموية التي تشهدها مدننا العربية...",
+  "heroIntroEn": "...",
+  "cardDescriptionAr": "معاً لنصنع مستقبل حضري أفضل...",
+  "sortOrder": 2
+}
+```
+
+**Save response `id`** as **`{{programId}}`** (Postman test script saves it automatically).
+
+> **Page labels:** `back` and `sectionsLabel` are **not** created via admin API. The site uses `messages/ar/programs.json` and `messages/en/programs.json` (training and partnerships).
+
+### Steps 02–09 — For each section (section → details)
+
+Per tab, run **two** requests. Postman saves **`{{programId}}`** after step 1 and **`{{programSectionId}}`** after each section create.
+
+**A — Section** (`program-sections` — title + image in same body):
+
+```http
+POST /api/admin/program-sections
+```
+
+```json
+{
+  "programId": "{{programId}}",
+  "tabKey": "euroArabDialogue",
+  "titleAr": "حوار المدن العربية الأوروبية",
+  "titleEn": "Euro-Arab Cities Dialogue",
+  "imageUrl": "/partnerships/euro-arab-dialogue.png",
+  "sortOrder": 0
+}
+```
+
+**B — Details** (`program-section-details`):
+
+```http
+POST /api/admin/program-section-details
+```
+
+```json
+{
+  "programSectionId": "{{programSectionId}}",
+  "introAr": "منصة حوار موسعة...",
+  "introEn": "An expanded dialogue platform...",
+  "bodyAr": {},
+  "bodyEn": {}
+}
+```
+
+Training tabs use rich `bodyAr`/`bodyEn` (formats, nav, sections, topics, etc.) — see Postman **بناء برنامج التدريب**.
+
+| tabKey | Update section (title/image) | Update details |
+|--------|------------------------------|----------------|
+| `euroArabDialogue` | `PUT /api/admin/program-sections/{{programSectionId}}` | `PUT /api/admin/program-section-details/{{programSectionDetailId}}` |
+| `secretarySpeaks` | same | same |
+| `urbanAwards` | same | same |
+| `partnersGuide` | same | same |
+
+### Verify
+
+```http
+GET /api/v1/programs/partnerships
+Accept-Language: ar
+```
+
+Response includes `tabs[]` (4 items) and `sections.euroArabDialogue` with `title`, `intro`, `image`.
+
+---
+
+## All partnerships sections (Postman bodies)
+
+| tabKey | Section | Details |
+|--------|---------|---------|
+| `euroArabDialogue` | `POST /api/admin/program-sections` | `POST /api/admin/program-section-details` |
+| `secretarySpeaks` | `POST /api/admin/program-sections` | `POST /api/admin/program-section-details` |
+| `urbanAwards` | `POST /api/admin/program-sections` | `POST /api/admin/program-section-details` |
+| `partnersGuide` | `POST /api/admin/program-sections` | `POST /api/admin/program-section-details` |
 
 ---
 

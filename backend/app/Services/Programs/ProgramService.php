@@ -28,16 +28,22 @@ class ProgramService
         $isAr = ($locale ?? app()->getLocale()) === 'ar';
         $meta = $this->programMeta($slug, $isAr);
 
-        $sections = $program->sections()->ordered()->get();
-        $tabs = $sections->map(fn (ProgramSection $section) => [
-            'id' => $section->tab_key,
-            'label' => $isAr ? $section->title_ar : $section->title_en,
-        ])->values()->all();
+        $sections = $program->sections()->with('details')->ordered()->get();
+
+        $tabs = $sections->map(function (ProgramSection $section) use ($isAr) {
+            return [
+                'id' => $section->tab_key,
+                'label' => $isAr
+                    ? ($section->title_ar ?? $section->tab_key)
+                    : ($section->title_en ?? $section->tab_key),
+            ];
+        })->values()->all();
 
         $sectionPayload = [];
 
         foreach ($sections as $section) {
-            $body = $isAr ? ($section->body_ar ?? []) : ($section->body_en ?? []);
+            $detail = $section->details;
+            $body = $isAr ? ($detail?->body_ar ?? []) : ($detail?->body_en ?? []);
             $body = is_array($body) ? $body : [];
             $body = ImageUrl::mapBodyPaths($body) ?? [];
 
@@ -54,9 +60,11 @@ class ProgramService
             }
 
             $sectionPayload[$section->tab_key] = array_merge([
-                'title' => $isAr ? $section->title_ar : $section->title_en,
-                'intro' => $isAr ? $section->intro_ar : $section->intro_en,
-                'image' => ImageUrl::public($section->image_url),
+                'title' => $isAr
+                    ? ($detail?->title_ar ?? $section->title_ar)
+                    : ($detail?->title_en ?? $section->title_en),
+                'intro' => $isAr ? $detail?->intro_ar : $detail?->intro_en,
+                'image' => ImageUrl::public($detail?->image_url ?? $section->image_url),
             ], $body);
         }
 
@@ -78,6 +86,7 @@ class ProgramService
     {
         $content = AboutContent::query()
             ->where('section_key', 'program_'.$slug)
+            ->whereNull('program_section_id')
             ->first();
 
         if (! $content) {

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AboutContent;
 use App\Support\AboutContentBodyRules;
 use App\Support\ImageUrl;
+use App\Support\ProgramContentKey;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -27,14 +28,22 @@ class AboutContentController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+        if ($request->filled('programSectionId')) {
+            return $this->storeSectionPresentation($request);
+        }
+
+        $sectionKey = (string) $request->input('sectionKey', '');
+        $parsed = ProgramContentKey::parse($sectionKey);
+        $isLegacyProgramSection = $parsed !== null && $parsed['type'] === 'section';
+
         $validated = $request->validate(array_merge([
             'sectionKey' => ['required', 'string', 'max:120', Rule::unique('about_content', 'section_key')],
-            'titleAr' => ['nullable', 'string', 'max:255'],
-            'titleEn' => ['nullable', 'string', 'max:255'],
+            'titleAr' => [$isLegacyProgramSection ? 'required' : 'nullable', 'string', 'max:255'],
+            'titleEn' => [$isLegacyProgramSection ? 'required' : 'nullable', 'string', 'max:255'],
             'bodyAr' => ['nullable', 'array'],
             'bodyEn' => ['nullable', 'array'],
             'imageUrl' => ['nullable', 'string', 'max:500'],
-        ], AboutContentBodyRules::rules($request->input('sectionKey', ''))));
+        ], AboutContentBodyRules::rules($sectionKey)));
 
         $content = AboutContent::query()->create([
             'section_key' => $validated['sectionKey'],
@@ -55,7 +64,13 @@ class AboutContentController extends Controller
 
     public function update(Request $request, AboutContent $aboutContent): JsonResponse
     {
+        if ($request->filled('programSectionId') || $aboutContent->program_section_id) {
+            return $this->updateSectionPresentation($request, $aboutContent);
+        }
+
         $sectionKey = $request->input('sectionKey', $aboutContent->section_key);
+        $parsed = ProgramContentKey::parse((string) $sectionKey);
+        $isLegacyProgramSection = $parsed !== null && $parsed['type'] === 'section';
 
         $validated = $request->validate(array_merge([
             'sectionKey' => [
@@ -64,12 +79,12 @@ class AboutContentController extends Controller
                 'max:120',
                 Rule::unique('about_content', 'section_key')->ignore($aboutContent->id),
             ],
-            'titleAr' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'titleEn' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'titleAr' => ['sometimes', $isLegacyProgramSection ? 'required' : 'nullable', 'string', 'max:255'],
+            'titleEn' => ['sometimes', $isLegacyProgramSection ? 'required' : 'nullable', 'string', 'max:255'],
             'bodyAr' => ['sometimes', 'nullable', 'array'],
             'bodyEn' => ['sometimes', 'nullable', 'array'],
             'imageUrl' => ['sometimes', 'nullable', 'string', 'max:500'],
-        ], AboutContentBodyRules::rules($sectionKey, partial: true)));
+        ], AboutContentBodyRules::rules((string) $sectionKey, partial: true)));
 
         $payload = [];
 
@@ -104,6 +119,74 @@ class AboutContentController extends Controller
         return response()->json(['message' => 'Deleted']);
     }
 
+    private function storeSectionPresentation(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'programSectionId' => [
+                'required',
+                'integer',
+                Rule::exists('program_sections', 'id'),
+                Rule::unique('about_content', 'program_section_id'),
+            ],
+            'titleAr' => ['required', 'string', 'max:255'],
+            'titleEn' => ['required', 'string', 'max:255'],
+            'imageUrl' => ['nullable', 'string', 'max:500'],
+            'sectionKey' => ['sometimes', 'string', 'max:120', Rule::unique('about_content', 'section_key')],
+        ]);
+
+        $sectionKey = $validated['sectionKey'] ?? 'program_section_'.$validated['programSectionId'];
+
+        $content = AboutContent::query()->create([
+            'section_key' => $sectionKey,
+            'program_section_id' => $validated['programSectionId'],
+            'title_ar' => $validated['titleAr'],
+            'title_en' => $validated['titleEn'],
+            'image_url' => $validated['imageUrl'] ?? null,
+        ]);
+
+        return response()->json(['data' => $this->transform($content)], 201);
+    }
+
+    private function updateSectionPresentation(Request $request, AboutContent $aboutContent): JsonResponse
+    {
+        $programSectionId = $request->input('programSectionId', $aboutContent->program_section_id);
+
+        $validated = $request->validate([
+            'programSectionId' => [
+                'sometimes',
+                'integer',
+                Rule::exists('program_sections', 'id'),
+                Rule::unique('about_content', 'program_section_id')->ignore($aboutContent->id),
+            ],
+            'titleAr' => ['sometimes', 'required', 'string', 'max:255'],
+            'titleEn' => ['sometimes', 'required', 'string', 'max:255'],
+            'imageUrl' => ['sometimes', 'nullable', 'string', 'max:500'],
+        ]);
+
+        $payload = [];
+
+        if (array_key_exists('programSectionId', $validated)) {
+            $payload['program_section_id'] = $validated['programSectionId'];
+            $payload['section_key'] = 'program_section_'.$validated['programSectionId'];
+        } elseif ($programSectionId) {
+            $payload['section_key'] = 'program_section_'.$programSectionId;
+        }
+
+        if (array_key_exists('titleAr', $validated)) {
+            $payload['title_ar'] = $validated['titleAr'];
+        }
+        if (array_key_exists('titleEn', $validated)) {
+            $payload['title_en'] = $validated['titleEn'];
+        }
+        if (array_key_exists('imageUrl', $validated)) {
+            $payload['image_url'] = $validated['imageUrl'];
+        }
+
+        $aboutContent->update($payload);
+
+        return response()->json(['data' => $this->transform($aboutContent->fresh())]);
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -112,6 +195,7 @@ class AboutContentController extends Controller
         return [
             'id' => $content->id,
             'sectionKey' => $content->section_key,
+            'programSectionId' => $content->program_section_id,
             'titleAr' => $content->title_ar,
             'titleEn' => $content->title_en,
             'bodyAr' => ImageUrl::mapBodyPaths($content->body_ar),

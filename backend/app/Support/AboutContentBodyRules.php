@@ -14,6 +14,12 @@ final class AboutContentBodyRules
     public static function rules(string $sectionKey, bool $partial = false): array
     {
         if (str_starts_with($sectionKey, 'program_')) {
+            $parsed = ProgramContentKey::parse($sectionKey);
+
+            if ($parsed !== null && $parsed['type'] === 'section') {
+                return [];
+            }
+
             return self::programMetaRules($partial);
         }
 

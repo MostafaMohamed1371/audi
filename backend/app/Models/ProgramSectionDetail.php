@@ -4,25 +4,23 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Concerns\LocalizesAttributes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Concerns\LocalizesAttributes;
 
-class AboutContent extends Model
+class ProgramSectionDetail extends Model
 {
-    use HasFactory, LocalizesAttributes;
-
-    protected $table = 'about_content';
+    use LocalizesAttributes;
 
     protected $fillable = [
-        'section_key',
         'program_section_id',
         'title_ar',
         'title_en',
+        'image_url',
+        'intro_ar',
+        'intro_en',
         'body_ar',
         'body_en',
-        'image_url',
     ];
 
     protected function casts(): array
@@ -33,7 +31,7 @@ class AboutContent extends Model
         ];
     }
 
-    public function programSection(): BelongsTo
+    public function section(): BelongsTo
     {
         return $this->belongsTo(ProgramSection::class, 'program_section_id');
     }

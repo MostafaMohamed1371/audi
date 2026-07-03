@@ -18,7 +18,7 @@ class ProgramSectionController extends Controller
     {
         $limit = min(max((int) $request->query('limit', 20), 1), 100);
 
-        $query = ProgramSection::query()->ordered();
+        $query = ProgramSection::query()->with('details')->ordered();
 
         if ($programId = $request->query('programId', $request->query('program_id'))) {
             $query->where('program_id', $programId);
@@ -43,44 +43,24 @@ class ProgramSectionController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        $validated = $request->validate([
-            'programId' => ['required', 'integer', Rule::exists('programs', 'id')],
-            'tabKey' => [
-                'required',
-                'string',
-                'max:120',
-                Rule::unique('program_sections', 'tab_key')->where(
-                    fn ($query) => $query->where('program_id', $request->input('programId'))
-                ),
-            ],
-            'titleAr' => ['required', 'string', 'max:255'],
-            'titleEn' => ['required', 'string', 'max:255'],
-            'introAr' => ['nullable', 'string'],
-            'introEn' => ['nullable', 'string'],
-            'bodyAr' => ['nullable', 'array'],
-            'bodyEn' => ['nullable', 'array'],
-            'imageUrl' => ['nullable', 'string', 'max:500'],
-            'sortOrder' => ['sometimes', 'integer', 'min:0'],
-        ]);
+        $validated = $request->validate($this->rules());
 
         $section = ProgramSection::query()->create([
             'program_id' => $validated['programId'],
             'tab_key' => $validated['tabKey'],
-            'title_ar' => $validated['titleAr'],
-            'title_en' => $validated['titleEn'],
-            'intro_ar' => $validated['introAr'] ?? null,
-            'intro_en' => $validated['introEn'] ?? null,
-            'body_ar' => $validated['bodyAr'] ?? null,
-            'body_en' => $validated['bodyEn'] ?? null,
-            'image_url' => $validated['imageUrl'] ?? null,
+            'title_ar' => $validated['titleAr'] ?? null,
+            'title_en' => $validated['titleEn'] ?? null,
+            'image_url' => isset($validated['imageUrl']) ? ImageUrl::normalizeStoredPath($validated['imageUrl']) : null,
             'sort_order' => $validated['sortOrder'] ?? 0,
         ]);
 
-        return response()->json(['data' => $this->transform($section)], 201);
+        return response()->json(['data' => $this->transform($section->load('details'))], 201);
     }
 
     public function show(ProgramSection $programSection): JsonResponse
     {
+        $programSection->load('details');
+
         return response()->json(['data' => $this->transform($programSection)]);
     }
 
@@ -88,25 +68,7 @@ class ProgramSectionController extends Controller
     {
         $programId = $request->input('programId', $programSection->program_id);
 
-        $validated = $request->validate([
-            'programId' => ['sometimes', 'integer', Rule::exists('programs', 'id')],
-            'tabKey' => [
-                'sometimes',
-                'string',
-                'max:120',
-                Rule::unique('program_sections', 'tab_key')
-                    ->where(fn ($query) => $query->where('program_id', $programId))
-                    ->ignore($programSection->id),
-            ],
-            'titleAr' => ['sometimes', 'string', 'max:255'],
-            'titleEn' => ['sometimes', 'string', 'max:255'],
-            'introAr' => ['sometimes', 'nullable', 'string'],
-            'introEn' => ['sometimes', 'nullable', 'string'],
-            'bodyAr' => ['sometimes', 'nullable', 'array'],
-            'bodyEn' => ['sometimes', 'nullable', 'array'],
-            'imageUrl' => ['sometimes', 'nullable', 'string', 'max:500'],
-            'sortOrder' => ['sometimes', 'integer', 'min:0'],
-        ]);
+        $validated = $request->validate($this->rules(partial: true, programId: (int) $programId, sectionId: $programSection->id));
 
         $payload = [];
 
@@ -122,20 +84,8 @@ class ProgramSectionController extends Controller
         if (array_key_exists('titleEn', $validated)) {
             $payload['title_en'] = $validated['titleEn'];
         }
-        if (array_key_exists('introAr', $validated)) {
-            $payload['intro_ar'] = $validated['introAr'];
-        }
-        if (array_key_exists('introEn', $validated)) {
-            $payload['intro_en'] = $validated['introEn'];
-        }
-        if (array_key_exists('bodyAr', $validated)) {
-            $payload['body_ar'] = $validated['bodyAr'];
-        }
-        if (array_key_exists('bodyEn', $validated)) {
-            $payload['body_en'] = $validated['bodyEn'];
-        }
         if (array_key_exists('imageUrl', $validated)) {
-            $payload['image_url'] = $validated['imageUrl'];
+            $payload['image_url'] = ImageUrl::normalizeStoredPath($validated['imageUrl']);
         }
         if (array_key_exists('sortOrder', $validated)) {
             $payload['sort_order'] = $validated['sortOrder'];
@@ -143,7 +93,7 @@ class ProgramSectionController extends Controller
 
         $programSection->update($payload);
 
-        return response()->json(['data' => $this->transform($programSection->fresh())]);
+        return response()->json(['data' => $this->transform($programSection->fresh()->load('details'))]);
     }
 
     public function destroy(ProgramSection $programSection): JsonResponse
@@ -167,20 +117,49 @@ class ProgramSectionController extends Controller
     /**
      * @return array<string, mixed>
      */
+    private function rules(bool $partial = false, ?int $programId = null, ?int $sectionId = null): array
+    {
+        $programId = $programId ?? request()->input('programId');
+
+        return [
+            'programId' => array_filter([
+                $partial ? 'sometimes' : 'required',
+                'integer',
+                Rule::exists('programs', 'id'),
+            ]),
+            'tabKey' => array_filter([
+                $partial ? 'sometimes' : 'required',
+                'string',
+                'max:120',
+                $programId !== null
+                    ? Rule::unique('program_sections', 'tab_key')
+                        ->where(fn ($query) => $query->where('program_id', $programId))
+                        ->ignore($sectionId)
+                    : null,
+            ]),
+            'titleAr' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'titleEn' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'imageUrl' => ['sometimes', 'nullable', 'string', 'max:500'],
+            'sortOrder' => ['sometimes', 'integer', 'min:0'],
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
     private function transform(ProgramSection $section): array
     {
+        $details = $section->relationLoaded('details') ? $section->details : null;
+
         return [
             'id' => $section->id,
             'programId' => $section->program_id,
             'tabKey' => $section->tab_key,
             'titleAr' => $section->title_ar,
             'titleEn' => $section->title_en,
-            'introAr' => $section->intro_ar,
-            'introEn' => $section->intro_en,
-            'bodyAr' => $section->body_ar,
-            'bodyEn' => $section->body_en,
             'imageUrl' => ImageUrl::api($section->image_url),
             'sortOrder' => $section->sort_order,
+            'detailId' => $details?->id,
             'createdAt' => $section->created_at?->toIso8601String(),
             'updatedAt' => $section->updated_at?->toIso8601String(),
         ];
