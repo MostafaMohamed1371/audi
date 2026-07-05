@@ -21,28 +21,23 @@
 
 ## Homepage map | خريطة الصفحة الرئيسية
 
-Matches live site: https://audi-ten.vercel.app/ar → public `GET /api/v1/home`
+الموقع: [audi-ten.vercel.app/ar](https://audi-ten.vercel.app/ar) → **`GET /api/v1/home`**
 
-| Section on site | Admin folder / endpoint | Public field |
-|-----------------|-------------------------|--------------|
-| Hero slider (تطوير تقني…) | `شرائح الهيرو` → `POST /api/admin/hero-slides` | `slider[]` |
-| About intro + mission/vision | `محتوى أقسام الرئيسية` → `home_about_intro` | `aboutIntro` |
-| المعهد في أرقام (title/subtitle) | `home_stats` in about-content | `stats.title`, `stats.subtitle` |
-| المعهد في أرقام (4 counters) | `إحصائيات الرئيسية` → `POST /api/admin/home-stats` | `stats.items[]` |
-| المدن الأعضاء (title) | `home_member_cities` in about-content | `memberCities.title` |
-| المدن الأعضاء (12 / 400 / 1240) | `المدن الأعضاء` → `PUT /api/admin/member-cities/stats` | `memberCities.stats[]` |
-| برامجنا (title + CTA) | `home_programs` in about-content | `programs.title`, `programs.cta` |
-| برامجنا (3 cards) | `البرامج` → `POST /api/admin/programs` | `programs.items[]` |
-| المركز الإعلامي (labels) | `محتوى أقسام الرئيسية` → `home_media_center` | `mediaCenter.title`, `subtitle`, `readMore`, `viewAll` |
-| المركز الإعلامي (news cards) | `بطاقات المركز الإعلامي` → `POST /api/admin/media` (`category: news`) | `mediaCenter.featured[]` (newest 4) + `mediaCenter.items[]` (next 4) |
-| مركز المعرفة (carousel + labels) | `تصنيفات مركز المعرفة` → `POST /api/admin/knowledge-categories` | `knowledgeCenter.categories[]`, `headerSlides[]` |
-| مركز المعرفة (3 cards) | `المصادر` → `POST /api/admin/resources` (`knowledgeCategoryId`) | `knowledgeCenter.categories[].items[]` |
-| عضوية + تواصل (labels) | `عضوية وتواصل` → `home_membership_contact` | `membershipContact.membership`, `contact.title` |
-| تواصل (phone, fax, email, address, map) | `عضوية وتواصل` → `PUT /api/admin/contact-info` | `membershipContact.contact` |
+| القسم على الموقع | خطوة Admin (مجلد `00 — بناء الصفحة الرئيسية`) | حقل Public |
+|------------------|-----------------------------------------------|------------|
+| سلايدر الهيرو | **01–04** → `hero-slides` | `slider[]` |
+| عن المعهد + رسالة + رؤية | **05** → `home_about_intro` | `aboutIntro` |
+| المعهد في أرقام (عنوان) | **06** → `home_stats` | `stats.title`, `stats.subtitle` |
+| المعهد في أرقام (4 عدادات) | **07–10** → `home-stats` | `stats.items[]` |
+| المدن الأعضاء (عنوان) | **11** → `home_member_cities` | `memberCities.title` |
+| المدن الأعضاء (12/400/1240) | **12** → `member-cities/stats` | `memberCities.stats[]` |
+| برامجنا (3 بطاقات) | **14–17** → `programs` | `programs.items[]` |
+| المركز الإعلامي | **18–24** → `about-content` + `media` | `mediaCenter.*` |
+| مركز المعرفة | **25–31** → `knowledge-categories` + `resources` | `knowledgeCenter.*` |
+| عضوية + تواصل | **32–33** → `about-content` + `contact-info` | `membershipContact.*` |
+| التذييل (حقوق + تواصل) | `الإعدادات` | `GET /api/v1/settings` |
 
-**Quick start:** run requests in folder `00 — بناء الصفحة الرئيسية` top to bottom (matches https://audi-ten.vercel.app/ar).
-
-**Note:** Stats icons (`/icons/num1.svg`…), knowledge carousel logos (`/knowledgeCenter/icon*.png`), and hero images (`/slider/*.png`) are static frontend assets.
+**التحقق:** بعد الخطوة 33 شغّل `Public` → `جلب الصفحة الرئيسية — Get Home`.
 
 ---
 

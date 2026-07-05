@@ -25,6 +25,7 @@ require __DIR__ . '/postman-home-examples.php';
 require __DIR__ . '/postman-homepage-guide-docs.php';
 require __DIR__ . '/postman-program-examples.php';
 require __DIR__ . '/postman-programs-guide-docs.php';
+require __DIR__ . '/postman-public-site-map.php';
 
 function req(string $name, string $method, string $path, array $opts = []): array
 {
@@ -143,6 +144,12 @@ function req(string $name, string $method, string $path, array $opts = []): arra
     return $item;
 }
 
+/** Public request — Arabic name first for admin users. */
+function publicReq(string $nameAr, string $nameEn, string $method, string $path, array $opts = []): array
+{
+    return req("{$nameAr} — {$nameEn}", $method, $path, $opts);
+}
+
 /** Postman test script: assert image fields are full paths (not bare filenames). */
 function imagePathTests(string $jsonPath, string $field = 'image'): array
 {
@@ -222,7 +229,7 @@ function adminCrud(string $resource, string $label, array $createBody, array $op
         req("إنشاء — Create {$labelAr}", 'POST', $base, $createReqOpts),
         req("عرض — Show {$labelAr}", 'GET', $base . '/'.$idPlaceholder, [
             'auth' => true,
-            'description' => $descPrefix . 'Use `'.$idVar.'` from create response.',
+            'description' => $descPrefix . 'استخدم `'.$idVar.'` من استجابة الإنشاء.',
         ]),
         req("تحديث — Update {$labelAr}", 'PUT', $base . '/'.$idPlaceholder, [
             'auth' => true,
@@ -253,83 +260,50 @@ $collection = [
         '_postman_id' => 'audi-api-full-v1',
         'name' => 'AUDI — Full API (المعهد العربي لإنماء المدن)',
         'description' => <<<'MD'
-# AUDI API — Public + Admin
+# واجهة برمجة المعهد — Public + Admin
 
-## Variables
-| Variable | Example | Purpose |
-|----------|---------|---------|
-| `baseUrl` | `http://localhost:8000` | API base URL |
-| `locale` | `ar` or `en` | Language for **all** endpoints (Public + Admin) |
-| `adminToken` | Bearer token | Admin auth after login |
-| `id`, `slug`, `category` | — | Path/query placeholders |
+> **المعهد العربي لإنماء المدن** — مرجع Postman للموقع [audi-ten.vercel.app/ar](https://audi-ten.vercel.app/ar)
 
-## Localization model
-- **Public `/api/v1/*`**: returns **one locale** per request — e.g. `{ "title": "..." }` (not `titleAr`/`titleEn`).
-- **Admin `/api/admin/*`**: stores **both languages** — e.g. `{ "titleAr": "...", "titleEn": "..." }`.
-- Switch language via collection variable `locale` or header `Accept-Language: ar|en` (also `?locale=ar`).
+## المتغيرات | Variables
+| المتغير | مثال | الغرض |
+|---------|------|--------|
+| `baseUrl` | `http://localhost:8000` | عنوان الخادم |
+| `locale` | `ar` أو `en` | اللغة لجميع الطلبات |
+| `adminToken` | Bearer token | بعد تسجيل الدخول |
+| `programId`, `programSectionId` | — | سلسلة FK لبناء البرامج |
 
-## Admin ↔ Public mapping
-| Public endpoint | Admin resources |
-|-----------------|-----------------|
-| `GET /api/v1/home` | hero-slides, home-stats, about-content (home_*), media, resources, settings |
+## نموذج اللغات
+- **Public `/api/v1/*`**: حقل واحد لكل لغة — `{ "title": "..." }` (ليس `titleAr`/`titleEn`).
+- **Admin `/api/admin/*`**: تخزين ثنائي — `{ "titleAr": "...", "titleEn": "..." }`.
+- غيّر `locale` أو `Accept-Language: ar|en`.
+
+## Admin ↔ Public (ملخص)
+| Public | Admin |
+|--------|-------|
+| `GET /api/v1/home` | hero-slides, home-stats, about-content (home_*), programs, media, resources, contact-info |
 | `GET /api/v1/settings` | settings, social-links |
 | `GET /api/v1/about/*` | about-content, leadership, advisory-board, team-*, partners |
-| `GET /api/v1/strategy/*` | strategy, strategy-pillars, strategy-diagram, focus-areas, about-content |
-| `GET /api/v1/programs/*` | programs, program-sections, training-courses, experts, directory/* |
-| `GET /api/v1/resources` | resources |
+| `GET /api/v1/strategy/*` | strategy, strategy-pillars, focus-areas, about-content |
+| `GET /api/v1/programs/*` | programs, program-sections, program-section-details, training-courses, experts, directory/* |
+| `GET /api/v1/resources` | resources, knowledge-categories |
 | `GET /api/v1/media/*` | media |
-| `GET /api/v1/careers` | job-openings |
-| `GET /api/v1/faqs` | faqs |
-| `GET /api/v1/legal/{slug}` | legal |
-| `GET /api/v1/contact` | settings (contact group) |
-| Form POSTs | contact-submissions, membership-applications, portal-contributions, job-applications, newsletter-subscriptions |
+| `GET /api/v1/contact` | contact-info |
+| نماذج POST | contact-submissions, membership-applications, … |
 
-## Image URL convention (Admin ↔ Public ↔ Frontend)
-- **Admin** stores `imageUrl` / `logoUrl` as **full paths** — root-relative (`/emp/1.png`, `/blog/2.png`) or absolute after upload (`http://localhost:8000/storage/uploads/…`).
-- **Public** returns the same path in locale-neutral fields (`image`, `imageUrl`, `listImage`, …) — **never** bare filenames.
-- **Upload flow:** `POST /api/admin/uploads` → use returned **absolute** `data.url` in admin `imageUrl` fields.
-- **Static asset directories:** `/emp/` (team, advisory), `/client/` (partners), `/blog/` (media), `/our-sources/` (resources), `/slider/` (hero).
+## دليل سريع للمسؤول (Admin)
+1. **تسجيل الدخول** → `المصادقة` → احفظ `token` في `adminToken`
+2. **بناء الرئيسية:** `الرئيسية` → `00 — بناء الصفحة الرئيسية` (خطوات 01–33)
+3. **بناء البرامج:** `البرامج` → `00 — أدلة البناء`
+4. **التحقق:** مجلد `Public` → `الرئيسية` → `GET /api/v1/home`
 
-Canonical examples in this collection use these paths. Public requests include tests that verify image fields start with `/`.
+## توثيق Markdown
+| الملف | المحتوى |
+|-------|---------|
+| `HOMEPAGE-ADMIN-GUIDE.md` | دليل بناء الرئيسية |
+| `PROGRAMS-ADMIN-GUIDE.md` | دليل بناء البرامج |
+| `PUBLIC-API.md` / `ADMIN-API.md` | مرجع كامل |
 
-> Member cities GeoJSON: see `AUDI-Member-Cities.postman_collection.json`
-
----
-
-# API Markdown Documentation | توثيق Markdown
-
-| File | Content |
-|------|---------|
-| **`docs/postman/HOMEPAGE-ADMIN-GUIDE.md`** | Homepage build guide — 30 admin steps for /ar |
-| **`docs/postman/API.md`** | Index — links to Public + Admin docs |
-| **`docs/postman/PUBLIC-API.md`** | Public `/api/v1` — purpose, parameters (Arabic) |
-| **`docs/postman/ADMIN-API.md`** | Admin `/api/admin` — purpose, parameters (Arabic) |
-
-Regenerate all docs: `php docs/postman/generate-audi-api-collection.php`
-
----
-
-# Public API | الواجهة العامة
-
-Open folder **Public — /api/v1**. Each request **Description** includes purpose and parameter tables.
-Set `Accept-Language: {{locale}}` (`ar` or `en`).
-
----
-
-# Admin API Documentation | توثيق واجهة الإدارة
-
-Full admin reference (purpose, description, parameters in Arabic): **`docs/postman/ADMIN-API.md`**
-
-Open folder **لوحة التحكم — Admin /api/admin** in this collection. Each request **Description** tab includes:
-- **الغرض | Purpose** — what the endpoint does
-- **المعاملات (Body Parameters)** — table with Arabic field descriptions
-- **Public match** — which public endpoint consumes the data
-
-### Quick start (Admin)
-1. Run **تسجيل الدخول — Login** → copy `token` to `adminToken`
-2. All other admin requests use `Authorization: Bearer {{adminToken}}`
-3. Create content with full bilingual bodies (`*Ar` / `*En`)
-4. Verify on public API with `Accept-Language: ar` or `en`
+أعد التوليد: `php docs/postman/generate-audi-api-collection.php`
 MD,
         'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
     ],
@@ -351,13 +325,24 @@ MD,
 // PUBLIC — /api/v1
 // =============================================================================
 
-$publicHome = folder('Home — الرئيسية', [
-    req('Get Home (Aggregate)', 'GET', '/api/v1/home', [
+$publicHome = folder('الرئيسية — Home', [
+    publicReq('جلب الصفحة الرئيسية', 'Get Home (Aggregate)', 'GET', '/api/v1/home', [
         'headers' => [$localeHeader],
-        'description' => publicMatch('/api/v1/home', 'Aggregates slider, stats, programs, mediaCenter, knowledgeCenter, membershipContact.'),
+        'description' => publicMatch('/api/v1/home', postmanPublicHomeSiteMap()."\n\n".postmanPublicAuditSummary()),
         'tests' => array_merge(
             imagePathTests('(pm.response.json().slider || [])', 'imageUrl'),
             [
+                "pm.test('Status is 2xx', () => pm.expect(pm.response.code).to.be.oneOf([200, 201]));",
+                "pm.test('Homepage sections present', () => {",
+                "  const h = pm.response.json();",
+                "  pm.expect(h.slider, 'slider').to.be.an('array');",
+                "  pm.expect(h.aboutIntro, 'aboutIntro').to.be.an('object');",
+                "  pm.expect(h.stats?.items, 'stats.items').to.be.an('array');",
+                "  pm.expect(h.programs?.items, 'programs.items').to.be.an('array');",
+                "  pm.expect(h.mediaCenter, 'mediaCenter').to.be.an('object');",
+                "  pm.expect(h.knowledgeCenter, 'knowledgeCenter').to.be.an('object');",
+                "  pm.expect(h.membershipContact, 'membershipContact').to.be.an('object');",
+                '});',
                 "pm.test('Media center images are full paths', () => {",
                 "  const mc = pm.response.json().mediaCenter || {};",
                 "  [...(mc.featured || []), ...(mc.items || [])].forEach((row) => {",
@@ -372,38 +357,38 @@ $publicHome = folder('Home — الرئيسية', [
             ],
         ),
     ]),
-    req('Get Member Cities Map', 'GET', '/api/v1/home/member-cities', [
+    publicReq('خريطة المدن الأعضاء', 'Get Member Cities Map', 'GET', '/api/v1/home/member-cities', [
         'headers' => [$localeHeader],
-        'description' => publicMatch('/api/v1/home/member-cities', 'Returns stats + GeoJSON. Admin: member-cities/stats + cities.'),
+        'description' => publicMatch('/api/v1/home/member-cities', 'قسم «المدن الأعضاء» على الرئيسية — إحصائيات + GeoJSON. Admin: `member-cities/stats` + `member-cities/cities`.'),
     ]),
-    req('Get Countries GeoJSON', 'GET', '/api/v1/home/member-cities/countries.geojson', [
-        'description' => 'GeoJSON — not locale-dependent geometry.',
+    publicReq('GeoJSON الدول', 'Get Countries GeoJSON', 'GET', '/api/v1/home/member-cities/countries.geojson', [
+        'description' => 'طبقة حدود الدول للخريطة — لا تعتمد على اللغة.',
     ]),
-    req('Get Cities GeoJSON', 'GET', '/api/v1/home/member-cities/cities.geojson', [
-        'description' => 'GeoJSON — city names resolved by Accept-Language.',
+    publicReq('GeoJSON المدن', 'Get Cities GeoJSON', 'GET', '/api/v1/home/member-cities/cities.geojson', [
+        'description' => 'طبقة نقاط المدن — أسماء المدن حسب Accept-Language.',
     ]),
 ]);
 
-$publicSettings = folder('Settings — الإعدادات', [
-    req('Get Site Settings', 'GET', '/api/v1/settings', [
+$publicSettings = folder('الإعدادات — Settings', [
+    publicReq('إعدادات الموقع والتذييل', 'Get Site Settings', 'GET', '/api/v1/settings', [
         'headers' => [$localeHeader],
-        'description' => publicMatch('/api/v1/settings', 'Returns siteName, copyright, socialLinks, contact. Admin: settings + social-links.'),
+        'description' => publicMatch('/api/v1/settings', 'اسم الموقع، حقوق النشر، روابط التواصل (Footer). Admin: `settings` + `social-links`.'),
     ]),
 ]);
 
-$publicAbout = folder('About — من نحن', [
-    req('Get Institute', 'GET', '/api/v1/about/institute', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/about/institute', 'Admin: about-content sectionKey=institute + home-stats.')]),
-    req('Get Vision & Mission', 'GET', '/api/v1/about/vision-mission', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/about/vision-mission', 'Admin: about-content keys vision_mission, goals, values.')]),
-    req('Get Leadership (President)', 'GET', '/api/v1/about/leadership/president', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/about/leadership/president', 'Admin: leadership type=president.')]),
-    req('Get Leadership (Director)', 'GET', '/api/v1/about/leadership/director', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/about/leadership/director', 'Admin: leadership type=director.')]),
-    req('Get Advisory Board', 'GET', '/api/v1/about/advisory-board', [
+$publicAbout = folder('من نحن — About', [
+    publicReq('عن المعهد', 'Get Institute', 'GET', '/api/v1/about/institute', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/about/institute', 'Admin: `about-content` (`institute`) + `home-stats`.')]),
+    publicReq('الرؤية والرسالة', 'Get Vision & Mission', 'GET', '/api/v1/about/vision-mission', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/about/vision-mission', 'Admin: `about-content` (`vision_mission`, `goals`, `values`).')]),
+    publicReq('كلمة رئيس المعهد', 'Get Leadership (President)', 'GET', '/api/v1/about/leadership/president', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/about/leadership/president', 'Admin: `leadership` type=president.')]),
+    publicReq('رسالة المدير العام', 'Get Leadership (Director)', 'GET', '/api/v1/about/leadership/director', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/about/leadership/director', 'Admin: `leadership` type=director.')]),
+    publicReq('المجلس الاستشاري', 'Get Advisory Board', 'GET', '/api/v1/about/advisory-board', [
         'headers' => [$localeHeader],
-        'description' => publicMatch('/api/v1/about/advisory-board', 'Admin: about-content advisory_board + advisory-board members. Public `members[].image` = admin `imageUrl`.'),
+        'description' => publicMatch('/api/v1/about/advisory-board', 'Admin: `about-content` + `advisory-board`.'),
         'tests' => imagePathTests('(pm.response.json().members || [])'),
     ]),
-    req('Get Team', 'GET', '/api/v1/about/team', [
+    publicReq('فريق العمل', 'Get Team', 'GET', '/api/v1/about/team', [
         'headers' => [$localeHeader],
-        'description' => publicMatch('/api/v1/about/team', 'Admin: team-sections + team-members. Public nested `members[].image` = admin `imageUrl`.'),
+        'description' => publicMatch('/api/v1/about/team', 'Admin: `team-sections` + `team-members`.'),
         'tests' => [
             "pm.test('Status is 2xx', () => pm.expect(pm.response.code).to.be.oneOf([200, 201]));",
             "pm.test('Team member images are full paths', () => {",
@@ -413,10 +398,10 @@ $publicAbout = folder('About — من نحن', [
             '});',
         ],
     ]),
-    req('Get Structure', 'GET', '/api/v1/about/structure', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/about/structure', 'Admin: about-content sectionKey=structure.')]),
-    req('Get Partners', 'GET', '/api/v1/about/partners', [
+    publicReq('الهيكل التشغيلي', 'Get Structure', 'GET', '/api/v1/about/structure', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/about/structure', 'Admin: `about-content` (`structure`).')]),
+    publicReq('الشركاء', 'Get Partners', 'GET', '/api/v1/about/partners', [
         'headers' => [$localeHeader],
-        'description' => publicMatch('/api/v1/about/partners', 'Admin: partners_hero + partner-categories + partners. Public `image` = admin `logoUrl`.'),
+        'description' => publicMatch('/api/v1/about/partners', 'Admin: `partner-categories` + `partners`.'),
         'tests' => [
             "pm.test('Status is 2xx', () => pm.expect(pm.response.code).to.be.oneOf([200, 201]));",
             "pm.test('Partner logos are full paths', () => {",
@@ -429,17 +414,17 @@ $publicAbout = folder('About — من نحن', [
     ]),
 ]);
 
-$publicStrategy = folder('Strategy — الاستراتيجية', [
-    req('Get Strategy 2025/2026', 'GET', '/api/v1/strategy/strategy-2025', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/strategy/strategy-2025', 'Admin: strategy + strategy-pillars + strategy-diagram.')]),
-    req('List Focus Areas', 'GET', '/api/v1/strategy/focus-areas', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/strategy/focus-areas', 'Admin: focus-areas + about-content focus_areas_pages.')]),
-    req('Get Focus Area Detail', 'GET', '/api/v1/strategy/focus-areas/{{slug}}', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/strategy/focus-areas/{slug}', 'Admin: focus-areas by slug.')]),
+$publicStrategy = folder('الاستراتيجية — Strategy', [
+    publicReq('استراتيجية 2025–2026', 'Get Strategy 2025/2026', 'GET', '/api/v1/strategy/strategy-2025', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/strategy/strategy-2025', 'Admin: `strategy` + `strategy-pillars` + `strategy-diagram`.')]),
+    publicReq('قائمة مجالات التركيز', 'List Focus Areas', 'GET', '/api/v1/strategy/focus-areas', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/strategy/focus-areas', 'Admin: `focus-areas` + `about-content` (`focus_areas_pages`).')]),
+    publicReq('تفاصيل مجال تركيز', 'Get Focus Area Detail', 'GET', '/api/v1/strategy/focus-areas/{{slug}}', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/strategy/focus-areas/{slug}', 'Admin: `focus-areas` by slug.')]),
 ]);
 
-$publicPrograms = folder('Programs — البرامج', [
-    req('Get Urban Policies Program', 'GET', '/api/v1/programs/urban-policies', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/programs/urban-policies', 'Admin: programs + program-sections + directory/*.')]),
-    req('Get Training Program', 'GET', '/api/v1/programs/training', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/programs/training', 'Admin: programs + program-sections + training-courses + experts.')]),
-    req('Get Partnerships Program', 'GET', '/api/v1/programs/partnerships', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/programs/partnerships', 'Admin: programs + program-sections.')]),
-    req('Get Development Portal Directory', 'GET', '/api/v1/programs/urban-policies/directory', [
+$publicPrograms = folder('البرامج — Programs', [
+    publicReq('السياسات الحضرية', 'Get Urban Policies Program', 'GET', '/api/v1/programs/urban-policies', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/programs/urban-policies', 'Admin: `00 — بناء برنامج السياسات الحضرية` + `directory/*`.')]),
+    publicReq('التدريب وتطوير القدرات', 'Get Training Program', 'GET', '/api/v1/programs/training', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/programs/training', 'Admin: `00 — بناء برنامج التدريب` (18 خطوة).')]),
+    publicReq('الشراكات', 'Get Partnerships Program', 'GET', '/api/v1/programs/partnerships', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/programs/partnerships', 'Admin: `00 — بناء برنامج الشراكات` (9 خطوات).')]),
+    publicReq('دليل بوابة التنمية', 'Get Development Portal Directory', 'GET', '/api/v1/programs/urban-policies/directory', [
         'headers' => [$localeHeader],
         'query' => [
             ['key' => 'tab', 'value' => 'cities', 'description' => 'cities|projects|organizations|publications'],
@@ -451,8 +436,8 @@ $publicPrograms = folder('Programs — البرامج', [
     ]),
 ]);
 
-$publicResources = folder('Resources — المصادر', [
-    req('List Resources', 'GET', '/api/v1/resources', [
+$publicResources = folder('المصادر — Resources', [
+    publicReq('قائمة المصادر', 'List Resources', 'GET', '/api/v1/resources', [
         'headers' => [$localeHeader],
         'query' => [
             ['key' => 'type', 'value' => '', 'disabled' => true],
@@ -461,13 +446,13 @@ $publicResources = folder('Resources — المصادر', [
             ['key' => 'search', 'value' => '', 'disabled' => true],
             ['key' => 'page', 'value' => '1'],
         ],
-        'description' => publicMatch('/api/v1/resources', 'Admin: resources CRUD. Public `image` = admin `imageUrl`.'),
+        'description' => publicMatch('/api/v1/resources', 'صفحة مصادرنا + بطاقات مركز المعرفة. Admin: `resources` + `knowledge-categories`.'),
         'tests' => imagePathTests('(pm.response.json().data || [])'),
     ]),
 ]);
 
-$publicMedia = folder('Media — المركز الإعلامي', [
-    req('List News', 'GET', '/api/v1/media/news', [
+$publicMedia = folder('المركز الإعلامي — Media', [
+    publicReq('الأخبار', 'List News', 'GET', '/api/v1/media/news', [
         'headers' => [$localeHeader],
         'query' => [
             ['key' => 'year', 'value' => '2025', 'disabled' => true],
@@ -478,22 +463,22 @@ $publicMedia = folder('Media — المركز الإعلامي', [
         'description' => publicMatch('/api/v1/media/news', 'Admin: media category=news. Public `image` = admin `imageUrl`.'),
         'tests' => imagePathTests('(pm.response.json().data || [])'),
     ]),
-    req('List Newsletter', 'GET', '/api/v1/media/newsletter', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/media/newsletter', 'Admin: media category=newsletter.')]),
-    req('List City Meetings', 'GET', '/api/v1/media/city-meetings', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/media/city-meetings', 'Admin: media category=city_meetings.')]),
-    req('List Secretary Speaks', 'GET', '/api/v1/media/secretary-speaks', [
+    publicReq('نشرة مدننا', 'List Newsletter', 'GET', '/api/v1/media/newsletter', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/media/newsletter', 'Admin: `media` category=newsletter.')]),
+    publicReq('لقاءات حراك المدن', 'List City Meetings', 'GET', '/api/v1/media/city-meetings', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/media/city-meetings', 'Admin: `media` category=city_meetings.')]),
+    publicReq('الأمين يتحدث', 'List Secretary Speaks', 'GET', '/api/v1/media/secretary-speaks', [
         'headers' => [$localeHeader],
-        'description' => publicMatch('/api/v1/media/secretary-speaks', 'Admin: media category=secretary_speaks.'),
+        'description' => publicMatch('/api/v1/media/secretary-speaks', 'Admin: `media` category=secretary_speaks.'),
     ]),
-    req('Get Media Article Detail', 'GET', '/api/v1/media/{{category}}/{{slug}}', [
+    publicReq('تفاصيل مقال', 'Get Media Article Detail', 'GET', '/api/v1/media/{{category}}/{{slug}}', [
         'headers' => [$localeHeader],
-        'description' => publicMatch('/api/v1/media/{category}/{slug}', 'Public category uses hyphens; admin uses underscores. Response includes slugAr/slugEn for language switch.'),
+        'description' => publicMatch('/api/v1/media/{category}/{slug}', 'Public: شرطة في الرابط (news). Admin: underscore (news).'),
     ]),
 ]);
 
-$publicCareers = folder('Careers — اعمل معنا', [
-    req('List Job Openings', 'GET', '/api/v1/careers', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/careers', 'Admin: job-openings.')]),
-    req('Get Job Opening', 'GET', '/api/v1/careers/{{id}}', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/careers/{id}', 'Admin: job-openings/{id}.')]),
-    req('Submit Job Application', 'POST', '/api/v1/careers/apply', [
+$publicCareers = folder('اعمل معنا — Careers', [
+    publicReq('الوظائف الشاغرة', 'List Job Openings', 'GET', '/api/v1/careers', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/careers', 'Admin: `job-openings`.')]),
+    publicReq('تفاصيل وظيفة', 'Get Job Opening', 'GET', '/api/v1/careers/{{id}}', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/careers/{id}', 'Admin: `job-openings/{id}`.')]),
+    publicReq('تقديم على وظيفة', 'Submit Job Application', 'POST', '/api/v1/careers/apply', [
         'headers' => [$localeHeader],
         'body' => [
             'jobOpeningId' => 1,
@@ -503,12 +488,12 @@ $publicCareers = folder('Careers — اعمل معنا', [
             'coverLetter' => 'لدي خبرة في التخطيط الحضري والعمل مع البلديات العربية.',
             'cvUrl' => 'https://example.com/cv.pdf',
         ],
-        'description' => 'Public form submission. Admin review: job-applications.',
+        'description' => 'نموذج التقديم — يُراجع في Admin → `النماذج الواردة` → `job-applications`.',
     ]),
 ]);
 
-$publicFaq = folder('FAQ — الأسئلة الشائعة', [
-    req('List FAQs', 'GET', '/api/v1/faqs', [
+$publicFaq = folder('الأسئلة الشائعة — FAQ', [
+    publicReq('قائمة الأسئلة', 'List FAQs', 'GET', '/api/v1/faqs', [
         'headers' => [$localeHeader],
         'query' => [
             ['key' => 'category', 'value' => '', 'disabled' => true, 'description' => 'membership | programs | general'],
@@ -517,17 +502,17 @@ $publicFaq = folder('FAQ — الأسئلة الشائعة', [
     ]),
 ]);
 
-$publicLegal = folder('Legal — الشروط والخصوصية', [
-    req('Get Terms', 'GET', '/api/v1/legal/terms', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/legal/terms', 'Admin: legal slug=terms.')]),
-    req('Get Privacy Policy', 'GET', '/api/v1/legal/privacy', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/legal/privacy', 'Admin: legal slug=privacy.')]),
+$publicLegal = folder('الصفحات القانونية — Legal', [
+    publicReq('الشروط والأحكام', 'Get Terms', 'GET', '/api/v1/legal/terms', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/legal/terms', 'Admin: `legal` slug=terms.')]),
+    publicReq('سياسة الخصوصية', 'Get Privacy Policy', 'GET', '/api/v1/legal/privacy', ['headers' => [$localeHeader], 'description' => publicMatch('/api/v1/legal/privacy', 'Admin: `legal` slug=privacy.')]),
 ]);
 
-$publicForms = folder('Forms — النماذج', [
-    req('Get Contact Info', 'GET', '/api/v1/contact', [
+$publicForms = folder('النماذج — Forms', [
+    publicReq('بيانات التواصل', 'Get Contact Info', 'GET', '/api/v1/contact', [
         'headers' => [$localeHeader],
-        'description' => publicMatch('/api/v1/contact', 'Admin: settings group=contact (contact.title, contact.address, …).'),
+        'description' => publicMatch('/api/v1/contact', 'صفحة تواصل معنا + تذييل الرئيسية. Admin: `contact-info` (ليس settings).'),
     ]),
-    req('Submit Contact Form', 'POST', '/api/v1/contact', [
+    publicReq('إرسال رسالة تواصل', 'Submit Contact Form', 'POST', '/api/v1/contact', [
         'headers' => [$localeHeader],
         'body' => [
             'name' => 'أحمد محمد',
@@ -535,9 +520,9 @@ $publicForms = folder('Forms — النماذج', [
             'email' => 'ahmed@example.com',
             'message' => 'استفسار عن برامج المعهد التدريبية والعضوية.',
         ],
-        'description' => 'Admin review: contact-submissions.',
+        'description' => 'نموذج تواصل — Admin → `contact-submissions`.',
     ]),
-    req('Submit Membership Application', 'POST', '/api/v1/membership', [
+    publicReq('طلب عضوية', 'Submit Membership Application', 'POST', '/api/v1/membership', [
         'headers' => [$localeHeader],
         'body' => [
             'organizationName' => 'أمانة منطقة الرياض',
@@ -548,9 +533,9 @@ $publicForms = folder('Forms — النماذج', [
             'city' => 'الرياض',
             'message' => 'نرغب في الانضمام كعضو في المعهد العربي لإنماء المدن.',
         ],
-        'description' => 'Admin review: membership-applications.',
+        'description' => 'نموذج انضم الى عضوية المعهد — Admin → `membership-applications`.',
     ]),
-    req('Submit Portal Contribution', 'POST', '/api/v1/programs/urban-policies/contribute', [
+    publicReq('مساهمة بوابة التنمية', 'Submit Portal Contribution', 'POST', '/api/v1/programs/urban-policies/contribute', [
         'headers' => [$localeHeader],
         'body' => [
             'type' => 'publications',
@@ -562,16 +547,16 @@ $publicForms = folder('Forms — النماذج', [
                 'year' => 2025,
             ],
         ],
-        'description' => 'Admin review: portal-contributions. type: publications | cities | organizations.',
+        'description' => 'مساهمة في دليل بوابة التنمية — Admin → `portal-contributions`. type: publications | cities | organizations.',
     ]),
-    req('Subscribe Newsletter', 'POST', '/api/v1/newsletter/subscribe', [
+    publicReq('الاشتراك في النشرة', 'Subscribe Newsletter', 'POST', '/api/v1/newsletter/subscribe', [
         'headers' => [$localeHeader],
         'body' => ['email' => 'subscriber@example.com', 'locale' => 'ar'],
-        'description' => 'Admin list: newsletter-subscriptions. Returns 201 (new) or 200 (existing).',
+        'description' => 'نموذج النشرة في التذييل — Admin → `newsletter-subscriptions`.',
     ]),
 ]);
 
-$public = folder('Public — /api/v1', [
+$public = folder('الواجهة العامة — Public /api/v1', [
     $publicHome,
     $publicSettings,
     $publicAbout,
@@ -583,7 +568,7 @@ $public = folder('Public — /api/v1', [
     $publicFaq,
     $publicLegal,
     $publicForms,
-], 'Public website API — locale via `Accept-Language: {{locale}}`. Returns single-language fields. Full MD: `docs/postman/PUBLIC-API.md`.');
+], postmanPublicSitePagesMap()."\n\n".postmanPublicAuditSummary()."\n\nاللغة: `Accept-Language: {{locale}}` (`ar` أو `en`). التفاصيل: `docs/postman/PUBLIC-API.md`.");
 
 // =============================================================================
 // ADMIN — /api/admin (mirrors Public structure)

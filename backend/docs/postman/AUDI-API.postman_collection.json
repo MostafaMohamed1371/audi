@@ -2,7 +2,7 @@
     "info": {
         "_postman_id": "audi-api-full-v1",
         "name": "AUDI — Full API (المعهد العربي لإنماء المدن)",
-        "description": "# AUDI API — Public + Admin\n\n## Variables\n| Variable | Example | Purpose |\n|----------|---------|---------|\n| `baseUrl` | `http://localhost:8000` | API base URL |\n| `locale` | `ar` or `en` | Language for **all** endpoints (Public + Admin) |\n| `adminToken` | Bearer token | Admin auth after login |\n| `id`, `slug`, `category` | — | Path/query placeholders |\n\n## Localization model\n- **Public `/api/v1/*`**: returns **one locale** per request — e.g. `{ \"title\": \"...\" }` (not `titleAr`/`titleEn`).\n- **Admin `/api/admin/*`**: stores **both languages** — e.g. `{ \"titleAr\": \"...\", \"titleEn\": \"...\" }`.\n- Switch language via collection variable `locale` or header `Accept-Language: ar|en` (also `?locale=ar`).\n\n## Admin ↔ Public mapping\n| Public endpoint | Admin resources |\n|-----------------|-----------------|\n| `GET /api/v1/home` | hero-slides, home-stats, about-content (home_*), media, resources, settings |\n| `GET /api/v1/settings` | settings, social-links |\n| `GET /api/v1/about/*` | about-content, leadership, advisory-board, team-*, partners |\n| `GET /api/v1/strategy/*` | strategy, strategy-pillars, strategy-diagram, focus-areas, about-content |\n| `GET /api/v1/programs/*` | programs, program-sections, training-courses, experts, directory/* |\n| `GET /api/v1/resources` | resources |\n| `GET /api/v1/media/*` | media |\n| `GET /api/v1/careers` | job-openings |\n| `GET /api/v1/faqs` | faqs |\n| `GET /api/v1/legal/{slug}` | legal |\n| `GET /api/v1/contact` | settings (contact group) |\n| Form POSTs | contact-submissions, membership-applications, portal-contributions, job-applications, newsletter-subscriptions |\n\n## Image URL convention (Admin ↔ Public ↔ Frontend)\n- **Admin** stores `imageUrl` / `logoUrl` as **full paths** — root-relative (`/emp/1.png`, `/blog/2.png`) or absolute after upload (`http://localhost:8000/storage/uploads/…`).\n- **Public** returns the same path in locale-neutral fields (`image`, `imageUrl`, `listImage`, …) — **never** bare filenames.\n- **Upload flow:** `POST /api/admin/uploads` → use returned **absolute** `data.url` in admin `imageUrl` fields.\n- **Static asset directories:** `/emp/` (team, advisory), `/client/` (partners), `/blog/` (media), `/our-sources/` (resources), `/slider/` (hero).\n\nCanonical examples in this collection use these paths. Public requests include tests that verify image fields start with `/`.\n\n> Member cities GeoJSON: see `AUDI-Member-Cities.postman_collection.json`\n\n---\n\n# API Markdown Documentation | توثيق Markdown\n\n| File | Content |\n|------|---------|\n| **`docs/postman/HOMEPAGE-ADMIN-GUIDE.md`** | Homepage build guide — 30 admin steps for /ar |\n| **`docs/postman/API.md`** | Index — links to Public + Admin docs |\n| **`docs/postman/PUBLIC-API.md`** | Public `/api/v1` — purpose, parameters (Arabic) |\n| **`docs/postman/ADMIN-API.md`** | Admin `/api/admin` — purpose, parameters (Arabic) |\n\nRegenerate all docs: `php docs/postman/generate-audi-api-collection.php`\n\n---\n\n# Public API | الواجهة العامة\n\nOpen folder **Public — /api/v1**. Each request **Description** includes purpose and parameter tables.\nSet `Accept-Language: {{locale}}` (`ar` or `en`).\n\n---\n\n# Admin API Documentation | توثيق واجهة الإدارة\n\nFull admin reference (purpose, description, parameters in Arabic): **`docs/postman/ADMIN-API.md`**\n\nOpen folder **لوحة التحكم — Admin /api/admin** in this collection. Each request **Description** tab includes:\n- **الغرض | Purpose** — what the endpoint does\n- **المعاملات (Body Parameters)** — table with Arabic field descriptions\n- **Public match** — which public endpoint consumes the data\n\n### Quick start (Admin)\n1. Run **تسجيل الدخول — Login** → copy `token` to `adminToken`\n2. All other admin requests use `Authorization: Bearer {{adminToken}}`\n3. Create content with full bilingual bodies (`*Ar` / `*En`)\n4. Verify on public API with `Accept-Language: ar` or `en`",
+        "description": "# واجهة برمجة المعهد — Public + Admin\n\n> **المعهد العربي لإنماء المدن** — مرجع Postman للموقع [audi-ten.vercel.app/ar](https://audi-ten.vercel.app/ar)\n\n## المتغيرات | Variables\n| المتغير | مثال | الغرض |\n|---------|------|--------|\n| `baseUrl` | `http://localhost:8000` | عنوان الخادم |\n| `locale` | `ar` أو `en` | اللغة لجميع الطلبات |\n| `adminToken` | Bearer token | بعد تسجيل الدخول |\n| `programId`, `programSectionId` | — | سلسلة FK لبناء البرامج |\n\n## نموذج اللغات\n- **Public `/api/v1/*`**: حقل واحد لكل لغة — `{ \"title\": \"...\" }` (ليس `titleAr`/`titleEn`).\n- **Admin `/api/admin/*`**: تخزين ثنائي — `{ \"titleAr\": \"...\", \"titleEn\": \"...\" }`.\n- غيّر `locale` أو `Accept-Language: ar|en`.\n\n## Admin ↔ Public (ملخص)\n| Public | Admin |\n|--------|-------|\n| `GET /api/v1/home` | hero-slides, home-stats, about-content (home_*), programs, media, resources, contact-info |\n| `GET /api/v1/settings` | settings, social-links |\n| `GET /api/v1/about/*` | about-content, leadership, advisory-board, team-*, partners |\n| `GET /api/v1/strategy/*` | strategy, strategy-pillars, focus-areas, about-content |\n| `GET /api/v1/programs/*` | programs, program-sections, program-section-details, training-courses, experts, directory/* |\n| `GET /api/v1/resources` | resources, knowledge-categories |\n| `GET /api/v1/media/*` | media |\n| `GET /api/v1/contact` | contact-info |\n| نماذج POST | contact-submissions, membership-applications, … |\n\n## دليل سريع للمسؤول (Admin)\n1. **تسجيل الدخول** → `المصادقة` → احفظ `token` في `adminToken`\n2. **بناء الرئيسية:** `الرئيسية` → `00 — بناء الصفحة الرئيسية` (خطوات 01–33)\n3. **بناء البرامج:** `البرامج` → `00 — أدلة البناء`\n4. **التحقق:** مجلد `Public` → `الرئيسية` → `GET /api/v1/home`\n\n## توثيق Markdown\n| الملف | المحتوى |\n|-------|---------|\n| `HOMEPAGE-ADMIN-GUIDE.md` | دليل بناء الرئيسية |\n| `PROGRAMS-ADMIN-GUIDE.md` | دليل بناء البرامج |\n| `PUBLIC-API.md` / `ADMIN-API.md` | مرجع كامل |\n\nأعد التوليد: `php docs/postman/generate-audi-api-collection.php`",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "variable": [
@@ -45,15 +45,15 @@
     ],
     "item": [
         {
-            "name": "Public — /api/v1",
-            "description": "Public website API — locale via `Accept-Language: {{locale}}`. Returns single-language fields. Full MD: `docs/postman/PUBLIC-API.md`.",
+            "name": "الواجهة العامة — Public /api/v1",
+            "description": "**الغرض:** جميع واجهات الموقع العام — للتحقق بعد بناء المحتوى من Admin.\n\n**Purpose:** All public website endpoints — verify after admin content build.\n\n**Admin resources:** `See each subfolder for Admin mapping`\n\n### خريطة صفحات الموقع | Site pages ↔ Public API\n\n| الصفحة على الموقع | Public API | Admin (Postman) |\n|-------------------|------------|-------------------|\n| `/ar` الرئيسية | `GET /api/v1/home` | `الرئيسية` → `00 — بناء الصفحة الرئيسية` |\n| من نحن / الرؤية / الفريق… | `GET /api/v1/about/*` | `من نحن` |\n| الاستراتيجية / مجالات التركيز | `GET /api/v1/strategy/*` | `الاستراتيجية` |\n| السياسات الحضرية / التدريب / الشراكات | `GET /api/v1/programs/{slug}` | `البرامج` → `00 — أدلة البناء` |\n| بوابة التنمية (دليل) | `GET /api/v1/programs/urban-policies/directory` | `البرامج` → `دليل المدن/…` |\n| مصادرنا | `GET /api/v1/resources` | `المصادر` |\n| الأخبار / نشرة مدننا / لقاءات… | `GET /api/v1/media/{category}` | `المركز الإعلامي` |\n| اعمل معنا | `GET /api/v1/careers` | `الوظائف` |\n| الأسئلة الشائعة | `GET /api/v1/faqs` | `الأسئلة الشائعة` |\n| الشروط / الخصوصية | `GET /api/v1/legal/{slug}` | `الصفحات القانونية` |\n| تواصل معنا (بيانات) | `GET /api/v1/contact` | `الإعدادات` → `معلومات التواصل` |\n| إعدادات عامة + تذييل | `GET /api/v1/settings` | `الإعدادات` |\n\n**نتيجة المراجعة:** جميع مسارات `GET/POST /api/v1/*` في الخادم موجودة في Postman (37 طلباً عاماً). لا توجد واجهة عامة ناقصة مقارنة بـ `routes/api.php`.\n\n**للتحقق بعد بناء المحتوى:** شغّل `GET /api/v1/home` ثم قارن الحقول مع [الموقع المباشر](https://audi-ten.vercel.app/ar).\n\nاللغة: `Accept-Language: {{locale}}` (`ar` أو `en`). التفاصيل: `docs/postman/PUBLIC-API.md`.",
             "item": [
                 {
-                    "name": "Home — الرئيسية",
+                    "name": "الرئيسية — Home",
                     "description": "",
                     "item": [
                         {
-                            "name": "Get Home (Aggregate)",
+                            "name": "جلب الصفحة الرئيسية — Get Home (Aggregate)",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -74,7 +74,7 @@
                                         "home"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** جلب محتوى الصفحة الرئيسية كاملاً (سلايدر، إحصائيات، برامج، إعلام، معرفة، عضوية).\n\n**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAggregates slider, stats, programs, mediaCenter, knowledgeCenter, membershipContact."
+                                "description": "**الغرض | Purpose:** جلب محتوى الصفحة الرئيسية كاملاً (سلايدر، إحصائيات، برامج، إعلام، معرفة، عضوية).\n\n**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n### خريطة الصفحة الرئيسية | Homepage ↔ API\n\nالموقع: [audi-ten.vercel.app/ar](https://audi-ten.vercel.app/ar) — طلب واحد: **`GET /api/v1/home`**\n\n| القسم على الموقع | حقل JSON | إدارة المحتوى (Postman Admin) |\n|------------------|----------|-------------------------------|\n| سلايدر الهيرو (تطوير تقني…) | `slider[]` | `الرئيسية` → `00 — بناء الصفحة الرئيسية` خطوات **01–04** → `hero-slides` |\n| عن المعهد + رسالة + رؤية | `aboutIntro` | خطوة **05** → `about-content` (`home_about_intro`) |\n| المعهد في أرقام (عنوان) | `stats.title`, `stats.subtitle` | خطوة **06** → `home_stats` |\n| المعهد في أرقام (4 عدادات) | `stats.items[]` | خطوات **07–10** → `home-stats` |\n| المدن الأعضاء (عنوان + أرقام) | `memberCities.title`, `memberCities.stats[]` | خطوات **11–12** → `about-content` + `member-cities/stats` |\n| خريطة المدن (GeoJSON) | — | `GET /api/v1/home/member-cities` + `.geojson` — خطوة **13** + مجلد `المدن الأعضاء` |\n| برامجنا (3 بطاقات) | `programs.items[]` | خطوات **14–17** → `programs` |\n| المركز الإعلامي | `mediaCenter.*` | خطوات **18–24** → `about-content` + `media` |\n| مركز المعرفة | `knowledgeCenter.*` | خطوات **25–31** → `about-content` + `knowledge-categories` + `resources` |\n| عضوية + تواصل | `membershipContact.*` | خطوات **32–33** → `about-content` + `contact-info` |\n\n**التذييل (Footer):** `GET /api/v1/settings` — حقوق النشر + روابط التواصل → Admin `الإعدادات`.\n\n**نتيجة المراجعة:** جميع مسارات `GET/POST /api/v1/*` في الخادم موجودة في Postman (37 طلباً عاماً). لا توجد واجهة عامة ناقصة مقارنة بـ `routes/api.php`.\n\n**للتحقق بعد بناء المحتوى:** شغّل `GET /api/v1/home` ثم قارن الحقول مع [الموقع المباشر](https://audi-ten.vercel.app/ar)."
                             },
                             "response": [],
                             "event": [
@@ -94,6 +94,17 @@
                                             "    pm.expect(val, `bare filename: ${val}`).to.match(/^(\\/|https?:\\/\\/)/);",
                                             "  });",
                                             "});",
+                                            "pm.test('Status is 2xx', () => pm.expect(pm.response.code).to.be.oneOf([200, 201]));",
+                                            "pm.test('Homepage sections present', () => {",
+                                            "  const h = pm.response.json();",
+                                            "  pm.expect(h.slider, 'slider').to.be.an('array');",
+                                            "  pm.expect(h.aboutIntro, 'aboutIntro').to.be.an('object');",
+                                            "  pm.expect(h.stats?.items, 'stats.items').to.be.an('array');",
+                                            "  pm.expect(h.programs?.items, 'programs.items').to.be.an('array');",
+                                            "  pm.expect(h.mediaCenter, 'mediaCenter').to.be.an('object');",
+                                            "  pm.expect(h.knowledgeCenter, 'knowledgeCenter').to.be.an('object');",
+                                            "  pm.expect(h.membershipContact, 'membershipContact').to.be.an('object');",
+                                            "});",
                                             "pm.test('Media center images are full paths', () => {",
                                             "  const mc = pm.response.json().mediaCenter || {};",
                                             "  [...(mc.featured || []), ...(mc.items || [])].forEach((row) => {",
@@ -111,7 +122,7 @@
                             ]
                         },
                         {
-                            "name": "Get Member Cities Map",
+                            "name": "خريطة المدن الأعضاء — Get Member Cities Map",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -133,12 +144,12 @@
                                         "member-cities"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** بيانات خريطة المدن الأعضاء: إحصائيات + GeoJSON.\n\n**Public match:** `GET /api/v1/home/member-cities` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nReturns stats + GeoJSON. Admin: member-cities/stats + cities."
+                                "description": "**الغرض | Purpose:** بيانات خريطة المدن الأعضاء: إحصائيات + GeoJSON.\n\n**Public match:** `GET /api/v1/home/member-cities` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nقسم «المدن الأعضاء» على الرئيسية — إحصائيات + GeoJSON. Admin: `member-cities/stats` + `member-cities/cities`."
                             },
                             "response": []
                         },
                         {
-                            "name": "Get Countries GeoJSON",
+                            "name": "GeoJSON الدول — Get Countries GeoJSON",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -161,12 +172,12 @@
                                         "countries.geojson"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** طبقة GeoJSON للخريطة (هندسة + أسماء حسب اللغة حيث ينطبق).\n\nGeoJSON — not locale-dependent geometry."
+                                "description": "**الغرض | Purpose:** طبقة GeoJSON للخريطة (هندسة + أسماء حسب اللغة حيث ينطبق).\n\nطبقة حدود الدول للخريطة — لا تعتمد على اللغة."
                             },
                             "response": []
                         },
                         {
-                            "name": "Get Cities GeoJSON",
+                            "name": "GeoJSON المدن — Get Cities GeoJSON",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -189,18 +200,18 @@
                                         "cities.geojson"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** طبقة GeoJSON للخريطة (هندسة + أسماء حسب اللغة حيث ينطبق).\n\nGeoJSON — city names resolved by Accept-Language."
+                                "description": "**الغرض | Purpose:** طبقة GeoJSON للخريطة (هندسة + أسماء حسب اللغة حيث ينطبق).\n\nطبقة نقاط المدن — أسماء المدن حسب Accept-Language."
                             },
                             "response": []
                         }
                     ]
                 },
                 {
-                    "name": "Settings — الإعدادات",
+                    "name": "الإعدادات — Settings",
                     "description": "",
                     "item": [
                         {
-                            "name": "Get Site Settings",
+                            "name": "إعدادات الموقع والتذييل — Get Site Settings",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -221,18 +232,18 @@
                                         "settings"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/settings` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nReturns siteName, copyright, socialLinks, contact. Admin: settings + social-links."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/settings` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاسم الموقع، حقوق النشر، روابط التواصل (Footer). Admin: `settings` + `social-links`."
                             },
                             "response": []
                         }
                     ]
                 },
                 {
-                    "name": "About — من نحن",
+                    "name": "من نحن — About",
                     "description": "",
                     "item": [
                         {
-                            "name": "Get Institute",
+                            "name": "عن المعهد — Get Institute",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -254,12 +265,12 @@
                                         "institute"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/about/institute` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: about-content sectionKey=institute + home-stats."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/about/institute` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `about-content` (`institute`) + `home-stats`."
                             },
                             "response": []
                         },
                         {
-                            "name": "Get Vision & Mission",
+                            "name": "الرؤية والرسالة — Get Vision & Mission",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -281,12 +292,12 @@
                                         "vision-mission"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/about/vision-mission` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: about-content keys vision_mission, goals, values."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/about/vision-mission` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `about-content` (`vision_mission`, `goals`, `values`)."
                             },
                             "response": []
                         },
                         {
-                            "name": "Get Leadership (President)",
+                            "name": "كلمة رئيس المعهد — Get Leadership (President)",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -309,12 +320,12 @@
                                         "president"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/about/leadership/president` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: leadership type=president."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/about/leadership/president` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `leadership` type=president."
                             },
                             "response": []
                         },
                         {
-                            "name": "Get Leadership (Director)",
+                            "name": "رسالة المدير العام — Get Leadership (Director)",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -337,12 +348,12 @@
                                         "director"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/about/leadership/director` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: leadership type=director."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/about/leadership/director` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `leadership` type=director."
                             },
                             "response": []
                         },
                         {
-                            "name": "Get Advisory Board",
+                            "name": "المجلس الاستشاري — Get Advisory Board",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -364,7 +375,7 @@
                                         "advisory-board"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/about/advisory-board` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: about-content advisory_board + advisory-board members. Public `members[].image` = admin `imageUrl`."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/about/advisory-board` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `about-content` + `advisory-board`."
                             },
                             "response": [],
                             "event": [
@@ -390,7 +401,7 @@
                             ]
                         },
                         {
-                            "name": "Get Team",
+                            "name": "فريق العمل — Get Team",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -412,7 +423,7 @@
                                         "team"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/about/team` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: team-sections + team-members. Public nested `members[].image` = admin `imageUrl`."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/about/team` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `team-sections` + `team-members`."
                             },
                             "response": [],
                             "event": [
@@ -433,7 +444,7 @@
                             ]
                         },
                         {
-                            "name": "Get Structure",
+                            "name": "الهيكل التشغيلي — Get Structure",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -455,12 +466,12 @@
                                         "structure"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/about/structure` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: about-content sectionKey=structure."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/about/structure` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `about-content` (`structure`)."
                             },
                             "response": []
                         },
                         {
-                            "name": "Get Partners",
+                            "name": "الشركاء — Get Partners",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -482,7 +493,7 @@
                                         "partners"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/about/partners` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: partners_hero + partner-categories + partners. Public `image` = admin `logoUrl`."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/about/partners` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `partner-categories` + `partners`."
                             },
                             "response": [],
                             "event": [
@@ -506,11 +517,11 @@
                     ]
                 },
                 {
-                    "name": "Strategy — الاستراتيجية",
+                    "name": "الاستراتيجية — Strategy",
                     "description": "",
                     "item": [
                         {
-                            "name": "Get Strategy 2025/2026",
+                            "name": "استراتيجية 2025–2026 — Get Strategy 2025/2026",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -532,12 +543,12 @@
                                         "strategy-2025"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/strategy/strategy-2025` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: strategy + strategy-pillars + strategy-diagram."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/strategy/strategy-2025` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `strategy` + `strategy-pillars` + `strategy-diagram`."
                             },
                             "response": []
                         },
                         {
-                            "name": "List Focus Areas",
+                            "name": "قائمة مجالات التركيز — List Focus Areas",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -559,12 +570,12 @@
                                         "focus-areas"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.\n\n**Public match:** `GET /api/v1/strategy/focus-areas` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: focus-areas + about-content focus_areas_pages."
+                                "description": "**الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.\n\n**Public match:** `GET /api/v1/strategy/focus-areas` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `focus-areas` + `about-content` (`focus_areas_pages`)."
                             },
                             "response": []
                         },
                         {
-                            "name": "Get Focus Area Detail",
+                            "name": "تفاصيل مجال تركيز — Get Focus Area Detail",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -587,18 +598,18 @@
                                         "{{slug}}"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/strategy/focus-areas/{slug}` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: focus-areas by slug."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/strategy/focus-areas/{slug}` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `focus-areas` by slug."
                             },
                             "response": []
                         }
                     ]
                 },
                 {
-                    "name": "Programs — البرامج",
+                    "name": "البرامج — Programs",
                     "description": "",
                     "item": [
                         {
-                            "name": "Get Urban Policies Program",
+                            "name": "السياسات الحضرية — Get Urban Policies Program",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -620,12 +631,12 @@
                                         "urban-policies"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: programs + program-sections + directory/*."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `00 — بناء برنامج السياسات الحضرية` + `directory/*`."
                             },
                             "response": []
                         },
                         {
-                            "name": "Get Training Program",
+                            "name": "التدريب وتطوير القدرات — Get Training Program",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -647,12 +658,12 @@
                                         "training"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: programs + program-sections + training-courses + experts."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `00 — بناء برنامج التدريب` (18 خطوة)."
                             },
                             "response": []
                         },
                         {
-                            "name": "Get Partnerships Program",
+                            "name": "الشراكات — Get Partnerships Program",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -674,12 +685,12 @@
                                         "partnerships"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/programs/partnerships` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: programs + program-sections."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/programs/partnerships` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `00 — بناء برنامج الشراكات` (9 خطوات)."
                             },
                             "response": []
                         },
                         {
-                            "name": "Get Development Portal Directory",
+                            "name": "دليل بوابة التنمية — Get Development Portal Directory",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -728,18 +739,18 @@
                                         }
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: directory/cities|projects|organizations|publications."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: directory/cities|projects|organizations|publications."
                             },
                             "response": []
                         }
                     ]
                 },
                 {
-                    "name": "Resources — المصادر",
+                    "name": "المصادر — Resources",
                     "description": "",
                     "item": [
                         {
-                            "name": "List Resources",
+                            "name": "قائمة المصادر — List Resources",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -792,7 +803,7 @@
                                         }
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.\n\n**Public match:** `GET /api/v1/resources` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: resources CRUD. Public `image` = admin `imageUrl`."
+                                "description": "**الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.\n\n**Public match:** `GET /api/v1/resources` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nصفحة مصادرنا + بطاقات مركز المعرفة. Admin: `resources` + `knowledge-categories`."
                             },
                             "response": [],
                             "event": [
@@ -820,11 +831,11 @@
                     ]
                 },
                 {
-                    "name": "Media — المركز الإعلامي",
+                    "name": "المركز الإعلامي — Media",
                     "description": "",
                     "item": [
                         {
-                            "name": "List News",
+                            "name": "الأخبار — List News",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -898,7 +909,7 @@
                             ]
                         },
                         {
-                            "name": "List Newsletter",
+                            "name": "نشرة مدننا — List Newsletter",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -920,12 +931,12 @@
                                         "newsletter"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.\n\n**Public match:** `GET /api/v1/media/newsletter` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: media category=newsletter."
+                                "description": "**الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.\n\n**Public match:** `GET /api/v1/media/newsletter` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `media` category=newsletter."
                             },
                             "response": []
                         },
                         {
-                            "name": "List City Meetings",
+                            "name": "لقاءات حراك المدن — List City Meetings",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -947,12 +958,12 @@
                                         "city-meetings"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.\n\n**Public match:** `GET /api/v1/media/city-meetings` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: media category=city_meetings."
+                                "description": "**الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.\n\n**Public match:** `GET /api/v1/media/city-meetings` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `media` category=city_meetings."
                             },
                             "response": []
                         },
                         {
-                            "name": "List Secretary Speaks",
+                            "name": "الأمين يتحدث — List Secretary Speaks",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -974,12 +985,12 @@
                                         "secretary-speaks"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.\n\n**Public match:** `GET /api/v1/media/secretary-speaks` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: media category=secretary_speaks."
+                                "description": "**الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.\n\n**Public match:** `GET /api/v1/media/secretary-speaks` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `media` category=secretary_speaks."
                             },
                             "response": []
                         },
                         {
-                            "name": "Get Media Article Detail",
+                            "name": "تفاصيل مقال — Get Media Article Detail",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -1002,18 +1013,18 @@
                                         "{{slug}}"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/media/{category}/{slug}` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nPublic category uses hyphens; admin uses underscores. Response includes slugAr/slugEn for language switch."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/media/{category}/{slug}` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nPublic: شرطة في الرابط (news). Admin: underscore (news)."
                             },
                             "response": []
                         }
                     ]
                 },
                 {
-                    "name": "Careers — اعمل معنا",
+                    "name": "اعمل معنا — Careers",
                     "description": "",
                     "item": [
                         {
-                            "name": "List Job Openings",
+                            "name": "الوظائف الشاغرة — List Job Openings",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -1034,12 +1045,12 @@
                                         "careers"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.\n\n**Public match:** `GET /api/v1/careers` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: job-openings."
+                                "description": "**الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.\n\n**Public match:** `GET /api/v1/careers` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `job-openings`."
                             },
                             "response": []
                         },
                         {
-                            "name": "Get Job Opening",
+                            "name": "تفاصيل وظيفة — Get Job Opening",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -1061,12 +1072,12 @@
                                         "{{id}}"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/careers/{id}` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: job-openings/{id}."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/careers/{id}` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `job-openings/{id}`."
                             },
                             "response": []
                         },
                         {
-                            "name": "Submit Job Application",
+                            "name": "تقديم على وظيفة — Submit Job Application",
                             "request": {
                                 "method": "POST",
                                 "header": [
@@ -1096,18 +1107,18 @@
                                     "mode": "raw",
                                     "raw": "{\n    \"jobOpeningId\": 1,\n    \"fullName\": \"سارة عبدالله\",\n    \"email\": \"sara@example.com\",\n    \"phone\": \"+966501234567\",\n    \"coverLetter\": \"لدي خبرة في التخطيط الحضري والعمل مع البلديات العربية.\",\n    \"cvUrl\": \"https:\\/\\/example.com\\/cv.pdf\"\n}"
                                 },
-                                "description": "**الغرض | Purpose:** إرسال نموذج من الموقع — يُراجع في لوحة التحكم (Admin).\n\nPublic form submission. Admin review: job-applications.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `jobOpeningId` | معرّف الوظيفة (اختياري) | 1 |\n| `fullName` | الاسم الكامل | \"سارة عبدالله\" |\n| `email` | البريد الإلكتروني | \"sara@example.com\" |\n| `phone` | رقم الهاتف | \"+966501234567\" |\n| `coverLetter` | خطاب التقديم | \"لدي خبرة في التخطيط الحضري والعمل مع البلديات العربية.\" |\n| `cvUrl` | رابط السيرة الذاتية | \"https:\\/\\/example.com\\/cv.pdf\" |"
+                                "description": "**الغرض | Purpose:** إرسال نموذج من الموقع — يُراجع في لوحة التحكم (Admin).\n\nنموذج التقديم — يُراجع في Admin → `النماذج الواردة` → `job-applications`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `jobOpeningId` | معرّف الوظيفة (اختياري) | 1 |\n| `fullName` | الاسم الكامل | \"سارة عبدالله\" |\n| `email` | البريد الإلكتروني | \"sara@example.com\" |\n| `phone` | رقم الهاتف | \"+966501234567\" |\n| `coverLetter` | خطاب التقديم | \"لدي خبرة في التخطيط الحضري والعمل مع البلديات العربية.\" |\n| `cvUrl` | رابط السيرة الذاتية | \"https:\\/\\/example.com\\/cv.pdf\" |"
                             },
                             "response": []
                         }
                     ]
                 },
                 {
-                    "name": "FAQ — الأسئلة الشائعة",
+                    "name": "الأسئلة الشائعة — FAQ",
                     "description": "",
                     "item": [
                         {
-                            "name": "List FAQs",
+                            "name": "قائمة الأسئلة — List FAQs",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -1143,11 +1154,11 @@
                     ]
                 },
                 {
-                    "name": "Legal — الشروط والخصوصية",
+                    "name": "الصفحات القانونية — Legal",
                     "description": "",
                     "item": [
                         {
-                            "name": "Get Terms",
+                            "name": "الشروط والأحكام — Get Terms",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -1169,12 +1180,12 @@
                                         "terms"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/legal/terms` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: legal slug=terms."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/legal/terms` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `legal` slug=terms."
                             },
                             "response": []
                         },
                         {
-                            "name": "Get Privacy Policy",
+                            "name": "سياسة الخصوصية — Get Privacy Policy",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -1196,18 +1207,18 @@
                                         "privacy"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/legal/privacy` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: legal slug=privacy."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/legal/privacy` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `legal` slug=privacy."
                             },
                             "response": []
                         }
                     ]
                 },
                 {
-                    "name": "Forms — النماذج",
+                    "name": "النماذج — Forms",
                     "description": "",
                     "item": [
                         {
-                            "name": "Get Contact Info",
+                            "name": "بيانات التواصل — Get Contact Info",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -1228,12 +1239,12 @@
                                         "contact"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).\n\n**Public match:** `GET /api/v1/contact` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: settings group=contact (contact.title, contact.address, …)."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/contact` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nصفحة تواصل معنا + تذييل الرئيسية. Admin: `contact-info` (ليس settings)."
                             },
                             "response": []
                         },
                         {
-                            "name": "Submit Contact Form",
+                            "name": "إرسال رسالة تواصل — Submit Contact Form",
                             "request": {
                                 "method": "POST",
                                 "header": [
@@ -1262,12 +1273,12 @@
                                     "mode": "raw",
                                     "raw": "{\n    \"name\": \"أحمد محمد\",\n    \"phone\": \"+966501234567\",\n    \"email\": \"ahmed@example.com\",\n    \"message\": \"استفسار عن برامج المعهد التدريبية والعضوية.\"\n}"
                                 },
-                                "description": "**الغرض | Purpose:** إرسال نموذج من الموقع — يُراجع في لوحة التحكم (Admin).\n\nAdmin review: contact-submissions.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `name` | الاسم | \"أحمد محمد\" |\n| `phone` | رقم الهاتف | \"+966501234567\" |\n| `email` | البريد الإلكتروني | \"ahmed@example.com\" |\n| `message` | نص الرسالة | \"استفسار عن برامج المعهد التدريبية والعضوية.\" |"
+                                "description": "**الغرض | Purpose:** إرسال نموذج من الموقع — يُراجع في لوحة التحكم (Admin).\n\nنموذج تواصل — Admin → `contact-submissions`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `name` | الاسم | \"أحمد محمد\" |\n| `phone` | رقم الهاتف | \"+966501234567\" |\n| `email` | البريد الإلكتروني | \"ahmed@example.com\" |\n| `message` | نص الرسالة | \"استفسار عن برامج المعهد التدريبية والعضوية.\" |"
                             },
                             "response": []
                         },
                         {
-                            "name": "Submit Membership Application",
+                            "name": "طلب عضوية — Submit Membership Application",
                             "request": {
                                 "method": "POST",
                                 "header": [
@@ -1296,12 +1307,12 @@
                                     "mode": "raw",
                                     "raw": "{\n    \"organizationName\": \"أمانة منطقة الرياض\",\n    \"contactName\": \"محمد العلي\",\n    \"email\": \"contact@example.gov.sa\",\n    \"phone\": \"+966114802555\",\n    \"countryCode\": \"SA\",\n    \"city\": \"الرياض\",\n    \"message\": \"نرغب في الانضمام كعضو في المعهد العربي لإنماء المدن.\"\n}"
                                 },
-                                "description": "**الغرض | Purpose:** إرسال نموذج من الموقع — يُراجع في لوحة التحكم (Admin).\n\nAdmin review: membership-applications.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `organizationName` | اسم الجهة/المؤسسة | \"أمانة منطقة الرياض\" |\n| `contactName` | اسم مسؤول التواصل | \"محمد العلي\" |\n| `email` | البريد الإلكتروني | \"contact@example.gov.sa\" |\n| `phone` | رقم الهاتف | \"+966114802555\" |\n| `countryCode` | رمز الدولة | \"SA\" |\n| `city` | المدينة | \"الرياض\" |\n| `message` | نص الرسالة | \"نرغب في الانضمام كعضو في المعهد العربي لإنماء المدن.\" |"
+                                "description": "**الغرض | Purpose:** إرسال نموذج من الموقع — يُراجع في لوحة التحكم (Admin).\n\nنموذج انضم الى عضوية المعهد — Admin → `membership-applications`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `organizationName` | اسم الجهة/المؤسسة | \"أمانة منطقة الرياض\" |\n| `contactName` | اسم مسؤول التواصل | \"محمد العلي\" |\n| `email` | البريد الإلكتروني | \"contact@example.gov.sa\" |\n| `phone` | رقم الهاتف | \"+966114802555\" |\n| `countryCode` | رمز الدولة | \"SA\" |\n| `city` | المدينة | \"الرياض\" |\n| `message` | نص الرسالة | \"نرغب في الانضمام كعضو في المعهد العربي لإنماء المدن.\" |"
                             },
                             "response": []
                         },
                         {
-                            "name": "Submit Portal Contribution",
+                            "name": "مساهمة بوابة التنمية — Submit Portal Contribution",
                             "request": {
                                 "method": "POST",
                                 "header": [
@@ -1332,12 +1343,12 @@
                                     "mode": "raw",
                                     "raw": "{\n    \"type\": \"publications\",\n    \"email\": \"researcher@example.com\",\n    \"payload\": {\n        \"title\": \"دراسة حول التخطيط الحضري المستدام\",\n        \"description\": \"بحث يتناول أفضل الممارسات في التخطيط الحضري للمدن العربية.\",\n        \"author\": \"د. خالد أحمد\",\n        \"year\": 2025\n    }\n}"
                                 },
-                                "description": "**الغرض | Purpose:** إرسال نموذج من الموقع — يُراجع في لوحة التحكم (Admin).\n\nAdmin review: portal-contributions. type: publications | cities | organizations.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `type` | النوع (director|president، publications|cities|organizations، …) | \"publications\" |\n| `email` | البريد الإلكتروني | \"researcher@example.com\" |\n| `payload.title` | العنوان | \"دراسة حول التخطيط الحضري المستدام\" |\n| `payload.description` | description | \"بحث يتناول أفضل الممارسات في التخطيط الحضري للمدن العربية.\" |\n| `payload.author` | المؤلف | \"د. خالد أحمد\" |\n| `payload.year` | السنة | 2025 |"
+                                "description": "**الغرض | Purpose:** إرسال نموذج من الموقع — يُراجع في لوحة التحكم (Admin).\n\nمساهمة في دليل بوابة التنمية — Admin → `portal-contributions`. type: publications | cities | organizations.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `type` | النوع (director|president، publications|cities|organizations، …) | \"publications\" |\n| `email` | البريد الإلكتروني | \"researcher@example.com\" |\n| `payload.title` | العنوان | \"دراسة حول التخطيط الحضري المستدام\" |\n| `payload.description` | description | \"بحث يتناول أفضل الممارسات في التخطيط الحضري للمدن العربية.\" |\n| `payload.author` | المؤلف | \"د. خالد أحمد\" |\n| `payload.year` | السنة | 2025 |"
                             },
                             "response": []
                         },
                         {
-                            "name": "Subscribe Newsletter",
+                            "name": "الاشتراك في النشرة — Subscribe Newsletter",
                             "request": {
                                 "method": "POST",
                                 "header": [
@@ -1367,7 +1378,7 @@
                                     "mode": "raw",
                                     "raw": "{\n    \"email\": \"subscriber@example.com\",\n    \"locale\": \"ar\"\n}"
                                 },
-                                "description": "**الغرض | Purpose:** إرسال نموذج من الموقع — يُراجع في لوحة التحكم (Admin).\n\nAdmin list: newsletter-subscriptions. Returns 201 (new) or 200 (existing).\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `email` | البريد الإلكتروني | \"subscriber@example.com\" |\n| `locale` | لغة المشترك (ar|en) | \"ar\" |"
+                                "description": "**الغرض | Purpose:** إرسال نموذج من الموقع — يُراجع في لوحة التحكم (Admin).\n\nنموذج النشرة في التذييل — Admin → `newsletter-subscriptions`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `email` | البريد الإلكتروني | \"subscriber@example.com\" |\n| `locale` | لغة المشترك (ar|en) | \"ar\" |"
                             },
                             "response": []
                         }
@@ -1753,7 +1764,7 @@
                                                 "{{id}}"
                                             ]
                                         },
-                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/settings` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nمفاتيح أخرى: `site.copyright`, `contact.title`, …Use `id` from create response."
+                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/settings` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nمفاتيح أخرى: `site.copyright`, `contact.title`, …استخدم `id` من استجابة الإنشاء."
                                     },
                                     "response": []
                                 },
@@ -1953,7 +1964,7 @@
                                                 "{{id}}"
                                             ]
                                         },
-                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/settings` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/settings` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                     },
                                     "response": []
                                 },
@@ -2190,7 +2201,7 @@
                 },
                 {
                     "name": "الرئيسية — Home",
-                    "description": "**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n## Homepage map | خريطة الصفحة الرئيسية\n\nMatches live site: https://audi-ten.vercel.app/ar → public `GET /api/v1/home`\n\n| Section on site | Admin folder / endpoint | Public field |\n|-----------------|-------------------------|--------------|\n| Hero slider (تطوير تقني…) | `شرائح الهيرو` → `POST /api/admin/hero-slides` | `slider[]` |\n| About intro + mission/vision | `محتوى أقسام الرئيسية` → `home_about_intro` | `aboutIntro` |\n| المعهد في أرقام (title/subtitle) | `home_stats` in about-content | `stats.title`, `stats.subtitle` |\n| المعهد في أرقام (4 counters) | `إحصائيات الرئيسية` → `POST /api/admin/home-stats` | `stats.items[]` |\n| المدن الأعضاء (title) | `home_member_cities` in about-content | `memberCities.title` |\n| المدن الأعضاء (12 / 400 / 1240) | `المدن الأعضاء` → `PUT /api/admin/member-cities/stats` | `memberCities.stats[]` |\n| برامجنا (title + CTA) | `home_programs` in about-content | `programs.title`, `programs.cta` |\n| برامجنا (3 cards) | `البرامج` → `POST /api/admin/programs` | `programs.items[]` |\n| المركز الإعلامي (labels) | `محتوى أقسام الرئيسية` → `home_media_center` | `mediaCenter.title`, `subtitle`, `readMore`, `viewAll` |\n| المركز الإعلامي (news cards) | `بطاقات المركز الإعلامي` → `POST /api/admin/media` (`category: news`) | `mediaCenter.featured[]` (newest 4) + `mediaCenter.items[]` (next 4) |\n| مركز المعرفة (carousel + labels) | `تصنيفات مركز المعرفة` → `POST /api/admin/knowledge-categories` | `knowledgeCenter.categories[]`, `headerSlides[]` |\n| مركز المعرفة (3 cards) | `المصادر` → `POST /api/admin/resources` (`knowledgeCategoryId`) | `knowledgeCenter.categories[].items[]` |\n| عضوية + تواصل (labels) | `عضوية وتواصل` → `home_membership_contact` | `membershipContact.membership`, `contact.title` |\n| تواصل (phone, fax, email, address, map) | `عضوية وتواصل` → `PUT /api/admin/contact-info` | `membershipContact.contact` |\n\n**Quick start:** run requests in folder `00 — بناء الصفحة الرئيسية` top to bottom (matches https://audi-ten.vercel.app/ar).\n\n**Note:** Stats icons (`/icons/num1.svg`…), knowledge carousel logos (`/knowledgeCenter/icon*.png`), and hero images (`/slider/*.png`) are static frontend assets.",
+                    "description": "**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n## Homepage map | خريطة الصفحة الرئيسية\n\nالموقع: [audi-ten.vercel.app/ar](https://audi-ten.vercel.app/ar) → **`GET /api/v1/home`**\n\n| القسم على الموقع | خطوة Admin (مجلد `00 — بناء الصفحة الرئيسية`) | حقل Public |\n|------------------|-----------------------------------------------|------------|\n| سلايدر الهيرو | **01–04** → `hero-slides` | `slider[]` |\n| عن المعهد + رسالة + رؤية | **05** → `home_about_intro` | `aboutIntro` |\n| المعهد في أرقام (عنوان) | **06** → `home_stats` | `stats.title`, `stats.subtitle` |\n| المعهد في أرقام (4 عدادات) | **07–10** → `home-stats` | `stats.items[]` |\n| المدن الأعضاء (عنوان) | **11** → `home_member_cities` | `memberCities.title` |\n| المدن الأعضاء (12/400/1240) | **12** → `member-cities/stats` | `memberCities.stats[]` |\n| برامجنا (3 بطاقات) | **14–17** → `programs` | `programs.items[]` |\n| المركز الإعلامي | **18–24** → `about-content` + `media` | `mediaCenter.*` |\n| مركز المعرفة | **25–31** → `knowledge-categories` + `resources` | `knowledgeCenter.*` |\n| عضوية + تواصل | **32–33** → `about-content` + `contact-info` | `membershipContact.*` |\n| التذييل (حقوق + تواصل) | `الإعدادات` | `GET /api/v1/settings` |\n\n**التحقق:** بعد الخطوة 33 شغّل `Public` → `جلب الصفحة الرئيسية — Get Home`.",
                     "item": [
                         {
                             "name": "00 — بناء الصفحة الرئيسية — 00 — Build Full Homepage",
@@ -3613,7 +3624,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nHomepage hero slider. Full seed: **00 — بناء الصفحة الرئيسية** steps 01–04.Use `id` from create response."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nHomepage hero slider. Full seed: **00 — بناء الصفحة الرئيسية** steps 01–04.استخدم `id` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -3853,7 +3864,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n«المعهد في أرقام» counters. Title/subtitle: `home_stats` about-content (build step 06). Full seed: steps 07–10.Use `id` from create response."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n«المعهد في أرقام» counters. Title/subtitle: `home_stats` about-content (build step 06). Full seed: steps 07–10.استخدم `id` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -4093,7 +4104,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nHomepage section labels. Keys: `home_about_intro`, `home_stats`, `home_member_cities`, `home_programs`, `home_media_center`, `home_knowledge_center`, `home_membership_contact` — all in **00 — بناء الصفحة الرئيسية**.Use `id` from create response."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nHomepage section labels. Keys: `home_about_intro`, `home_stats`, `home_member_cities`, `home_programs`, `home_media_center`, `home_knowledge_center`, `home_membership_contact` — all in **00 — بناء الصفحة الرئيسية**.استخدم `id` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -4293,7 +4304,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nCarousel tabs → `knowledgeCenter.categories[]`. Full seed: build steps 26–28. Resource cards: **المصادر** CRUD with `knowledgeCategoryId`.Use `id` from create response."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nCarousel tabs → `knowledgeCenter.categories[]`. Full seed: build steps 26–28. Resource cards: **المصادر** CRUD with `knowledgeCategoryId`.استخدم `id` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -4541,7 +4552,7 @@
                                                 "{{id}}"
                                             ]
                                         },
-                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/about/institute` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/about/institute` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                     },
                                     "response": []
                                 },
@@ -4819,7 +4830,7 @@
                                                 "{{id}}"
                                             ]
                                         },
-                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/about/leadership/director` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/about/leadership/director` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                     },
                                     "response": []
                                 },
@@ -5019,7 +5030,7 @@
                                                 "{{id}}"
                                             ]
                                         },
-                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/about/advisory-board` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/about/advisory-board` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                     },
                                     "response": []
                                 },
@@ -5259,7 +5270,7 @@
                                                 "{{id}}"
                                             ]
                                         },
-                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/about/team` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/about/team` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                     },
                                     "response": []
                                 },
@@ -5499,7 +5510,7 @@
                                                 "{{id}}"
                                             ]
                                         },
-                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/about/team` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/about/team` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                     },
                                     "response": []
                                 },
@@ -5739,7 +5750,7 @@
                                                 "{{id}}"
                                             ]
                                         },
-                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/about/partners` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/about/partners` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                     },
                                     "response": []
                                 },
@@ -5979,7 +5990,7 @@
                                                 "{{id}}"
                                             ]
                                         },
-                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/about/partners` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/about/partners` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                     },
                                     "response": []
                                 },
@@ -6301,7 +6312,7 @@
                                                 "{{id}}"
                                             ]
                                         },
-                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/strategy/strategy-2025` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/strategy/strategy-2025` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                     },
                                     "response": []
                                 },
@@ -6541,7 +6552,7 @@
                                                 "{{id}}"
                                             ]
                                         },
-                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/strategy/strategy-2025` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/strategy/strategy-2025` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                     },
                                     "response": []
                                 },
@@ -6781,7 +6792,7 @@
                                                 "{{id}}"
                                             ]
                                         },
-                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/strategy/focus-areas` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/strategy/focus-areas` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                     },
                                     "response": []
                                 },
@@ -8930,7 +8941,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nHomepage cards + program pages. Full seed: **الرئيسية → 00 — بناء الصفحة الرئيسية** steps 15–17, or program build guides.Use `id` from create response."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/home` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nHomepage cards + program pages. Full seed: **الرئيسية → 00 — بناء الصفحة الرئيسية** steps 15–17, or program build guides.استخدم `id` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -9146,7 +9157,7 @@
                                                         "{{programSectionId}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/partnerships` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**One create**: `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`. Then `program-section-details`. Full examples: **00 — أدلة البناء**.Use `programSectionId` from create response."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/partnerships` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**One create**: `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`. Then `program-section-details`. Full examples: **00 — أدلة البناء**.استخدم `programSectionId` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -9408,7 +9419,7 @@
                                                         "{{programSectionDetailId}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAfter section create: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageUrl`. Full examples: **00 — أدلة البناء**.Use `programSectionDetailId` from create response."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAfter section create: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageUrl`. Full examples: **00 — أدلة البناء**.استخدم `programSectionDetailId` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -9608,7 +9619,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nTraining grid on ?tab=trainingPrograms. Full seed: **بناء برنامج التدريب** steps 10–15.Use `id` from create response."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nTraining grid on ?tab=trainingPrograms. Full seed: **بناء برنامج التدريب** steps 10–15.استخدم `id` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -9848,7 +9859,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nExperts carousel on ?tab=experts. Full seed: **بناء برنامج التدريب** steps 16–18.Use `id` from create response."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nExperts carousel on ?tab=experts. Full seed: **بناء برنامج التدريب** steps 16–18.استخدم `id` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -10091,7 +10102,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -10337,7 +10348,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -10583,7 +10594,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -10829,7 +10840,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -11080,7 +11091,7 @@
                                                 "{{id}}"
                                             ]
                                         },
-                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/resources` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nResources page + homepage knowledge cards. Full homepage seed: **الرئيسية → 00 — بناء الصفحة الرئيسية** steps 29–31.Use `id` from create response."
+                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/resources` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nResources page + homepage knowledge cards. Full homepage seed: **الرئيسية → 00 — بناء الصفحة الرئيسية** steps 29–31.استخدم `id` من استجابة الإنشاء."
                                     },
                                     "response": []
                                 },
@@ -11326,7 +11337,7 @@
                                                 "{{id}}"
                                             ]
                                         },
-                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/media/news` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nNews articles (`category: news`). Homepage seed: **الرئيسية → 00 — بناء الصفحة الرئيسية** steps 19–24.Use `id` from create response."
+                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/media/news` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nNews articles (`category: news`). Homepage seed: **الرئيسية → 00 — بناء الصفحة الرئيسية** steps 19–24.استخدم `id` من استجابة الإنشاء."
                                     },
                                     "response": []
                                 },
@@ -11650,7 +11661,7 @@
                                                 "{{id}}"
                                             ]
                                         },
-                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/careers` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/careers` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                     },
                                     "response": []
                                 },
@@ -11896,7 +11907,7 @@
                                                 "{{id}}"
                                             ]
                                         },
-                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/faqs` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/faqs` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                     },
                                     "response": []
                                 },
@@ -12142,7 +12153,7 @@
                                                 "{{id}}"
                                             ]
                                         },
-                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/legal/terms` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nUse `id` from create response."
+                                        "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/legal/terms` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
                                     },
                                     "response": []
                                 },

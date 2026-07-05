@@ -37,33 +37,65 @@ Public يُرجع:  { "title": "..." }  ← حسب locale
 ---
 
 ## فهرس الأقسام | Section Index
-- [Home — الرئيسية](#home) — الصفحة الرئيسية: السلايدر، الإحصائيات، البرامج، المركز الإعلامي، مركز المعرفة، وخريطة المدن الأعضاء.
-- [Settings — الإعدادات](#settings) — إعدادات الموقع العامة: اسم الموقع، حقوق النشر، روابط التواصل الاجتماعي.
-- [About — من نحن](#about) — صفحات عن المعهد: التعريف، الرؤية والرسالة، القيادة، المجلس الاستشاري، الفريق، الهيكل، الشركاء.
-- [Strategy — الاستراتيجية](#strategy) — استراتيجية المعهد ومجالات التركيز.
-- [Programs — البرامج](#programs) — صفحات البرامج الثلاثة ودليل بوابة التنمية الحضرية.
-- [Resources — المصادر](#resources) — قائمة التقارير والدراسات والمصادر (مع فلاتر اختيارية).
-- [Media — المركز الإعلامي](#media) — الأخبار، نشرة مدننا، لقاءات حراك المدن، الأمين يتحدث، وتفاصيل المقالات.
-- [Careers — اعمل معنا](#careers) — عرض الوظائف الشاغرة وتقديم طلب التوظيف.
-- [FAQ — الأسئلة الشائعة](#faq) — قائمة الأسئلة الشائعة (مع تصنيف اختياري).
-- [Legal — الشروط والخصوصية](#legal) — صفحات الشروط والأحكام وسياسة الخصوصية.
-- [Forms — النماذج](#forms) — معلومات التواصل ونماذج الإرسال: تواصل، عضوية، مساهمة، توظيف، نشرة.
+- [الرئيسية — Home](#) — الصفحة الرئيسية كاملة — يطابق https://audi-ten.vercel.app/ar
+- [الإعدادات — Settings](#) — إعدادات الموقع، حقوق النشر، روابط التواصل (التذييل).
+- [من نحن — About](#) — صفحات عن المعهد: التعريف، الرؤية والرسالة، القيادة، المجلس، الفريق، الهيكل، الشركاء.
+- [الاستراتيجية — Strategy](#) — استراتيجية المعهد ومجالات التركيز.
+- [البرامج — Programs](#) — صفحات البرامج الثلاثة ودليل بوابة التنمية الحضرية.
+- [المصادر — Resources](#) — قائمة التقارير والدراسات (صفحة مصادرنا + مركز المعرفة).
+- [المركز الإعلامي — Media](#) — الأخبار، نشرة مدننا، لقاءات حراك المدن، الأمين يتحدث.
+- [اعمل معنا — Careers](#) — عرض الوظائف الشاغرة وتقديم طلب التوظيف.
+- [الأسئلة الشائعة — FAQ](#) — قائمة الأسئلة الشائعة (مع تصنيف اختياري).
+- [الصفحات القانونية — Legal](#) — صفحات الشروط والأحكام وسياسة الخصوصية.
+- [النماذج — Forms](#) — معلومات التواصل ونماذج الإرسال من الموقع.
+- [الواجهة العامة — Public /api/v1](#) — جميع واجهات الموقع العام — للتحقق بعد بناء المحتوى من Admin.
 
 ---
 
-## Public — /api/v1
+## الواجهة العامة — Public /api/v1
 
-Public website API — locale via `Accept-Language: {{locale}}`. Returns single-language fields. Full MD: `docs/postman/PUBLIC-API.md`.
+<a id=""></a>
+**الغرض | Purpose:** جميع واجهات الموقع العام — للتحقق بعد بناء المحتوى من Admin. / All public website endpoints — verify after admin content build.
+**لوحة التحكم | Admin resources:** `See each subfolder for Admin mapping`
 
-### Home — الرئيسية
+**الغرض:** جميع واجهات الموقع العام — للتحقق بعد بناء المحتوى من Admin.
 
-<a id="home"></a>
-**الغرض | Purpose:** الصفحة الرئيسية: السلايدر، الإحصائيات، البرامج، المركز الإعلامي، مركز المعرفة، وخريطة المدن الأعضاء. / Homepage aggregate, member cities map, and GeoJSON layers.
-**لوحة التحكم | Admin resources:** `hero-slides, home-stats, programs, about-content (home_*), media, resources`
+**Purpose:** All public website endpoints — verify after admin content build.
+
+**Admin resources:** `See each subfolder for Admin mapping`
+
+### خريطة صفحات الموقع | Site pages ↔ Public API
+
+| الصفحة على الموقع | Public API | Admin (Postman) |
+|-------------------|------------|-------------------|
+| `/ar` الرئيسية | `GET /api/v1/home` | `الرئيسية` → `00 — بناء الصفحة الرئيسية` |
+| من نحن / الرؤية / الفريق… | `GET /api/v1/about/*` | `من نحن` |
+| الاستراتيجية / مجالات التركيز | `GET /api/v1/strategy/*` | `الاستراتيجية` |
+| السياسات الحضرية / التدريب / الشراكات | `GET /api/v1/programs/{slug}` | `البرامج` → `00 — أدلة البناء` |
+| بوابة التنمية (دليل) | `GET /api/v1/programs/urban-policies/directory` | `البرامج` → `دليل المدن/…` |
+| مصادرنا | `GET /api/v1/resources` | `المصادر` |
+| الأخبار / نشرة مدننا / لقاءات… | `GET /api/v1/media/{category}` | `المركز الإعلامي` |
+| اعمل معنا | `GET /api/v1/careers` | `الوظائف` |
+| الأسئلة الشائعة | `GET /api/v1/faqs` | `الأسئلة الشائعة` |
+| الشروط / الخصوصية | `GET /api/v1/legal/{slug}` | `الصفحات القانونية` |
+| تواصل معنا (بيانات) | `GET /api/v1/contact` | `الإعدادات` → `معلومات التواصل` |
+| إعدادات عامة + تذييل | `GET /api/v1/settings` | `الإعدادات` |
+
+**نتيجة المراجعة:** جميع مسارات `GET/POST /api/v1/*` في الخادم موجودة في Postman (37 طلباً عاماً). لا توجد واجهة عامة ناقصة مقارنة بـ `routes/api.php`.
+
+**للتحقق بعد بناء المحتوى:** شغّل `GET /api/v1/home` ثم قارن الحقول مع [الموقع المباشر](https://audi-ten.vercel.app/ar).
+
+اللغة: `Accept-Language: {{locale}}` (`ar` أو `en`). التفاصيل: `docs/postman/PUBLIC-API.md`.
+
+### الرئيسية — Home
+
+<a id=""></a>
+**الغرض | Purpose:** الصفحة الرئيسية كاملة — يطابق https://audi-ten.vercel.app/ar / Homepage aggregate, member cities map, and GeoJSON layers.
+**لوحة التحكم | Admin resources:** `الرئيسية → 00 — بناء الصفحة الرئيسية (hero-slides, home-stats, about-content, programs, media, resources, contact-info)`
 
 #### GET `/api/v1/home`
 
-**الاسم | Name:** Get Home (Aggregate)
+**الاسم | Name:** جلب الصفحة الرئيسية — Get Home (Aggregate)
 
 **الغرض | Purpose:** جلب محتوى الصفحة الرئيسية كاملاً (سلايدر، إحصائيات، برامج، إعلام، معرفة، عضوية).
 
@@ -76,13 +108,34 @@ Public website API — locale via `Accept-Language: {{locale}}`. Returns single-
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Aggregates slider, stats, programs, mediaCenter, knowledgeCenter, membershipContact.
+### خريطة الصفحة الرئيسية | Homepage ↔ API
+
+الموقع: [audi-ten.vercel.app/ar](https://audi-ten.vercel.app/ar) — طلب واحد: **`GET /api/v1/home`**
+
+| القسم على الموقع | حقل JSON | إدارة المحتوى (Postman Admin) |
+|------------------|----------|-------------------------------|
+| سلايدر الهيرو (تطوير تقني…) | `slider[]` | `الرئيسية` → `00 — بناء الصفحة الرئيسية` خطوات **01–04** → `hero-slides` |
+| عن المعهد + رسالة + رؤية | `aboutIntro` | خطوة **05** → `about-content` (`home_about_intro`) |
+| المعهد في أرقام (عنوان) | `stats.title`, `stats.subtitle` | خطوة **06** → `home_stats` |
+| المعهد في أرقام (4 عدادات) | `stats.items[]` | خطوات **07–10** → `home-stats` |
+| المدن الأعضاء (عنوان + أرقام) | `memberCities.title`, `memberCities.stats[]` | خطوات **11–12** → `about-content` + `member-cities/stats` |
+| خريطة المدن (GeoJSON) | — | `GET /api/v1/home/member-cities` + `.geojson` — خطوة **13** + مجلد `المدن الأعضاء` |
+| برامجنا (3 بطاقات) | `programs.items[]` | خطوات **14–17** → `programs` |
+| المركز الإعلامي | `mediaCenter.*` | خطوات **18–24** → `about-content` + `media` |
+| مركز المعرفة | `knowledgeCenter.*` | خطوات **25–31** → `about-content` + `knowledge-categories` + `resources` |
+| عضوية + تواصل | `membershipContact.*` | خطوات **32–33** → `about-content` + `contact-info` |
+
+**التذييل (Footer):** `GET /api/v1/settings` — حقوق النشر + روابط التواصل → Admin `الإعدادات`.
+
+**نتيجة المراجعة:** جميع مسارات `GET/POST /api/v1/*` في الخادم موجودة في Postman (37 طلباً عاماً). لا توجد واجهة عامة ناقصة مقارنة بـ `routes/api.php`.
+
+**للتحقق بعد بناء المحتوى:** شغّل `GET /api/v1/home` ثم قارن الحقول مع [الموقع المباشر](https://audi-ten.vercel.app/ar).
 
 ---
 
 #### GET `/api/v1/home/member-cities`
 
-**الاسم | Name:** Get Member Cities Map
+**الاسم | Name:** خريطة المدن الأعضاء — Get Member Cities Map
 
 **الغرض | Purpose:** بيانات خريطة المدن الأعضاء: إحصائيات + GeoJSON.
 
@@ -95,13 +148,13 @@ Aggregates slider, stats, programs, mediaCenter, knowledgeCenter, membershipCont
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Returns stats + GeoJSON. Admin: member-cities/stats + cities.
+قسم «المدن الأعضاء» على الرئيسية — إحصائيات + GeoJSON. Admin: `member-cities/stats` + `member-cities/cities`.
 
 ---
 
 #### GET `/api/v1/home/member-cities/countries.geojson`
 
-**الاسم | Name:** Get Countries GeoJSON
+**الاسم | Name:** GeoJSON الدول — Get Countries GeoJSON
 
 **الغرض | Purpose:** طبقة GeoJSON للخريطة (هندسة + أسماء حسب اللغة حيث ينطبق).
 
@@ -110,13 +163,13 @@ Returns stats + GeoJSON. Admin: member-cities/stats + cities.
 
 #### Notes | ملاحظات
 
-GeoJSON — not locale-dependent geometry.
+طبقة حدود الدول للخريطة — لا تعتمد على اللغة.
 
 ---
 
 #### GET `/api/v1/home/member-cities/cities.geojson`
 
-**الاسم | Name:** Get Cities GeoJSON
+**الاسم | Name:** GeoJSON المدن — Get Cities GeoJSON
 
 **الغرض | Purpose:** طبقة GeoJSON للخريطة (هندسة + أسماء حسب اللغة حيث ينطبق).
 
@@ -125,21 +178,21 @@ GeoJSON — not locale-dependent geometry.
 
 #### Notes | ملاحظات
 
-GeoJSON — city names resolved by Accept-Language.
+طبقة نقاط المدن — أسماء المدن حسب Accept-Language.
 
 ---
 
-### Settings — الإعدادات
+### الإعدادات — Settings
 
-<a id="settings"></a>
-**الغرض | Purpose:** إعدادات الموقع العامة: اسم الموقع، حقوق النشر، روابط التواصل الاجتماعي. / Site-wide settings and social links.
+<a id=""></a>
+**الغرض | Purpose:** إعدادات الموقع، حقوق النشر، روابط التواصل (التذييل). / Site-wide settings and social links.
 **لوحة التحكم | Admin resources:** `settings, social-links`
 
 #### GET `/api/v1/settings`
 
-**الاسم | Name:** Get Site Settings
+**الاسم | Name:** إعدادات الموقع والتذييل — Get Site Settings
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -150,21 +203,21 @@ GeoJSON — city names resolved by Accept-Language.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Returns siteName, copyright, socialLinks, contact. Admin: settings + social-links.
+اسم الموقع، حقوق النشر، روابط التواصل (Footer). Admin: `settings` + `social-links`.
 
 ---
 
-### About — من نحن
+### من نحن — About
 
-<a id="about"></a>
-**الغرض | Purpose:** صفحات عن المعهد: التعريف، الرؤية والرسالة، القيادة، المجلس الاستشاري، الفريق، الهيكل، الشركاء. / About institute pages with locale-resolved content.
+<a id=""></a>
+**الغرض | Purpose:** صفحات عن المعهد: التعريف، الرؤية والرسالة، القيادة، المجلس، الفريق، الهيكل، الشركاء. / About institute pages with locale-resolved content.
 **لوحة التحكم | Admin resources:** `about-content, leadership, advisory-board, team-*, partners`
 
 #### GET `/api/v1/about/institute`
 
-**الاسم | Name:** Get Institute
+**الاسم | Name:** عن المعهد — Get Institute
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -175,15 +228,15 @@ Returns siteName, copyright, socialLinks, contact. Admin: settings + social-link
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: about-content sectionKey=institute + home-stats.
+Admin: `about-content` (`institute`) + `home-stats`.
 
 ---
 
 #### GET `/api/v1/about/vision-mission`
 
-**الاسم | Name:** Get Vision & Mission
+**الاسم | Name:** الرؤية والرسالة — Get Vision & Mission
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -194,15 +247,15 @@ Admin: about-content sectionKey=institute + home-stats.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: about-content keys vision_mission, goals, values.
+Admin: `about-content` (`vision_mission`, `goals`, `values`).
 
 ---
 
 #### GET `/api/v1/about/leadership/president`
 
-**الاسم | Name:** Get Leadership (President)
+**الاسم | Name:** كلمة رئيس المعهد — Get Leadership (President)
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -213,15 +266,15 @@ Admin: about-content keys vision_mission, goals, values.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: leadership type=president.
+Admin: `leadership` type=president.
 
 ---
 
 #### GET `/api/v1/about/leadership/director`
 
-**الاسم | Name:** Get Leadership (Director)
+**الاسم | Name:** رسالة المدير العام — Get Leadership (Director)
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -232,15 +285,15 @@ Admin: leadership type=president.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: leadership type=director.
+Admin: `leadership` type=director.
 
 ---
 
 #### GET `/api/v1/about/advisory-board`
 
-**الاسم | Name:** Get Advisory Board
+**الاسم | Name:** المجلس الاستشاري — Get Advisory Board
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -251,15 +304,15 @@ Admin: leadership type=director.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: about-content advisory_board + advisory-board members. Public `members[].image` = admin `imageUrl`.
+Admin: `about-content` + `advisory-board`.
 
 ---
 
 #### GET `/api/v1/about/team`
 
-**الاسم | Name:** Get Team
+**الاسم | Name:** فريق العمل — Get Team
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -270,15 +323,15 @@ Admin: about-content advisory_board + advisory-board members. Public `members[].
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: team-sections + team-members. Public nested `members[].image` = admin `imageUrl`.
+Admin: `team-sections` + `team-members`.
 
 ---
 
 #### GET `/api/v1/about/structure`
 
-**الاسم | Name:** Get Structure
+**الاسم | Name:** الهيكل التشغيلي — Get Structure
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -289,15 +342,15 @@ Admin: team-sections + team-members. Public nested `members[].image` = admin `im
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: about-content sectionKey=structure.
+Admin: `about-content` (`structure`).
 
 ---
 
 #### GET `/api/v1/about/partners`
 
-**الاسم | Name:** Get Partners
+**الاسم | Name:** الشركاء — Get Partners
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -308,21 +361,21 @@ Admin: about-content sectionKey=structure.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: partners_hero + partner-categories + partners. Public `image` = admin `logoUrl`.
+Admin: `partner-categories` + `partners`.
 
 ---
 
-### Strategy — الاستراتيجية
+### الاستراتيجية — Strategy
 
-<a id="strategy"></a>
+<a id=""></a>
 **الغرض | Purpose:** استراتيجية المعهد ومجالات التركيز. / Strategy page and focus areas.
 **لوحة التحكم | Admin resources:** `strategy, strategy-pillars, focus-areas, about-content`
 
 #### GET `/api/v1/strategy/strategy-2025`
 
-**الاسم | Name:** Get Strategy 2025/2026
+**الاسم | Name:** استراتيجية 2025–2026 — Get Strategy 2025/2026
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -333,13 +386,13 @@ Admin: partners_hero + partner-categories + partners. Public `image` = admin `lo
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: strategy + strategy-pillars + strategy-diagram.
+Admin: `strategy` + `strategy-pillars` + `strategy-diagram`.
 
 ---
 
 #### GET `/api/v1/strategy/focus-areas`
 
-**الاسم | Name:** List Focus Areas
+**الاسم | Name:** قائمة مجالات التركيز — List Focus Areas
 
 **الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.
 
@@ -352,15 +405,15 @@ Admin: strategy + strategy-pillars + strategy-diagram.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: focus-areas + about-content focus_areas_pages.
+Admin: `focus-areas` + `about-content` (`focus_areas_pages`).
 
 ---
 
 #### GET `/api/v1/strategy/focus-areas/{{slug}}`
 
-**الاسم | Name:** Get Focus Area Detail
+**الاسم | Name:** تفاصيل مجال تركيز — Get Focus Area Detail
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -371,21 +424,21 @@ Admin: focus-areas + about-content focus_areas_pages.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: focus-areas by slug.
+Admin: `focus-areas` by slug.
 
 ---
 
-### Programs — البرامج
+### البرامج — Programs
 
-<a id="programs"></a>
+<a id=""></a>
 **الغرض | Purpose:** صفحات البرامج الثلاثة ودليل بوابة التنمية الحضرية. / Program pages and urban policies directory.
-**لوحة التحكم | Admin resources:** `programs, program-sections, training-courses, experts, directory/*`
+**لوحة التحكم | Admin resources:** `programs, program-sections, program-section-details, training-courses, experts, directory/*`
 
 #### GET `/api/v1/programs/urban-policies`
 
-**الاسم | Name:** Get Urban Policies Program
+**الاسم | Name:** السياسات الحضرية — Get Urban Policies Program
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -396,15 +449,15 @@ Admin: focus-areas by slug.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: programs + program-sections + directory/*.
+Admin: `00 — بناء برنامج السياسات الحضرية` + `directory/*`.
 
 ---
 
 #### GET `/api/v1/programs/training`
 
-**الاسم | Name:** Get Training Program
+**الاسم | Name:** التدريب وتطوير القدرات — Get Training Program
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -415,15 +468,15 @@ Admin: programs + program-sections + directory/*.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: programs + program-sections + training-courses + experts.
+Admin: `00 — بناء برنامج التدريب` (18 خطوة).
 
 ---
 
 #### GET `/api/v1/programs/partnerships`
 
-**الاسم | Name:** Get Partnerships Program
+**الاسم | Name:** الشراكات — Get Partnerships Program
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -434,15 +487,15 @@ Admin: programs + program-sections + training-courses + experts.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: programs + program-sections.
+Admin: `00 — بناء برنامج الشراكات` (9 خطوات).
 
 ---
 
 #### GET `/api/v1/programs/urban-policies/directory`
 
-**الاسم | Name:** Get Development Portal Directory
+**الاسم | Name:** دليل بوابة التنمية — Get Development Portal Directory
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -466,15 +519,15 @@ Admin: directory/cities|projects|organizations|publications.
 
 ---
 
-### Resources — المصادر
+### المصادر — Resources
 
-<a id="resources"></a>
-**الغرض | Purpose:** قائمة التقارير والدراسات والمصادر (مع فلاتر اختيارية). / Paginated knowledge resources list.
-**لوحة التحكم | Admin resources:** `resources`
+<a id=""></a>
+**الغرض | Purpose:** قائمة التقارير والدراسات (صفحة مصادرنا + مركز المعرفة). / Paginated knowledge resources list.
+**لوحة التحكم | Admin resources:** `resources, knowledge-categories`
 
 #### GET `/api/v1/resources`
 
-**الاسم | Name:** List Resources
+**الاسم | Name:** قائمة المصادر — List Resources
 
 **الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.
 
@@ -497,19 +550,19 @@ Admin: directory/cities|projects|organizations|publications.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: resources CRUD. Public `image` = admin `imageUrl`.
+صفحة مصادرنا + بطاقات مركز المعرفة. Admin: `resources` + `knowledge-categories`.
 
 ---
 
-### Media — المركز الإعلامي
+### المركز الإعلامي — Media
 
-<a id="media"></a>
-**الغرض | Purpose:** الأخبار، نشرة مدننا، لقاءات حراك المدن، الأمين يتحدث، وتفاصيل المقالات. / Media center listings and article detail.
-**لوحة التحكم | Admin resources:** `media (category news, newsletter, city_meetings, secretary_speaks)`
+<a id=""></a>
+**الغرض | Purpose:** الأخبار، نشرة مدننا، لقاءات حراك المدن، الأمين يتحدث. / Media center listings and article detail.
+**لوحة التحكم | Admin resources:** `media (news, newsletter, city_meetings, secretary_speaks)`
 
 #### GET `/api/v1/media/news`
 
-**الاسم | Name:** List News
+**الاسم | Name:** الأخبار — List News
 
 **الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.
 
@@ -537,7 +590,7 @@ Admin: media category=news. Public `image` = admin `imageUrl`.
 
 #### GET `/api/v1/media/newsletter`
 
-**الاسم | Name:** List Newsletter
+**الاسم | Name:** نشرة مدننا — List Newsletter
 
 **الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.
 
@@ -550,13 +603,13 @@ Admin: media category=news. Public `image` = admin `imageUrl`.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: media category=newsletter.
+Admin: `media` category=newsletter.
 
 ---
 
 #### GET `/api/v1/media/city-meetings`
 
-**الاسم | Name:** List City Meetings
+**الاسم | Name:** لقاءات حراك المدن — List City Meetings
 
 **الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.
 
@@ -569,13 +622,13 @@ Admin: media category=newsletter.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: media category=city_meetings.
+Admin: `media` category=city_meetings.
 
 ---
 
 #### GET `/api/v1/media/secretary-speaks`
 
-**الاسم | Name:** List Secretary Speaks
+**الاسم | Name:** الأمين يتحدث — List Secretary Speaks
 
 **الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.
 
@@ -588,15 +641,15 @@ Admin: media category=city_meetings.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: media category=secretary_speaks.
+Admin: `media` category=secretary_speaks.
 
 ---
 
 #### GET `/api/v1/media/{{category}}/{{slug}}`
 
-**الاسم | Name:** Get Media Article Detail
+**الاسم | Name:** تفاصيل مقال — Get Media Article Detail
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -607,19 +660,19 @@ Admin: media category=secretary_speaks.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Public category uses hyphens; admin uses underscores. Response includes slugAr/slugEn for language switch.
+Public: شرطة في الرابط (news). Admin: underscore (news).
 
 ---
 
-### Careers — اعمل معنا
+### اعمل معنا — Careers
 
-<a id="careers"></a>
+<a id=""></a>
 **الغرض | Purpose:** عرض الوظائف الشاغرة وتقديم طلب التوظيف. / Job listings and application form.
 **لوحة التحكم | Admin resources:** `job-openings, job-applications`
 
 #### GET `/api/v1/careers`
 
-**الاسم | Name:** List Job Openings
+**الاسم | Name:** الوظائف الشاغرة — List Job Openings
 
 **الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.
 
@@ -632,15 +685,15 @@ Public category uses hyphens; admin uses underscores. Response includes slugAr/s
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: job-openings.
+Admin: `job-openings`.
 
 ---
 
 #### GET `/api/v1/careers/{{id}}`
 
-**الاسم | Name:** Get Job Opening
+**الاسم | Name:** تفاصيل وظيفة — Get Job Opening
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -651,13 +704,13 @@ Admin: job-openings.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: job-openings/{id}.
+Admin: `job-openings/{id}`.
 
 ---
 
 #### POST `/api/v1/careers/apply`
 
-**الاسم | Name:** Submit Job Application
+**الاسم | Name:** تقديم على وظيفة — Submit Job Application
 
 **الغرض | Purpose:** إرسال نموذج من الموقع — يُراجع في لوحة التحكم (Admin).
 
@@ -677,19 +730,19 @@ Admin: job-openings/{id}.
 
 #### Notes | ملاحظات
 
-Public form submission. Admin review: job-applications.
+نموذج التقديم — يُراجع في Admin → `النماذج الواردة` → `job-applications`.
 
 ---
 
-### FAQ — الأسئلة الشائعة
+### الأسئلة الشائعة — FAQ
 
-<a id="faq"></a>
+<a id=""></a>
 **الغرض | Purpose:** قائمة الأسئلة الشائعة (مع تصنيف اختياري). / FAQ list with optional category filter.
 **لوحة التحكم | Admin resources:** `faqs`
 
 #### GET `/api/v1/faqs`
 
-**الاسم | Name:** List FAQs
+**الاسم | Name:** قائمة الأسئلة — List FAQs
 
 **الغرض | Purpose:** قائمة paginated — حقول بلغة واحدة حسب Accept-Language.
 
@@ -712,17 +765,17 @@ Admin: faqs CRUD.
 
 ---
 
-### Legal — الشروط والخصوصية
+### الصفحات القانونية — Legal
 
-<a id="legal"></a>
+<a id=""></a>
 **الغرض | Purpose:** صفحات الشروط والأحكام وسياسة الخصوصية. / Terms and privacy policy pages.
 **لوحة التحكم | Admin resources:** `legal`
 
 #### GET `/api/v1/legal/terms`
 
-**الاسم | Name:** Get Terms
+**الاسم | Name:** الشروط والأحكام — Get Terms
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -733,15 +786,15 @@ Admin: faqs CRUD.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: legal slug=terms.
+Admin: `legal` slug=terms.
 
 ---
 
 #### GET `/api/v1/legal/privacy`
 
-**الاسم | Name:** Get Privacy Policy
+**الاسم | Name:** سياسة الخصوصية — Get Privacy Policy
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -752,21 +805,21 @@ Admin: legal slug=terms.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: legal slug=privacy.
+Admin: `legal` slug=privacy.
 
 ---
 
-### Forms — النماذج
+### النماذج — Forms
 
-<a id="forms"></a>
-**الغرض | Purpose:** معلومات التواصل ونماذج الإرسال: تواصل، عضوية، مساهمة، توظيف، نشرة. / Contact info and public form submissions.
+<a id=""></a>
+**الغرض | Purpose:** معلومات التواصل ونماذج الإرسال من الموقع. / Contact info and public form submissions.
 **لوحة التحكم | Admin resources:** `contact-info, contact-submissions, membership-applications, portal-contributions, job-applications, newsletter-subscriptions`
 
 #### GET `/api/v1/contact`
 
-**الاسم | Name:** Get Contact Info
+**الاسم | Name:** بيانات التواصل — Get Contact Info
 
-**الغرض | Purpose:** قراءة محتوى الصفحة بلغة واحدة (حسب Accept-Language أو ?locale=).
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
 
 **المصادقة | Auth:** غير مطلوب (واجهة عامة)
 **اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
@@ -777,13 +830,13 @@ Admin: legal slug=privacy.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: settings group=contact (contact.title, contact.address, …).
+صفحة تواصل معنا + تذييل الرئيسية. Admin: `contact-info` (ليس settings).
 
 ---
 
 #### POST `/api/v1/contact`
 
-**الاسم | Name:** Submit Contact Form
+**الاسم | Name:** إرسال رسالة تواصل — Submit Contact Form
 
 **الغرض | Purpose:** إرسال نموذج من الموقع — يُراجع في لوحة التحكم (Admin).
 
@@ -801,13 +854,13 @@ Admin: settings group=contact (contact.title, contact.address, …).
 
 #### Notes | ملاحظات
 
-Admin review: contact-submissions.
+نموذج تواصل — Admin → `contact-submissions`.
 
 ---
 
 #### POST `/api/v1/membership`
 
-**الاسم | Name:** Submit Membership Application
+**الاسم | Name:** طلب عضوية — Submit Membership Application
 
 **الغرض | Purpose:** إرسال نموذج من الموقع — يُراجع في لوحة التحكم (Admin).
 
@@ -828,13 +881,13 @@ Admin review: contact-submissions.
 
 #### Notes | ملاحظات
 
-Admin review: membership-applications.
+نموذج انضم الى عضوية المعهد — Admin → `membership-applications`.
 
 ---
 
 #### POST `/api/v1/programs/urban-policies/contribute`
 
-**الاسم | Name:** Submit Portal Contribution
+**الاسم | Name:** مساهمة بوابة التنمية — Submit Portal Contribution
 
 **الغرض | Purpose:** إرسال نموذج من الموقع — يُراجع في لوحة التحكم (Admin).
 
@@ -854,13 +907,13 @@ Admin review: membership-applications.
 
 #### Notes | ملاحظات
 
-Admin review: portal-contributions. type: publications | cities | organizations.
+مساهمة في دليل بوابة التنمية — Admin → `portal-contributions`. type: publications | cities | organizations.
 
 ---
 
 #### POST `/api/v1/newsletter/subscribe`
 
-**الاسم | Name:** Subscribe Newsletter
+**الاسم | Name:** الاشتراك في النشرة — Subscribe Newsletter
 
 **الغرض | Purpose:** إرسال نموذج من الموقع — يُراجع في لوحة التحكم (Admin).
 
@@ -876,6 +929,6 @@ Admin review: portal-contributions. type: publications | cities | organizations.
 
 #### Notes | ملاحظات
 
-Admin list: newsletter-subscriptions. Returns 201 (new) or 200 (existing).
+نموذج النشرة في التذييل — Admin → `newsletter-subscriptions`.
 
 ---

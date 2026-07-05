@@ -20,7 +20,7 @@ function postmanAdminSectionCatalog(): array
             'public' => 'GET /api/v1/settings, GET /api/v1/contact',
         ],
         'الرئيسية — Home' => [
-            'ar' => 'محتوى الصفحة الرئيسية: الهيرو، الإحصائيات، وأقسام about-content (home_*).',
+            'ar' => 'محتوى الصفحة الرئيسية — شغّل مجلد `00 — بناء الصفحة الرئيسية` (33 خطوة) ثم تحقق من `GET /api/v1/home`.',
             'en' => 'Homepage: hero slides, stats, and home_* about-content sections.',
             'public' => 'GET /api/v1/home',
         ],
@@ -35,7 +35,7 @@ function postmanAdminSectionCatalog(): array
             'public' => 'GET /api/v1/strategy/*',
         ],
         'البرامج — Programs' => [
-            'ar' => 'برامج المعهد (3 برامج)، أقسامها، الدورات، الخبراء، ودليل السياسات الحضرية.',
+            'ar' => 'برامج المعهد الثلاثة — استخدم `00 — أدلة البناء` ثم تحقق من `GET /api/v1/programs/{slug}`.',
             'en' => 'Programs, sections, training courses, experts, urban policies directory.',
             'public' => 'GET /api/v1/programs/*',
         ],
@@ -127,60 +127,65 @@ function postmanRequestPurpose(string $method, string $name, string $apiType = '
 function postmanPublicSectionCatalog(): array
 {
     return [
-        'Home — الرئيسية' => [
-            'ar' => 'الصفحة الرئيسية: السلايدر، الإحصائيات، البرامج، المركز الإعلامي، مركز المعرفة، وخريطة المدن الأعضاء.',
+        'الرئيسية — Home' => [
+            'ar' => 'الصفحة الرئيسية كاملة — يطابق https://audi-ten.vercel.app/ar',
             'en' => 'Homepage aggregate, member cities map, and GeoJSON layers.',
-            'admin' => 'hero-slides, home-stats, programs, about-content (home_*), media, resources',
+            'admin' => 'الرئيسية → 00 — بناء الصفحة الرئيسية (hero-slides, home-stats, about-content, programs, media, resources, contact-info)',
         ],
-        'Settings — الإعدادات' => [
-            'ar' => 'إعدادات الموقع العامة: اسم الموقع، حقوق النشر، روابط التواصل الاجتماعي.',
+        'الإعدادات — Settings' => [
+            'ar' => 'إعدادات الموقع، حقوق النشر، روابط التواصل (التذييل).',
             'en' => 'Site-wide settings and social links.',
             'admin' => 'settings, social-links',
         ],
-        'About — من نحن' => [
-            'ar' => 'صفحات عن المعهد: التعريف، الرؤية والرسالة، القيادة، المجلس الاستشاري، الفريق، الهيكل، الشركاء.',
+        'من نحن — About' => [
+            'ar' => 'صفحات عن المعهد: التعريف، الرؤية والرسالة، القيادة، المجلس، الفريق، الهيكل، الشركاء.',
             'en' => 'About institute pages with locale-resolved content.',
             'admin' => 'about-content, leadership, advisory-board, team-*, partners',
         ],
-        'Strategy — الاستراتيجية' => [
+        'الاستراتيجية — Strategy' => [
             'ar' => 'استراتيجية المعهد ومجالات التركيز.',
             'en' => 'Strategy page and focus areas.',
             'admin' => 'strategy, strategy-pillars, focus-areas, about-content',
         ],
-        'Programs — البرامج' => [
+        'البرامج — Programs' => [
             'ar' => 'صفحات البرامج الثلاثة ودليل بوابة التنمية الحضرية.',
             'en' => 'Program pages and urban policies directory.',
-            'admin' => 'programs, program-sections, training-courses, experts, directory/*',
+            'admin' => 'programs, program-sections, program-section-details, training-courses, experts, directory/*',
         ],
-        'Resources — المصادر' => [
-            'ar' => 'قائمة التقارير والدراسات والمصادر (مع فلاتر اختيارية).',
+        'المصادر — Resources' => [
+            'ar' => 'قائمة التقارير والدراسات (صفحة مصادرنا + مركز المعرفة).',
             'en' => 'Paginated knowledge resources list.',
-            'admin' => 'resources',
+            'admin' => 'resources, knowledge-categories',
         ],
-        'Media — المركز الإعلامي' => [
-            'ar' => 'الأخبار، نشرة مدننا، لقاءات حراك المدن، الأمين يتحدث، وتفاصيل المقالات.',
+        'المركز الإعلامي — Media' => [
+            'ar' => 'الأخبار، نشرة مدننا، لقاءات حراك المدن، الأمين يتحدث.',
             'en' => 'Media center listings and article detail.',
-            'admin' => 'media (category news, newsletter, city_meetings, secretary_speaks)',
+            'admin' => 'media (news, newsletter, city_meetings, secretary_speaks)',
         ],
-        'Careers — اعمل معنا' => [
+        'اعمل معنا — Careers' => [
             'ar' => 'عرض الوظائف الشاغرة وتقديم طلب التوظيف.',
             'en' => 'Job listings and application form.',
             'admin' => 'job-openings, job-applications',
         ],
-        'FAQ — الأسئلة الشائعة' => [
+        'الأسئلة الشائعة — FAQ' => [
             'ar' => 'قائمة الأسئلة الشائعة (مع تصنيف اختياري).',
             'en' => 'FAQ list with optional category filter.',
             'admin' => 'faqs',
         ],
-        'Legal — الشروط والخصوصية' => [
+        'الصفحات القانونية — Legal' => [
             'ar' => 'صفحات الشروط والأحكام وسياسة الخصوصية.',
             'en' => 'Terms and privacy policy pages.',
             'admin' => 'legal',
         ],
-        'Forms — النماذج' => [
-            'ar' => 'معلومات التواصل ونماذج الإرسال: تواصل، عضوية، مساهمة، توظيف، نشرة.',
+        'النماذج — Forms' => [
+            'ar' => 'معلومات التواصل ونماذج الإرسال من الموقع.',
             'en' => 'Contact info and public form submissions.',
             'admin' => 'contact-info, contact-submissions, membership-applications, portal-contributions, job-applications, newsletter-subscriptions',
+        ],
+        'الواجهة العامة — Public /api/v1' => [
+            'ar' => 'جميع واجهات الموقع العام — للتحقق بعد بناء المحتوى من Admin.',
+            'en' => 'All public website endpoints — verify after admin content build.',
+            'admin' => 'See each subfolder for Admin mapping',
         ],
     ];
 }
