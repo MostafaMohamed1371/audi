@@ -658,7 +658,7 @@
                                         "training"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `00 — بناء برنامج التدريب` (18 خطوة)."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `00 — بناء برنامج التدريب` (9 خطوات)."
                             },
                             "response": []
                         },
@@ -6953,7 +6953,7 @@
                 },
                 {
                     "name": "البرامج — Programs",
-                    "description": "**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n### Why section Postman bodies looked different from the live tab pages\n\nEach `?tab=` page is built from **multiple admin sources**, not only `program-sections`:\n\n| Tab URL | UI blocks (your screenshots) | Admin source | JSON fields |\n|---------|------------------------------|--------------|-------------|\n| `?tab=trainingPrograms` | Title + intro paragraph | Step 03 `program-sections` | `titleAr`, `introAr` |\n| | Top hero gif | Step 03 `imageUrl` + `bodyAr.heroImage` | `/icons/program/6.gif` |\n| | 3 format boxes | Step 03 `bodyAr.formats[]` | `formatsTitle`, `formats` |\n| | **البرامج التدريبية ٢٠٢٣–٢٠٢٤** + course rows | Steps **07–12** `training-courses` | `coursesTitle` + `titleAr`/`countAr` per course |\n| | Courses section photo | Step 03 `bodyAr.coursesImage` | `/icons/program/7.png` |\n| `?tab=consulting` | Title + intro | Step 04 `program-sections` | `titleAr`, `introAr` |\n| | Hero photo (nav row) | Step 04 `imageUrl` | `/projects/p2.png` |\n| | 3 nav pills | Step 04 `bodyAr.nav[]` | |\n| | 3 detail blocks with long text | Step 04 `bodyAr.sections[]` | `title` + `description` each |\n| | Presenter photo | Step 04 `bodyAr.detailImage` | `/projects/consulting-presenter.png` |\n| `?tab=executive` | Title + intro + 2 program boxes | Step 05 `program-sections` | `offersTitle`, `programs[]` |\n| | Hero video | Step 05 `bodyAr.heroVideo` | `/icons/program/executive.mp4` |\n| | Topics carousel | Step 05 `bodyAr.topics[]` | `topicsTitle`, `topics[{title, image}]` → `p1.png`… |\n| `?tab=experts` | Section title | Step 06 `program-sections` | `bodyAr.title` |\n| | Expert cards carousel | Steps **13–15** `experts` | `nameAr`, `specialtyAr`, `imageUrl` (`/emp/1.png`…) |\n\n**One API call** `GET /api/v1/programs/training` merges section JSON + all `training-courses` + all `experts`.",
+                    "description": "**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n### محتوى كل تبويب — Training (?tab=)\n\nكل صفحة تبويب = **قسم** (02/04/06/08) + **تفاصيل** (03/05/07/09) — جسم كامل مثل `programs.json`:\n\n| `?tab=` | خطوات | قسم | تفاصيل | داخل `bodyAr/En` |\n|---------|--------|-----|--------|------------------|\n| `trainingPrograms` | 02–03 | 02 | 03 | `courses[]` في body |\n| `consulting` | 04–05 | 04 | 05 | — |\n| `executive` | 06–07 | 06 | 07 | — |\n| `experts` | 08–09 | 08 | 09 | `experts[]` في body |\n\n**طلب واحد** `GET /api/v1/programs/training` يدمج كل الأقسام + الدورات + الخبراء.",
                     "item": [
                         {
                             "name": "00 — أدلة البناء — 00 — Build Guides",
@@ -7462,7 +7462,7 @@
                                 },
                                 {
                                     "name": "بناء برنامج التدريب — Build Training Program",
-                                    "description": "Build [مركز دعم المدن / training](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن):\n\n**Note:** `back` and `sectionsLabel` are **not** admin API — frontend i18n (`messages/{locale}/programs.json`), same as partnerships.\n\n**Bodies from `messages/{ar,en}/programs.json`.**\n\n01 program → **02–09** four tabs × (section → details) → **10–15** courses → **16–18** experts.\n\nVerify: `GET /api/v1/programs/training`.",
+                                    "description": "### كيف تبني كل تبويب؟ (خطوتان)\n\n| الخطوة | Endpoint | ماذا تخزّن؟ | أين يظهر على الموقع؟ |\n|--------|----------|------------|----------------------|\n| **أ — قسم** | `POST /api/admin/program-sections` | `programId`, `tabKey`, **عنوان التبويب**, **صورة البطاقة** | بطاقات «اقسام البرنامج» + صورة أعلى صفحة التبويب |\n| **ب — تفاصيل** | `POST /api/admin/program-section-details` | `programSectionId`, **المقدمة** (`intro`), **محتوى الصفحة** (`bodyAr/En`) | محتوى صفحة `?tab=` عند النقر على التبويب |\n\n**مهم:** `programSectionId` يُحفظ تلقائياً بعد خطوة **أ** — استخدمه في خطوة **ب** (`{{programSectionId}}`).\n\n**تبويب البرامج التدريبية:** ضع `courses[]` داخل **`bodyAr` / `bodyEn`** في خطوة التفاصيل (03) — **لا** طلبات منفصلة.\n\n**تبويب الخبراء:** ضع `experts[]` داخل **`bodyAr` / `bodyEn`** في خطوة التفاصيل (09) — **لا** طلبات منفصلة.\n\nالخادم ينسّخ `courses[]` و `experts[]` تلقائياً إلى جداولها عند حفظ التفاصيل.\n\n**تسميات الصفحة** (`back`, `sectionsLabel`): من ملفات i18n — **لا** تُنشأ عبر Admin.\n\nVerify: `GET /api/v1/programs/training` + `Accept-Language: ar`\n\n### محتوى كل تبويب — Training (?tab=)\n\nكل صفحة تبويب = **قسم** (02/04/06/08) + **تفاصيل** (03/05/07/09) — جسم كامل مثل `programs.json`:\n\n| `?tab=` | خطوات | قسم | تفاصيل | داخل `bodyAr/En` |\n|---------|--------|-----|--------|------------------|\n| `trainingPrograms` | 02–03 | 02 | 03 | `courses[]` في body |\n| `consulting` | 04–05 | 04 | 05 | — |\n| `executive` | 06–07 | 06 | 07 | — |\n| `experts` | 08–09 | 08 | 09 | `experts[]` في body |\n\n**طلب واحد** `GET /api/v1/programs/training` يدمج كل الأقسام + الدورات + الخبراء.\n\nBuild [مركز دعم المدن / training](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن). Bodies from `messages/{ar,en}/programs.json`.",
                                     "item": [
                                         {
                                             "name": "01 — برنامج التدريب — training program",
@@ -7499,7 +7499,7 @@
                                                     "mode": "raw",
                                                     "raw": "{\n    \"slug\": \"training\",\n    \"titleAr\": \"التدريب و تطوير القدرات\",\n    \"titleEn\": \"Training & Capacity Building\",\n    \"heroIntroAr\": \"يهدف مركز دعم المدن إلى تلبية احتياجات الأمانات والبلديات العربية من خلال برامج تدريبية واستشارات فنية تعزز القدرات المؤسسية وتنقل الخبرات بين المدن.\",\n    \"heroIntroEn\": \"The City Support Center aims to meet the needs of Arab municipalities through training programs and technical consultations that strengthen institutional capacities and facilitate knowledge exchange among cities.\",\n    \"sortOrder\": 1,\n    \"cardDescriptionAr\": \"برامج تدريبية متخصصة لبناء قدرات العاملين في البلديات والمؤسسات الحضرية في العالم العربي.\",\n    \"cardDescriptionEn\": \"Specialized training programs to build the capabilities of municipal staff and urban institutions across the Arab world.\"\n}"
                                                 },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 1: Program category. Saves `programId`. URL: /ar/برامجنا/مركز-دعم-المدن\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `slug` | المعرّف اللatinي للرابط (مثل: training) | \"training\" |\n| `titleAr` | العنوان بالعربية | \"التدريب و تطوير القدرات\" |\n| `titleEn` | العنوان بالإنجليزية | \"Training & Capacity Building\" |\n| `heroIntroAr` | مقدمة صفحة البرنامج بالعربية | \"يهدف مركز دعم المدن إلى تلبية احتياجات الأمانات والبلديا… |\n| `heroIntroEn` | مقدمة صفحة البرنامج بالإنجليزية | \"The City Support Center aims to meet the needs of Arab m… |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |\n| `cardDescriptionAr` | وصف بطاقة البرنامج في الرئيسية (عربي) | \"برامج تدريبية متخصصة لبناء قدرات العاملين في البلديات وا… |\n| `cardDescriptionEn` | وصف بطاقة البرنامج في الرئيسية (إنجليزي) | \"Specialized training programs to build the capabilities … |"
+                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 1 — فئة البرنامج**\n\nيحفظ **`{{programId}}`** — مطلوب لجميع الخطوات التالية.\n\nURL: `/ar/برامجنا/مركز-دعم-المدن`\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `slug` | المعرّف اللatinي للرابط (مثل: training) | \"training\" |\n| `titleAr` | العنوان بالعربية | \"التدريب و تطوير القدرات\" |\n| `titleEn` | العنوان بالإنجليزية | \"Training & Capacity Building\" |\n| `heroIntroAr` | مقدمة صفحة البرنامج بالعربية | \"يهدف مركز دعم المدن إلى تلبية احتياجات الأمانات والبلديا… |\n| `heroIntroEn` | مقدمة صفحة البرنامج بالإنجليزية | \"The City Support Center aims to meet the needs of Arab m… |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |\n| `cardDescriptionAr` | وصف بطاقة البرنامج في الرئيسية (عربي) | \"برامج تدريبية متخصصة لبناء قدرات العاملين في البلديات وا… |\n| `cardDescriptionEn` | وصف بطاقة البرنامج في الرئيسية (إنجليزي) | \"Specialized training programs to build the capabilities … |"
                                             },
                                             "response": [],
                                             "event": [
@@ -7520,795 +7520,468 @@
                                             ]
                                         },
                                         {
-                                            "name": "02 — قسم trainingPrograms — program-sections",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
+                                            "name": "خطوات 02–03 — البرامج التدريبية — Steps 02–03 — trainingPrograms",
+                                            "description": "**تبويب: البرامج التدريبية** (`?tab=trainingPrograms`) — خطوات 2–3\n\n**2 — قسم:** عنوان + صورة البطاقة → يحفظ `{{programSectionId}}`\n\n**3 — تفاصيل:** مقدمة + محتوى الصفحة:\n| الحقل | على الموقع |\n|-------|------------|\n| `introAr/En` | فقرة المقدمة تحت العنوان |\n| `bodyAr.formatsTitle` + `formats[]` | «حيث يتم تقديم هذه البرامج…» + 3 صناديق |\n| `bodyAr.coursesTitle` | عنوان «البرامج التدريبية ٢٠٢٣–٢٠٢٤» |\n| `bodyAr.heroImage` | صورة GIF أعلى الصفحة |\n| `bodyAr.coursesImage` | صورة أسفل قائمة الدورات |\n| `bodyAr.courses[]` | شبكة «البرامج التدريبية ٢٠٢٣–٢٠٢٤» — `{title, count}` لكل صف |\n\n**`courses[]` في `bodyAr/En`:** الخادم ينسّخها تلقائياً إلى `training_courses` عند حفظ التفاصيل.",
+                                            "item": [
+                                                {
+                                                    "name": "02 — [قسم] البرامج التدريبية — عنوان + صورة — program-sections",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [
+                                                            {
+                                                                "key": "Accept-Language",
+                                                                "value": "{{locale}}",
+                                                                "description": "اللغة: ar | en"
+                                                            },
+                                                            {
+                                                                "key": "Authorization",
+                                                                "value": "Bearer {{adminToken}}",
+                                                                "description": ""
+                                                            },
+                                                            {
+                                                                "key": "Content-Type",
+                                                                "value": "application/json"
+                                                            }
+                                                        ],
+                                                        "url": {
+                                                            "raw": "{{baseUrl}}/api/admin/program-sections",
+                                                            "host": [
+                                                                "{{baseUrl}}"
+                                                            ],
+                                                            "path": [
+                                                                "api",
+                                                                "admin",
+                                                                "program-sections"
+                                                            ]
+                                                        },
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    \"programId\": \"{{programId}}\",\n    \"tabKey\": \"trainingPrograms\",\n    \"sortOrder\": 0,\n    \"titleAr\": \"البرامج التدريبية\",\n    \"titleEn\": \"Training Programs\",\n    \"imageUrl\": \"\\/icons\\/program\\/6.gif\"\n}"
+                                                        },
+                                                        "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 2 — قسم التبويب (عنوان + صورة)**\n\nتبويب: **البرامج التدريبية** (`tabKey: trainingPrograms`)\n\n**Body:** `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`\n\nيحفظ **`{{programSectionId}}`** — مطلوب للخطوة التالية (تفاصيل).\n\n**لا تضع** `intro` أو `body` هنا — ضعها في خطوة **تفاصيل** التبويب.\n\n**Public:** `GET /api/v1/programs/training` → `sections.trainingPrograms.title`, `.image`\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programId` | معرّف البرنامج (FK) | \"{{programId}}\" |\n| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | \"trainingPrograms\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |\n| `titleAr` | العنوان بالعربية | \"البرامج التدريبية\" |\n| `titleEn` | العنوان بالإنجليزية | \"Training Programs\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/icons\\/program\\/6.gif\" |"
                                                     },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/program-sections",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "program-sections"
+                                                    "response": [],
+                                                    "event": [
+                                                        {
+                                                            "listen": "test",
+                                                            "script": {
+                                                                "type": "text/javascript",
+                                                                "exec": [
+                                                                    "pm.test('save programSectionId', function () {",
+                                                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                                    "    const data = pm.response.json().data;",
+                                                                    "    pm.expect(data.id).to.be.a('number');",
+                                                                    "    pm.collectionVariables.set('programSectionId', String(data.id));",
+                                                                    "});"
+                                                                ]
+                                                            }
+                                                        }
                                                     ]
                                                 },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"programId\": \"{{programId}}\",\n    \"tabKey\": \"trainingPrograms\",\n    \"sortOrder\": 0,\n    \"titleAr\": \"البرامج التدريبية\",\n    \"titleEn\": \"Training Programs\",\n    \"imageUrl\": \"\\/icons\\/program\\/6.gif\"\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 2: **One request**: `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`. Saves `programSectionId`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programId` | معرّف البرنامج (FK) | \"{{programId}}\" |\n| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | \"trainingPrograms\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |\n| `titleAr` | العنوان بالعربية | \"البرامج التدريبية\" |\n| `titleEn` | العنوان بالإنجليزية | \"Training Programs\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/icons\\/program\\/6.gif\" |"
-                                            },
-                                            "response": [],
-                                            "event": [
                                                 {
-                                                    "listen": "test",
-                                                    "script": {
-                                                        "type": "text/javascript",
-                                                        "exec": [
-                                                            "pm.test('save programSectionId', function () {",
-                                                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                                                            "    const data = pm.response.json().data;",
-                                                            "    pm.expect(data.id).to.be.a('number');",
-                                                            "    pm.collectionVariables.set('programSectionId', String(data.id));",
-                                                            "});"
-                                                        ]
-                                                    }
+                                                    "name": "03 — [تفاصيل] البرامج التدريبية — intro + formats + courses[] — program-section-details",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [
+                                                            {
+                                                                "key": "Accept-Language",
+                                                                "value": "{{locale}}",
+                                                                "description": "اللغة: ar | en"
+                                                            },
+                                                            {
+                                                                "key": "Authorization",
+                                                                "value": "Bearer {{adminToken}}",
+                                                                "description": ""
+                                                            },
+                                                            {
+                                                                "key": "Content-Type",
+                                                                "value": "application/json"
+                                                            }
+                                                        ],
+                                                        "url": {
+                                                            "raw": "{{baseUrl}}/api/admin/program-section-details",
+                                                            "host": [
+                                                                "{{baseUrl}}"
+                                                            ],
+                                                            "path": [
+                                                                "api",
+                                                                "admin",
+                                                                "program-section-details"
+                                                            ]
+                                                        },
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    \"programSectionId\": \"{{programSectionId}}\",\n    \"introAr\": \"هدف مركز دعم المدن لتلبية احتياجات ومتطلبات الامانات والبلديات لتطوير القدرات الفنية من خلال رفع كفاءة العاملين في الأمانات والبلديات، القدرة على حل المشكلات والتحديات الوظيفية، ومواكبة التطورات التكنولوجية في مجال العمل. لذلك يوفر منظومة من الخدمات تتضمن سلسلة برامج تدريبية تواكب التغيرات العالمية الحديثة لرفع مستوى جودة الاعمال.\",\n    \"introEn\": \"The City Support Center aims to meet the needs and requirements of municipalities for developing technical capacities by raising the efficiency of municipal employees, building problem-solving skills, and keeping pace with technological developments in the field. It provides a suite of services including training programs aligned with global changes to improve the quality of work.\",\n    \"bodyAr\": {\n        \"formatsTitle\": \"حيث يتم تقديم هذه البرامج التدريبية على شكل:\",\n        \"formats\": [\n            \"دورات تدريبية (حضورية وعن بعد).\",\n            \"ورش عمل متخصصة بطبيعة البلديات في المدن العربية معززة بأمثلة تطبيقية من واقع العمل البلدي\",\n            \"منصة تدريب بلدي (MOOC).\"\n        ],\n        \"coursesTitle\": \"البرامج التدريبية ٢٠٢٣ – ٢٠٢٤\",\n        \"heroImage\": \"\\/icons\\/program\\/6.gif\",\n        \"coursesImage\": \"\\/icons\\/program\\/7.png\",\n        \"courses\": [\n            {\n                \"title\": \"التخطيط والتطوير الحضري\",\n                \"count\": \"3 دورات تدريبية\"\n            },\n            {\n                \"title\": \"تطوير العمل البلدي للقيادات\",\n                \"count\": \"3 دورات تدريبية\"\n            },\n            {\n                \"title\": \"الاستثمار في القطاع البلدي\",\n                \"count\": \"3 دورات تدريبية\"\n            },\n            {\n                \"title\": \"التخطيط والتطوير الحضري\",\n                \"count\": \"3 دورات تدريبية\"\n            },\n            {\n                \"title\": \"تطوير العمل البلدي للقيادات\",\n                \"count\": \"3 دورات تدريبية\"\n            },\n            {\n                \"title\": \"الاستثمار في القطاع البلدي\",\n                \"count\": \"3 دورات تدريبية\"\n            }\n        ]\n    },\n    \"bodyEn\": {\n        \"formatsTitle\": \"These training programs are delivered through:\",\n        \"formats\": [\n            \"Training courses (in-person and remote).\",\n            \"Specialized workshops tailored to Arab municipalities, enriched with practical examples from municipal work\",\n            \"Municipal training platform (MOOC).\"\n        ],\n        \"coursesTitle\": \"Training Programs 2023 – 2024\",\n        \"heroImage\": \"\\/icons\\/program\\/6.gif\",\n        \"coursesImage\": \"\\/icons\\/program\\/7.png\",\n        \"courses\": [\n            {\n                \"title\": \"Urban Planning and Development\",\n                \"count\": \"3 training courses\"\n            },\n            {\n                \"title\": \"Municipal Leadership Development\",\n                \"count\": \"3 training courses\"\n            },\n            {\n                \"title\": \"Investment in the Municipal Sector\",\n                \"count\": \"3 training courses\"\n            },\n            {\n                \"title\": \"Urban Planning and Development\",\n                \"count\": \"3 training courses\"\n            },\n            {\n                \"title\": \"Municipal Leadership Development\",\n                \"count\": \"3 training courses\"\n            },\n            {\n                \"title\": \"Investment in the Municipal Sector\",\n                \"count\": \"3 training courses\"\n            }\n        ]\n    }\n}"
+                                                        },
+                                                        "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 3 — تفاصيل التبويب (مقدمة + محتوى الصفحة)**\n\nتبويب: **البرامج التدريبية** — بعد إنشاء القسم في الخطوة 2\n\n**Body:** `programSectionId` (= `{{programSectionId}}`), `introAr`, `introEn`, `bodyAr`, `bodyEn`\n\n**حقول `bodyAr` / `bodyEn` لهذا التبويب:**\n| الحقل | على الموقع |\n|-------|------------|\n| `introAr/En` | فقرة المقدمة تحت العنوان |\n| `bodyAr.formatsTitle` + `formats[]` | «حيث يتم تقديم هذه البرامج…» + 3 صناديق |\n| `bodyAr.coursesTitle` | عنوان «البرامج التدريبية ٢٠٢٣–٢٠٢٤» |\n| `bodyAr.heroImage` | صورة GIF أعلى الصفحة |\n| `bodyAr.coursesImage` | صورة أسفل قائمة الدورات |\n| `bodyAr.courses[]` | شبكة «البرامج التدريبية ٢٠٢٣–٢٠٢٤» — `{title, count}` لكل صف |\n\n**يظهر على الموقع:** `/ar/برامجنا/مركز-دعم-المدن?tab=trainingPrograms` → `sections.trainingPrograms`\n\n**`courses[]` في `bodyAr/En`:** الخادم ينسّخها تلقائياً إلى `training_courses` عند حفظ التفاصيل.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programSectionId` | programSectionId | \"{{programSectionId}}\" |\n| `introAr` | المقدمة بالعربية | \"هدف مركز دعم المدن لتلبية احتياجات ومتطلبات الامانات وال… |\n| `introEn` | المقدمة بالإنجليزية | \"The City Support Center aims to meet the needs and requi… |\n| `bodyAr.formatsTitle` | formatsTitle | \"حيث يتم تقديم هذه البرامج التدريبية على شكل:\" |\n| `bodyAr.formats` | formats | [\"دورات تدريبية (حضورية وعن بعد).\",\"ورش عمل متخصصة بطبيعة… |\n| `bodyAr.coursesTitle` | coursesTitle | \"البرامج التدريبية ٢٠٢٣ – ٢٠٢٤\" |\n| `bodyAr.heroImage` | heroImage | \"\\/icons\\/program\\/6.gif\" |\n| `bodyAr.coursesImage` | coursesImage | \"\\/icons\\/program\\/7.png\" |\n| `bodyAr.courses` | courses | [{\"title\":\"التخطيط والتطوير الحضري\",\"count\":\"3 دورات تدري… |\n| `bodyEn.formatsTitle` | formatsTitle | \"These training programs are delivered through:\" |\n| `bodyEn.formats` | formats | [\"Training courses (in-person and remote).\",\"Specialized … |\n| `bodyEn.coursesTitle` | coursesTitle | \"Training Programs 2023 – 2024\" |\n| `bodyEn.heroImage` | heroImage | \"\\/icons\\/program\\/6.gif\" |\n| `bodyEn.coursesImage` | coursesImage | \"\\/icons\\/program\\/7.png\" |\n| `bodyEn.courses` | courses | [{\"title\":\"Urban Planning and Development\",\"count\":\"3 tra… |"
+                                                    },
+                                                    "response": [],
+                                                    "event": [
+                                                        {
+                                                            "listen": "test",
+                                                            "script": {
+                                                                "type": "text/javascript",
+                                                                "exec": [
+                                                                    "pm.test('save programSectionDetailId', function () {",
+                                                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                                    "    const data = pm.response.json().data;",
+                                                                    "    pm.expect(data.id).to.be.a('number');",
+                                                                    "    pm.collectionVariables.set('programSectionDetailId', String(data.id));",
+                                                                    "});"
+                                                                ]
+                                                            }
+                                                        }
+                                                    ]
                                                 }
                                             ]
                                         },
                                         {
-                                            "name": "03 — تفاصيل trainingPrograms — program-section-details",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
+                                            "name": "خطوات 04–05 — الاستشارات الفنية — Steps 04–05 — consulting",
+                                            "description": "**تبويب: الاستشارات الفنية** (`?tab=consulting`) — خطوات 4–5\n\n**4 — قسم:** عنوان + صورة البطاقة → يحفظ `{{programSectionId}}`\n\n**5 — تفاصيل:** مقدمة + محتوى الصفحة:\n| الحقل | على الموقع |\n|-------|------------|\n| `introAr/En` | فقرة المقدمة |\n| `bodyAr.nav[]` | 3 أزرار التنقل (استشارات هندسية…، مشاركة التجارب…، تبادل الخبرات…) |\n| `bodyAr.sections[]` | 3 كتل (title + description لكل كتلة) |\n| `bodyAr.detailImage` | صورة المتحدث `/projects/consulting-presenter.png` |",
+                                            "item": [
+                                                {
+                                                    "name": "04 — [قسم] الاستشارات الفنية — عنوان + صورة — program-sections",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [
+                                                            {
+                                                                "key": "Accept-Language",
+                                                                "value": "{{locale}}",
+                                                                "description": "اللغة: ar | en"
+                                                            },
+                                                            {
+                                                                "key": "Authorization",
+                                                                "value": "Bearer {{adminToken}}",
+                                                                "description": ""
+                                                            },
+                                                            {
+                                                                "key": "Content-Type",
+                                                                "value": "application/json"
+                                                            }
+                                                        ],
+                                                        "url": {
+                                                            "raw": "{{baseUrl}}/api/admin/program-sections",
+                                                            "host": [
+                                                                "{{baseUrl}}"
+                                                            ],
+                                                            "path": [
+                                                                "api",
+                                                                "admin",
+                                                                "program-sections"
+                                                            ]
+                                                        },
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    \"programId\": \"{{programId}}\",\n    \"tabKey\": \"consulting\",\n    \"sortOrder\": 1,\n    \"titleAr\": \"الاستشارات الفنية ونقل الخبرات\",\n    \"titleEn\": \"Technical Consultations & Knowledge Transfer\",\n    \"imageUrl\": \"\\/projects\\/p2.png\"\n}"
+                                                        },
+                                                        "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 4 — قسم التبويب (عنوان + صورة)**\n\nتبويب: **الاستشارات الفنية** (`tabKey: consulting`)\n\n**Body:** `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`\n\nيحفظ **`{{programSectionId}}`** — مطلوب للخطوة التالية (تفاصيل).\n\n**لا تضع** `intro` أو `body` هنا — ضعها في خطوة **تفاصيل** التبويب.\n\n**Public:** `GET /api/v1/programs/training` → `sections.consulting.title`, `.image`\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programId` | معرّف البرنامج (FK) | \"{{programId}}\" |\n| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | \"consulting\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |\n| `titleAr` | العنوان بالعربية | \"الاستشارات الفنية ونقل الخبرات\" |\n| `titleEn` | العنوان بالإنجليزية | \"Technical Consultations & Knowledge Transfer\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/projects\\/p2.png\" |"
                                                     },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/program-section-details",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "program-section-details"
+                                                    "response": [],
+                                                    "event": [
+                                                        {
+                                                            "listen": "test",
+                                                            "script": {
+                                                                "type": "text/javascript",
+                                                                "exec": [
+                                                                    "pm.test('save programSectionId', function () {",
+                                                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                                    "    const data = pm.response.json().data;",
+                                                                    "    pm.expect(data.id).to.be.a('number');",
+                                                                    "    pm.collectionVariables.set('programSectionId', String(data.id));",
+                                                                    "});"
+                                                                ]
+                                                            }
+                                                        }
                                                     ]
                                                 },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"programSectionId\": \"{{programSectionId}}\",\n    \"introAr\": \"هدف مركز دعم المدن لتلبية احتياجات ومتطلبات الامانات والبلديات لتطوير القدرات الفنية من خلال رفع كفاءة العاملين في الأمانات والبلديات، القدرة على حل المشكلات والتحديات الوظيفية، ومواكبة التطورات التكنولوجية في مجال العمل. لذلك يوفر منظومة من الخدمات تتضمن سلسلة برامج تدريبية تواكب التغيرات العالمية الحديثة لرفع مستوى جودة الاعمال.\",\n    \"introEn\": \"The City Support Center aims to meet the needs and requirements of municipalities for developing technical capacities by raising the efficiency of municipal employees, building problem-solving skills, and keeping pace with technological developments in the field. It provides a suite of services including training programs aligned with global changes to improve the quality of work.\",\n    \"bodyAr\": {\n        \"formatsTitle\": \"حيث يتم تقديم هذه البرامج التدريبية على شكل:\",\n        \"formats\": [\n            \"دورات تدريبية (حضورية وعن بعد).\",\n            \"ورش عمل متخصصة بطبيعة البلديات في المدن العربية معززة بأمثلة تطبيقية من واقع العمل البلدي\",\n            \"منصة تدريب بلدي (MOOC).\"\n        ],\n        \"coursesTitle\": \"البرامج التدريبية ٢٠٢٣ – ٢٠٢٤\",\n        \"heroImage\": \"\\/icons\\/program\\/6.gif\",\n        \"coursesImage\": \"\\/icons\\/program\\/7.png\"\n    },\n    \"bodyEn\": {\n        \"formatsTitle\": \"These training programs are delivered through:\",\n        \"formats\": [\n            \"Training courses (in-person and remote).\",\n            \"Specialized workshops tailored to Arab municipalities, enriched with practical examples from municipal work\",\n            \"Municipal training platform (MOOC).\"\n        ],\n        \"coursesTitle\": \"Training Programs 2023 – 2024\",\n        \"heroImage\": \"\\/icons\\/program\\/6.gif\",\n        \"coursesImage\": \"\\/icons\\/program\\/7.png\"\n    }\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 3: Details: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageUrl` if different from section.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programSectionId` | programSectionId | \"{{programSectionId}}\" |\n| `introAr` | المقدمة بالعربية | \"هدف مركز دعم المدن لتلبية احتياجات ومتطلبات الامانات وال… |\n| `introEn` | المقدمة بالإنجليزية | \"The City Support Center aims to meet the needs and requi… |\n| `bodyAr.formatsTitle` | formatsTitle | \"حيث يتم تقديم هذه البرامج التدريبية على شكل:\" |\n| `bodyAr.formats` | formats | [\"دورات تدريبية (حضورية وعن بعد).\",\"ورش عمل متخصصة بطبيعة… |\n| `bodyAr.coursesTitle` | coursesTitle | \"البرامج التدريبية ٢٠٢٣ – ٢٠٢٤\" |\n| `bodyAr.heroImage` | heroImage | \"\\/icons\\/program\\/6.gif\" |\n| `bodyAr.coursesImage` | coursesImage | \"\\/icons\\/program\\/7.png\" |\n| `bodyEn.formatsTitle` | formatsTitle | \"These training programs are delivered through:\" |\n| `bodyEn.formats` | formats | [\"Training courses (in-person and remote).\",\"Specialized … |\n| `bodyEn.coursesTitle` | coursesTitle | \"Training Programs 2023 – 2024\" |\n| `bodyEn.heroImage` | heroImage | \"\\/icons\\/program\\/6.gif\" |\n| `bodyEn.coursesImage` | coursesImage | \"\\/icons\\/program\\/7.png\" |"
-                                            },
-                                            "response": [],
-                                            "event": [
                                                 {
-                                                    "listen": "test",
-                                                    "script": {
-                                                        "type": "text/javascript",
-                                                        "exec": [
-                                                            "pm.test('save programSectionDetailId', function () {",
-                                                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                                                            "    const data = pm.response.json().data;",
-                                                            "    pm.expect(data.id).to.be.a('number');",
-                                                            "    pm.collectionVariables.set('programSectionDetailId', String(data.id));",
-                                                            "});"
-                                                        ]
-                                                    }
+                                                    "name": "05 — [تفاصيل] الاستشارات الفنية — intro + nav + sections — program-section-details",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [
+                                                            {
+                                                                "key": "Accept-Language",
+                                                                "value": "{{locale}}",
+                                                                "description": "اللغة: ar | en"
+                                                            },
+                                                            {
+                                                                "key": "Authorization",
+                                                                "value": "Bearer {{adminToken}}",
+                                                                "description": ""
+                                                            },
+                                                            {
+                                                                "key": "Content-Type",
+                                                                "value": "application/json"
+                                                            }
+                                                        ],
+                                                        "url": {
+                                                            "raw": "{{baseUrl}}/api/admin/program-section-details",
+                                                            "host": [
+                                                                "{{baseUrl}}"
+                                                            ],
+                                                            "path": [
+                                                                "api",
+                                                                "admin",
+                                                                "program-section-details"
+                                                            ]
+                                                        },
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    \"programSectionId\": \"{{programSectionId}}\",\n    \"introAr\": \"يحرص مركز دعم المدن على تقديم الدعم الفني للبلديات في إدارة وتنفيذ المشاريع البلدية، رفع جودة الإجراءات والخدمات التي تقدمها البلديات، والاطلاع على الممارسات الفضلى في الأمانات والبلديات.\",\n    \"introEn\": \"The City Support Center is committed to providing technical support to municipalities in managing and implementing municipal projects, improving the quality of procedures and services, and learning from best practices in municipalities.\",\n    \"bodyAr\": {\n        \"nav\": [\n            \"استشارات هندسية وإدارية\",\n            \"مشاركة التجارب بين المدن\",\n            \"تبادل الخبرات بين الافراد\"\n        ],\n        \"detailImage\": \"\\/projects\\/consulting-presenter.png\",\n        \"sections\": [\n            {\n                \"title\": \"استشارات هندسية وإدارية\",\n                \"description\": \"تعزز هذه الاستشارات قدرات المدن العربية بالمجالات الحضرية المختلفة، وقدرتها على اعداد وتنفيذ الدراسات والمشاريع المتعلقة بالتنمية والتطوير الحضري. وتشمل الاستشارات الفنية اعداد الوثائق الفنية والشروط المرجعية للمشاريع الحضرية، وتمثيل الامانات والبلديات من خلال مراجعة اعمال وتقارير الجهات الاستشارية المنفذة لتلك المشاريع.\"\n            },\n            {\n                \"title\": \"مشاركة التجارب بين المدن\",\n                \"description\": \"لقاءات تهدف إلى إبراز المبادرات والممارسات المثلى ليتم الاستفادة منها في حل مشكلات حضرية قد تعاني منها أي من المدن الأعضاء. حيث يتشكل من هذه اللقاءات مجتمع تنموي تفاعلي يسمح للبلديات اكتشاف الاهتمامات والاحتياجات الحضرية المشتركة.\"\n            },\n            {\n                \"title\": \"تبادل الخبرات بين الافراد\",\n                \"description\": \"لقاءات تهدف إلى إبراز المبادرات والممارسات المثلى ليتم الاستفادة منها في حل مشكلات حضرية قد تعاني منها أي من المدن الأعضاء. حيث يتشكل من هذه اللقاءات مجتمع تنموي تفاعلي يسمح للبلديات اكتشاف الاهتمامات والاحتياجات الحضرية المشتركة.\"\n            }\n        ]\n    },\n    \"bodyEn\": {\n        \"nav\": [\n            \"Engineering and administrative consultations\",\n            \"City experience sharing\",\n            \"Individual knowledge exchange\"\n        ],\n        \"detailImage\": \"\\/projects\\/consulting-presenter.png\",\n        \"sections\": [\n            {\n                \"title\": \"Engineering and administrative consultations\",\n                \"description\": \"These consultations enhance Arab cities' capacities in various urban fields and their ability to prepare and implement studies and projects related to urban development. Technical consultations include preparing technical documents and reference specifications for urban projects, and representing municipalities by reviewing work and reports of consulting entities.\"\n            },\n            {\n                \"title\": \"City experience sharing\",\n                \"description\": \"Meetings aimed at highlighting best initiatives and practices to address urban challenges faced by member cities, forming an interactive development community that allows municipalities to discover shared urban interests and needs.\"\n            },\n            {\n                \"title\": \"Individual knowledge exchange\",\n                \"description\": \"Meetings aimed at highlighting best initiatives and practices to address urban challenges faced by member cities, forming an interactive development community that allows municipalities to discover shared urban interests and needs.\"\n            }\n        ]\n    }\n}"
+                                                        },
+                                                        "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 5 — تفاصيل التبويب (مقدمة + محتوى الصفحة)**\n\nتبويب: **الاستشارات الفنية** — بعد إنشاء القسم في الخطوة 4\n\n**Body:** `programSectionId` (= `{{programSectionId}}`), `introAr`, `introEn`, `bodyAr`, `bodyEn`\n\n**حقول `bodyAr` / `bodyEn` لهذا التبويب:**\n| الحقل | على الموقع |\n|-------|------------|\n| `introAr/En` | فقرة المقدمة |\n| `bodyAr.nav[]` | 3 أزرار التنقل (استشارات هندسية…، مشاركة التجارب…، تبادل الخبرات…) |\n| `bodyAr.sections[]` | 3 كتل (title + description لكل كتلة) |\n| `bodyAr.detailImage` | صورة المتحدث `/projects/consulting-presenter.png` |\n\n**يظهر على الموقع:** `/ar/برامجنا/مركز-دعم-المدن?tab=consulting` → `sections.consulting`\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programSectionId` | programSectionId | \"{{programSectionId}}\" |\n| `introAr` | المقدمة بالعربية | \"يحرص مركز دعم المدن على تقديم الدعم الفني للبلديات في إد… |\n| `introEn` | المقدمة بالإنجليزية | \"The City Support Center is committed to providing techni… |\n| `bodyAr.nav` | nav | [\"استشارات هندسية وإدارية\",\"مشاركة التجارب بين المدن\",\"تب… |\n| `bodyAr.detailImage` | detailImage | \"\\/projects\\/consulting-presenter.png\" |\n| `bodyAr.sections` | sections | [{\"title\":\"استشارات هندسية وإدارية\",\"description\":\"تعزز ه… |\n| `bodyEn.nav` | nav | [\"Engineering and administrative consultations\",\"City exp… |\n| `bodyEn.detailImage` | detailImage | \"\\/projects\\/consulting-presenter.png\" |\n| `bodyEn.sections` | sections | [{\"title\":\"Engineering and administrative consultations\",… |"
+                                                    },
+                                                    "response": [],
+                                                    "event": [
+                                                        {
+                                                            "listen": "test",
+                                                            "script": {
+                                                                "type": "text/javascript",
+                                                                "exec": [
+                                                                    "pm.test('save programSectionDetailId', function () {",
+                                                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                                    "    const data = pm.response.json().data;",
+                                                                    "    pm.expect(data.id).to.be.a('number');",
+                                                                    "    pm.collectionVariables.set('programSectionDetailId', String(data.id));",
+                                                                    "});"
+                                                                ]
+                                                            }
+                                                        }
+                                                    ]
                                                 }
                                             ]
                                         },
                                         {
-                                            "name": "04 — قسم consulting — program-sections",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
+                                            "name": "خطوات 06–07 — البرنامج التنفيذي — Steps 06–07 — executive",
+                                            "description": "**تبويب: البرنامج التنفيذي** (`?tab=executive`) — خطوات 6–7\n\n**6 — قسم:** عنوان + صورة البطاقة → يحفظ `{{programSectionId}}`\n\n**7 — تفاصيل:** مقدمة + محتوى الصفحة:\n| الحقل | على الموقع |\n|-------|------------|\n| `introAr/En` | فقرة المقدمة |\n| `bodyAr.offersTitle` + `programs[]` | «يقدم البرنامج التنفيذي» + صندوقان |\n| `bodyAr.heroVideo` | فيديو `/icons/program/executive.mp4` |\n| `bodyAr.topicsTitle` + `topics[]` | كاروسيل الموضوعات (title + image) |",
+                                            "item": [
+                                                {
+                                                    "name": "06 — [قسم] البرنامج التنفيذي — عنوان + صورة — program-sections",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [
+                                                            {
+                                                                "key": "Accept-Language",
+                                                                "value": "{{locale}}",
+                                                                "description": "اللغة: ar | en"
+                                                            },
+                                                            {
+                                                                "key": "Authorization",
+                                                                "value": "Bearer {{adminToken}}",
+                                                                "description": ""
+                                                            },
+                                                            {
+                                                                "key": "Content-Type",
+                                                                "value": "application/json"
+                                                            }
+                                                        ],
+                                                        "url": {
+                                                            "raw": "{{baseUrl}}/api/admin/program-sections",
+                                                            "host": [
+                                                                "{{baseUrl}}"
+                                                            ],
+                                                            "path": [
+                                                                "api",
+                                                                "admin",
+                                                                "program-sections"
+                                                            ]
+                                                        },
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    \"programId\": \"{{programId}}\",\n    \"tabKey\": \"executive\",\n    \"sortOrder\": 2,\n    \"titleAr\": \"البرنامج التنفيذي\",\n    \"titleEn\": \"Executive Program\"\n}"
+                                                        },
+                                                        "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 6 — قسم التبويب (عنوان + صورة)**\n\nتبويب: **البرنامج التنفيذي** (`tabKey: executive`)\n\n**Body:** `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`\n\nيحفظ **`{{programSectionId}}`** — مطلوب للخطوة التالية (تفاصيل).\n\n**لا تضع** `intro` أو `body` هنا — ضعها في خطوة **تفاصيل** التبويب.\n\n**Public:** `GET /api/v1/programs/training` → `sections.executive.title`, `.image`\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programId` | معرّف البرنامج (FK) | \"{{programId}}\" |\n| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | \"executive\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |\n| `titleAr` | العنوان بالعربية | \"البرنامج التنفيذي\" |\n| `titleEn` | العنوان بالإنجليزية | \"Executive Program\" |"
                                                     },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/program-sections",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "program-sections"
+                                                    "response": [],
+                                                    "event": [
+                                                        {
+                                                            "listen": "test",
+                                                            "script": {
+                                                                "type": "text/javascript",
+                                                                "exec": [
+                                                                    "pm.test('save programSectionId', function () {",
+                                                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                                    "    const data = pm.response.json().data;",
+                                                                    "    pm.expect(data.id).to.be.a('number');",
+                                                                    "    pm.collectionVariables.set('programSectionId', String(data.id));",
+                                                                    "});"
+                                                                ]
+                                                            }
+                                                        }
                                                     ]
                                                 },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"programId\": \"{{programId}}\",\n    \"tabKey\": \"consulting\",\n    \"sortOrder\": 1,\n    \"titleAr\": \"الاستشارات الفنية ونقل الخبرات\",\n    \"titleEn\": \"Technical Consultations & Knowledge Transfer\",\n    \"imageUrl\": \"\\/projects\\/p2.png\"\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 4: **One request**: `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`. Saves `programSectionId`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programId` | معرّف البرنامج (FK) | \"{{programId}}\" |\n| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | \"consulting\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |\n| `titleAr` | العنوان بالعربية | \"الاستشارات الفنية ونقل الخبرات\" |\n| `titleEn` | العنوان بالإنجليزية | \"Technical Consultations & Knowledge Transfer\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/projects\\/p2.png\" |"
-                                            },
-                                            "response": [],
-                                            "event": [
                                                 {
-                                                    "listen": "test",
-                                                    "script": {
-                                                        "type": "text/javascript",
-                                                        "exec": [
-                                                            "pm.test('save programSectionId', function () {",
-                                                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                                                            "    const data = pm.response.json().data;",
-                                                            "    pm.expect(data.id).to.be.a('number');",
-                                                            "    pm.collectionVariables.set('programSectionId', String(data.id));",
-                                                            "});"
-                                                        ]
-                                                    }
+                                                    "name": "07 — [تفاصيل] البرنامج التنفيذي — intro + programs + topics — program-section-details",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [
+                                                            {
+                                                                "key": "Accept-Language",
+                                                                "value": "{{locale}}",
+                                                                "description": "اللغة: ar | en"
+                                                            },
+                                                            {
+                                                                "key": "Authorization",
+                                                                "value": "Bearer {{adminToken}}",
+                                                                "description": ""
+                                                            },
+                                                            {
+                                                                "key": "Content-Type",
+                                                                "value": "application/json"
+                                                            }
+                                                        ],
+                                                        "url": {
+                                                            "raw": "{{baseUrl}}/api/admin/program-section-details",
+                                                            "host": [
+                                                                "{{baseUrl}}"
+                                                            ],
+                                                            "path": [
+                                                                "api",
+                                                                "admin",
+                                                                "program-section-details"
+                                                            ]
+                                                        },
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    \"programSectionId\": \"{{programSectionId}}\",\n    \"introAr\": \"برنامج تنفيذي متخصص في التنمية الحضرية ناتج عن تعاون بين المركز وجامعات عالمية. وتم تصميم البرامج التنفيذية بهدف تعزيز منسوبي الامانات والبلديات بالمهارات والمعارف العالمية والإلمام بأحدث النظريات والممارسات في العمل البلدي كما تتاح لهم فرص الاطلاع على كيفية توظيف التكنولوجيا في حلول المشاكل الحضرية.\",\n    \"introEn\": \"An executive program specialized in urban development resulting from cooperation between the Center and international universities. Executive programs are designed to enhance municipal staff with global skills and knowledge, familiarity with the latest theories and practices in municipal work, and opportunities to learn how to employ technology in urban problem-solving.\",\n    \"bodyAr\": {\n        \"offersTitle\": \"يقدم البرنامج التنفيذي\",\n        \"programs\": [\n            \"الماجستير التنفيذي في التطوير البلدي\",\n            \"البرنامج الدولي في الابتكار والإدارة الحضرية\"\n        ],\n        \"topicsTitle\": \"يقدم البرنامج التنفيذي\",\n        \"heroVideo\": \"\\/icons\\/program\\/executive.mp4\",\n        \"topics\": [\n            {\n                \"title\": \"التغير المناخي\",\n                \"image\": \"p1.png\"\n            },\n            {\n                \"title\": \"الاقتصاد الدائري\",\n                \"image\": \"p2.png\"\n            },\n            {\n                \"title\": \"التنقل الذكي\",\n                \"image\": \"p3.png\"\n            }\n        ]\n    },\n    \"bodyEn\": {\n        \"offersTitle\": \"The executive program offers\",\n        \"programs\": [\n            \"Executive Master's in Municipal Development\",\n            \"International Program in Innovation and Urban Management\"\n        ],\n        \"topicsTitle\": \"The executive program offers\",\n        \"heroVideo\": \"\\/icons\\/program\\/executive.mp4\",\n        \"topics\": [\n            {\n                \"title\": \"Climate Change\",\n                \"image\": \"p1.png\"\n            },\n            {\n                \"title\": \"Circular Economy\",\n                \"image\": \"p2.png\"\n            },\n            {\n                \"title\": \"Smart Mobility\",\n                \"image\": \"p3.png\"\n            }\n        ]\n    }\n}"
+                                                        },
+                                                        "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 7 — تفاصيل التبويب (مقدمة + محتوى الصفحة)**\n\nتبويب: **البرنامج التنفيذي** — بعد إنشاء القسم في الخطوة 6\n\n**Body:** `programSectionId` (= `{{programSectionId}}`), `introAr`, `introEn`, `bodyAr`, `bodyEn`\n\n**حقول `bodyAr` / `bodyEn` لهذا التبويب:**\n| الحقل | على الموقع |\n|-------|------------|\n| `introAr/En` | فقرة المقدمة |\n| `bodyAr.offersTitle` + `programs[]` | «يقدم البرنامج التنفيذي» + صندوقان |\n| `bodyAr.heroVideo` | فيديو `/icons/program/executive.mp4` |\n| `bodyAr.topicsTitle` + `topics[]` | كاروسيل الموضوعات (title + image) |\n\n**يظهر على الموقع:** `/ar/برامجنا/مركز-دعم-المدن?tab=executive` → `sections.executive`\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programSectionId` | programSectionId | \"{{programSectionId}}\" |\n| `introAr` | المقدمة بالعربية | \"برنامج تنفيذي متخصص في التنمية الحضرية ناتج عن تعاون بين… |\n| `introEn` | المقدمة بالإنجليزية | \"An executive program specialized in urban development re… |\n| `bodyAr.offersTitle` | offersTitle | \"يقدم البرنامج التنفيذي\" |\n| `bodyAr.programs` | programs | [\"الماجستير التنفيذي في التطوير البلدي\",\"البرنامج الدولي … |\n| `bodyAr.topicsTitle` | topicsTitle | \"يقدم البرنامج التنفيذي\" |\n| `bodyAr.heroVideo` | heroVideo | \"\\/icons\\/program\\/executive.mp4\" |\n| `bodyAr.topics` | topics | [{\"title\":\"التغير المناخي\",\"image\":\"p1.png\"},{\"title\":\"ال… |\n| `bodyEn.offersTitle` | offersTitle | \"The executive program offers\" |\n| `bodyEn.programs` | programs | [\"Executive Master's in Municipal Development\",\"Internati… |\n| `bodyEn.topicsTitle` | topicsTitle | \"The executive program offers\" |\n| `bodyEn.heroVideo` | heroVideo | \"\\/icons\\/program\\/executive.mp4\" |\n| `bodyEn.topics` | topics | [{\"title\":\"Climate Change\",\"image\":\"p1.png\"},{\"title\":\"Ci… |"
+                                                    },
+                                                    "response": [],
+                                                    "event": [
+                                                        {
+                                                            "listen": "test",
+                                                            "script": {
+                                                                "type": "text/javascript",
+                                                                "exec": [
+                                                                    "pm.test('save programSectionDetailId', function () {",
+                                                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                                    "    const data = pm.response.json().data;",
+                                                                    "    pm.expect(data.id).to.be.a('number');",
+                                                                    "    pm.collectionVariables.set('programSectionDetailId', String(data.id));",
+                                                                    "});"
+                                                                ]
+                                                            }
+                                                        }
+                                                    ]
                                                 }
                                             ]
                                         },
                                         {
-                                            "name": "05 — تفاصيل consulting — program-section-details",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
+                                            "name": "خطوات 08–09 — خبراء مركز الدعم — Steps 08–09 — experts",
+                                            "description": "**تبويب: خبراء مركز الدعم** (`?tab=experts`) — خطوات 8–9\n\n**8 — قسم:** عنوان + صورة البطاقة → يحفظ `{{programSectionId}}`\n\n**9 — تفاصيل:** مقدمة + محتوى الصفحة:\n| الحقل | على الموقع |\n|-------|------------|\n| `bodyAr.experts[]` | بطاقات الخبراء — `{name, specialty, image}` لكل خبير |\n\n**`experts[]` في `bodyAr/En`:** الخادم ينسّخها تلقائياً إلى `experts` عند حفظ التفاصيل. العنوان في خطوة **القسم** (08).",
+                                            "item": [
+                                                {
+                                                    "name": "08 — [قسم] خبراء مركز الدعم — عنوان + صورة — program-sections",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [
+                                                            {
+                                                                "key": "Accept-Language",
+                                                                "value": "{{locale}}",
+                                                                "description": "اللغة: ar | en"
+                                                            },
+                                                            {
+                                                                "key": "Authorization",
+                                                                "value": "Bearer {{adminToken}}",
+                                                                "description": ""
+                                                            },
+                                                            {
+                                                                "key": "Content-Type",
+                                                                "value": "application/json"
+                                                            }
+                                                        ],
+                                                        "url": {
+                                                            "raw": "{{baseUrl}}/api/admin/program-sections",
+                                                            "host": [
+                                                                "{{baseUrl}}"
+                                                            ],
+                                                            "path": [
+                                                                "api",
+                                                                "admin",
+                                                                "program-sections"
+                                                            ]
+                                                        },
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    \"programId\": \"{{programId}}\",\n    \"tabKey\": \"experts\",\n    \"sortOrder\": 3,\n    \"titleAr\": \"خبراء مركز الدعم\",\n    \"titleEn\": \"Support Center Experts\"\n}"
+                                                        },
+                                                        "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 8 — قسم التبويب (عنوان + صورة)**\n\nتبويب: **خبراء مركز الدعم** (`tabKey: experts`)\n\n**Body:** `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`\n\nيحفظ **`{{programSectionId}}`** — مطلوب للخطوة التالية (تفاصيل).\n\n**لا تضع** `intro` أو `body` هنا — ضعها في خطوة **تفاصيل** التبويب.\n\n**Public:** `GET /api/v1/programs/training` → `sections.experts.title`, `.image`\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programId` | معرّف البرنامج (FK) | \"{{programId}}\" |\n| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | \"experts\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 3 |\n| `titleAr` | العنوان بالعربية | \"خبراء مركز الدعم\" |\n| `titleEn` | العنوان بالإنجليزية | \"Support Center Experts\" |"
                                                     },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/program-section-details",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "program-section-details"
+                                                    "response": [],
+                                                    "event": [
+                                                        {
+                                                            "listen": "test",
+                                                            "script": {
+                                                                "type": "text/javascript",
+                                                                "exec": [
+                                                                    "pm.test('save programSectionId', function () {",
+                                                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                                    "    const data = pm.response.json().data;",
+                                                                    "    pm.expect(data.id).to.be.a('number');",
+                                                                    "    pm.collectionVariables.set('programSectionId', String(data.id));",
+                                                                    "});"
+                                                                ]
+                                                            }
+                                                        }
                                                     ]
                                                 },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"programSectionId\": \"{{programSectionId}}\",\n    \"introAr\": \"يحرص مركز دعم المدن على تقديم الدعم الفني للبلديات في إدارة وتنفيذ المشاريع البلدية، رفع جودة الإجراءات والخدمات التي تقدمها البلديات، والاطلاع على الممارسات الفضلى في الأمانات والبلديات.\",\n    \"introEn\": \"The City Support Center is committed to providing technical support to municipalities in managing and implementing municipal projects, improving the quality of procedures and services, and learning from best practices in municipalities.\",\n    \"bodyAr\": {\n        \"nav\": [\n            \"استشارات هندسية وإدارية\",\n            \"مشاركة التجارب بين المدن\",\n            \"تبادل الخبرات بين الافراد\"\n        ],\n        \"detailImage\": \"\\/projects\\/consulting-presenter.png\",\n        \"sections\": [\n            {\n                \"title\": \"استشارات هندسية وإدارية\",\n                \"description\": \"تعزز هذه الاستشارات قدرات المدن العربية بالمجالات الحضرية المختلفة، وقدرتها على اعداد وتنفيذ الدراسات والمشاريع المتعلقة بالتنمية والتطوير الحضري. وتشمل الاستشارات الفنية اعداد الوثائق الفنية والشروط المرجعية للمشاريع الحضرية، وتمثيل الامانات والبلديات من خلال مراجعة اعمال وتقارير الجهات الاستشارية المنفذة لتلك المشاريع.\"\n            },\n            {\n                \"title\": \"مشاركة التجارب بين المدن\",\n                \"description\": \"لقاءات تهدف إلى إبراز المبادرات والممارسات المثلى ليتم الاستفادة منها في حل مشكلات حضرية قد تعاني منها أي من المدن الأعضاء. حيث يتشكل من هذه اللقاءات مجتمع تنموي تفاعلي يسمح للبلديات اكتشاف الاهتمامات والاحتياجات الحضرية المشتركة.\"\n            },\n            {\n                \"title\": \"تبادل الخبرات بين الافراد\",\n                \"description\": \"لقاءات تهدف إلى إبراز المبادرات والممارسات المثلى ليتم الاستفادة منها في حل مشكلات حضرية قد تعاني منها أي من المدن الأعضاء. حيث يتشكل من هذه اللقاءات مجتمع تنموي تفاعلي يسمح للبلديات اكتشاف الاهتمامات والاحتياجات الحضرية المشتركة.\"\n            }\n        ]\n    },\n    \"bodyEn\": {\n        \"nav\": [\n            \"Engineering and administrative consultations\",\n            \"City experience sharing\",\n            \"Individual knowledge exchange\"\n        ],\n        \"detailImage\": \"\\/projects\\/consulting-presenter.png\",\n        \"sections\": [\n            {\n                \"title\": \"Engineering and administrative consultations\",\n                \"description\": \"These consultations enhance Arab cities' capacities in various urban fields and their ability to prepare and implement studies and projects related to urban development. Technical consultations include preparing technical documents and reference specifications for urban projects, and representing municipalities by reviewing work and reports of consulting entities.\"\n            },\n            {\n                \"title\": \"City experience sharing\",\n                \"description\": \"Meetings aimed at highlighting best initiatives and practices to address urban challenges faced by member cities, forming an interactive development community that allows municipalities to discover shared urban interests and needs.\"\n            },\n            {\n                \"title\": \"Individual knowledge exchange\",\n                \"description\": \"Meetings aimed at highlighting best initiatives and practices to address urban challenges faced by member cities, forming an interactive development community that allows municipalities to discover shared urban interests and needs.\"\n            }\n        ]\n    }\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 5: Details: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageUrl` if different from section.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programSectionId` | programSectionId | \"{{programSectionId}}\" |\n| `introAr` | المقدمة بالعربية | \"يحرص مركز دعم المدن على تقديم الدعم الفني للبلديات في إد… |\n| `introEn` | المقدمة بالإنجليزية | \"The City Support Center is committed to providing techni… |\n| `bodyAr.nav` | nav | [\"استشارات هندسية وإدارية\",\"مشاركة التجارب بين المدن\",\"تب… |\n| `bodyAr.detailImage` | detailImage | \"\\/projects\\/consulting-presenter.png\" |\n| `bodyAr.sections` | sections | [{\"title\":\"استشارات هندسية وإدارية\",\"description\":\"تعزز ه… |\n| `bodyEn.nav` | nav | [\"Engineering and administrative consultations\",\"City exp… |\n| `bodyEn.detailImage` | detailImage | \"\\/projects\\/consulting-presenter.png\" |\n| `bodyEn.sections` | sections | [{\"title\":\"Engineering and administrative consultations\",… |"
-                                            },
-                                            "response": [],
-                                            "event": [
                                                 {
-                                                    "listen": "test",
-                                                    "script": {
-                                                        "type": "text/javascript",
-                                                        "exec": [
-                                                            "pm.test('save programSectionDetailId', function () {",
-                                                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                                                            "    const data = pm.response.json().data;",
-                                                            "    pm.expect(data.id).to.be.a('number');",
-                                                            "    pm.collectionVariables.set('programSectionDetailId', String(data.id));",
-                                                            "});"
-                                                        ]
-                                                    }
+                                                    "name": "09 — [تفاصيل] خبراء مركز الدعم — experts[] — program-section-details",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [
+                                                            {
+                                                                "key": "Accept-Language",
+                                                                "value": "{{locale}}",
+                                                                "description": "اللغة: ar | en"
+                                                            },
+                                                            {
+                                                                "key": "Authorization",
+                                                                "value": "Bearer {{adminToken}}",
+                                                                "description": ""
+                                                            },
+                                                            {
+                                                                "key": "Content-Type",
+                                                                "value": "application/json"
+                                                            }
+                                                        ],
+                                                        "url": {
+                                                            "raw": "{{baseUrl}}/api/admin/program-section-details",
+                                                            "host": [
+                                                                "{{baseUrl}}"
+                                                            ],
+                                                            "path": [
+                                                                "api",
+                                                                "admin",
+                                                                "program-section-details"
+                                                            ]
+                                                        },
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    \"programSectionId\": \"{{programSectionId}}\",\n    \"introAr\": null,\n    \"introEn\": null,\n    \"bodyAr\": {\n        \"experts\": [\n            {\n                \"name\": \"د. إبراهيم باهر الدين\",\n                \"specialty\": \"التصميم الحضري والتخطيط التشاركي\",\n                \"image\": \"\\/emp\\/1.png\"\n            },\n            {\n                \"name\": \"د. خالد الوزني\",\n                \"specialty\": \"سياسات التنمية الاقتصادية\",\n                \"image\": \"\\/emp\\/2.png\"\n            },\n            {\n                \"name\": \"توماس ميرفي\",\n                \"specialty\": \"عمدة سابق لمدينة بيتسبرغ\",\n                \"image\": \"\\/emp\\/3.png\"\n            }\n        ]\n    },\n    \"bodyEn\": {\n        \"experts\": [\n            {\n                \"name\": \"Dr. Ibrahim Baher El-Din\",\n                \"specialty\": \"Urban Design and Participatory Planning\",\n                \"image\": \"\\/emp\\/1.png\"\n            },\n            {\n                \"name\": \"Dr. Khaled Al-Wazni\",\n                \"specialty\": \"Economic Development Policies\",\n                \"image\": \"\\/emp\\/2.png\"\n            },\n            {\n                \"name\": \"Thomas Murphy\",\n                \"specialty\": \"Former Mayor of Pittsburgh\",\n                \"image\": \"\\/emp\\/3.png\"\n            }\n        ]\n    }\n}"
+                                                        },
+                                                        "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 9 — تفاصيل التبويب (مقدمة + محتوى الصفحة)**\n\nتبويب: **خبراء مركز الدعم** — بعد إنشاء القسم في الخطوة 8\n\n**Body:** `programSectionId` (= `{{programSectionId}}`), `introAr`, `introEn`, `bodyAr`, `bodyEn`\n\n**حقول `bodyAr` / `bodyEn` لهذا التبويب:**\n| الحقل | على الموقع |\n|-------|------------|\n| `bodyAr.experts[]` | بطاقات الخبراء — `{name, specialty, image}` لكل خبير |\n\n**يظهر على الموقع:** `/ar/برامجنا/مركز-دعم-المدن?tab=experts` → `sections.experts`\n\n**`experts[]` في `bodyAr/En`:** الخادم ينسّخها تلقائياً إلى `experts` عند حفظ التفاصيل. العنوان في خطوة **القسم** (08).\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programSectionId` | programSectionId | \"{{programSectionId}}\" |\n| `introAr` | المقدمة بالعربية | null |\n| `introEn` | المقدمة بالإنجليزية | null |\n| `bodyAr.experts` | experts | [{\"name\":\"د. إبراهيم باهر الدين\",\"specialty\":\"التصميم الح… |\n| `bodyEn.experts` | experts | [{\"name\":\"Dr. Ibrahim Baher El-Din\",\"specialty\":\"Urban De… |"
+                                                    },
+                                                    "response": [],
+                                                    "event": [
+                                                        {
+                                                            "listen": "test",
+                                                            "script": {
+                                                                "type": "text/javascript",
+                                                                "exec": [
+                                                                    "pm.test('save programSectionDetailId', function () {",
+                                                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                                    "    const data = pm.response.json().data;",
+                                                                    "    pm.expect(data.id).to.be.a('number');",
+                                                                    "    pm.collectionVariables.set('programSectionDetailId', String(data.id));",
+                                                                    "});"
+                                                                ]
+                                                            }
+                                                        }
+                                                    ]
                                                 }
                                             ]
-                                        },
-                                        {
-                                            "name": "06 — قسم executive — program-sections",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
-                                                    },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/program-sections",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "program-sections"
-                                                    ]
-                                                },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"programId\": \"{{programId}}\",\n    \"tabKey\": \"executive\",\n    \"sortOrder\": 2,\n    \"titleAr\": \"البرنامج التنفيذي\",\n    \"titleEn\": \"Executive Program\"\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 6: **One request**: `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`. Saves `programSectionId`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programId` | معرّف البرنامج (FK) | \"{{programId}}\" |\n| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | \"executive\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |\n| `titleAr` | العنوان بالعربية | \"البرنامج التنفيذي\" |\n| `titleEn` | العنوان بالإنجليزية | \"Executive Program\" |"
-                                            },
-                                            "response": [],
-                                            "event": [
-                                                {
-                                                    "listen": "test",
-                                                    "script": {
-                                                        "type": "text/javascript",
-                                                        "exec": [
-                                                            "pm.test('save programSectionId', function () {",
-                                                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                                                            "    const data = pm.response.json().data;",
-                                                            "    pm.expect(data.id).to.be.a('number');",
-                                                            "    pm.collectionVariables.set('programSectionId', String(data.id));",
-                                                            "});"
-                                                        ]
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "name": "07 — تفاصيل executive — program-section-details",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
-                                                    },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/program-section-details",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "program-section-details"
-                                                    ]
-                                                },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"programSectionId\": \"{{programSectionId}}\",\n    \"introAr\": \"برنامج تنفيذي متخصص في التنمية الحضرية ناتج عن تعاون بين المركز وجامعات عالمية. وتم تصميم البرامج التنفيذية بهدف تعزيز منسوبي الامانات والبلديات بالمهارات والمعارف العالمية والإلمام بأحدث النظريات والممارسات في العمل البلدي كما تتاح لهم فرص الاطلاع على كيفية توظيف التكنولوجيا في حلول المشاكل الحضرية.\",\n    \"introEn\": \"An executive program specialized in urban development resulting from cooperation between the Center and international universities. Executive programs are designed to enhance municipal staff with global skills and knowledge, familiarity with the latest theories and practices in municipal work, and opportunities to learn how to employ technology in urban problem-solving.\",\n    \"bodyAr\": {\n        \"offersTitle\": \"يقدم البرنامج التنفيذي\",\n        \"programs\": [\n            \"الماجستير التنفيذي في التطوير البلدي\",\n            \"البرنامج الدولي في الابتكار والإدارة الحضرية\"\n        ],\n        \"topicsTitle\": \"يقدم البرنامج التنفيذي\",\n        \"heroVideo\": \"\\/icons\\/program\\/executive.mp4\",\n        \"topics\": [\n            {\n                \"title\": \"التغير المناخي\",\n                \"image\": \"p1.png\"\n            },\n            {\n                \"title\": \"الاقتصاد الدائري\",\n                \"image\": \"p2.png\"\n            },\n            {\n                \"title\": \"التنقل الذكي\",\n                \"image\": \"p3.png\"\n            }\n        ]\n    },\n    \"bodyEn\": {\n        \"offersTitle\": \"The executive program offers\",\n        \"programs\": [\n            \"Executive Master's in Municipal Development\",\n            \"International Program in Innovation and Urban Management\"\n        ],\n        \"topicsTitle\": \"The executive program offers\",\n        \"heroVideo\": \"\\/icons\\/program\\/executive.mp4\",\n        \"topics\": [\n            {\n                \"title\": \"Climate Change\",\n                \"image\": \"p1.png\"\n            },\n            {\n                \"title\": \"Circular Economy\",\n                \"image\": \"p2.png\"\n            },\n            {\n                \"title\": \"Smart Mobility\",\n                \"image\": \"p3.png\"\n            }\n        ]\n    }\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 7: Details: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageUrl` if different from section.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programSectionId` | programSectionId | \"{{programSectionId}}\" |\n| `introAr` | المقدمة بالعربية | \"برنامج تنفيذي متخصص في التنمية الحضرية ناتج عن تعاون بين… |\n| `introEn` | المقدمة بالإنجليزية | \"An executive program specialized in urban development re… |\n| `bodyAr.offersTitle` | offersTitle | \"يقدم البرنامج التنفيذي\" |\n| `bodyAr.programs` | programs | [\"الماجستير التنفيذي في التطوير البلدي\",\"البرنامج الدولي … |\n| `bodyAr.topicsTitle` | topicsTitle | \"يقدم البرنامج التنفيذي\" |\n| `bodyAr.heroVideo` | heroVideo | \"\\/icons\\/program\\/executive.mp4\" |\n| `bodyAr.topics` | topics | [{\"title\":\"التغير المناخي\",\"image\":\"p1.png\"},{\"title\":\"ال… |\n| `bodyEn.offersTitle` | offersTitle | \"The executive program offers\" |\n| `bodyEn.programs` | programs | [\"Executive Master's in Municipal Development\",\"Internati… |\n| `bodyEn.topicsTitle` | topicsTitle | \"The executive program offers\" |\n| `bodyEn.heroVideo` | heroVideo | \"\\/icons\\/program\\/executive.mp4\" |\n| `bodyEn.topics` | topics | [{\"title\":\"Climate Change\",\"image\":\"p1.png\"},{\"title\":\"Ci… |"
-                                            },
-                                            "response": [],
-                                            "event": [
-                                                {
-                                                    "listen": "test",
-                                                    "script": {
-                                                        "type": "text/javascript",
-                                                        "exec": [
-                                                            "pm.test('save programSectionDetailId', function () {",
-                                                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                                                            "    const data = pm.response.json().data;",
-                                                            "    pm.expect(data.id).to.be.a('number');",
-                                                            "    pm.collectionVariables.set('programSectionDetailId', String(data.id));",
-                                                            "});"
-                                                        ]
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "name": "08 — قسم experts — program-sections",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
-                                                    },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/program-sections",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "program-sections"
-                                                    ]
-                                                },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"programId\": \"{{programId}}\",\n    \"tabKey\": \"experts\",\n    \"sortOrder\": 3,\n    \"titleAr\": \"خبراء مركز الدعم\",\n    \"titleEn\": \"Support Center Experts\"\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 8: **One request**: `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`. Saves `programSectionId`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programId` | معرّف البرنامج (FK) | \"{{programId}}\" |\n| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | \"experts\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 3 |\n| `titleAr` | العنوان بالعربية | \"خبراء مركز الدعم\" |\n| `titleEn` | العنوان بالإنجليزية | \"Support Center Experts\" |"
-                                            },
-                                            "response": [],
-                                            "event": [
-                                                {
-                                                    "listen": "test",
-                                                    "script": {
-                                                        "type": "text/javascript",
-                                                        "exec": [
-                                                            "pm.test('save programSectionId', function () {",
-                                                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                                                            "    const data = pm.response.json().data;",
-                                                            "    pm.expect(data.id).to.be.a('number');",
-                                                            "    pm.collectionVariables.set('programSectionId', String(data.id));",
-                                                            "});"
-                                                        ]
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "name": "09 — تفاصيل experts — program-section-details",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
-                                                    },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/program-section-details",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "program-section-details"
-                                                    ]
-                                                },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"programSectionId\": \"{{programSectionId}}\",\n    \"introAr\": null,\n    \"introEn\": null,\n    \"bodyAr\": {\n        \"title\": \"خبراء مركز الدعم\"\n    },\n    \"bodyEn\": {\n        \"title\": \"Support Center Experts\"\n    }\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 9: Details: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageUrl` if different from section.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programSectionId` | programSectionId | \"{{programSectionId}}\" |\n| `introAr` | المقدمة بالعربية | null |\n| `introEn` | المقدمة بالإنجليزية | null |\n| `bodyAr.title` | العنوان | \"خبراء مركز الدعم\" |\n| `bodyEn.title` | العنوان | \"Support Center Experts\" |"
-                                            },
-                                            "response": [],
-                                            "event": [
-                                                {
-                                                    "listen": "test",
-                                                    "script": {
-                                                        "type": "text/javascript",
-                                                        "exec": [
-                                                            "pm.test('save programSectionDetailId', function () {",
-                                                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                                                            "    const data = pm.response.json().data;",
-                                                            "    pm.expect(data.id).to.be.a('number');",
-                                                            "    pm.collectionVariables.set('programSectionDetailId', String(data.id));",
-                                                            "});"
-                                                        ]
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "name": "10 — دورة تدريبية — التخطيط والتطوير الحضري",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
-                                                    },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/training-courses",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "training-courses"
-                                                    ]
-                                                },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"titleAr\": \"التخطيط والتطوير الحضري\",\n    \"titleEn\": \"Urban Planning and Development\",\n    \"countAr\": \"3 دورات تدريبية\",\n    \"countEn\": \"3 training courses\",\n    \"sortOrder\": 0\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 10: Course row on ?tab=trainingPrograms (البرامج التدريبية ٢٠٢٣–٢٠٢٤ grid). Merged into `sections.trainingPrograms.courses[]`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `titleAr` | العنوان بالعربية | \"التخطيط والتطوير الحضري\" |\n| `titleEn` | العنوان بالإنجليزية | \"Urban Planning and Development\" |\n| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | \"3 دورات تدريبية\" |\n| `countEn` | العدد/التعداد بالإنجليزية | \"3 training courses\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
-                                            },
-                                            "response": []
-                                        },
-                                        {
-                                            "name": "11 — دورة تدريبية — التخطيط والتطوير الحضري",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
-                                                    },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/training-courses",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "training-courses"
-                                                    ]
-                                                },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"titleAr\": \"التخطيط والتطوير الحضري\",\n    \"titleEn\": \"Urban Planning and Development\",\n    \"countAr\": \"3 دورات تدريبية\",\n    \"countEn\": \"3 training courses\",\n    \"sortOrder\": 3\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 11: Course row on ?tab=trainingPrograms (البرامج التدريبية ٢٠٢٣–٢٠٢٤ grid). Merged into `sections.trainingPrograms.courses[]`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `titleAr` | العنوان بالعربية | \"التخطيط والتطوير الحضري\" |\n| `titleEn` | العنوان بالإنجليزية | \"Urban Planning and Development\" |\n| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | \"3 دورات تدريبية\" |\n| `countEn` | العدد/التعداد بالإنجليزية | \"3 training courses\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 3 |"
-                                            },
-                                            "response": []
-                                        },
-                                        {
-                                            "name": "12 — دورة تدريبية — تطوير العمل البلدي للقيادات",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
-                                                    },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/training-courses",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "training-courses"
-                                                    ]
-                                                },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"titleAr\": \"تطوير العمل البلدي للقيادات\",\n    \"titleEn\": \"Municipal Leadership Development\",\n    \"countAr\": \"3 دورات تدريبية\",\n    \"countEn\": \"3 training courses\",\n    \"sortOrder\": 1\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 12: Course row on ?tab=trainingPrograms (البرامج التدريبية ٢٠٢٣–٢٠٢٤ grid). Merged into `sections.trainingPrograms.courses[]`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `titleAr` | العنوان بالعربية | \"تطوير العمل البلدي للقيادات\" |\n| `titleEn` | العنوان بالإنجليزية | \"Municipal Leadership Development\" |\n| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | \"3 دورات تدريبية\" |\n| `countEn` | العدد/التعداد بالإنجليزية | \"3 training courses\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |"
-                                            },
-                                            "response": []
-                                        },
-                                        {
-                                            "name": "13 — دورة تدريبية — تطوير العمل البلدي للقيادات",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
-                                                    },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/training-courses",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "training-courses"
-                                                    ]
-                                                },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"titleAr\": \"تطوير العمل البلدي للقيادات\",\n    \"titleEn\": \"Municipal Leadership Development\",\n    \"countAr\": \"3 دورات تدريبية\",\n    \"countEn\": \"3 training courses\",\n    \"sortOrder\": 4\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 13: Course row on ?tab=trainingPrograms (البرامج التدريبية ٢٠٢٣–٢٠٢٤ grid). Merged into `sections.trainingPrograms.courses[]`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `titleAr` | العنوان بالعربية | \"تطوير العمل البلدي للقيادات\" |\n| `titleEn` | العنوان بالإنجليزية | \"Municipal Leadership Development\" |\n| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | \"3 دورات تدريبية\" |\n| `countEn` | العدد/التعداد بالإنجليزية | \"3 training courses\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 4 |"
-                                            },
-                                            "response": []
-                                        },
-                                        {
-                                            "name": "14 — دورة تدريبية — الاستثمار في القطاع البلدي",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
-                                                    },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/training-courses",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "training-courses"
-                                                    ]
-                                                },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"titleAr\": \"الاستثمار في القطاع البلدي\",\n    \"titleEn\": \"Investment in the Municipal Sector\",\n    \"countAr\": \"3 دورات تدريبية\",\n    \"countEn\": \"3 training courses\",\n    \"sortOrder\": 2\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 14: Course row on ?tab=trainingPrograms (البرامج التدريبية ٢٠٢٣–٢٠٢٤ grid). Merged into `sections.trainingPrograms.courses[]`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `titleAr` | العنوان بالعربية | \"الاستثمار في القطاع البلدي\" |\n| `titleEn` | العنوان بالإنجليزية | \"Investment in the Municipal Sector\" |\n| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | \"3 دورات تدريبية\" |\n| `countEn` | العدد/التعداد بالإنجليزية | \"3 training courses\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |"
-                                            },
-                                            "response": []
-                                        },
-                                        {
-                                            "name": "15 — دورة تدريبية — الاستثمار في القطاع البلدي",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
-                                                    },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/training-courses",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "training-courses"
-                                                    ]
-                                                },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"titleAr\": \"الاستثمار في القطاع البلدي\",\n    \"titleEn\": \"Investment in the Municipal Sector\",\n    \"countAr\": \"3 دورات تدريبية\",\n    \"countEn\": \"3 training courses\",\n    \"sortOrder\": 5\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 15: Course row on ?tab=trainingPrograms (البرامج التدريبية ٢٠٢٣–٢٠٢٤ grid). Merged into `sections.trainingPrograms.courses[]`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `titleAr` | العنوان بالعربية | \"الاستثمار في القطاع البلدي\" |\n| `titleEn` | العنوان بالإنجليزية | \"Investment in the Municipal Sector\" |\n| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | \"3 دورات تدريبية\" |\n| `countEn` | العدد/التعداد بالإنجليزية | \"3 training courses\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 5 |"
-                                            },
-                                            "response": []
-                                        },
-                                        {
-                                            "name": "16 — خبير — د. إبراهيم باهر الدين",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
-                                                    },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/experts",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "experts"
-                                                    ]
-                                                },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"nameAr\": \"د. إبراهيم باهر الدين\",\n    \"nameEn\": \"Dr. Ibrahim Baher El-Din\",\n    \"specialtyAr\": \"التصميم الحضري والتخطيط التشاركي\",\n    \"specialtyEn\": \"Urban Design and Participatory Planning\",\n    \"imageUrl\": \"\\/emp\\/1.png\",\n    \"sortOrder\": 0\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 16: Expert card on ?tab=experts carousel. Merged into `sections.experts.experts[]`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `nameAr` | الاسم بالعربية | \"د. إبراهيم باهر الدين\" |\n| `nameEn` | الاسم بالإنجليزية | \"Dr. Ibrahim Baher El-Din\" |\n| `specialtyAr` | specialtyAr | \"التصميم الحضري والتخطيط التشاركي\" |\n| `specialtyEn` | specialtyEn | \"Urban Design and Participatory Planning\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/emp\\/1.png\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
-                                            },
-                                            "response": []
-                                        },
-                                        {
-                                            "name": "17 — خبير — د. خالد الوزني",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
-                                                    },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/experts",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "experts"
-                                                    ]
-                                                },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"nameAr\": \"د. خالد الوزني\",\n    \"nameEn\": \"Dr. Khaled Al-Wazni\",\n    \"specialtyAr\": \"سياسات التنمية الاقتصادية\",\n    \"specialtyEn\": \"Economic Development Policies\",\n    \"imageUrl\": \"\\/emp\\/2.png\",\n    \"sortOrder\": 1\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 17: Expert card on ?tab=experts carousel. Merged into `sections.experts.experts[]`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `nameAr` | الاسم بالعربية | \"د. خالد الوزني\" |\n| `nameEn` | الاسم بالإنجليزية | \"Dr. Khaled Al-Wazni\" |\n| `specialtyAr` | specialtyAr | \"سياسات التنمية الاقتصادية\" |\n| `specialtyEn` | specialtyEn | \"Economic Development Policies\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/emp\\/2.png\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |"
-                                            },
-                                            "response": []
-                                        },
-                                        {
-                                            "name": "18 — خبير — توماس ميرفي",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
-                                                    },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/experts",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "experts"
-                                                    ]
-                                                },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"nameAr\": \"توماس ميرفي\",\n    \"nameEn\": \"Thomas Murphy\",\n    \"specialtyAr\": \"عمدة سابق لمدينة بيتسبرغ\",\n    \"specialtyEn\": \"Former Mayor of Pittsburgh\",\n    \"imageUrl\": \"\\/emp\\/3.png\",\n    \"sortOrder\": 2\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 18: Expert card on ?tab=experts carousel. Merged into `sections.experts.experts[]`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `nameAr` | الاسم بالعربية | \"توماس ميرفي\" |\n| `nameEn` | الاسم بالإنجليزية | \"Thomas Murphy\" |\n| `specialtyAr` | specialtyAr | \"عمدة سابق لمدينة بيتسبرغ\" |\n| `specialtyEn` | specialtyEn | \"Former Mayor of Pittsburgh\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/emp\\/3.png\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |"
-                                            },
-                                            "response": []
                                         }
                                     ]
                                 },
@@ -9548,7 +9221,7 @@
                                                         }
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض قائمة paginated مع حقول ثنائية اللغة (*Ar/*En).\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nTraining grid on ?tab=trainingPrograms. Full seed: **بناء برنامج التدريب** steps 10–15.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً."
+                                                "description": "**الغرض | Purpose:** عرض قائمة paginated مع حقول ثنائية اللغة (*Ar/*En).\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nTraining grid on ?tab=trainingPrograms. Build guide: `courses[]` inside **program-section-details** step 03. Optional row edits here.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً."
                                             },
                                             "response": []
                                         },
@@ -9587,7 +9260,7 @@
                                                     "mode": "raw",
                                                     "raw": "{\n    \"titleAr\": \"التخطيط والتطوير الحضري\",\n    \"titleEn\": \"Urban Planning and Development\",\n    \"countAr\": \"3 دورات تدريبية\",\n    \"countEn\": \"3 training courses\",\n    \"sortOrder\": 0\n}"
                                                 },
-                                                "description": "**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nTraining grid on ?tab=trainingPrograms. Full seed: **بناء برنامج التدريب** steps 10–15.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `titleAr` | العنوان بالعربية | \"التخطيط والتطوير الحضري\" |\n| `titleEn` | العنوان بالإنجليزية | \"Urban Planning and Development\" |\n| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | \"3 دورات تدريبية\" |\n| `countEn` | العدد/التعداد بالإنجليزية | \"3 training courses\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
+                                                "description": "**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nTraining grid on ?tab=trainingPrograms. Build guide: `courses[]` inside **program-section-details** step 03. Optional row edits here.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `titleAr` | العنوان بالعربية | \"التخطيط والتطوير الحضري\" |\n| `titleEn` | العنوان بالإنجليزية | \"Urban Planning and Development\" |\n| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | \"3 دورات تدريبية\" |\n| `countEn` | العدد/التعداد بالإنجليزية | \"3 training courses\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
                                             },
                                             "response": []
                                         },
@@ -9619,7 +9292,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nTraining grid on ?tab=trainingPrograms. Full seed: **بناء برنامج التدريب** steps 10–15.استخدم `id` من استجابة الإنشاء."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nTraining grid on ?tab=trainingPrograms. Build guide: `courses[]` inside **program-section-details** step 03. Optional row edits here.استخدم `id` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -9659,7 +9332,7 @@
                                                     "mode": "raw",
                                                     "raw": "{\n    \"titleAr\": \"التخطيط والتطوير الحضري\",\n    \"titleEn\": \"Urban Planning and Development\",\n    \"countAr\": \"3 دورات تدريبية\",\n    \"countEn\": \"3 training courses\",\n    \"sortOrder\": 0\n}"
                                                 },
-                                                "description": "**الغرض | Purpose:** تحديث سجل موجود (PUT/PATCH).\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nTraining grid on ?tab=trainingPrograms. Full seed: **بناء برنامج التدريب** steps 10–15.**جسم التحديث كامل** — نفس حقول الإنشاء.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `titleAr` | العنوان بالعربية | \"التخطيط والتطوير الحضري\" |\n| `titleEn` | العنوان بالإنجليزية | \"Urban Planning and Development\" |\n| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | \"3 دورات تدريبية\" |\n| `countEn` | العدد/التعداد بالإنجليزية | \"3 training courses\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
+                                                "description": "**الغرض | Purpose:** تحديث سجل موجود (PUT/PATCH).\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nTraining grid on ?tab=trainingPrograms. Build guide: `courses[]` inside **program-section-details** step 03. Optional row edits here.**جسم التحديث كامل** — نفس حقول الإنشاء.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `titleAr` | العنوان بالعربية | \"التخطيط والتطوير الحضري\" |\n| `titleEn` | العنوان بالإنجليزية | \"Urban Planning and Development\" |\n| `countAr` | العدد/التعداد بالعربية (مثل: 3 دورات) | \"3 دورات تدريبية\" |\n| `countEn` | العدد/التعداد بالإنجليزية | \"3 training courses\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
                                             },
                                             "response": []
                                         },
@@ -9691,7 +9364,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** حذف سجل نهائياً.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nTraining grid on ?tab=trainingPrograms. Full seed: **بناء برنامج التدريب** steps 10–15."
+                                                "description": "**الغرض | Purpose:** حذف سجل نهائياً.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nTraining grid on ?tab=trainingPrograms. Build guide: `courses[]` inside **program-section-details** step 03. Optional row edits here."
                                             },
                                             "response": []
                                         },
@@ -9788,7 +9461,7 @@
                                                         }
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض قائمة paginated مع حقول ثنائية اللغة (*Ar/*En).\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nExperts carousel on ?tab=experts. Full seed: **بناء برنامج التدريب** steps 16–18.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً."
+                                                "description": "**الغرض | Purpose:** عرض قائمة paginated مع حقول ثنائية اللغة (*Ar/*En).\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nExperts carousel on ?tab=experts. Build guide: `experts[]` inside **program-section-details** step 09. Optional row edits here.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً."
                                             },
                                             "response": []
                                         },
@@ -9827,7 +9500,7 @@
                                                     "mode": "raw",
                                                     "raw": "{\n    \"nameAr\": \"د. إبراهيم باهر الدين\",\n    \"nameEn\": \"Dr. Ibrahim Baher El-Din\",\n    \"specialtyAr\": \"التصميم الحضري والتخطيط التشاركي\",\n    \"specialtyEn\": \"Urban Design and Participatory Planning\",\n    \"imageUrl\": \"\\/emp\\/1.png\",\n    \"sortOrder\": 0\n}"
                                                 },
-                                                "description": "**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nExperts carousel on ?tab=experts. Full seed: **بناء برنامج التدريب** steps 16–18.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `nameAr` | الاسم بالعربية | \"د. إبراهيم باهر الدين\" |\n| `nameEn` | الاسم بالإنجليزية | \"Dr. Ibrahim Baher El-Din\" |\n| `specialtyAr` | specialtyAr | \"التصميم الحضري والتخطيط التشاركي\" |\n| `specialtyEn` | specialtyEn | \"Urban Design and Participatory Planning\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/emp\\/1.png\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
+                                                "description": "**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nExperts carousel on ?tab=experts. Build guide: `experts[]` inside **program-section-details** step 09. Optional row edits here.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `nameAr` | الاسم بالعربية | \"د. إبراهيم باهر الدين\" |\n| `nameEn` | الاسم بالإنجليزية | \"Dr. Ibrahim Baher El-Din\" |\n| `specialtyAr` | specialtyAr | \"التصميم الحضري والتخطيط التشاركي\" |\n| `specialtyEn` | specialtyEn | \"Urban Design and Participatory Planning\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/emp\\/1.png\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
                                             },
                                             "response": []
                                         },
@@ -9859,7 +9532,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nExperts carousel on ?tab=experts. Full seed: **بناء برنامج التدريب** steps 16–18.استخدم `id` من استجابة الإنشاء."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nExperts carousel on ?tab=experts. Build guide: `experts[]` inside **program-section-details** step 09. Optional row edits here.استخدم `id` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -9899,7 +9572,7 @@
                                                     "mode": "raw",
                                                     "raw": "{\n    \"nameAr\": \"د. إبراهيم باهر الدين\",\n    \"nameEn\": \"Dr. Ibrahim Baher El-Din\",\n    \"specialtyAr\": \"التصميم الحضري والتخطيط التشاركي\",\n    \"specialtyEn\": \"Urban Design and Participatory Planning\",\n    \"imageUrl\": \"\\/emp\\/1.png\",\n    \"sortOrder\": 0\n}"
                                                 },
-                                                "description": "**الغرض | Purpose:** تحديث سجل موجود (PUT/PATCH).\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nExperts carousel on ?tab=experts. Full seed: **بناء برنامج التدريب** steps 16–18.**جسم التحديث كامل** — نفس حقول الإنشاء.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `nameAr` | الاسم بالعربية | \"د. إبراهيم باهر الدين\" |\n| `nameEn` | الاسم بالإنجليزية | \"Dr. Ibrahim Baher El-Din\" |\n| `specialtyAr` | specialtyAr | \"التصميم الحضري والتخطيط التشاركي\" |\n| `specialtyEn` | specialtyEn | \"Urban Design and Participatory Planning\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/emp\\/1.png\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
+                                                "description": "**الغرض | Purpose:** تحديث سجل موجود (PUT/PATCH).\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nExperts carousel on ?tab=experts. Build guide: `experts[]` inside **program-section-details** step 09. Optional row edits here.**جسم التحديث كامل** — نفس حقول الإنشاء.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `nameAr` | الاسم بالعربية | \"د. إبراهيم باهر الدين\" |\n| `nameEn` | الاسم بالإنجليزية | \"Dr. Ibrahim Baher El-Din\" |\n| `specialtyAr` | specialtyAr | \"التصميم الحضري والتخطيط التشاركي\" |\n| `specialtyEn` | specialtyEn | \"Urban Design and Participatory Planning\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/emp\\/1.png\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
                                             },
                                             "response": []
                                         },
@@ -9931,7 +9604,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** حذف سجل نهائياً.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nExperts carousel on ?tab=experts. Full seed: **بناء برنامج التدريب** steps 16–18."
+                                                "description": "**الغرض | Purpose:** حذف سجل نهائياً.\n\n**Public match:** `GET /api/v1/programs/training` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nExperts carousel on ?tab=experts. Build guide: `experts[]` inside **program-section-details** step 09. Optional row edits here."
                                             },
                                             "response": []
                                         },

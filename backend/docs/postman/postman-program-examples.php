@@ -57,7 +57,7 @@ function postmanProgramSectionPairs(string $slug): array
 }
 
 /**
- * Body fields stored in program_section_details (matches ProgramsSeeder).
+ * Body fields stored in program_section_details (matches ProgramsSeeder — strips nested rows).
  *
  * @param  array<string, mixed>  $section
  * @return array<string, mixed>
@@ -83,15 +83,40 @@ function postmanSectionBodyFromProgramsJson(array $section, string $tabKey): arr
 }
 
 /**
+ * Full tab body for program-section-details — same shape as messages/{locale}/programs.json.
+ *
+ * @param  array<string, mixed>  $section
+ * @return array<string, mixed>
+ */
+function postmanSectionFullBodyFromProgramsJson(array $section, string $tabKey): array
+{
+    if ($tabKey === 'experts') {
+        return [
+            'experts' => $section['experts'] ?? [],
+        ];
+    }
+
+    $body = $section;
+    unset($body['title'], $body['intro'], $body['image']);
+
+    if ($tabKey === 'developmentPortal' && isset($body['directory']['rows'])) {
+        unset($body['directory']['rows']);
+    }
+
+    return $body;
+}
+
+/**
  * Full section row split into shell / about / details layers.
  *
  * @return array<string, mixed>
  */
-function postmanSectionLegacyFromJson(string $slug, string $tabKey, int $sortOrder): array
+function postmanSectionLegacyFromJson(string $slug, string $tabKey, int $sortOrder, bool $fullBody = false): array
 {
     $jsonKey = postmanProgramJsonKey($slug);
     $arSection = postmanLoadProgramsJson('ar')[$jsonKey][$tabKey] ?? [];
     $enSection = postmanLoadProgramsJson('en')[$jsonKey][$tabKey] ?? [];
+    $bodyFn = $fullBody ? 'postmanSectionFullBodyFromProgramsJson' : 'postmanSectionBodyFromProgramsJson';
 
     return [
         'programId' => '{{programId}}',
@@ -102,9 +127,19 @@ function postmanSectionLegacyFromJson(string $slug, string $tabKey, int $sortOrd
         'introAr' => $arSection['intro'] ?? null,
         'introEn' => $enSection['intro'] ?? null,
         'imageUrl' => $arSection['image'] ?? null,
-        'bodyAr' => postmanSectionBodyFromProgramsJson($arSection, $tabKey),
-        'bodyEn' => postmanSectionBodyFromProgramsJson($enSection, $tabKey),
+        'bodyAr' => $bodyFn($arSection, $tabKey),
+        'bodyEn' => $bodyFn($enSection, $tabKey),
     ];
+}
+
+/**
+ * Training build guide — details body includes courses[] / experts[] (one POST per tab).
+ *
+ * @return array<string, mixed>
+ */
+function postmanTrainingSectionLegacyFromJson(string $tabKey, int $sortOrder): array
+{
+    return postmanSectionLegacyFromJson('training', $tabKey, $sortOrder, fullBody: true);
 }
 
 /**
@@ -211,7 +246,7 @@ function postmanDevelopmentPortalSectionBody(): array
 }
 
 /**
- * Course rows on ?tab=trainingPrograms (second screen) — NOT stored inside program-section.
+ * Course rows — used for CRUD reference examples only (build guide uses bodyAr.courses[]).
  *
  * @return array<int, array<string, mixed>>
  */
@@ -234,7 +269,7 @@ function postmanTrainingCourses(): array
 }
 
 /**
- * Expert carousel on ?tab=experts — NOT stored inside program-section body.
+ * Expert carousel rows — used for CRUD reference examples only (build guide uses bodyAr.experts[]).
  *
  * @return array<int, array<string, mixed>>
  */
@@ -498,32 +533,163 @@ function postmanPartnershipsSectionBody(string $tabKey, int $sortOrder): array
     );
 }
 
+function postmanTrainingTabLabelAr(string $tabKey): string
+{
+    return match ($tabKey) {
+        'trainingPrograms' => 'البرامج التدريبية',
+        'consulting' => 'الاستشارات الفنية',
+        'executive' => 'البرنامج التنفيذي',
+        'experts' => 'خبراء مركز الدعم',
+        default => $tabKey,
+    };
+}
+
+function postmanTrainingTabStepRange(string $tabKey, int $sectionStep, int $detailsStep): int
+{
+    return $detailsStep;
+}
+
+function postmanTrainingDetailsStepName(string $tabKey, int $step): string
+{
+    $label = postmanTrainingTabLabelAr($tabKey);
+    $fields = match ($tabKey) {
+        'trainingPrograms' => 'intro + formats + courses[]',
+        'consulting' => 'intro + nav + sections',
+        'executive' => 'intro + programs + topics',
+        'experts' => 'experts[]',
+        default => 'intro + body',
+    };
+
+    return sprintf('%02d — [تفاصيل] %s — %s — program-section-details', $step, $label, $fields);
+}
+
+function postmanTrainingBuildFolderGuide(): string
+{
+    return <<<'MD'
+### كيف تبني كل تبويب؟ (خطوتان)
+
+| الخطوة | Endpoint | ماذا تخزّن؟ | أين يظهر على الموقع؟ |
+|--------|----------|------------|----------------------|
+| **أ — قسم** | `POST /api/admin/program-sections` | `programId`, `tabKey`, **عنوان التبويب**, **صورة البطاقة** | بطاقات «اقسام البرنامج» + صورة أعلى صفحة التبويب |
+| **ب — تفاصيل** | `POST /api/admin/program-section-details` | `programSectionId`, **المقدمة** (`intro`), **محتوى الصفحة** (`bodyAr/En`) | محتوى صفحة `?tab=` عند النقر على التبويب |
+
+**مهم:** `programSectionId` يُحفظ تلقائياً بعد خطوة **أ** — استخدمه في خطوة **ب** (`{{programSectionId}}`).
+
+**تبويب البرامج التدريبية:** ضع `courses[]` داخل **`bodyAr` / `bodyEn`** في خطوة التفاصيل (03) — **لا** طلبات منفصلة.
+
+**تبويب الخبراء:** ضع `experts[]` داخل **`bodyAr` / `bodyEn`** في خطوة التفاصيل (09) — **لا** طلبات منفصلة.
+
+الخادم ينسّخ `courses[]` و `experts[]` تلقائياً إلى جداولها عند حفظ التفاصيل.
+
+**تسميات الصفحة** (`back`, `sectionsLabel`): من ملفات i18n — **لا** تُنشأ عبر Admin.
+
+Verify: `GET /api/v1/programs/training` + `Accept-Language: ar`
+MD;
+}
+
+function postmanTrainingTabFolderDescription(string $tabKey, int $sectionStep, int $detailsStep, int $lastStep): string
+{
+    $label = postmanTrainingTabLabelAr($tabKey);
+    $bodyFields = postmanTrainingDetailsBodyFieldsGuide($tabKey);
+    $extra = postmanTrainingTabExtraRequestsGuide($tabKey, $detailsStep);
+
+    $extraBlock = $extra !== '' ? "\n\n{$extra}" : '';
+
+    return "**تبويب: {$label}** (`?tab={$tabKey}`) — خطوات {$sectionStep}–{$lastStep}\n\n"
+        ."**{$sectionStep} — قسم:** عنوان + صورة البطاقة → يحفظ `{{programSectionId}}`\n\n"
+        ."**{$detailsStep} — تفاصيل:** مقدمة + محتوى الصفحة:\n{$bodyFields}"
+        .$extraBlock;
+}
+
+function postmanTrainingSectionStepDescription(string $tabKey, int $step): string
+{
+    $label = postmanTrainingTabLabelAr($tabKey);
+
+    return "**الخطوة {$step} — قسم التبويب (عنوان + صورة)**\n\n"
+        ."تبويب: **{$label}** (`tabKey: {$tabKey}`)\n\n"
+        ."**Body:** `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`\n\n"
+        ."يحفظ **`{{programSectionId}}`** — مطلوب للخطوة التالية (تفاصيل).\n\n"
+        ."**لا تضع** `intro` أو `body` هنا — ضعها في خطوة **تفاصيل** التبويب.\n\n"
+        ."**Public:** `GET /api/v1/programs/training` → `sections.{$tabKey}.title`, `.image`";
+}
+
+function postmanTrainingDetailsStepDescription(string $tabKey, int $step): string
+{
+    $label = postmanTrainingTabLabelAr($tabKey);
+    $bodyFields = postmanTrainingDetailsBodyFieldsGuide($tabKey);
+    $extra = postmanTrainingTabExtraRequestsGuide($tabKey, $step);
+    $extraBlock = $extra !== '' ? "\n\n{$extra}" : '';
+
+    return "**الخطوة {$step} — تفاصيل التبويب (مقدمة + محتوى الصفحة)**\n\n"
+        ."تبويب: **{$label}** — بعد إنشاء القسم في الخطوة ".($step - 1)."\n\n"
+        ."**Body:** `programSectionId` (= `{{programSectionId}}`), `introAr`, `introEn`, `bodyAr`, `bodyEn`\n\n"
+        ."**حقول `bodyAr` / `bodyEn` لهذا التبويب:**\n{$bodyFields}\n\n"
+        ."**يظهر على الموقع:** `/ar/برامجنا/مركز-دعم-المدن?tab={$tabKey}` → `sections.{$tabKey}`"
+        .$extraBlock;
+}
+
+function postmanTrainingDetailsBodyFieldsGuide(string $tabKey): string
+{
+    return match ($tabKey) {
+        'trainingPrograms' => <<<'MD'
+| الحقل | على الموقع |
+|-------|------------|
+| `introAr/En` | فقرة المقدمة تحت العنوان |
+| `bodyAr.formatsTitle` + `formats[]` | «حيث يتم تقديم هذه البرامج…» + 3 صناديق |
+| `bodyAr.coursesTitle` | عنوان «البرامج التدريبية ٢٠٢٣–٢٠٢٤» |
+| `bodyAr.heroImage` | صورة GIF أعلى الصفحة |
+| `bodyAr.coursesImage` | صورة أسفل قائمة الدورات |
+| `bodyAr.courses[]` | شبكة «البرامج التدريبية ٢٠٢٣–٢٠٢٤» — `{title, count}` لكل صف |
+MD,
+        'consulting' => <<<'MD'
+| الحقل | على الموقع |
+|-------|------------|
+| `introAr/En` | فقرة المقدمة |
+| `bodyAr.nav[]` | 3 أزرار التنقل (استشارات هندسية…، مشاركة التجارب…، تبادل الخبرات…) |
+| `bodyAr.sections[]` | 3 كتل (title + description لكل كتلة) |
+| `bodyAr.detailImage` | صورة المتحدث `/projects/consulting-presenter.png` |
+MD,
+        'executive' => <<<'MD'
+| الحقل | على الموقع |
+|-------|------------|
+| `introAr/En` | فقرة المقدمة |
+| `bodyAr.offersTitle` + `programs[]` | «يقدم البرنامج التنفيذي» + صندوقان |
+| `bodyAr.heroVideo` | فيديو `/icons/program/executive.mp4` |
+| `bodyAr.topicsTitle` + `topics[]` | كاروسيل الموضوعات (title + image) |
+MD,
+        'experts' => <<<'MD'
+| الحقل | على الموقع |
+|-------|------------|
+| `bodyAr.experts[]` | بطاقات الخبراء — `{name, specialty, image}` لكل خبير |
+MD,
+        default => '- راجع `messages/ar/programs.json` → `training.'.$tabKey.'`',
+    };
+}
+
+function postmanTrainingTabExtraRequestsGuide(string $tabKey, int $detailsStep): string
+{
+    return match ($tabKey) {
+        'trainingPrograms' => '**`courses[]` في `bodyAr/En`:** الخادم ينسّخها تلقائياً إلى `training_courses` عند حفظ التفاصيل.',
+        'experts' => '**`experts[]` في `bodyAr/En`:** الخادم ينسّخها تلقائياً إلى `experts` عند حفظ التفاصيل. العنوان في خطوة **القسم** (08).',
+        default => '',
+    };
+}
+
 function postmanProgramsTabContentGuide(): string
 {
     return <<<'MD'
-### Why section Postman bodies looked different from the live tab pages
+### محتوى كل تبويب — Training (?tab=)
 
-Each `?tab=` page is built from **multiple admin sources**, not only `program-sections`:
+كل صفحة تبويب = **قسم** (02/04/06/08) + **تفاصيل** (03/05/07/09) — جسم كامل مثل `programs.json`:
 
-| Tab URL | UI blocks (your screenshots) | Admin source | JSON fields |
-|---------|------------------------------|--------------|-------------|
-| `?tab=trainingPrograms` | Title + intro paragraph | Step 03 `program-sections` | `titleAr`, `introAr` |
-| | Top hero gif | Step 03 `imageUrl` + `bodyAr.heroImage` | `/icons/program/6.gif` |
-| | 3 format boxes | Step 03 `bodyAr.formats[]` | `formatsTitle`, `formats` |
-| | **البرامج التدريبية ٢٠٢٣–٢٠٢٤** + course rows | Steps **07–12** `training-courses` | `coursesTitle` + `titleAr`/`countAr` per course |
-| | Courses section photo | Step 03 `bodyAr.coursesImage` | `/icons/program/7.png` |
-| `?tab=consulting` | Title + intro | Step 04 `program-sections` | `titleAr`, `introAr` |
-| | Hero photo (nav row) | Step 04 `imageUrl` | `/projects/p2.png` |
-| | 3 nav pills | Step 04 `bodyAr.nav[]` | |
-| | 3 detail blocks with long text | Step 04 `bodyAr.sections[]` | `title` + `description` each |
-| | Presenter photo | Step 04 `bodyAr.detailImage` | `/projects/consulting-presenter.png` |
-| `?tab=executive` | Title + intro + 2 program boxes | Step 05 `program-sections` | `offersTitle`, `programs[]` |
-| | Hero video | Step 05 `bodyAr.heroVideo` | `/icons/program/executive.mp4` |
-| | Topics carousel | Step 05 `bodyAr.topics[]` | `topicsTitle`, `topics[{title, image}]` → `p1.png`… |
-| `?tab=experts` | Section title | Step 06 `program-sections` | `bodyAr.title` |
-| | Expert cards carousel | Steps **13–15** `experts` | `nameAr`, `specialtyAr`, `imageUrl` (`/emp/1.png`…) |
+| `?tab=` | خطوات | قسم | تفاصيل | داخل `bodyAr/En` |
+|---------|--------|-----|--------|------------------|
+| `trainingPrograms` | 02–03 | 02 | 03 | `courses[]` في body |
+| `consulting` | 04–05 | 04 | 05 | — |
+| `executive` | 06–07 | 06 | 07 | — |
+| `experts` | 08–09 | 08 | 09 | `experts[]` في body |
 
-**One API call** `GET /api/v1/programs/training` merges section JSON + all `training-courses` + all `experts`.
+**طلب واحد** `GET /api/v1/programs/training` يدمج كل الأقسام + الدورات + الخبراء.
 MD;
 }
 
@@ -575,9 +741,9 @@ Accept-Language: ar
 
 | Live tab URL | `?tab=` value | API field | Admin to edit content |
 |--------------|---------------|-----------|------------------------|
-| […?tab=trainingPrograms](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=trainingPrograms) | `trainingPrograms` | `sections.trainingPrograms` | steps 02–03 + 10–15 |
+| […?tab=trainingPrograms](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=trainingPrograms) | `trainingPrograms` | `sections.trainingPrograms` | steps 02–03 (body includes `courses[]`) |
 | […?tab=consulting](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=consulting) | `consulting` | `sections.consulting` | steps 04–05 |
 | […?tab=executive](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=executive) | `executive` | `sections.executive` | steps 06–07 |
-| […?tab=experts](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=experts) | `experts` | `sections.experts` | steps 08–09 + 16–18 |
+| […?tab=experts](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=experts) | `experts` | `sections.experts` | steps 08–09 (body includes `experts[]`) |
 MD;
 }

@@ -468,7 +468,7 @@ Admin: `00 — بناء برنامج السياسات الحضرية` + `directo
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: `00 — بناء برنامج التدريب` (18 خطوة).
+Admin: `00 — بناء برنامج التدريب` (9 خطوات).
 
 ---
 

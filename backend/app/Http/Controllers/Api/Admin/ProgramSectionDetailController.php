@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ProgramSection;
 use App\Models\ProgramSectionDetail;
+use App\Services\Programs\ProgramSectionNestedContentSync;
 use App\Support\ImageUrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,6 +15,10 @@ use Illuminate\Validation\Rule;
 
 class ProgramSectionDetailController extends Controller
 {
+    public function __construct(
+        private readonly ProgramSectionNestedContentSync $nestedContentSync,
+    ) {}
+
     public function index(Request $request): JsonResponse
     {
         $limit = min(max((int) $request->query('limit', 20), 1), 100);
@@ -55,6 +61,8 @@ class ProgramSectionDetailController extends Controller
             'body_en' => $validated['bodyEn'] ?? null,
         ]);
 
+        $this->syncNestedContent($validated);
+
         return response()->json(['data' => $this->transform($detail->load('section'))], 201);
     }
 
@@ -96,6 +104,11 @@ class ProgramSectionDetailController extends Controller
 
         $programSectionDetail->update($payload);
 
+        $this->syncNestedContent(array_merge(
+            ['programSectionId' => $programSectionDetail->program_section_id],
+            $validated,
+        ));
+
         return response()->json(['data' => $this->transform($programSectionDetail->fresh()->load('section'))]);
     }
 
@@ -104,6 +117,28 @@ class ProgramSectionDetailController extends Controller
         $programSectionDetail->delete();
 
         return response()->json(['message' => 'Deleted']);
+    }
+
+    /**
+     * @param  array<string, mixed>  $validated
+     */
+    private function syncNestedContent(array $validated): void
+    {
+        $sectionId = $validated['programSectionId'] ?? null;
+        if (! $sectionId) {
+            return;
+        }
+
+        $section = ProgramSection::query()->find($sectionId);
+        if (! $section) {
+            return;
+        }
+
+        $this->nestedContentSync->syncFromDetail(
+            $section,
+            $validated['bodyAr'] ?? null,
+            $validated['bodyEn'] ?? null,
+        );
     }
 
     /**

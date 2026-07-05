@@ -17,40 +17,29 @@
 | **Section details (intro/body)** | `program_section_details` | `POST /api/admin/program-section-details` | **`programSectionId`** |
 | **Page labels** (`back`, `sectionsLabel`) | — | **Frontend i18n** | `messages/{locale}/programs.json` — **not** admin API for training/partnerships |
 | **Page labels** (urban-policies only) | `about_content` | `POST /api/admin/about-content` | `sectionKey`: `program_urban-policies` (optional; frontend falls back to i18n) |
-| **Training courses** | `training_courses` | `POST /api/admin/training-courses` | تظهر في tab `trainingPrograms` |
-| **Experts** | `experts` | `POST /api/admin/experts` | تظهر في tab `experts` |
+| **Training courses** | `training_courses` | `POST /api/admin/training-courses` | اختياري — أو ضمّ `courses[]` في `program-section-details` (تبويب trainingPrograms) |
+| **Experts** | `experts` | `POST /api/admin/experts` | اختياري — أو ضمّ `experts[]` في `program-section-details` (تبويب experts) |
 
 **Postman folders:**
-- `Admin` → `البرامج — Programs` → `00 — أدلة البناء` → `بناء برنامج التدريب` (18 steps)
+- `Admin` → `البرامج — Programs` → `00 — أدلة البناء` → `بناء برنامج التدريب` (9 steps)
 - `Admin` → `البرامج — Programs` → `00 — أدلة البناء` → `بناء برنامج الشراكات` (9 steps)
 
 **All section bodies are loaded from `messages/{ar,en}/programs.json`** — the same source as [audi-ten.vercel.app/ar](https://audi-ten.vercel.app/ar).
 
 **Verify:** `GET /api/v1/programs/training` or `GET /api/v1/programs/partnerships` with `Accept-Language: ar`
 
-### Why section Postman bodies looked different from the live tab pages
+### محتوى كل تبويب — Training (?tab=)
 
-Each `?tab=` page is built from **multiple admin sources**, not only `program-sections`:
+كل صفحة تبويب = **قسم** + **تفاصيل** + (إن وُجد) **طلبات إضافية في نفس المجلد**:
 
-| Tab URL | UI blocks (your screenshots) | Admin source | JSON fields |
-|---------|------------------------------|--------------|-------------|
-| `?tab=trainingPrograms` | Title + intro paragraph | Step 03 `program-sections` | `titleAr`, `introAr` |
-| | Top hero gif | Step 03 `imageUrl` + `bodyAr.heroImage` | `/icons/program/6.gif` |
-| | 3 format boxes | Step 03 `bodyAr.formats[]` | `formatsTitle`, `formats` |
-| | **البرامج التدريبية ٢٠٢٣–٢٠٢٤** + course rows | Steps **07–12** `training-courses` | `coursesTitle` + `titleAr`/`countAr` per course |
-| | Courses section photo | Step 03 `bodyAr.coursesImage` | `/icons/program/7.png` |
-| `?tab=consulting` | Title + intro | Step 04 `program-sections` | `titleAr`, `introAr` |
-| | Hero photo (nav row) | Step 04 `imageUrl` | `/projects/p2.png` |
-| | 3 nav pills | Step 04 `bodyAr.nav[]` | |
-| | 3 detail blocks with long text | Step 04 `bodyAr.sections[]` | `title` + `description` each |
-| | Presenter photo | Step 04 `bodyAr.detailImage` | `/projects/consulting-presenter.png` |
-| `?tab=executive` | Title + intro + 2 program boxes | Step 05 `program-sections` | `offersTitle`, `programs[]` |
-| | Hero video | Step 05 `bodyAr.heroVideo` | `/icons/program/executive.mp4` |
-| | Topics carousel | Step 05 `bodyAr.topics[]` | `topicsTitle`, `topics[{title, image}]` → `p1.png`… |
-| `?tab=experts` | Section title | Step 06 `program-sections` | `bodyAr.title` |
-| | Expert cards carousel | Steps **13–15** `experts` | `nameAr`, `specialtyAr`, `imageUrl` (`/emp/1.png`…) |
+| `?tab=` | خطوات Postman | قسم | تفاصيل | في نفس المجلد |
+|---------|---------------|-----|--------|---------------|
+| `trainingPrograms` | 02–03 | 02 | 03 | `courses[]` في body |
+| `consulting` | 04–05 | 04 | 05 | — |
+| `executive` | 06–07 | 06 | 07 | — |
+| `experts` | 08–09 | 08 | 09 | `experts[]` في body |
 
-**One API call** `GET /api/v1/programs/training` merges section JSON + all `training-courses` + all `experts`.
+**طلب واحد** `GET /api/v1/programs/training` يدمج كل الأقسام + الدورات + الخبراء.
 
 ---
 
@@ -100,10 +89,10 @@ Accept-Language: ar
 
 | Live tab URL | `?tab=` value | API field | Admin to edit content |
 |--------------|---------------|-----------|------------------------|
-| […?tab=trainingPrograms](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=trainingPrograms) | `trainingPrograms` | `sections.trainingPrograms` | steps 02–03 + 10–15 |
+| […?tab=trainingPrograms](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=trainingPrograms) | `trainingPrograms` | `sections.trainingPrograms` | steps 02–03 (body includes `courses[]`) |
 | […?tab=consulting](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=consulting) | `consulting` | `sections.consulting` | steps 04–05 |
 | […?tab=executive](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=executive) | `executive` | `sections.executive` | steps 06–07 |
-| […?tab=experts](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=experts) | `experts` | `sections.experts` | steps 08–09 + 16–18 |
+| […?tab=experts](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن?tab=experts) | `experts` | `sections.experts` | steps 08–09 (body includes `experts[]`) |
 
 ---
 
@@ -152,26 +141,14 @@ Each tab uses **two** requests. Bodies match `messages/ar/programs.json` and `me
 
 | Steps | tabKey | Notes |
 |-------|--------|-------|
-| 02–03 | `trainingPrograms` | `program-sections` (title+image) → `program-section-details` (`formats`, `coursesTitle`, …) |
+| 02–03 | `trainingPrograms` | section → details — **`bodyAr.courses[]`** included (full JSON from programs.json) |
 | 04–05 | `consulting` | section → details (`nav[]`, `sections[]`, …) |
 | 06–07 | `executive` | section → details (`programs[]`, `topics[]`, …) |
-| 08–09 | `experts` | section → details (`title` only — cards in steps 16–18) |
+| 08–09 | `experts` | section → details — **`bodyAr.experts[]`** included |
 
-### Steps 10–15 — Training courses (trainingPrograms grid)
+When you save details for `trainingPrograms` or `experts`, the API **syncs** `courses[]` / `experts[]` from the body to their tables automatically.
 
-```http
-POST /api/admin/training-courses
-```
-
-Six rows (3 unique titles × 2) for the **البرامج التدريبية ٢٠٢٣ – ٢٠٢٤** list. Merged into `sections.trainingPrograms.courses[]`.
-
-### Steps 16–18 — Experts (experts carousel)
-
-```http
-POST /api/admin/experts
-```
-
-Three expert cards with `nameAr`, `specialtyAr`, `imageUrl`. Merged into `sections.experts.experts[]`.
+Optional: edit individual rows later via **01 — مرجع CRUD** → `training-courses` / `experts`.
 
 ---
 
