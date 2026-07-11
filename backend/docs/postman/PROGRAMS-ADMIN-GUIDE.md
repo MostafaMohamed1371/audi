@@ -30,10 +30,10 @@
 
 ### محتوى كل تبويب — Training (?tab=)
 
-كل صفحة تبويب = **قسم** + **تفاصيل** + (إن وُجد) **طلبات إضافية في نفس المجلد**:
+كل صفحة تبويب = **قسم** (02/04/06/08) + **تفاصيل** (03/05/07/09) — جسم كامل مثل `programs.json`:
 
-| `?tab=` | خطوات Postman | قسم | تفاصيل | في نفس المجلد |
-|---------|---------------|-----|--------|---------------|
+| `?tab=` | خطوات | قسم | تفاصيل | داخل `bodyAr/En` |
+|---------|--------|-----|--------|------------------|
 | `trainingPrograms` | 02–03 | 02 | 03 | `courses[]` في body |
 | `consulting` | 04–05 | 04 | 05 | — |
 | `executive` | 06–07 | 06 | 07 | — |
@@ -48,7 +48,7 @@
 
 | Page on site (Arabic URL) | API slug | Public endpoint |
 |---------------------------|----------|-----------------|
-| [/برامجنا/برنامج-السياسات-الحضرية](https://audi-ten.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية) | `urban-policies` | `GET /api/v1/programs/urban-policies` |
+| [/برامجنا/برنامج-السياسات-الحضرية](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية) | `urban-policies` | `GET /api/v1/programs/urban-policies` |
 | [/برامجنا/مركز-دعم-المدن](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن) | `training` | `GET /api/v1/programs/training` |
 | [/برامجنا/الشراكات](https://audi-ten.vercel.app/ar/برامجنا/الشراكات) | `partnerships` | `GET /api/v1/programs/partnerships` |
 

@@ -631,7 +631,7 @@
                                         "urban-policies"
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `00 — بناء برنامج السياسات الحضرية` + `directory/*`."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: `00 — بناء برنامج السياسات الحضرية` (9 خطوات)."
                             },
                             "response": []
                         },
@@ -739,7 +739,7 @@
                                         }
                                     ]
                                 },
-                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nAdmin: directory/cities|projects|organizations|publications."
+                                "description": "**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory rows: include `directory.rows` in **program-section-details** step 03, or edit via `directory/*` CRUD."
                             },
                             "response": []
                         }
@@ -7987,7 +7987,7 @@
                                 },
                                 {
                                     "name": "بناء برنامج السياسات الحضرية — Build Urban Policies Program",
-                                    "description": "Build [السياسات الحضرية / urban-policies](https://audi-ten.vercel.app/ar/برامجنا/السياسات-الحضرية):\n\n**FK chain:** 01 program → **02–09** four tabs × (program-sections → program-section-details).\n\nDirectory rows (`developmentPortal`): use **01 — مرجع CRUD → دليل المدن/المشاريع/…** after seeding the portal section.\n\nVerify: `GET /api/v1/programs/urban-policies`.",
+                                    "description": "### كيف تبني كل تبويب؟ (خطوتان)\n\n| الخطوة | Endpoint | ماذا تخزّن؟ | أين يظهر على الموقع؟ |\n|--------|----------|------------|----------------------|\n| **أ — قسم** | `POST /api/admin/program-sections` | `programId`, `tabKey`, **عنوان التبويب**, **صورة البطاقة** | بطاقات «اقسام البرنامج» |\n| **ب — تفاصيل** | `POST /api/admin/program-section-details` | `programSectionId`, `introAr/En`, **`bodyAr/En` كامل** | صفحة `?tab=` |\n\n**تبويب بوابة التنمية (`developmentPortal`):** ضع **`directory.rows`** (مدن، مشاريع، منظمات، منشورات) داخل **`bodyAr.directory`** في خطوة التفاصيل (03) — **لا** طلبات `directory/*` منفصلة في دليل البناء.\n\nالخادم ينسّخ `directory.rows` تلقائياً إلى جداول `directory_*` عند حفظ التفاصيل.\n\n**تسميات الصفحة** (`back`, `sectionsLabel`): من i18n أو اختياري `about_content` (`program_urban-policies`).\n\nVerify: `GET /api/v1/programs/urban-policies` + `GET /api/v1/programs/urban-policies/directory`\n\n### محتوى كل تبويب — Urban Policies (?tab=)\n\n| `?tab=` | خطوات | قسم | تفاصيل | داخل body |\n|---------|--------|-----|--------|-----------|\n| `developmentPortal` | 02–03 | 02 | 03 | paragraphs, directory, `directory.rows` |\n| `developmentIndex` | 04–05 | 04 | 05 | `intro` |\n| `innovationLab` | 06–07 | 06 | 07 | `intro`, `video`, `projects[]` |\n| `practiceReports` | 08–09 | 08 | 09 | `intro`, `projects[]` |\n\nBuild [برنامج السياسات الحضرية](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية). Bodies from `messages/{ar,en}/programs.json`.",
                                     "item": [
                                         {
                                             "name": "01 — برنامج السياسات الحضرية — urban-policies program",
@@ -8024,7 +8024,7 @@
                                                     "mode": "raw",
                                                     "raw": "{\n    \"slug\": \"urban-policies\",\n    \"titleAr\": \"ابحاث السياسات الحضرية\",\n    \"titleEn\": \"Urban Policy Research\",\n    \"heroIntroAr\": \"يتألف مؤشر التنمية الحضرية في المدن العربية من سلسلة من الاستطلاعات التي يتم إجراؤها كل ستة أشهر، ويتم نشر التحليلات الناتجة كتقرير موحد. الهدف من هذا المؤشر هو رصد توجهات التنمية الحضرية وتطور المدن العربية على مر الزمن.\",\n    \"heroIntroEn\": \"The Urban Development Index in Arab cities consists of a series of surveys conducted every six months, with unified analytical reports published from the results. The index aims to monitor urban development trends and the evolution of Arab cities over time.\",\n    \"sortOrder\": 0,\n    \"cardDescriptionAr\": \"إعداد دراسات وتقارير سياسات حضرية تدعم صناع القرار في المدن العربية، وتعزز التخطيط الحضري المستدام.\",\n    \"cardDescriptionEn\": \"Developing urban policy studies and reports that support decision-makers in Arab cities and promote sustainable urban planning.\"\n}"
                                                 },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 1: Program category. Saves `programId`. URL: /ar/برامجنا/السياسات-الحضرية\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `slug` | المعرّف اللatinي للرابط (مثل: training) | \"urban-policies\" |\n| `titleAr` | العنوان بالعربية | \"ابحاث السياسات الحضرية\" |\n| `titleEn` | العنوان بالإنجليزية | \"Urban Policy Research\" |\n| `heroIntroAr` | مقدمة صفحة البرنامج بالعربية | \"يتألف مؤشر التنمية الحضرية في المدن العربية من سلسلة من … |\n| `heroIntroEn` | مقدمة صفحة البرنامج بالإنجليزية | \"The Urban Development Index in Arab cities consists of a… |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |\n| `cardDescriptionAr` | وصف بطاقة البرنامج في الرئيسية (عربي) | \"إعداد دراسات وتقارير سياسات حضرية تدعم صناع القرار في ال… |\n| `cardDescriptionEn` | وصف بطاقة البرنامج في الرئيسية (إنجليزي) | \"Developing urban policy studies and reports that support… |"
+                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 1 — فئة البرنامج**\n\nيحفظ **`{{programId}}`**.\n\nURL: [برنامج السياسات الحضرية](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية)\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `slug` | المعرّف اللatinي للرابط (مثل: training) | \"urban-policies\" |\n| `titleAr` | العنوان بالعربية | \"ابحاث السياسات الحضرية\" |\n| `titleEn` | العنوان بالإنجليزية | \"Urban Policy Research\" |\n| `heroIntroAr` | مقدمة صفحة البرنامج بالعربية | \"يتألف مؤشر التنمية الحضرية في المدن العربية من سلسلة من … |\n| `heroIntroEn` | مقدمة صفحة البرنامج بالإنجليزية | \"The Urban Development Index in Arab cities consists of a… |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |\n| `cardDescriptionAr` | وصف بطاقة البرنامج في الرئيسية (عربي) | \"إعداد دراسات وتقارير سياسات حضرية تدعم صناع القرار في ال… |\n| `cardDescriptionEn` | وصف بطاقة البرنامج في الرئيسية (إنجليزي) | \"Developing urban policy studies and reports that support… |"
                                             },
                                             "response": [],
                                             "event": [
@@ -8045,442 +8045,466 @@
                                             ]
                                         },
                                         {
-                                            "name": "02 — قسم developmentPortal — program-sections",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
+                                            "name": "خطوات 02–03 — بوابة التنمية الحضرية العربية — Steps 02–03 — developmentPortal",
+                                            "description": "**تبويب: بوابة التنمية الحضرية العربية** (`?tab=developmentPortal`) — خطوات 2–3\n\n**2 — قسم:** عنوان + صورة → يحفظ `{{programSectionId}}`\n\n**3 — تفاصيل:**\n| الحقل | على الموقع |\n|-------|------------|\n| `bodyAr.paragraphs[]` | فقرات المقدمة |\n| `bodyAr.contributeTitle` + `contributionTypes` | قسم «ساهم من خلال…» |\n| `bodyAr.contributionForm` | نموذج المساهمة (يُرسل إلى `POST /api/v1/programs/urban-policies/contribute`) |\n| `bodyAr.directory` | دليل المدن (فيديو، عناوين، تبويبات، أعمدة) |\n| `bodyAr.directory.rows.cities[]` | جدول المدن |\n| `bodyAr.directory.rows.projects[]` | جدول المشاريع |\n| `bodyAr.directory.rows.organizations[]` | جدول المنظمات |\n| `bodyAr.directory.rows.publications[]` | جدول المنشورات |\n\n**`directory.rows` في `bodyAr/En`:** يُنسّخ تلقائياً إلى `directory/cities|projects|organizations|publications`. صفوف الدليل تظهر عبر `GET /api/v1/programs/urban-policies/directory`.",
+                                            "item": [
+                                                {
+                                                    "name": "02 — [قسم] بوابة التنمية الحضرية العربية — عنوان + صورة — program-sections",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [
+                                                            {
+                                                                "key": "Accept-Language",
+                                                                "value": "{{locale}}",
+                                                                "description": "اللغة: ar | en"
+                                                            },
+                                                            {
+                                                                "key": "Authorization",
+                                                                "value": "Bearer {{adminToken}}",
+                                                                "description": ""
+                                                            },
+                                                            {
+                                                                "key": "Content-Type",
+                                                                "value": "application/json"
+                                                            }
+                                                        ],
+                                                        "url": {
+                                                            "raw": "{{baseUrl}}/api/admin/program-sections",
+                                                            "host": [
+                                                                "{{baseUrl}}"
+                                                            ],
+                                                            "path": [
+                                                                "api",
+                                                                "admin",
+                                                                "program-sections"
+                                                            ]
+                                                        },
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    \"programId\": \"{{programId}}\",\n    \"tabKey\": \"developmentPortal\",\n    \"sortOrder\": 0,\n    \"titleAr\": \"بوابة التنمية الحضرية العربية\",\n    \"titleEn\": \"Arab Urban Development Portal\",\n    \"imageUrl\": \"\\/urban-policies\\/1.gif\"\n}"
+                                                        },
+                                                        "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 2 — قسم التبويب (عنوان + صورة)**\n\nتبويب: **بوابة التنمية الحضرية العربية** (`tabKey: developmentPortal`)\n\n**Body:** `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`\n\nيحفظ **`{{programSectionId}}`** للخطوة التالية.\n\n**Public:** `GET /api/v1/programs/urban-policies` → `sections.developmentPortal.title`, `.image`\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programId` | معرّف البرنامج (FK) | \"{{programId}}\" |\n| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | \"developmentPortal\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |\n| `titleAr` | العنوان بالعربية | \"بوابة التنمية الحضرية العربية\" |\n| `titleEn` | العنوان بالإنجليزية | \"Arab Urban Development Portal\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/urban-policies\\/1.gif\" |"
                                                     },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/program-sections",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "program-sections"
+                                                    "response": [],
+                                                    "event": [
+                                                        {
+                                                            "listen": "test",
+                                                            "script": {
+                                                                "type": "text/javascript",
+                                                                "exec": [
+                                                                    "pm.test('save programSectionId', function () {",
+                                                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                                    "    const data = pm.response.json().data;",
+                                                                    "    pm.expect(data.id).to.be.a('number');",
+                                                                    "    pm.collectionVariables.set('programSectionId', String(data.id));",
+                                                                    "});"
+                                                                ]
+                                                            }
+                                                        }
                                                     ]
                                                 },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"programId\": \"{{programId}}\",\n    \"tabKey\": \"developmentPortal\",\n    \"sortOrder\": 0,\n    \"titleAr\": \"بوابة التنمية الحضرية العربية\",\n    \"titleEn\": \"Arab Urban Development Portal\",\n    \"imageUrl\": \"\\/urban-policies\\/1.gif\"\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 2: **One request**: `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`. Saves `programSectionId`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programId` | معرّف البرنامج (FK) | \"{{programId}}\" |\n| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | \"developmentPortal\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |\n| `titleAr` | العنوان بالعربية | \"بوابة التنمية الحضرية العربية\" |\n| `titleEn` | العنوان بالإنجليزية | \"Arab Urban Development Portal\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/urban-policies\\/1.gif\" |"
-                                            },
-                                            "response": [],
-                                            "event": [
                                                 {
-                                                    "listen": "test",
-                                                    "script": {
-                                                        "type": "text/javascript",
-                                                        "exec": [
-                                                            "pm.test('save programSectionId', function () {",
-                                                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                                                            "    const data = pm.response.json().data;",
-                                                            "    pm.expect(data.id).to.be.a('number');",
-                                                            "    pm.collectionVariables.set('programSectionId', String(data.id));",
-                                                            "});"
-                                                        ]
-                                                    }
+                                                    "name": "03 — [تفاصيل] بوابة التنمية الحضرية العربية — paragraphs + directory + مساهمة — program-section-details",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [
+                                                            {
+                                                                "key": "Accept-Language",
+                                                                "value": "{{locale}}",
+                                                                "description": "اللغة: ar | en"
+                                                            },
+                                                            {
+                                                                "key": "Authorization",
+                                                                "value": "Bearer {{adminToken}}",
+                                                                "description": ""
+                                                            },
+                                                            {
+                                                                "key": "Content-Type",
+                                                                "value": "application/json"
+                                                            }
+                                                        ],
+                                                        "url": {
+                                                            "raw": "{{baseUrl}}/api/admin/program-section-details",
+                                                            "host": [
+                                                                "{{baseUrl}}"
+                                                            ],
+                                                            "path": [
+                                                                "api",
+                                                                "admin",
+                                                                "program-section-details"
+                                                            ]
+                                                        },
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    \"programSectionId\": \"{{programSectionId}}\",\n    \"introAr\": null,\n    \"introEn\": null,\n    \"bodyAr\": {\n        \"paragraphs\": [\n            \"تُعد بوابة التنمية الحضرية العربية منصة لجمع ومشاركة البيانات والمعلومات المتعلقة بالمدن والمشاريع والمنظمات والمنشورات في مجال التنمية الحضرية في العالم العربي، بهدف توفير مرجع موحد للباحثين وصناع القرار.\",\n            \"تسعى البوابة إلى تعزيز التبادل المعرفي بين المدن العربية، وتسهيل الوصول إلى مصادر المعلومات الموثوقة التي تدعم صنع السياسات والممارسات الحضرية، مع إتاحة فرصة المساهمة في إثراء محتواها.\"\n        ],\n        \"contributeTitle\": \"ساهم من خلال تقديم معلومات حول\",\n        \"contributeDescription\": \"يمكنكم المساهمة في إثراء محتوى البوابة من خلال مشاركة معلومات عن المدن أو المنظمات أو المنشورات ذات الصلة بالتنمية الحضرية. تخضع جميع المساهمات لمراجعة وفق منهجية المعهد قبل النشر، ويمكنكم التواصل معنا عبر البريد الإلكتروني أدناه.\",\n        \"email\": \"infohub@araburban.org\",\n        \"ctaTitle\": \"اختر نوع المساهمة\",\n        \"ctaDisclaimer\": \"لا يعني إدراج أي مشروع أو منظمة في البوابة بالضرورة موافقة المعهد على محتواه أو التزامه.\",\n        \"contributionTypes\": [\n            {\n                \"id\": \"publications\",\n                \"label\": \"المنشورات\"\n            },\n            {\n                \"id\": \"cities\",\n                \"label\": \"المدن\"\n            },\n            {\n                \"id\": \"organizations\",\n                \"label\": \"المنظمات\"\n            }\n        ],\n        \"contributionForm\": {\n            \"openLabel\": \"قدّم مساهمة عبر الإنترنت\",\n            \"typeLabel\": \"نوع المساهمة\",\n            \"types\": {\n                \"publications\": \"المنشورات\",\n                \"cities\": \"المدن\",\n                \"organizations\": \"المنظمات\"\n            },\n            \"emailLabel\": \"البريد الإلكتروني\",\n            \"emailPlaceholder\": \"your@email.com\",\n            \"titleLabel\": \"العنوان\",\n            \"titlePlaceholder\": \"عنوان المدينة أو المنظمة أو المنشور\",\n            \"detailsLabel\": \"التفاصيل\",\n            \"detailsPlaceholder\": \"صف المعلومات التي ترغب في المساهمة بها...\",\n            \"submit\": \"إرسال المساهمة\",\n            \"success\": \"تم إرسال مساهمتك بنجاح.\",\n            \"error\": \"حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى.\"\n        },\n        \"directory\": {\n            \"video\": \"\\/urban-policies\\/audi-infohub-inst-2.mp4\",\n            \"title\": \"دليل المدن العربية\",\n            \"subtitle\": \"يسعى المعهد إلى جمع وتوثيق البيانات والإحصاءات والمعلومات المتعلقة بالمدن العربية وإجراء الأبحاث الحضرية، بهدف توفير مرجع موحد للباحثين وصناع القرار في مجال التنمية الحضرية.\",\n            \"filtersTitle\": \"التصنيف\",\n            \"countryLabel\": \"الدولة\",\n            \"cityLabel\": \"المدينة\",\n            \"citySizeLabel\": \"حجم المدينة\",\n            \"resetLabel\": \"إعادة ضبط\",\n            \"searchLabel\": \"بحث\",\n            \"viewListLabel\": \"القائمة\",\n            \"viewMapLabel\": \"الخريطة\",\n            \"mapPlaceholder\": \"عرض الخريطة قيد التطوير\",\n            \"seeMoreLabel\": \"رؤية المزيد\",\n            \"tabs\": [\n                {\n                    \"id\": \"cities\",\n                    \"label\": \"المدن\"\n                },\n                {\n                    \"id\": \"projects\",\n                    \"label\": \"المشاريع\"\n                },\n                {\n                    \"id\": \"organizations\",\n                    \"label\": \"المنظمات\"\n                },\n                {\n                    \"id\": \"publications\",\n                    \"label\": \"المنشورات\"\n                }\n            ],\n            \"columns\": {\n                \"cities\": {\n                    \"number\": \"الرقم\",\n                    \"name\": \"اسم المدينة\",\n                    \"details\": \"تفاصيل\"\n                },\n                \"projects\": {\n                    \"number\": \"رقم المشروع\",\n                    \"city\": \"المدينة\",\n                    \"country\": \"الدولة\",\n                    \"startDate\": \"التاريخ\",\n                    \"endDate\": \"تاريخ النهاية\"\n                }\n            },\n            \"rows\": {\n                \"cities\": [\n                    {\n                        \"number\": \"01\",\n                        \"name\": \"الباحة، المملكة العربية السعودية\",\n                        \"description\": \"مدينة صغيرة أو متوسطة الحجم\"\n                    },\n                    {\n                        \"number\": \"02\",\n                        \"name\": \"الرياض، المملكة العربية السعودية\",\n                        \"description\": \"مدينة كبيرة الحجم\"\n                    },\n                    {\n                        \"number\": \"03\",\n                        \"name\": \"جدة، المملكة العربية السعودية\",\n                        \"description\": \"مدينة كبيرة الحجم\"\n                    },\n                    {\n                        \"number\": \"04\",\n                        \"name\": \"القاهرة، جمهورية مصر العربية\",\n                        \"description\": \"مدينة كبيرة الحجم\"\n                    },\n                    {\n                        \"number\": \"05\",\n                        \"name\": \"عمان، المملكة الأردنية الهاشمية\",\n                        \"description\": \"مدينة متوسطة الحجم\"\n                    },\n                    {\n                        \"number\": \"06\",\n                        \"name\": \"بيروت، الجمهورية اللبنانية\",\n                        \"description\": \"مدينة كبيرة الحجم\"\n                    }\n                ],\n                \"projects\": [\n                    {\n                        \"number\": \"01\",\n                        \"city\": \"القاهرة\",\n                        \"country\": \"مصر\",\n                        \"startDate\": \"2020\",\n                        \"endDate\": \"2024\"\n                    },\n                    {\n                        \"number\": \"02\",\n                        \"city\": \"الرياض\",\n                        \"country\": \"السعودية\",\n                        \"startDate\": \"2019\",\n                        \"endDate\": \"2023\"\n                    },\n                    {\n                        \"number\": \"03\",\n                        \"city\": \"الكويت\",\n                        \"country\": \"الكويت\",\n                        \"startDate\": \"2018\",\n                        \"endDate\": \"العمل مستمر\"\n                    },\n                    {\n                        \"number\": \"04\",\n                        \"city\": \"دبي\",\n                        \"country\": \"الإمارات\",\n                        \"startDate\": \"2021\",\n                        \"endDate\": \"2025\"\n                    },\n                    {\n                        \"number\": \"05\",\n                        \"city\": \"تونس\",\n                        \"country\": \"تونس\",\n                        \"startDate\": \"2017\",\n                        \"endDate\": \"2022\"\n                    },\n                    {\n                        \"number\": \"06\",\n                        \"city\": \"المنامة\",\n                        \"country\": \"البحرين\",\n                        \"startDate\": \"2020\",\n                        \"endDate\": \"العمل مستمر\"\n                    }\n                ],\n                \"organizations\": [\n                    {\n                        \"number\": \"01\",\n                        \"name\": \"منظمة المدن العربية\",\n                        \"description\": \"منظمة إقليمية حكومية\"\n                    },\n                    {\n                        \"number\": \"02\",\n                        \"name\": \"الموئل الأمم المتحدة (UN-Habitat)\",\n                        \"description\": \"منظمة دولية\"\n                    },\n                    {\n                        \"number\": \"03\",\n                        \"name\": \"اتحاد البلديات العربية\",\n                        \"description\": \"منظمة بلدية\"\n                    }\n                ],\n                \"publications\": [\n                    {\n                        \"number\": \"01\",\n                        \"name\": \"تقرير التنمية الحضرية العربية 2024\",\n                        \"description\": \"تقرير سنوي\"\n                    },\n                    {\n                        \"number\": \"02\",\n                        \"name\": \"دليل السياسات الحضرية\",\n                        \"description\": \"منشور مرجعي\"\n                    },\n                    {\n                        \"number\": \"03\",\n                        \"name\": \"دراسة المدن الذكية في العالم العربي\",\n                        \"description\": \"دراسة بحثية\"\n                    }\n                ]\n            }\n        }\n    },\n    \"bodyEn\": {\n        \"paragraphs\": [\n            \"The Arab Urban Development Portal is a platform for collecting and sharing data and information on cities, projects, organizations, and publications related to urban development in the Arab region.\",\n            \"The portal aims to strengthen knowledge exchange among Arab cities and facilitate access to reliable information sources that support urban policy and practice.\"\n        ],\n        \"contributeTitle\": \"Contribute by providing information about\",\n        \"contributeDescription\": \"You can help enrich the portal by sharing information about cities, organizations, or publications related to urban development. All submissions are reviewed according to the Institute's methodology before publication.\",\n        \"email\": \"infohub@araburban.org\",\n        \"ctaTitle\": \"Choose the type of contribution\",\n        \"ctaDisclaimer\": \"The inclusion of any project or organization in the portal does not necessarily imply endorsement by the Institute.\",\n        \"contributionTypes\": [\n            {\n                \"id\": \"publications\",\n                \"label\": \"Publications\"\n            },\n            {\n                \"id\": \"cities\",\n                \"label\": \"Cities\"\n            },\n            {\n                \"id\": \"organizations\",\n                \"label\": \"Organizations\"\n            }\n        ],\n        \"contributionForm\": {\n            \"openLabel\": \"Submit a contribution online\",\n            \"typeLabel\": \"Contribution type\",\n            \"types\": {\n                \"publications\": \"Publications\",\n                \"cities\": \"Cities\",\n                \"organizations\": \"Organizations\"\n            },\n            \"emailLabel\": \"Email\",\n            \"emailPlaceholder\": \"your@email.com\",\n            \"titleLabel\": \"Title\",\n            \"titlePlaceholder\": \"Title of the city, organization, or publication\",\n            \"detailsLabel\": \"Details\",\n            \"detailsPlaceholder\": \"Describe the information you would like to contribute...\",\n            \"submit\": \"Submit Contribution\",\n            \"success\": \"Your contribution was submitted successfully.\",\n            \"error\": \"An error occurred while submitting. Please try again.\"\n        },\n        \"directory\": {\n            \"video\": \"\\/urban-policies\\/audi-infohub-inst-2.mp4\",\n            \"title\": \"Directory of Arab Cities\",\n            \"subtitle\": \"The Institute seeks to collect and document data, statistics, and information related to Arab cities and conduct urban research, providing a unified reference for researchers and decision-makers in urban development.\",\n            \"filtersTitle\": \"Classification\",\n            \"countryLabel\": \"Country\",\n            \"cityLabel\": \"City\",\n            \"citySizeLabel\": \"City Size\",\n            \"resetLabel\": \"Reset\",\n            \"searchLabel\": \"Search\",\n            \"viewListLabel\": \"List\",\n            \"viewMapLabel\": \"Map\",\n            \"mapPlaceholder\": \"Map view coming soon\",\n            \"seeMoreLabel\": \"See More\",\n            \"tabs\": [\n                {\n                    \"id\": \"cities\",\n                    \"label\": \"Cities\"\n                },\n                {\n                    \"id\": \"projects\",\n                    \"label\": \"Projects\"\n                },\n                {\n                    \"id\": \"organizations\",\n                    \"label\": \"Organizations\"\n                },\n                {\n                    \"id\": \"publications\",\n                    \"label\": \"Publications\"\n                }\n            ],\n            \"columns\": {\n                \"cities\": {\n                    \"number\": \"No.\",\n                    \"name\": \"City Name\",\n                    \"details\": \"Details\"\n                },\n                \"projects\": {\n                    \"number\": \"Project No.\",\n                    \"city\": \"City\",\n                    \"country\": \"Country\",\n                    \"startDate\": \"Start Date\",\n                    \"endDate\": \"End Date\"\n                }\n            },\n            \"rows\": {\n                \"cities\": [\n                    {\n                        \"number\": \"01\",\n                        \"name\": \"Al Baha, Saudi Arabia\",\n                        \"description\": \"Small or medium-sized city\"\n                    },\n                    {\n                        \"number\": \"02\",\n                        \"name\": \"Riyadh, Saudi Arabia\",\n                        \"description\": \"Large city\"\n                    },\n                    {\n                        \"number\": \"03\",\n                        \"name\": \"Jeddah, Saudi Arabia\",\n                        \"description\": \"Large city\"\n                    },\n                    {\n                        \"number\": \"04\",\n                        \"name\": \"Cairo, Egypt\",\n                        \"description\": \"Large city\"\n                    },\n                    {\n                        \"number\": \"05\",\n                        \"name\": \"Amman, Jordan\",\n                        \"description\": \"Medium-sized city\"\n                    },\n                    {\n                        \"number\": \"06\",\n                        \"name\": \"Beirut, Lebanon\",\n                        \"description\": \"Large city\"\n                    }\n                ],\n                \"projects\": [\n                    {\n                        \"number\": \"01\",\n                        \"city\": \"Cairo\",\n                        \"country\": \"Egypt\",\n                        \"startDate\": \"2020\",\n                        \"endDate\": \"2024\"\n                    },\n                    {\n                        \"number\": \"02\",\n                        \"city\": \"Riyadh\",\n                        \"country\": \"Saudi Arabia\",\n                        \"startDate\": \"2019\",\n                        \"endDate\": \"2023\"\n                    },\n                    {\n                        \"number\": \"03\",\n                        \"city\": \"Kuwait City\",\n                        \"country\": \"Kuwait\",\n                        \"startDate\": \"2018\",\n                        \"endDate\": \"Ongoing\"\n                    },\n                    {\n                        \"number\": \"04\",\n                        \"city\": \"Dubai\",\n                        \"country\": \"UAE\",\n                        \"startDate\": \"2021\",\n                        \"endDate\": \"2025\"\n                    },\n                    {\n                        \"number\": \"05\",\n                        \"city\": \"Tunis\",\n                        \"country\": \"Tunisia\",\n                        \"startDate\": \"2017\",\n                        \"endDate\": \"2022\"\n                    },\n                    {\n                        \"number\": \"06\",\n                        \"city\": \"Manama\",\n                        \"country\": \"Bahrain\",\n                        \"startDate\": \"2020\",\n                        \"endDate\": \"Ongoing\"\n                    }\n                ],\n                \"organizations\": [\n                    {\n                        \"number\": \"01\",\n                        \"name\": \"Organization of Arab Cities\",\n                        \"description\": \"Regional intergovernmental organization\"\n                    },\n                    {\n                        \"number\": \"02\",\n                        \"name\": \"UN-Habitat\",\n                        \"description\": \"International organization\"\n                    },\n                    {\n                        \"number\": \"03\",\n                        \"name\": \"Union of Arab Municipalities\",\n                        \"description\": \"Municipal organization\"\n                    }\n                ],\n                \"publications\": [\n                    {\n                        \"number\": \"01\",\n                        \"name\": \"Arab Urban Development Report 2024\",\n                        \"description\": \"Annual report\"\n                    },\n                    {\n                        \"number\": \"02\",\n                        \"name\": \"Urban Policy Guide\",\n                        \"description\": \"Reference publication\"\n                    },\n                    {\n                        \"number\": \"03\",\n                        \"name\": \"Smart Cities Study in the Arab World\",\n                        \"description\": \"Research study\"\n                    }\n                ]\n            }\n        }\n    }\n}"
+                                                        },
+                                                        "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 3 — تفاصيل التبويب**\n\nتبويب: **بوابة التنمية الحضرية العربية** — بعد القسم في الخطوة 2\n\n**Body:** `programSectionId`, `introAr`, `introEn`, `bodyAr`, `bodyEn`\n\n**حقول المحتوى:**\n| الحقل | على الموقع |\n|-------|------------|\n| `bodyAr.paragraphs[]` | فقرات المقدمة |\n| `bodyAr.contributeTitle` + `contributionTypes` | قسم «ساهم من خلال…» |\n| `bodyAr.contributionForm` | نموذج المساهمة (يُرسل إلى `POST /api/v1/programs/urban-policies/contribute`) |\n| `bodyAr.directory` | دليل المدن (فيديو، عناوين، تبويبات، أعمدة) |\n| `bodyAr.directory.rows.cities[]` | جدول المدن |\n| `bodyAr.directory.rows.projects[]` | جدول المشاريع |\n| `bodyAr.directory.rows.organizations[]` | جدول المنظمات |\n| `bodyAr.directory.rows.publications[]` | جدول المنشورات |\n\n**الموقع:** `/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal`\n\n**`directory.rows` في `bodyAr/En`:** يُنسّخ تلقائياً إلى `directory/cities|projects|organizations|publications`. صفوف الدليل تظهر عبر `GET /api/v1/programs/urban-policies/directory`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programSectionId` | programSectionId | \"{{programSectionId}}\" |\n| `introAr` | المقدمة بالعربية | null |\n| `introEn` | المقدمة بالإنجليزية | null |\n| `bodyAr.paragraphs` | paragraphs | [\"تُعد بوابة التنمية الحضرية العربية منصة لجمع ومشاركة ال… |\n| `bodyAr.contributeTitle` | contributeTitle | \"ساهم من خلال تقديم معلومات حول\" |\n| `bodyAr.contributeDescription` | contributeDescription | \"يمكنكم المساهمة في إثراء محتوى البوابة من خلال مشاركة مع… |\n| `bodyAr.email` | البريد الإلكتروني | \"infohub@araburban.org\" |\n| `bodyAr.ctaTitle` | ctaTitle | \"اختر نوع المساهمة\" |\n| `bodyAr.ctaDisclaimer` | ctaDisclaimer | \"لا يعني إدراج أي مشروع أو منظمة في البوابة بالضرورة مواف… |\n| `bodyAr.contributionTypes` | contributionTypes | [{\"id\":\"publications\",\"label\":\"المنشورات\"},{\"id\":\"cities\"… |\n| `bodyAr.contributionForm.openLabel` | openLabel | \"قدّم مساهمة عبر الإنترنت\" |\n| `bodyAr.contributionForm.typeLabel` | typeLabel | \"نوع المساهمة\" |\n| `bodyAr.contributionForm.types.publications` | publications | \"المنشورات\" |\n| `bodyAr.contributionForm.types.cities` | مصفوفة المدن للاستيراد | \"المدن\" |\n| `bodyAr.contributionForm.types.organizations` | organizations | \"المنظمات\" |\n| `bodyAr.contributionForm.emailLabel` | emailLabel | \"البريد الإلكتروني\" |\n| `bodyAr.contributionForm.emailPlaceholder` | emailPlaceholder | \"your@email.com\" |\n| `bodyAr.contributionForm.titleLabel` | titleLabel | \"العنوان\" |\n| `bodyAr.contributionForm.titlePlaceholder` | titlePlaceholder | \"عنوان المدينة أو المنظمة أو المنشور\" |\n| `bodyAr.contributionForm.detailsLabel` | detailsLabel | \"التفاصيل\" |\n| `bodyAr.contributionForm.detailsPlaceholder` | detailsPlaceholder | \"صف المعلومات التي ترغب في المساهمة بها...\" |\n| `bodyAr.contributionForm.submit` | submit | \"إرسال المساهمة\" |\n| `bodyAr.contributionForm.success` | success | \"تم إرسال مساهمتك بنجاح.\" |\n| `bodyAr.contributionForm.error` | error | \"حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى.\" |\n| `bodyAr.directory.video` | video | \"\\/urban-policies\\/audi-infohub-inst-2.mp4\" |\n| `bodyAr.directory.title` | العنوان | \"دليل المدن العربية\" |\n| `bodyAr.directory.subtitle` | subtitle | \"يسعى المعهد إلى جمع وتوثيق البيانات والإحصاءات والمعلوما… |\n| `bodyAr.directory.filtersTitle` | filtersTitle | \"التصنيف\" |\n| `bodyAr.directory.countryLabel` | countryLabel | \"الدولة\" |\n| `bodyAr.directory.cityLabel` | cityLabel | \"المدينة\" |\n| `bodyAr.directory.citySizeLabel` | citySizeLabel | \"حجم المدينة\" |\n| `bodyAr.directory.resetLabel` | resetLabel | \"إعادة ضبط\" |\n| `bodyAr.directory.searchLabel` | searchLabel | \"بحث\" |\n| `bodyAr.directory.viewListLabel` | viewListLabel | \"القائمة\" |\n| `bodyAr.directory.viewMapLabel` | viewMapLabel | \"الخريطة\" |\n| `bodyAr.directory.mapPlaceholder` | mapPlaceholder | \"عرض الخريطة قيد التطوير\" |\n| `bodyAr.directory.seeMoreLabel` | seeMoreLabel | \"رؤية المزيد\" |\n| `bodyAr.directory.tabs` | tabs | [{\"id\":\"cities\",\"label\":\"المدن\"},{\"id\":\"projects\",\"label\"… |\n| `bodyAr.directory.columns.cities.number` | الرقم الترتيبي (01, 02, …) | \"الرقم\" |\n| `bodyAr.directory.columns.cities.name` | الاسم | \"اسم المدينة\" |\n| `bodyAr.directory.columns.cities.details` | details | \"تفاصيل\" |\n| `bodyAr.directory.columns.projects.number` | الرقم الترتيبي (01, 02, …) | \"رقم المشروع\" |\n| `bodyAr.directory.columns.projects.city` | المدينة | \"المدينة\" |\n| `bodyAr.directory.columns.projects.country` | country | \"الدولة\" |\n| `bodyAr.directory.columns.projects.startDate` | تاريخ البداية | \"التاريخ\" |\n| `bodyAr.directory.columns.projects.endDate` | تاريخ النهاية | \"تاريخ النهاية\" |\n| `bodyAr.directory.rows.cities` | مصفوفة المدن للاستيراد | [{\"number\":\"01\",\"name\":\"الباحة، المملكة العربية السعودية\"… |\n| `bodyAr.directory.rows.projects` | projects | [{\"number\":\"01\",\"city\":\"القاهرة\",\"country\":\"مصر\",\"startDa… |\n| `bodyAr.directory.rows.organizations` | organizations | [{\"number\":\"01\",\"name\":\"منظمة المدن العربية\",\"description… |\n| `bodyAr.directory.rows.publications` | publications | [{\"number\":\"01\",\"name\":\"تقرير التنمية الحضرية العربية 202… |\n| `bodyEn.paragraphs` | paragraphs | [\"The Arab Urban Development Portal is a platform for col… |\n| `bodyEn.contributeTitle` | contributeTitle | \"Contribute by providing information about\" |\n| `bodyEn.contributeDescription` | contributeDescription | \"You can help enrich the portal by sharing information ab… |\n| `bodyEn.email` | البريد الإلكتروني | \"infohub@araburban.org\" |\n| `bodyEn.ctaTitle` | ctaTitle | \"Choose the type of contribution\" |\n| `bodyEn.ctaDisclaimer` | ctaDisclaimer | \"The inclusion of any project or organization in the port… |\n| `bodyEn.contributionTypes` | contributionTypes | [{\"id\":\"publications\",\"label\":\"Publications\"},{\"id\":\"citi… |\n| `bodyEn.contributionForm.openLabel` | openLabel | \"Submit a contribution online\" |\n| `bodyEn.contributionForm.typeLabel` | typeLabel | \"Contribution type\" |\n| `bodyEn.contributionForm.types.publications` | publications | \"Publications\" |\n| `bodyEn.contributionForm.types.cities` | مصفوفة المدن للاستيراد | \"Cities\" |\n| `bodyEn.contributionForm.types.organizations` | organizations | \"Organizations\" |\n| `bodyEn.contributionForm.emailLabel` | emailLabel | \"Email\" |\n| `bodyEn.contributionForm.emailPlaceholder` | emailPlaceholder | \"your@email.com\" |\n| `bodyEn.contributionForm.titleLabel` | titleLabel | \"Title\" |\n| `bodyEn.contributionForm.titlePlaceholder` | titlePlaceholder | \"Title of the city, organization, or publication\" |\n| `bodyEn.contributionForm.detailsLabel` | detailsLabel | \"Details\" |\n| `bodyEn.contributionForm.detailsPlaceholder` | detailsPlaceholder | \"Describe the information you would like to contribute...\" |\n| `bodyEn.contributionForm.submit` | submit | \"Submit Contribution\" |\n| `bodyEn.contributionForm.success` | success | \"Your contribution was submitted successfully.\" |\n| `bodyEn.contributionForm.error` | error | \"An error occurred while submitting. Please try again.\" |\n| `bodyEn.directory.video` | video | \"\\/urban-policies\\/audi-infohub-inst-2.mp4\" |\n| `bodyEn.directory.title` | العنوان | \"Directory of Arab Cities\" |\n| `bodyEn.directory.subtitle` | subtitle | \"The Institute seeks to collect and document data, statis… |\n| `bodyEn.directory.filtersTitle` | filtersTitle | \"Classification\" |\n| `bodyEn.directory.countryLabel` | countryLabel | \"Country\" |\n| `bodyEn.directory.cityLabel` | cityLabel | \"City\" |\n| `bodyEn.directory.citySizeLabel` | citySizeLabel | \"City Size\" |\n| `bodyEn.directory.resetLabel` | resetLabel | \"Reset\" |\n| `bodyEn.directory.searchLabel` | searchLabel | \"Search\" |\n| `bodyEn.directory.viewListLabel` | viewListLabel | \"List\" |\n| `bodyEn.directory.viewMapLabel` | viewMapLabel | \"Map\" |\n| `bodyEn.directory.mapPlaceholder` | mapPlaceholder | \"Map view coming soon\" |\n| `bodyEn.directory.seeMoreLabel` | seeMoreLabel | \"See More\" |\n| `bodyEn.directory.tabs` | tabs | [{\"id\":\"cities\",\"label\":\"Cities\"},{\"id\":\"projects\",\"label… |\n| `bodyEn.directory.columns.cities.number` | الرقم الترتيبي (01, 02, …) | \"No.\" |\n| `bodyEn.directory.columns.cities.name` | الاسم | \"City Name\" |\n| `bodyEn.directory.columns.cities.details` | details | \"Details\" |\n| `bodyEn.directory.columns.projects.number` | الرقم الترتيبي (01, 02, …) | \"Project No.\" |\n| `bodyEn.directory.columns.projects.city` | المدينة | \"City\" |\n| `bodyEn.directory.columns.projects.country` | country | \"Country\" |\n| `bodyEn.directory.columns.projects.startDate` | تاريخ البداية | \"Start Date\" |\n| `bodyEn.directory.columns.projects.endDate` | تاريخ النهاية | \"End Date\" |\n| `bodyEn.directory.rows.cities` | مصفوفة المدن للاستيراد | [{\"number\":\"01\",\"name\":\"Al Baha, Saudi Arabia\",\"descripti… |\n| `bodyEn.directory.rows.projects` | projects | [{\"number\":\"01\",\"city\":\"Cairo\",\"country\":\"Egypt\",\"startDa… |\n| `bodyEn.directory.rows.organizations` | organizations | [{\"number\":\"01\",\"name\":\"Organization of Arab Cities\",\"des… |\n| `bodyEn.directory.rows.publications` | publications | [{\"number\":\"01\",\"name\":\"Arab Urban Development Report 202… |"
+                                                    },
+                                                    "response": [],
+                                                    "event": [
+                                                        {
+                                                            "listen": "test",
+                                                            "script": {
+                                                                "type": "text/javascript",
+                                                                "exec": [
+                                                                    "pm.test('save programSectionDetailId', function () {",
+                                                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                                    "    const data = pm.response.json().data;",
+                                                                    "    pm.expect(data.id).to.be.a('number');",
+                                                                    "    pm.collectionVariables.set('programSectionDetailId', String(data.id));",
+                                                                    "});"
+                                                                ]
+                                                            }
+                                                        }
+                                                    ]
                                                 }
                                             ]
                                         },
                                         {
-                                            "name": "03 — تفاصيل developmentPortal — program-section-details",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
+                                            "name": "خطوات 04–05 — مؤشر التنمية الحضرية — Steps 04–05 — developmentIndex",
+                                            "description": "**تبويب: مؤشر التنمية الحضرية** (`?tab=developmentIndex`) — خطوات 4–5\n\n**4 — قسم:** عنوان + صورة → يحفظ `{{programSectionId}}`\n\n**5 — تفاصيل:**\n| الحقل | على الموقع |\n|-------|------------|\n| `introAr/En` | فقرة المقدمة تحت العنوان |",
+                                            "item": [
+                                                {
+                                                    "name": "04 — [قسم] مؤشر التنمية الحضرية — عنوان + صورة — program-sections",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [
+                                                            {
+                                                                "key": "Accept-Language",
+                                                                "value": "{{locale}}",
+                                                                "description": "اللغة: ar | en"
+                                                            },
+                                                            {
+                                                                "key": "Authorization",
+                                                                "value": "Bearer {{adminToken}}",
+                                                                "description": ""
+                                                            },
+                                                            {
+                                                                "key": "Content-Type",
+                                                                "value": "application/json"
+                                                            }
+                                                        ],
+                                                        "url": {
+                                                            "raw": "{{baseUrl}}/api/admin/program-sections",
+                                                            "host": [
+                                                                "{{baseUrl}}"
+                                                            ],
+                                                            "path": [
+                                                                "api",
+                                                                "admin",
+                                                                "program-sections"
+                                                            ]
+                                                        },
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    \"programId\": \"{{programId}}\",\n    \"tabKey\": \"developmentIndex\",\n    \"sortOrder\": 1,\n    \"titleAr\": \"مؤشر التنمية الحضرية في المدن العربية\",\n    \"titleEn\": \"Urban Development Index in Arab Cities\",\n    \"imageUrl\": \"\\/urban-policies\\/2.gif\"\n}"
+                                                        },
+                                                        "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 4 — قسم التبويب (عنوان + صورة)**\n\nتبويب: **مؤشر التنمية الحضرية** (`tabKey: developmentIndex`)\n\n**Body:** `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`\n\nيحفظ **`{{programSectionId}}`** للخطوة التالية.\n\n**Public:** `GET /api/v1/programs/urban-policies` → `sections.developmentIndex.title`, `.image`\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programId` | معرّف البرنامج (FK) | \"{{programId}}\" |\n| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | \"developmentIndex\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |\n| `titleAr` | العنوان بالعربية | \"مؤشر التنمية الحضرية في المدن العربية\" |\n| `titleEn` | العنوان بالإنجليزية | \"Urban Development Index in Arab Cities\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/urban-policies\\/2.gif\" |"
                                                     },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/program-section-details",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "program-section-details"
+                                                    "response": [],
+                                                    "event": [
+                                                        {
+                                                            "listen": "test",
+                                                            "script": {
+                                                                "type": "text/javascript",
+                                                                "exec": [
+                                                                    "pm.test('save programSectionId', function () {",
+                                                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                                    "    const data = pm.response.json().data;",
+                                                                    "    pm.expect(data.id).to.be.a('number');",
+                                                                    "    pm.collectionVariables.set('programSectionId', String(data.id));",
+                                                                    "});"
+                                                                ]
+                                                            }
+                                                        }
                                                     ]
                                                 },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"programSectionId\": \"{{programSectionId}}\",\n    \"introAr\": null,\n    \"introEn\": null,\n    \"bodyAr\": {\n        \"paragraphs\": [\n            \"تُعد بوابة التنمية الحضرية العربية منصة لجمع ومشاركة البيانات والمعلومات المتعلقة بالمدن والمشاريع والمنظمات والمنشورات في مجال التنمية الحضرية في العالم العربي، بهدف توفير مرجع موحد للباحثين وصناع القرار.\",\n            \"تسعى البوابة إلى تعزيز التبادل المعرفي بين المدن العربية، وتسهيل الوصول إلى مصادر المعلومات الموثوقة التي تدعم صنع السياسات والممارسات الحضرية، مع إتاحة فرصة المساهمة في إثراء محتواها.\"\n        ],\n        \"contributeTitle\": \"ساهم من خلال تقديم معلومات حول\",\n        \"contributeDescription\": \"يمكنكم المساهمة في إثراء محتوى البوابة من خلال مشاركة معلومات عن المدن أو المنظمات أو المنشورات ذات الصلة بالتنمية الحضرية. تخضع جميع المساهمات لمراجعة وفق منهجية المعهد قبل النشر، ويمكنكم التواصل معنا عبر البريد الإلكتروني أدناه.\",\n        \"email\": \"infohub@araburban.org\",\n        \"ctaTitle\": \"اختر نوع المساهمة\",\n        \"ctaDisclaimer\": \"لا يعني إدراج أي مشروع أو منظمة في البوابة بالضرورة موافقة المعهد على محتواه أو التزامه.\",\n        \"contributionTypes\": [\n            {\n                \"id\": \"publications\",\n                \"label\": \"المنشورات\"\n            },\n            {\n                \"id\": \"cities\",\n                \"label\": \"المدن\"\n            },\n            {\n                \"id\": \"organizations\",\n                \"label\": \"المنظمات\"\n            }\n        ],\n        \"contributionForm\": {\n            \"openLabel\": \"قدّم مساهمة عبر الإنترنت\",\n            \"typeLabel\": \"نوع المساهمة\",\n            \"types\": {\n                \"publications\": \"المنشورات\",\n                \"cities\": \"المدن\",\n                \"organizations\": \"المنظمات\"\n            },\n            \"emailLabel\": \"البريد الإلكتروني\",\n            \"emailPlaceholder\": \"your@email.com\",\n            \"titleLabel\": \"العنوان\",\n            \"titlePlaceholder\": \"عنوان المدينة أو المنظمة أو المنشور\",\n            \"detailsLabel\": \"التفاصيل\",\n            \"detailsPlaceholder\": \"صف المعلومات التي ترغب في المساهمة بها...\",\n            \"submit\": \"إرسال المساهمة\",\n            \"success\": \"تم إرسال مساهمتك بنجاح.\",\n            \"error\": \"حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى.\"\n        },\n        \"directory\": {\n            \"video\": \"\\/urban-policies\\/audi-infohub-inst-2.mp4\",\n            \"title\": \"دليل المدن العربية\",\n            \"subtitle\": \"يسعى المعهد إلى جمع وتوثيق البيانات والإحصاءات والمعلومات المتعلقة بالمدن العربية وإجراء الأبحاث الحضرية، بهدف توفير مرجع موحد للباحثين وصناع القرار في مجال التنمية الحضرية.\",\n            \"filtersTitle\": \"التصنيف\",\n            \"countryLabel\": \"الدولة\",\n            \"cityLabel\": \"المدينة\",\n            \"citySizeLabel\": \"حجم المدينة\",\n            \"resetLabel\": \"إعادة ضبط\",\n            \"searchLabel\": \"بحث\",\n            \"viewListLabel\": \"القائمة\",\n            \"viewMapLabel\": \"الخريطة\",\n            \"mapPlaceholder\": \"عرض الخريطة قيد التطوير\",\n            \"seeMoreLabel\": \"رؤية المزيد\",\n            \"tabs\": [\n                {\n                    \"id\": \"cities\",\n                    \"label\": \"المدن\"\n                },\n                {\n                    \"id\": \"projects\",\n                    \"label\": \"المشاريع\"\n                },\n                {\n                    \"id\": \"organizations\",\n                    \"label\": \"المنظمات\"\n                },\n                {\n                    \"id\": \"publications\",\n                    \"label\": \"المنشورات\"\n                }\n            ],\n            \"columns\": {\n                \"cities\": {\n                    \"number\": \"الرقم\",\n                    \"name\": \"اسم المدينة\",\n                    \"details\": \"تفاصيل\"\n                },\n                \"projects\": {\n                    \"number\": \"رقم المشروع\",\n                    \"city\": \"المدينة\",\n                    \"country\": \"الدولة\",\n                    \"startDate\": \"التاريخ\",\n                    \"endDate\": \"تاريخ النهاية\"\n                }\n            }\n        }\n    },\n    \"bodyEn\": {\n        \"paragraphs\": [\n            \"The Arab Urban Development Portal is a platform for collecting and sharing data and information on cities, projects, organizations, and publications related to urban development in the Arab region.\",\n            \"The portal aims to strengthen knowledge exchange among Arab cities and facilitate access to reliable information sources that support urban policy and practice.\"\n        ],\n        \"contributeTitle\": \"Contribute by providing information about\",\n        \"contributeDescription\": \"You can help enrich the portal by sharing information about cities, organizations, or publications related to urban development. All submissions are reviewed according to the Institute's methodology before publication.\",\n        \"email\": \"infohub@araburban.org\",\n        \"ctaTitle\": \"Choose the type of contribution\",\n        \"ctaDisclaimer\": \"The inclusion of any project or organization in the portal does not necessarily imply endorsement by the Institute.\",\n        \"contributionTypes\": [\n            {\n                \"id\": \"publications\",\n                \"label\": \"Publications\"\n            },\n            {\n                \"id\": \"cities\",\n                \"label\": \"Cities\"\n            },\n            {\n                \"id\": \"organizations\",\n                \"label\": \"Organizations\"\n            }\n        ],\n        \"contributionForm\": {\n            \"openLabel\": \"Submit a contribution online\",\n            \"typeLabel\": \"Contribution type\",\n            \"types\": {\n                \"publications\": \"Publications\",\n                \"cities\": \"Cities\",\n                \"organizations\": \"Organizations\"\n            },\n            \"emailLabel\": \"Email\",\n            \"emailPlaceholder\": \"your@email.com\",\n            \"titleLabel\": \"Title\",\n            \"titlePlaceholder\": \"Title of the city, organization, or publication\",\n            \"detailsLabel\": \"Details\",\n            \"detailsPlaceholder\": \"Describe the information you would like to contribute...\",\n            \"submit\": \"Submit Contribution\",\n            \"success\": \"Your contribution was submitted successfully.\",\n            \"error\": \"An error occurred while submitting. Please try again.\"\n        },\n        \"directory\": {\n            \"video\": \"\\/urban-policies\\/audi-infohub-inst-2.mp4\",\n            \"title\": \"Directory of Arab Cities\",\n            \"subtitle\": \"The Institute seeks to collect and document data, statistics, and information related to Arab cities and conduct urban research, providing a unified reference for researchers and decision-makers in urban development.\",\n            \"filtersTitle\": \"Classification\",\n            \"countryLabel\": \"Country\",\n            \"cityLabel\": \"City\",\n            \"citySizeLabel\": \"City Size\",\n            \"resetLabel\": \"Reset\",\n            \"searchLabel\": \"Search\",\n            \"viewListLabel\": \"List\",\n            \"viewMapLabel\": \"Map\",\n            \"mapPlaceholder\": \"Map view coming soon\",\n            \"seeMoreLabel\": \"See More\",\n            \"tabs\": [\n                {\n                    \"id\": \"cities\",\n                    \"label\": \"Cities\"\n                },\n                {\n                    \"id\": \"projects\",\n                    \"label\": \"Projects\"\n                },\n                {\n                    \"id\": \"organizations\",\n                    \"label\": \"Organizations\"\n                },\n                {\n                    \"id\": \"publications\",\n                    \"label\": \"Publications\"\n                }\n            ],\n            \"columns\": {\n                \"cities\": {\n                    \"number\": \"No.\",\n                    \"name\": \"City Name\",\n                    \"details\": \"Details\"\n                },\n                \"projects\": {\n                    \"number\": \"Project No.\",\n                    \"city\": \"City\",\n                    \"country\": \"Country\",\n                    \"startDate\": \"Start Date\",\n                    \"endDate\": \"End Date\"\n                }\n            }\n        }\n    }\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 3: Details: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageUrl` if different from section.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programSectionId` | programSectionId | \"{{programSectionId}}\" |\n| `introAr` | المقدمة بالعربية | null |\n| `introEn` | المقدمة بالإنجليزية | null |\n| `bodyAr.paragraphs` | paragraphs | [\"تُعد بوابة التنمية الحضرية العربية منصة لجمع ومشاركة ال… |\n| `bodyAr.contributeTitle` | contributeTitle | \"ساهم من خلال تقديم معلومات حول\" |\n| `bodyAr.contributeDescription` | contributeDescription | \"يمكنكم المساهمة في إثراء محتوى البوابة من خلال مشاركة مع… |\n| `bodyAr.email` | البريد الإلكتروني | \"infohub@araburban.org\" |\n| `bodyAr.ctaTitle` | ctaTitle | \"اختر نوع المساهمة\" |\n| `bodyAr.ctaDisclaimer` | ctaDisclaimer | \"لا يعني إدراج أي مشروع أو منظمة في البوابة بالضرورة مواف… |\n| `bodyAr.contributionTypes` | contributionTypes | [{\"id\":\"publications\",\"label\":\"المنشورات\"},{\"id\":\"cities\"… |\n| `bodyAr.contributionForm.openLabel` | openLabel | \"قدّم مساهمة عبر الإنترنت\" |\n| `bodyAr.contributionForm.typeLabel` | typeLabel | \"نوع المساهمة\" |\n| `bodyAr.contributionForm.types.publications` | publications | \"المنشورات\" |\n| `bodyAr.contributionForm.types.cities` | مصفوفة المدن للاستيراد | \"المدن\" |\n| `bodyAr.contributionForm.types.organizations` | organizations | \"المنظمات\" |\n| `bodyAr.contributionForm.emailLabel` | emailLabel | \"البريد الإلكتروني\" |\n| `bodyAr.contributionForm.emailPlaceholder` | emailPlaceholder | \"your@email.com\" |\n| `bodyAr.contributionForm.titleLabel` | titleLabel | \"العنوان\" |\n| `bodyAr.contributionForm.titlePlaceholder` | titlePlaceholder | \"عنوان المدينة أو المنظمة أو المنشور\" |\n| `bodyAr.contributionForm.detailsLabel` | detailsLabel | \"التفاصيل\" |\n| `bodyAr.contributionForm.detailsPlaceholder` | detailsPlaceholder | \"صف المعلومات التي ترغب في المساهمة بها...\" |\n| `bodyAr.contributionForm.submit` | submit | \"إرسال المساهمة\" |\n| `bodyAr.contributionForm.success` | success | \"تم إرسال مساهمتك بنجاح.\" |\n| `bodyAr.contributionForm.error` | error | \"حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى.\" |\n| `bodyAr.directory.video` | video | \"\\/urban-policies\\/audi-infohub-inst-2.mp4\" |\n| `bodyAr.directory.title` | العنوان | \"دليل المدن العربية\" |\n| `bodyAr.directory.subtitle` | subtitle | \"يسعى المعهد إلى جمع وتوثيق البيانات والإحصاءات والمعلوما… |\n| `bodyAr.directory.filtersTitle` | filtersTitle | \"التصنيف\" |\n| `bodyAr.directory.countryLabel` | countryLabel | \"الدولة\" |\n| `bodyAr.directory.cityLabel` | cityLabel | \"المدينة\" |\n| `bodyAr.directory.citySizeLabel` | citySizeLabel | \"حجم المدينة\" |\n| `bodyAr.directory.resetLabel` | resetLabel | \"إعادة ضبط\" |\n| `bodyAr.directory.searchLabel` | searchLabel | \"بحث\" |\n| `bodyAr.directory.viewListLabel` | viewListLabel | \"القائمة\" |\n| `bodyAr.directory.viewMapLabel` | viewMapLabel | \"الخريطة\" |\n| `bodyAr.directory.mapPlaceholder` | mapPlaceholder | \"عرض الخريطة قيد التطوير\" |\n| `bodyAr.directory.seeMoreLabel` | seeMoreLabel | \"رؤية المزيد\" |\n| `bodyAr.directory.tabs` | tabs | [{\"id\":\"cities\",\"label\":\"المدن\"},{\"id\":\"projects\",\"label\"… |\n| `bodyAr.directory.columns.cities.number` | الرقم الترتيبي (01, 02, …) | \"الرقم\" |\n| `bodyAr.directory.columns.cities.name` | الاسم | \"اسم المدينة\" |\n| `bodyAr.directory.columns.cities.details` | details | \"تفاصيل\" |\n| `bodyAr.directory.columns.projects.number` | الرقم الترتيبي (01, 02, …) | \"رقم المشروع\" |\n| `bodyAr.directory.columns.projects.city` | المدينة | \"المدينة\" |\n| `bodyAr.directory.columns.projects.country` | country | \"الدولة\" |\n| `bodyAr.directory.columns.projects.startDate` | تاريخ البداية | \"التاريخ\" |\n| `bodyAr.directory.columns.projects.endDate` | تاريخ النهاية | \"تاريخ النهاية\" |\n| `bodyEn.paragraphs` | paragraphs | [\"The Arab Urban Development Portal is a platform for col… |\n| `bodyEn.contributeTitle` | contributeTitle | \"Contribute by providing information about\" |\n| `bodyEn.contributeDescription` | contributeDescription | \"You can help enrich the portal by sharing information ab… |\n| `bodyEn.email` | البريد الإلكتروني | \"infohub@araburban.org\" |\n| `bodyEn.ctaTitle` | ctaTitle | \"Choose the type of contribution\" |\n| `bodyEn.ctaDisclaimer` | ctaDisclaimer | \"The inclusion of any project or organization in the port… |\n| `bodyEn.contributionTypes` | contributionTypes | [{\"id\":\"publications\",\"label\":\"Publications\"},{\"id\":\"citi… |\n| `bodyEn.contributionForm.openLabel` | openLabel | \"Submit a contribution online\" |\n| `bodyEn.contributionForm.typeLabel` | typeLabel | \"Contribution type\" |\n| `bodyEn.contributionForm.types.publications` | publications | \"Publications\" |\n| `bodyEn.contributionForm.types.cities` | مصفوفة المدن للاستيراد | \"Cities\" |\n| `bodyEn.contributionForm.types.organizations` | organizations | \"Organizations\" |\n| `bodyEn.contributionForm.emailLabel` | emailLabel | \"Email\" |\n| `bodyEn.contributionForm.emailPlaceholder` | emailPlaceholder | \"your@email.com\" |\n| `bodyEn.contributionForm.titleLabel` | titleLabel | \"Title\" |\n| `bodyEn.contributionForm.titlePlaceholder` | titlePlaceholder | \"Title of the city, organization, or publication\" |\n| `bodyEn.contributionForm.detailsLabel` | detailsLabel | \"Details\" |\n| `bodyEn.contributionForm.detailsPlaceholder` | detailsPlaceholder | \"Describe the information you would like to contribute...\" |\n| `bodyEn.contributionForm.submit` | submit | \"Submit Contribution\" |\n| `bodyEn.contributionForm.success` | success | \"Your contribution was submitted successfully.\" |\n| `bodyEn.contributionForm.error` | error | \"An error occurred while submitting. Please try again.\" |\n| `bodyEn.directory.video` | video | \"\\/urban-policies\\/audi-infohub-inst-2.mp4\" |\n| `bodyEn.directory.title` | العنوان | \"Directory of Arab Cities\" |\n| `bodyEn.directory.subtitle` | subtitle | \"The Institute seeks to collect and document data, statis… |\n| `bodyEn.directory.filtersTitle` | filtersTitle | \"Classification\" |\n| `bodyEn.directory.countryLabel` | countryLabel | \"Country\" |\n| `bodyEn.directory.cityLabel` | cityLabel | \"City\" |\n| `bodyEn.directory.citySizeLabel` | citySizeLabel | \"City Size\" |\n| `bodyEn.directory.resetLabel` | resetLabel | \"Reset\" |\n| `bodyEn.directory.searchLabel` | searchLabel | \"Search\" |\n| `bodyEn.directory.viewListLabel` | viewListLabel | \"List\" |\n| `bodyEn.directory.viewMapLabel` | viewMapLabel | \"Map\" |\n| `bodyEn.directory.mapPlaceholder` | mapPlaceholder | \"Map view coming soon\" |\n| `bodyEn.directory.seeMoreLabel` | seeMoreLabel | \"See More\" |\n| `bodyEn.directory.tabs` | tabs | [{\"id\":\"cities\",\"label\":\"Cities\"},{\"id\":\"projects\",\"label… |\n| `bodyEn.directory.columns.cities.number` | الرقم الترتيبي (01, 02, …) | \"No.\" |\n| `bodyEn.directory.columns.cities.name` | الاسم | \"City Name\" |\n| `bodyEn.directory.columns.cities.details` | details | \"Details\" |\n| `bodyEn.directory.columns.projects.number` | الرقم الترتيبي (01, 02, …) | \"Project No.\" |\n| `bodyEn.directory.columns.projects.city` | المدينة | \"City\" |\n| `bodyEn.directory.columns.projects.country` | country | \"Country\" |\n| `bodyEn.directory.columns.projects.startDate` | تاريخ البداية | \"Start Date\" |\n| `bodyEn.directory.columns.projects.endDate` | تاريخ النهاية | \"End Date\" |"
-                                            },
-                                            "response": [],
-                                            "event": [
                                                 {
-                                                    "listen": "test",
-                                                    "script": {
-                                                        "type": "text/javascript",
-                                                        "exec": [
-                                                            "pm.test('save programSectionDetailId', function () {",
-                                                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                                                            "    const data = pm.response.json().data;",
-                                                            "    pm.expect(data.id).to.be.a('number');",
-                                                            "    pm.collectionVariables.set('programSectionDetailId', String(data.id));",
-                                                            "});"
-                                                        ]
-                                                    }
+                                                    "name": "05 — [تفاصيل] مؤشر التنمية الحضرية — intro — program-section-details",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [
+                                                            {
+                                                                "key": "Accept-Language",
+                                                                "value": "{{locale}}",
+                                                                "description": "اللغة: ar | en"
+                                                            },
+                                                            {
+                                                                "key": "Authorization",
+                                                                "value": "Bearer {{adminToken}}",
+                                                                "description": ""
+                                                            },
+                                                            {
+                                                                "key": "Content-Type",
+                                                                "value": "application/json"
+                                                            }
+                                                        ],
+                                                        "url": {
+                                                            "raw": "{{baseUrl}}/api/admin/program-section-details",
+                                                            "host": [
+                                                                "{{baseUrl}}"
+                                                            ],
+                                                            "path": [
+                                                                "api",
+                                                                "admin",
+                                                                "program-section-details"
+                                                            ]
+                                                        },
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    \"programSectionId\": \"{{programSectionId}}\",\n    \"introAr\": \"أداة علمية متخصصة تهدف إلى رصد مسارات وتوجهات التنمية الحضرية، ومقارنتها بين المدن العربية، ومراقبة استقرار واستدامة النمو الاقتصادي والتغيرات الديموغرافية والبيانات الاجتماعية والثقافية على المستوى الحضري.\",\n    \"introEn\": \"A specialized scientific tool for monitoring urban development pathways and trends, comparing them among Arab cities, and tracking the stability and sustainability of economic growth, demographic change, and social and cultural data at the urban level.\"\n}"
+                                                        },
+                                                        "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 5 — تفاصيل التبويب**\n\nتبويب: **مؤشر التنمية الحضرية** — بعد القسم في الخطوة 4\n\n**Body:** `programSectionId`, `introAr`, `introEn`, `bodyAr`, `bodyEn`\n\n**حقول المحتوى:**\n| الحقل | على الموقع |\n|-------|------------|\n| `introAr/En` | فقرة المقدمة تحت العنوان |\n\n**الموقع:** `/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentIndex`\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programSectionId` | programSectionId | \"{{programSectionId}}\" |\n| `introAr` | المقدمة بالعربية | \"أداة علمية متخصصة تهدف إلى رصد مسارات وتوجهات التنمية ال… |\n| `introEn` | المقدمة بالإنجليزية | \"A specialized scientific tool for monitoring urban devel… |"
+                                                    },
+                                                    "response": [],
+                                                    "event": [
+                                                        {
+                                                            "listen": "test",
+                                                            "script": {
+                                                                "type": "text/javascript",
+                                                                "exec": [
+                                                                    "pm.test('save programSectionDetailId', function () {",
+                                                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                                    "    const data = pm.response.json().data;",
+                                                                    "    pm.expect(data.id).to.be.a('number');",
+                                                                    "    pm.collectionVariables.set('programSectionDetailId', String(data.id));",
+                                                                    "});"
+                                                                ]
+                                                            }
+                                                        }
+                                                    ]
                                                 }
                                             ]
                                         },
                                         {
-                                            "name": "04 — قسم developmentIndex — program-sections",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
+                                            "name": "خطوات 06–07 — معمل الابتكار الحضري — Steps 06–07 — innovationLab",
+                                            "description": "**تبويب: معمل الابتكار الحضري** (`?tab=innovationLab`) — خطوات 6–7\n\n**6 — قسم:** عنوان + صورة → يحفظ `{{programSectionId}}`\n\n**7 — تفاصيل:**\n| الحقل | على الموقع |\n|-------|------------|\n| `introAr/En` | فقرة المقدمة أعلى الصفحة |\n| `bodyAr.video` | فيديو معمل الابتكار (`?tab=innovationLab`) |\n| `bodyAr.videoPoster` | صورة غلاف الفيديو |\n| `bodyAr.projectsTitle` | عنوان «المشاريع التي تم تنفيذها» |\n| `bodyAr.viewIssue` | نص زر «عرض الإصدار» |\n| `bodyAr.projects[]` | بطاقات المشاريع — `{title, date, image, href}` |",
+                                            "item": [
+                                                {
+                                                    "name": "06 — [قسم] معمل الابتكار الحضري — عنوان + صورة — program-sections",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [
+                                                            {
+                                                                "key": "Accept-Language",
+                                                                "value": "{{locale}}",
+                                                                "description": "اللغة: ar | en"
+                                                            },
+                                                            {
+                                                                "key": "Authorization",
+                                                                "value": "Bearer {{adminToken}}",
+                                                                "description": ""
+                                                            },
+                                                            {
+                                                                "key": "Content-Type",
+                                                                "value": "application/json"
+                                                            }
+                                                        ],
+                                                        "url": {
+                                                            "raw": "{{baseUrl}}/api/admin/program-sections",
+                                                            "host": [
+                                                                "{{baseUrl}}"
+                                                            ],
+                                                            "path": [
+                                                                "api",
+                                                                "admin",
+                                                                "program-sections"
+                                                            ]
+                                                        },
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    \"programId\": \"{{programId}}\",\n    \"tabKey\": \"innovationLab\",\n    \"sortOrder\": 2,\n    \"titleAr\": \"معمل الابتكار الحضري للمدن العربية\",\n    \"titleEn\": \"Urban Innovation Lab for Arab Cities\",\n    \"imageUrl\": \"\\/urban-policies\\/3.gif\"\n}"
+                                                        },
+                                                        "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 6 — قسم التبويب (عنوان + صورة)**\n\nتبويب: **معمل الابتكار الحضري** (`tabKey: innovationLab`)\n\n**Body:** `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`\n\nيحفظ **`{{programSectionId}}`** للخطوة التالية.\n\n**Public:** `GET /api/v1/programs/urban-policies` → `sections.innovationLab.title`, `.image`\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programId` | معرّف البرنامج (FK) | \"{{programId}}\" |\n| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | \"innovationLab\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |\n| `titleAr` | العنوان بالعربية | \"معمل الابتكار الحضري للمدن العربية\" |\n| `titleEn` | العنوان بالإنجليزية | \"Urban Innovation Lab for Arab Cities\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/urban-policies\\/3.gif\" |"
                                                     },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/program-sections",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "program-sections"
+                                                    "response": [],
+                                                    "event": [
+                                                        {
+                                                            "listen": "test",
+                                                            "script": {
+                                                                "type": "text/javascript",
+                                                                "exec": [
+                                                                    "pm.test('save programSectionId', function () {",
+                                                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                                    "    const data = pm.response.json().data;",
+                                                                    "    pm.expect(data.id).to.be.a('number');",
+                                                                    "    pm.collectionVariables.set('programSectionId', String(data.id));",
+                                                                    "});"
+                                                                ]
+                                                            }
+                                                        }
                                                     ]
                                                 },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"programId\": \"{{programId}}\",\n    \"tabKey\": \"developmentIndex\",\n    \"sortOrder\": 1,\n    \"titleAr\": \"مؤشر التنمية الحضرية في المدن العربية\",\n    \"titleEn\": \"Urban Development Index in Arab Cities\",\n    \"imageUrl\": \"\\/urban-policies\\/2.gif\"\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 4: **One request**: `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`. Saves `programSectionId`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programId` | معرّف البرنامج (FK) | \"{{programId}}\" |\n| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | \"developmentIndex\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 1 |\n| `titleAr` | العنوان بالعربية | \"مؤشر التنمية الحضرية في المدن العربية\" |\n| `titleEn` | العنوان بالإنجليزية | \"Urban Development Index in Arab Cities\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/urban-policies\\/2.gif\" |"
-                                            },
-                                            "response": [],
-                                            "event": [
                                                 {
-                                                    "listen": "test",
-                                                    "script": {
-                                                        "type": "text/javascript",
-                                                        "exec": [
-                                                            "pm.test('save programSectionId', function () {",
-                                                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                                                            "    const data = pm.response.json().data;",
-                                                            "    pm.expect(data.id).to.be.a('number');",
-                                                            "    pm.collectionVariables.set('programSectionId', String(data.id));",
-                                                            "});"
-                                                        ]
-                                                    }
+                                                    "name": "07 — [تفاصيل] معمل الابتكار الحضري — intro + video + projects[] — program-section-details",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [
+                                                            {
+                                                                "key": "Accept-Language",
+                                                                "value": "{{locale}}",
+                                                                "description": "اللغة: ar | en"
+                                                            },
+                                                            {
+                                                                "key": "Authorization",
+                                                                "value": "Bearer {{adminToken}}",
+                                                                "description": ""
+                                                            },
+                                                            {
+                                                                "key": "Content-Type",
+                                                                "value": "application/json"
+                                                            }
+                                                        ],
+                                                        "url": {
+                                                            "raw": "{{baseUrl}}/api/admin/program-section-details",
+                                                            "host": [
+                                                                "{{baseUrl}}"
+                                                            ],
+                                                            "path": [
+                                                                "api",
+                                                                "admin",
+                                                                "program-section-details"
+                                                            ]
+                                                        },
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    \"programSectionId\": \"{{programSectionId}}\",\n    \"introAr\": \"مساحة تجريبية لتطوير حلول مبتكرة للتحديات الحضرية، من خلال ربط المدن العربية بالخبرات العالمية وتشجيع تبني التقنيات والممارسات الحديثة في التخطيط والإدارة الحضرية.\",\n    \"introEn\": \"An experimental space for developing innovative solutions to urban challenges by connecting Arab cities with global expertise and encouraging the adoption of modern technologies and practices in urban planning and management.\",\n    \"bodyAr\": {\n        \"video\": \"\\/urban-policies\\/innovation-lab.mp4\",\n        \"videoPoster\": \"\\/urban-policies\\/3.gif\",\n        \"projectsTitle\": \"المشاريع التي تم تنفيذها\",\n        \"viewIssue\": \"عرض الإصدار\",\n        \"projects\": [\n            {\n                \"title\": \"مختبر الابتكار الحضري: من الفكرة إلى التطبيق\",\n                \"date\": \"DEC 29, 2025\",\n                \"image\": \"\\/our-sources\\/1.png\",\n                \"href\": \"#\"\n            },\n            {\n                \"title\": \"حلول ذكية لإدارة النفايات في المدن العربية\",\n                \"date\": \"DEC 29, 2025\",\n                \"image\": \"\\/our-sources\\/2.png\",\n                \"href\": \"#\"\n            },\n            {\n                \"title\": \"منصة ربط المدن العربية بالخبرات العالمية\",\n                \"date\": \"MAY 29, 2025\",\n                \"image\": \"\\/our-sources\\/3.png\",\n                \"href\": \"#\"\n            }\n        ]\n    },\n    \"bodyEn\": {\n        \"video\": \"\\/urban-policies\\/innovation-lab.mp4\",\n        \"videoPoster\": \"\\/urban-policies\\/3.gif\",\n        \"projectsTitle\": \"Implemented Projects\",\n        \"viewIssue\": \"View Issue\",\n        \"projects\": [\n            {\n                \"title\": \"Urban Innovation Lab: From Idea to Implementation\",\n                \"date\": \"DEC 29, 2025\",\n                \"image\": \"\\/our-sources\\/1.png\",\n                \"href\": \"#\"\n            },\n            {\n                \"title\": \"Smart Solutions for Waste Management in Arab Cities\",\n                \"date\": \"DEC 29, 2025\",\n                \"image\": \"\\/our-sources\\/2.png\",\n                \"href\": \"#\"\n            },\n            {\n                \"title\": \"Platform Connecting Arab Cities with Global Expertise\",\n                \"date\": \"MAY 29, 2025\",\n                \"image\": \"\\/our-sources\\/3.png\",\n                \"href\": \"#\"\n            }\n        ]\n    }\n}"
+                                                        },
+                                                        "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 7 — تفاصيل التبويب**\n\nتبويب: **معمل الابتكار الحضري** — بعد القسم في الخطوة 6\n\n**Body:** `programSectionId`, `introAr`, `introEn`, `bodyAr`, `bodyEn`\n\n**حقول المحتوى:**\n| الحقل | على الموقع |\n|-------|------------|\n| `introAr/En` | فقرة المقدمة أعلى الصفحة |\n| `bodyAr.video` | فيديو معمل الابتكار (`?tab=innovationLab`) |\n| `bodyAr.videoPoster` | صورة غلاف الفيديو |\n| `bodyAr.projectsTitle` | عنوان «المشاريع التي تم تنفيذها» |\n| `bodyAr.viewIssue` | نص زر «عرض الإصدار» |\n| `bodyAr.projects[]` | بطاقات المشاريع — `{title, date, image, href}` |\n\n**الموقع:** `/ar/برامجنا/برنامج-السياسات-الحضرية?tab=innovationLab`\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programSectionId` | programSectionId | \"{{programSectionId}}\" |\n| `introAr` | المقدمة بالعربية | \"مساحة تجريبية لتطوير حلول مبتكرة للتحديات الحضرية، من خل… |\n| `introEn` | المقدمة بالإنجليزية | \"An experimental space for developing innovative solution… |\n| `bodyAr.video` | video | \"\\/urban-policies\\/innovation-lab.mp4\" |\n| `bodyAr.videoPoster` | videoPoster | \"\\/urban-policies\\/3.gif\" |\n| `bodyAr.projectsTitle` | projectsTitle | \"المشاريع التي تم تنفيذها\" |\n| `bodyAr.viewIssue` | viewIssue | \"عرض الإصدار\" |\n| `bodyAr.projects` | projects | [{\"title\":\"مختبر الابتكار الحضري: من الفكرة إلى التطبيق\",… |\n| `bodyEn.video` | video | \"\\/urban-policies\\/innovation-lab.mp4\" |\n| `bodyEn.videoPoster` | videoPoster | \"\\/urban-policies\\/3.gif\" |\n| `bodyEn.projectsTitle` | projectsTitle | \"Implemented Projects\" |\n| `bodyEn.viewIssue` | viewIssue | \"View Issue\" |\n| `bodyEn.projects` | projects | [{\"title\":\"Urban Innovation Lab: From Idea to Implementat… |"
+                                                    },
+                                                    "response": [],
+                                                    "event": [
+                                                        {
+                                                            "listen": "test",
+                                                            "script": {
+                                                                "type": "text/javascript",
+                                                                "exec": [
+                                                                    "pm.test('save programSectionDetailId', function () {",
+                                                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                                    "    const data = pm.response.json().data;",
+                                                                    "    pm.expect(data.id).to.be.a('number');",
+                                                                    "    pm.collectionVariables.set('programSectionDetailId', String(data.id));",
+                                                                    "});"
+                                                                ]
+                                                            }
+                                                        }
+                                                    ]
                                                 }
                                             ]
                                         },
                                         {
-                                            "name": "05 — تفاصيل developmentIndex — program-section-details",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
+                                            "name": "خطوات 08–09 — تقارير الممارسات والسياسات — Steps 08–09 — practiceReports",
+                                            "description": "**تبويب: تقارير الممارسات والسياسات** (`?tab=practiceReports`) — خطوات 8–9\n\n**8 — قسم:** عنوان + صورة → يحفظ `{{programSectionId}}`\n\n**9 — تفاصيل:**\n| الحقل | على الموقع |\n|-------|------------|\n| `introAr/En` | فقرة المقدمة أعلى الصفحة |\n| `bodyAr.projectsTitle` | عنوان «المشاريع التي تم تنفيذها» |\n| `bodyAr.viewIssue` | نص زر «عرض الإصدار» |\n| `bodyAr.projects[]` | بطاقات التقارير — `{title, date, image, href}` |",
+                                            "item": [
+                                                {
+                                                    "name": "08 — [قسم] تقارير الممارسات والسياسات — عنوان + صورة — program-sections",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [
+                                                            {
+                                                                "key": "Accept-Language",
+                                                                "value": "{{locale}}",
+                                                                "description": "اللغة: ar | en"
+                                                            },
+                                                            {
+                                                                "key": "Authorization",
+                                                                "value": "Bearer {{adminToken}}",
+                                                                "description": ""
+                                                            },
+                                                            {
+                                                                "key": "Content-Type",
+                                                                "value": "application/json"
+                                                            }
+                                                        ],
+                                                        "url": {
+                                                            "raw": "{{baseUrl}}/api/admin/program-sections",
+                                                            "host": [
+                                                                "{{baseUrl}}"
+                                                            ],
+                                                            "path": [
+                                                                "api",
+                                                                "admin",
+                                                                "program-sections"
+                                                            ]
+                                                        },
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    \"programId\": \"{{programId}}\",\n    \"tabKey\": \"practiceReports\",\n    \"sortOrder\": 3,\n    \"titleAr\": \"تقارير للممارسات والسياسات الحضرية\",\n    \"titleEn\": \"Urban Practices and Policies Reports\",\n    \"imageUrl\": \"\\/urban-policies\\/4.gif\"\n}"
+                                                        },
+                                                        "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 8 — قسم التبويب (عنوان + صورة)**\n\nتبويب: **تقارير الممارسات والسياسات** (`tabKey: practiceReports`)\n\n**Body:** `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`\n\nيحفظ **`{{programSectionId}}`** للخطوة التالية.\n\n**Public:** `GET /api/v1/programs/urban-policies` → `sections.practiceReports.title`, `.image`\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programId` | معرّف البرنامج (FK) | \"{{programId}}\" |\n| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | \"practiceReports\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 3 |\n| `titleAr` | العنوان بالعربية | \"تقارير للممارسات والسياسات الحضرية\" |\n| `titleEn` | العنوان بالإنجليزية | \"Urban Practices and Policies Reports\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/urban-policies\\/4.gif\" |"
                                                     },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/program-section-details",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "program-section-details"
+                                                    "response": [],
+                                                    "event": [
+                                                        {
+                                                            "listen": "test",
+                                                            "script": {
+                                                                "type": "text/javascript",
+                                                                "exec": [
+                                                                    "pm.test('save programSectionId', function () {",
+                                                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                                    "    const data = pm.response.json().data;",
+                                                                    "    pm.expect(data.id).to.be.a('number');",
+                                                                    "    pm.collectionVariables.set('programSectionId', String(data.id));",
+                                                                    "});"
+                                                                ]
+                                                            }
+                                                        }
                                                     ]
                                                 },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"programSectionId\": \"{{programSectionId}}\",\n    \"introAr\": \"أداة علمية متخصصة تهدف إلى رصد مسارات وتوجهات التنمية الحضرية، ومقارنتها بين المدن العربية، ومراقبة استقرار واستدامة النمو الاقتصادي والتغيرات الديموغرافية والبيانات الاجتماعية والثقافية على المستوى الحضري.\",\n    \"introEn\": \"A specialized scientific tool for monitoring urban development pathways and trends, comparing them among Arab cities, and tracking the stability and sustainability of economic growth, demographic change, and social and cultural data at the urban level.\"\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 5: Details: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageUrl` if different from section.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programSectionId` | programSectionId | \"{{programSectionId}}\" |\n| `introAr` | المقدمة بالعربية | \"أداة علمية متخصصة تهدف إلى رصد مسارات وتوجهات التنمية ال… |\n| `introEn` | المقدمة بالإنجليزية | \"A specialized scientific tool for monitoring urban devel… |"
-                                            },
-                                            "response": [],
-                                            "event": [
                                                 {
-                                                    "listen": "test",
-                                                    "script": {
-                                                        "type": "text/javascript",
-                                                        "exec": [
-                                                            "pm.test('save programSectionDetailId', function () {",
-                                                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                                                            "    const data = pm.response.json().data;",
-                                                            "    pm.expect(data.id).to.be.a('number');",
-                                                            "    pm.collectionVariables.set('programSectionDetailId', String(data.id));",
-                                                            "});"
-                                                        ]
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "name": "06 — قسم innovationLab — program-sections",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
+                                                    "name": "09 — [تفاصيل] تقارير الممارسات والسياسات — intro + projects[] — program-section-details",
+                                                    "request": {
+                                                        "method": "POST",
+                                                        "header": [
+                                                            {
+                                                                "key": "Accept-Language",
+                                                                "value": "{{locale}}",
+                                                                "description": "اللغة: ar | en"
+                                                            },
+                                                            {
+                                                                "key": "Authorization",
+                                                                "value": "Bearer {{adminToken}}",
+                                                                "description": ""
+                                                            },
+                                                            {
+                                                                "key": "Content-Type",
+                                                                "value": "application/json"
+                                                            }
+                                                        ],
+                                                        "url": {
+                                                            "raw": "{{baseUrl}}/api/admin/program-section-details",
+                                                            "host": [
+                                                                "{{baseUrl}}"
+                                                            ],
+                                                            "path": [
+                                                                "api",
+                                                                "admin",
+                                                                "program-section-details"
+                                                            ]
+                                                        },
+                                                        "body": {
+                                                            "mode": "raw",
+                                                            "raw": "{\n    \"programSectionId\": \"{{programSectionId}}\",\n    \"introAr\": \"سلسلة من التقارير والدراسات التطبيقية التي توثق أفضل الممارسات والسياسات الحضرية في المدن العربية، وتقدم توصيات عملية لدعم صناع القرار في البلديات والأمانات.\",\n    \"introEn\": \"A series of applied reports and studies documenting best urban practices and policies in Arab cities, with practical recommendations to support decision-makers in municipalities.\",\n    \"bodyAr\": {\n        \"projectsTitle\": \"المشاريع التي تم تنفيذها\",\n        \"viewIssue\": \"عرض الإصدار\",\n        \"projects\": [\n            {\n                \"title\": \"التخضير التشاركي للأحياء في المدن العربية\",\n                \"date\": \"DEC 29, 2025\",\n                \"image\": \"\\/our-sources\\/1.png\",\n                \"href\": \"#\"\n            },\n            {\n                \"title\": \"التخضير التشاركي: تجارب عالمية\",\n                \"date\": \"DEC 29, 2025\",\n                \"image\": \"\\/our-sources\\/2.png\",\n                \"href\": \"#\"\n            },\n            {\n                \"title\": \"60 مشروع تخضير حضري\",\n                \"date\": \"DEC 29, 2025\",\n                \"image\": \"\\/our-sources\\/3.png\",\n                \"href\": \"#\"\n            }\n        ]\n    },\n    \"bodyEn\": {\n        \"projectsTitle\": \"Implemented Projects\",\n        \"viewIssue\": \"View Issue\",\n        \"projects\": [\n            {\n                \"title\": \"Participatory Greening of Neighborhoods in Arab Cities\",\n                \"date\": \"DEC 29, 2025\",\n                \"image\": \"\\/our-sources\\/1.png\",\n                \"href\": \"#\"\n            },\n            {\n                \"title\": \"Participatory Greening: Global Experiences\",\n                \"date\": \"DEC 29, 2025\",\n                \"image\": \"\\/our-sources\\/2.png\",\n                \"href\": \"#\"\n            },\n            {\n                \"title\": \"60 Urban Greening Projects\",\n                \"date\": \"DEC 29, 2025\",\n                \"image\": \"\\/our-sources\\/3.png\",\n                \"href\": \"#\"\n            }\n        ]\n    }\n}"
+                                                        },
+                                                        "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**الخطوة 9 — تفاصيل التبويب**\n\nتبويب: **تقارير الممارسات والسياسات** — بعد القسم في الخطوة 8\n\n**Body:** `programSectionId`, `introAr`, `introEn`, `bodyAr`, `bodyEn`\n\n**حقول المحتوى:**\n| الحقل | على الموقع |\n|-------|------------|\n| `introAr/En` | فقرة المقدمة أعلى الصفحة |\n| `bodyAr.projectsTitle` | عنوان «المشاريع التي تم تنفيذها» |\n| `bodyAr.viewIssue` | نص زر «عرض الإصدار» |\n| `bodyAr.projects[]` | بطاقات التقارير — `{title, date, image, href}` |\n\n**الموقع:** `/ar/برامجنا/برنامج-السياسات-الحضرية?tab=practiceReports`\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programSectionId` | programSectionId | \"{{programSectionId}}\" |\n| `introAr` | المقدمة بالعربية | \"سلسلة من التقارير والدراسات التطبيقية التي توثق أفضل الم… |\n| `introEn` | المقدمة بالإنجليزية | \"A series of applied reports and studies documenting best… |\n| `bodyAr.projectsTitle` | projectsTitle | \"المشاريع التي تم تنفيذها\" |\n| `bodyAr.viewIssue` | viewIssue | \"عرض الإصدار\" |\n| `bodyAr.projects` | projects | [{\"title\":\"التخضير التشاركي للأحياء في المدن العربية\",\"da… |\n| `bodyEn.projectsTitle` | projectsTitle | \"Implemented Projects\" |\n| `bodyEn.viewIssue` | viewIssue | \"View Issue\" |\n| `bodyEn.projects` | projects | [{\"title\":\"Participatory Greening of Neighborhoods in Ara… |"
                                                     },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/program-sections",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "program-sections"
+                                                    "response": [],
+                                                    "event": [
+                                                        {
+                                                            "listen": "test",
+                                                            "script": {
+                                                                "type": "text/javascript",
+                                                                "exec": [
+                                                                    "pm.test('save programSectionDetailId', function () {",
+                                                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                                    "    const data = pm.response.json().data;",
+                                                                    "    pm.expect(data.id).to.be.a('number');",
+                                                                    "    pm.collectionVariables.set('programSectionDetailId', String(data.id));",
+                                                                    "});"
+                                                                ]
+                                                            }
+                                                        }
                                                     ]
-                                                },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"programId\": \"{{programId}}\",\n    \"tabKey\": \"innovationLab\",\n    \"sortOrder\": 2,\n    \"titleAr\": \"معمل الابتكار الحضري للمدن العربية\",\n    \"titleEn\": \"Urban Innovation Lab for Arab Cities\",\n    \"imageUrl\": \"\\/urban-policies\\/3.gif\"\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 6: **One request**: `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`. Saves `programSectionId`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programId` | معرّف البرنامج (FK) | \"{{programId}}\" |\n| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | \"innovationLab\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 2 |\n| `titleAr` | العنوان بالعربية | \"معمل الابتكار الحضري للمدن العربية\" |\n| `titleEn` | العنوان بالإنجليزية | \"Urban Innovation Lab for Arab Cities\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/urban-policies\\/3.gif\" |"
-                                            },
-                                            "response": [],
-                                            "event": [
-                                                {
-                                                    "listen": "test",
-                                                    "script": {
-                                                        "type": "text/javascript",
-                                                        "exec": [
-                                                            "pm.test('save programSectionId', function () {",
-                                                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                                                            "    const data = pm.response.json().data;",
-                                                            "    pm.expect(data.id).to.be.a('number');",
-                                                            "    pm.collectionVariables.set('programSectionId', String(data.id));",
-                                                            "});"
-                                                        ]
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "name": "07 — تفاصيل innovationLab — program-section-details",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
-                                                    },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/program-section-details",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "program-section-details"
-                                                    ]
-                                                },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"programSectionId\": \"{{programSectionId}}\",\n    \"introAr\": \"مساحة تجريبية لتطوير حلول مبتكرة للتحديات الحضرية، من خلال ربط المدن العربية بالخبرات العالمية وتشجيع تبني التقنيات والممارسات الحديثة في التخطيط والإدارة الحضرية.\",\n    \"introEn\": \"An experimental space for developing innovative solutions to urban challenges by connecting Arab cities with global expertise and encouraging the adoption of modern technologies and practices in urban planning and management.\"\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 7: Details: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageUrl` if different from section.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programSectionId` | programSectionId | \"{{programSectionId}}\" |\n| `introAr` | المقدمة بالعربية | \"مساحة تجريبية لتطوير حلول مبتكرة للتحديات الحضرية، من خل… |\n| `introEn` | المقدمة بالإنجليزية | \"An experimental space for developing innovative solution… |"
-                                            },
-                                            "response": [],
-                                            "event": [
-                                                {
-                                                    "listen": "test",
-                                                    "script": {
-                                                        "type": "text/javascript",
-                                                        "exec": [
-                                                            "pm.test('save programSectionDetailId', function () {",
-                                                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                                                            "    const data = pm.response.json().data;",
-                                                            "    pm.expect(data.id).to.be.a('number');",
-                                                            "    pm.collectionVariables.set('programSectionDetailId', String(data.id));",
-                                                            "});"
-                                                        ]
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "name": "08 — قسم practiceReports — program-sections",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
-                                                    },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/program-sections",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "program-sections"
-                                                    ]
-                                                },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"programId\": \"{{programId}}\",\n    \"tabKey\": \"practiceReports\",\n    \"sortOrder\": 3,\n    \"titleAr\": \"تقارير للممارسات والسياسات الحضرية\",\n    \"titleEn\": \"Urban Practices and Policies Reports\",\n    \"imageUrl\": \"\\/urban-policies\\/4.gif\"\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 8: **One request**: `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`. Saves `programSectionId`.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programId` | معرّف البرنامج (FK) | \"{{programId}}\" |\n| `tabKey` | مفتاح تبويب البرنامج (trainingPrograms, experts, …) | \"practiceReports\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 3 |\n| `titleAr` | العنوان بالعربية | \"تقارير للممارسات والسياسات الحضرية\" |\n| `titleEn` | العنوان بالإنجليزية | \"Urban Practices and Policies Reports\" |\n| `imageUrl` | رابط الصورة (مسار كامل: /emp/1.png أو رابط رفع) | \"\\/urban-policies\\/4.gif\" |"
-                                            },
-                                            "response": [],
-                                            "event": [
-                                                {
-                                                    "listen": "test",
-                                                    "script": {
-                                                        "type": "text/javascript",
-                                                        "exec": [
-                                                            "pm.test('save programSectionId', function () {",
-                                                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                                                            "    const data = pm.response.json().data;",
-                                                            "    pm.expect(data.id).to.be.a('number');",
-                                                            "    pm.collectionVariables.set('programSectionId', String(data.id));",
-                                                            "});"
-                                                        ]
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "name": "09 — تفاصيل practiceReports — program-section-details",
-                                            "request": {
-                                                "method": "POST",
-                                                "header": [
-                                                    {
-                                                        "key": "Accept-Language",
-                                                        "value": "{{locale}}",
-                                                        "description": "اللغة: ar | en"
-                                                    },
-                                                    {
-                                                        "key": "Authorization",
-                                                        "value": "Bearer {{adminToken}}",
-                                                        "description": ""
-                                                    },
-                                                    {
-                                                        "key": "Content-Type",
-                                                        "value": "application/json"
-                                                    }
-                                                ],
-                                                "url": {
-                                                    "raw": "{{baseUrl}}/api/admin/program-section-details",
-                                                    "host": [
-                                                        "{{baseUrl}}"
-                                                    ],
-                                                    "path": [
-                                                        "api",
-                                                        "admin",
-                                                        "program-section-details"
-                                                    ]
-                                                },
-                                                "body": {
-                                                    "mode": "raw",
-                                                    "raw": "{\n    \"programSectionId\": \"{{programSectionId}}\",\n    \"introAr\": \"سلسلة من التقارير والدراسات التطبيقية التي توثق أفضل الممارسات والسياسات الحضرية في المدن العربية، وتقدم توصيات عملية لدعم صناع القرار في البلديات والأمانات.\",\n    \"introEn\": \"A series of applied reports and studies documenting best urban practices and policies in Arab cities, with practical recommendations to support decision-makers in municipalities.\"\n}"
-                                                },
-                                                "description": "**الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.\n\n**Public match:** `GET /api/v1/programs/urban-policies` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nStep 9: Details: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageUrl` if different from section.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `programSectionId` | programSectionId | \"{{programSectionId}}\" |\n| `introAr` | المقدمة بالعربية | \"سلسلة من التقارير والدراسات التطبيقية التي توثق أفضل الم… |\n| `introEn` | المقدمة بالإنجليزية | \"A series of applied reports and studies documenting best… |"
-                                            },
-                                            "response": [],
-                                            "event": [
-                                                {
-                                                    "listen": "test",
-                                                    "script": {
-                                                        "type": "text/javascript",
-                                                        "exec": [
-                                                            "pm.test('save programSectionDetailId', function () {",
-                                                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                                                            "    const data = pm.response.json().data;",
-                                                            "    pm.expect(data.id).to.be.a('number');",
-                                                            "    pm.collectionVariables.set('programSectionDetailId', String(data.id));",
-                                                            "});"
-                                                        ]
-                                                    }
                                                 }
                                             ]
                                         }
@@ -9702,7 +9726,7 @@
                                                         }
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض قائمة paginated مع حقول ثنائية اللغة (*Ar/*En).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nقائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً."
+                                                "description": "**الغرض | Purpose:** عرض قائمة paginated مع حقول ثنائية اللغة (*Ar/*En).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory cities. Build guide: `directory.rows.cities` in developmentPortal details step 03.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً."
                                             },
                                             "response": []
                                         },
@@ -9742,7 +9766,7 @@
                                                     "mode": "raw",
                                                     "raw": "{\n    \"number\": \"01\",\n    \"nameAr\": \"الرياض، المملكة العربية السعودية\",\n    \"nameEn\": \"Riyadh, Saudi Arabia\",\n    \"descriptionAr\": \"عاصمة المملكة وواحدة من أكبر المدن في المنطقة.\",\n    \"descriptionEn\": \"Capital of the Kingdom and one of the largest cities in the region.\",\n    \"countryCode\": \"SA\",\n    \"citySize\": \"large\",\n    \"sortOrder\": 0\n}"
                                                 },
-                                                "description": "**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `number` | الرقم الترتيبي (01, 02, …) | \"01\" |\n| `nameAr` | الاسم بالعربية | \"الرياض، المملكة العربية السعودية\" |\n| `nameEn` | الاسم بالإنجليزية | \"Riyadh, Saudi Arabia\" |\n| `descriptionAr` | الوصف بالعربية | \"عاصمة المملكة وواحدة من أكبر المدن في المنطقة.\" |\n| `descriptionEn` | الوصف بالإنجليزية | \"Capital of the Kingdom and one of the largest cities in … |\n| `countryCode` | رمز الدولة | \"SA\" |\n| `citySize` | حجم المدينة (large|medium|small) | \"large\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
+                                                "description": "**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory cities. Build guide: `directory.rows.cities` in developmentPortal details step 03.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `number` | الرقم الترتيبي (01, 02, …) | \"01\" |\n| `nameAr` | الاسم بالعربية | \"الرياض، المملكة العربية السعودية\" |\n| `nameEn` | الاسم بالإنجليزية | \"Riyadh, Saudi Arabia\" |\n| `descriptionAr` | الوصف بالعربية | \"عاصمة المملكة وواحدة من أكبر المدن في المنطقة.\" |\n| `descriptionEn` | الوصف بالإنجليزية | \"Capital of the Kingdom and one of the largest cities in … |\n| `countryCode` | رمز الدولة | \"SA\" |\n| `citySize` | حجم المدينة (large|medium|small) | \"large\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
                                             },
                                             "response": []
                                         },
@@ -9775,7 +9799,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory cities. Build guide: `directory.rows.cities` in developmentPortal details step 03.استخدم `id` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -9816,7 +9840,7 @@
                                                     "mode": "raw",
                                                     "raw": "{\n    \"number\": \"01\",\n    \"nameAr\": \"الرياض، المملكة العربية السعودية\",\n    \"nameEn\": \"Riyadh, Saudi Arabia\",\n    \"descriptionAr\": \"عاصمة المملكة وواحدة من أكبر المدن في المنطقة.\",\n    \"descriptionEn\": \"Capital of the Kingdom and one of the largest cities in the region.\",\n    \"countryCode\": \"SA\",\n    \"citySize\": \"large\",\n    \"sortOrder\": 0\n}"
                                                 },
-                                                "description": "**الغرض | Purpose:** تحديث سجل موجود (PUT/PATCH).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**جسم التحديث كامل** — نفس حقول الإنشاء.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `number` | الرقم الترتيبي (01, 02, …) | \"01\" |\n| `nameAr` | الاسم بالعربية | \"الرياض، المملكة العربية السعودية\" |\n| `nameEn` | الاسم بالإنجليزية | \"Riyadh, Saudi Arabia\" |\n| `descriptionAr` | الوصف بالعربية | \"عاصمة المملكة وواحدة من أكبر المدن في المنطقة.\" |\n| `descriptionEn` | الوصف بالإنجليزية | \"Capital of the Kingdom and one of the largest cities in … |\n| `countryCode` | رمز الدولة | \"SA\" |\n| `citySize` | حجم المدينة (large|medium|small) | \"large\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
+                                                "description": "**الغرض | Purpose:** تحديث سجل موجود (PUT/PATCH).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory cities. Build guide: `directory.rows.cities` in developmentPortal details step 03.**جسم التحديث كامل** — نفس حقول الإنشاء.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `number` | الرقم الترتيبي (01, 02, …) | \"01\" |\n| `nameAr` | الاسم بالعربية | \"الرياض، المملكة العربية السعودية\" |\n| `nameEn` | الاسم بالإنجليزية | \"Riyadh, Saudi Arabia\" |\n| `descriptionAr` | الوصف بالعربية | \"عاصمة المملكة وواحدة من أكبر المدن في المنطقة.\" |\n| `descriptionEn` | الوصف بالإنجليزية | \"Capital of the Kingdom and one of the largest cities in … |\n| `countryCode` | رمز الدولة | \"SA\" |\n| `citySize` | حجم المدينة (large|medium|small) | \"large\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
                                             },
                                             "response": []
                                         },
@@ -9849,7 +9873,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** حذف سجل نهائياً.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n"
+                                                "description": "**الغرض | Purpose:** حذف سجل نهائياً.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory cities. Build guide: `directory.rows.cities` in developmentPortal details step 03."
                                             },
                                             "response": []
                                         },
@@ -9948,7 +9972,7 @@
                                                         }
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض قائمة paginated مع حقول ثنائية اللغة (*Ar/*En).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nقائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً."
+                                                "description": "**الغرض | Purpose:** عرض قائمة paginated مع حقول ثنائية اللغة (*Ar/*En).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory projects. Build guide: `directory.rows.projects` in step 03.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً."
                                             },
                                             "response": []
                                         },
@@ -9988,7 +10012,7 @@
                                                     "mode": "raw",
                                                     "raw": "{\n    \"number\": \"01\",\n    \"cityAr\": \"الرياض\",\n    \"cityEn\": \"Riyadh\",\n    \"countryAr\": \"المملكة العربية السعودية\",\n    \"countryEn\": \"Saudi Arabia\",\n    \"startDate\": \"2019\",\n    \"endDate\": \"2023\",\n    \"sortOrder\": 0\n}"
                                                 },
-                                                "description": "**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `number` | الرقم الترتيبي (01, 02, …) | \"01\" |\n| `cityAr` | المدينة بالعربية | \"الرياض\" |\n| `cityEn` | المدينة بالإنجليزية | \"Riyadh\" |\n| `countryAr` | الدولة بالعربية | \"المملكة العربية السعودية\" |\n| `countryEn` | الدولة بالإنجليزية | \"Saudi Arabia\" |\n| `startDate` | تاريخ البداية | \"2019\" |\n| `endDate` | تاريخ النهاية | \"2023\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
+                                                "description": "**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory projects. Build guide: `directory.rows.projects` in step 03.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `number` | الرقم الترتيبي (01, 02, …) | \"01\" |\n| `cityAr` | المدينة بالعربية | \"الرياض\" |\n| `cityEn` | المدينة بالإنجليزية | \"Riyadh\" |\n| `countryAr` | الدولة بالعربية | \"المملكة العربية السعودية\" |\n| `countryEn` | الدولة بالإنجليزية | \"Saudi Arabia\" |\n| `startDate` | تاريخ البداية | \"2019\" |\n| `endDate` | تاريخ النهاية | \"2023\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
                                             },
                                             "response": []
                                         },
@@ -10021,7 +10045,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory projects. Build guide: `directory.rows.projects` in step 03.استخدم `id` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -10062,7 +10086,7 @@
                                                     "mode": "raw",
                                                     "raw": "{\n    \"number\": \"01\",\n    \"cityAr\": \"الرياض\",\n    \"cityEn\": \"Riyadh\",\n    \"countryAr\": \"المملكة العربية السعودية\",\n    \"countryEn\": \"Saudi Arabia\",\n    \"startDate\": \"2019\",\n    \"endDate\": \"2023\",\n    \"sortOrder\": 0\n}"
                                                 },
-                                                "description": "**الغرض | Purpose:** تحديث سجل موجود (PUT/PATCH).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**جسم التحديث كامل** — نفس حقول الإنشاء.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `number` | الرقم الترتيبي (01, 02, …) | \"01\" |\n| `cityAr` | المدينة بالعربية | \"الرياض\" |\n| `cityEn` | المدينة بالإنجليزية | \"Riyadh\" |\n| `countryAr` | الدولة بالعربية | \"المملكة العربية السعودية\" |\n| `countryEn` | الدولة بالإنجليزية | \"Saudi Arabia\" |\n| `startDate` | تاريخ البداية | \"2019\" |\n| `endDate` | تاريخ النهاية | \"2023\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
+                                                "description": "**الغرض | Purpose:** تحديث سجل موجود (PUT/PATCH).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory projects. Build guide: `directory.rows.projects` in step 03.**جسم التحديث كامل** — نفس حقول الإنشاء.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `number` | الرقم الترتيبي (01, 02, …) | \"01\" |\n| `cityAr` | المدينة بالعربية | \"الرياض\" |\n| `cityEn` | المدينة بالإنجليزية | \"Riyadh\" |\n| `countryAr` | الدولة بالعربية | \"المملكة العربية السعودية\" |\n| `countryEn` | الدولة بالإنجليزية | \"Saudi Arabia\" |\n| `startDate` | تاريخ البداية | \"2019\" |\n| `endDate` | تاريخ النهاية | \"2023\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
                                             },
                                             "response": []
                                         },
@@ -10095,7 +10119,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** حذف سجل نهائياً.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n"
+                                                "description": "**الغرض | Purpose:** حذف سجل نهائياً.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory projects. Build guide: `directory.rows.projects` in step 03."
                                             },
                                             "response": []
                                         },
@@ -10194,7 +10218,7 @@
                                                         }
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض قائمة paginated مع حقول ثنائية اللغة (*Ar/*En).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nقائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً."
+                                                "description": "**الغرض | Purpose:** عرض قائمة paginated مع حقول ثنائية اللغة (*Ar/*En).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory organizations. Build guide: `directory.rows.organizations` in step 03.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً."
                                             },
                                             "response": []
                                         },
@@ -10234,7 +10258,7 @@
                                                     "mode": "raw",
                                                     "raw": "{\n    \"number\": \"01\",\n    \"nameAr\": \"برنامج الأمم المتحدة للمستوطنات البشرية\",\n    \"nameEn\": \"UN-Habitat\",\n    \"descriptionAr\": \"منظمة الأمم المتحدة المعنية بالمستوطنات البشرية.\",\n    \"descriptionEn\": \"UN agency for human settlements.\",\n    \"sortOrder\": 0\n}"
                                                 },
-                                                "description": "**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `number` | الرقم الترتيبي (01, 02, …) | \"01\" |\n| `nameAr` | الاسم بالعربية | \"برنامج الأمم المتحدة للمستوطنات البشرية\" |\n| `nameEn` | الاسم بالإنجليزية | \"UN-Habitat\" |\n| `descriptionAr` | الوصف بالعربية | \"منظمة الأمم المتحدة المعنية بالمستوطنات البشرية.\" |\n| `descriptionEn` | الوصف بالإنجليزية | \"UN agency for human settlements.\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
+                                                "description": "**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory organizations. Build guide: `directory.rows.organizations` in step 03.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `number` | الرقم الترتيبي (01, 02, …) | \"01\" |\n| `nameAr` | الاسم بالعربية | \"برنامج الأمم المتحدة للمستوطنات البشرية\" |\n| `nameEn` | الاسم بالإنجليزية | \"UN-Habitat\" |\n| `descriptionAr` | الوصف بالعربية | \"منظمة الأمم المتحدة المعنية بالمستوطنات البشرية.\" |\n| `descriptionEn` | الوصف بالإنجليزية | \"UN agency for human settlements.\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
                                             },
                                             "response": []
                                         },
@@ -10267,7 +10291,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory organizations. Build guide: `directory.rows.organizations` in step 03.استخدم `id` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -10308,7 +10332,7 @@
                                                     "mode": "raw",
                                                     "raw": "{\n    \"number\": \"01\",\n    \"nameAr\": \"برنامج الأمم المتحدة للمستوطنات البشرية\",\n    \"nameEn\": \"UN-Habitat\",\n    \"descriptionAr\": \"منظمة الأمم المتحدة المعنية بالمستوطنات البشرية.\",\n    \"descriptionEn\": \"UN agency for human settlements.\",\n    \"sortOrder\": 0\n}"
                                                 },
-                                                "description": "**الغرض | Purpose:** تحديث سجل موجود (PUT/PATCH).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**جسم التحديث كامل** — نفس حقول الإنشاء.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `number` | الرقم الترتيبي (01, 02, …) | \"01\" |\n| `nameAr` | الاسم بالعربية | \"برنامج الأمم المتحدة للمستوطنات البشرية\" |\n| `nameEn` | الاسم بالإنجليزية | \"UN-Habitat\" |\n| `descriptionAr` | الوصف بالعربية | \"منظمة الأمم المتحدة المعنية بالمستوطنات البشرية.\" |\n| `descriptionEn` | الوصف بالإنجليزية | \"UN agency for human settlements.\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
+                                                "description": "**الغرض | Purpose:** تحديث سجل موجود (PUT/PATCH).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory organizations. Build guide: `directory.rows.organizations` in step 03.**جسم التحديث كامل** — نفس حقول الإنشاء.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `number` | الرقم الترتيبي (01, 02, …) | \"01\" |\n| `nameAr` | الاسم بالعربية | \"برنامج الأمم المتحدة للمستوطنات البشرية\" |\n| `nameEn` | الاسم بالإنجليزية | \"UN-Habitat\" |\n| `descriptionAr` | الوصف بالعربية | \"منظمة الأمم المتحدة المعنية بالمستوطنات البشرية.\" |\n| `descriptionEn` | الوصف بالإنجليزية | \"UN agency for human settlements.\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
                                             },
                                             "response": []
                                         },
@@ -10341,7 +10365,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** حذف سجل نهائياً.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n"
+                                                "description": "**الغرض | Purpose:** حذف سجل نهائياً.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory organizations. Build guide: `directory.rows.organizations` in step 03."
                                             },
                                             "response": []
                                         },
@@ -10440,7 +10464,7 @@
                                                         }
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض قائمة paginated مع حقول ثنائية اللغة (*Ar/*En).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nقائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً."
+                                                "description": "**الغرض | Purpose:** عرض قائمة paginated مع حقول ثنائية اللغة (*Ar/*En).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory publications. Build guide: `directory.rows.publications` in step 03.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً."
                                             },
                                             "response": []
                                         },
@@ -10480,7 +10504,7 @@
                                                     "mode": "raw",
                                                     "raw": "{\n    \"number\": \"01\",\n    \"nameAr\": \"تقرير التنمية الحضرية العربية 2024\",\n    \"nameEn\": \"Arab Urban Development Report 2024\",\n    \"descriptionAr\": \"تقرير سنوي يرصد التطورات في التنمية الحضرية.\",\n    \"descriptionEn\": \"Annual report monitoring urban development trends.\",\n    \"sortOrder\": 0\n}"
                                                 },
-                                                "description": "**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `number` | الرقم الترتيبي (01, 02, …) | \"01\" |\n| `nameAr` | الاسم بالعربية | \"تقرير التنمية الحضرية العربية 2024\" |\n| `nameEn` | الاسم بالإنجليزية | \"Arab Urban Development Report 2024\" |\n| `descriptionAr` | الوصف بالعربية | \"تقرير سنوي يرصد التطورات في التنمية الحضرية.\" |\n| `descriptionEn` | الوصف بالإنجليزية | \"Annual report monitoring urban development trends.\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
+                                                "description": "**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory publications. Build guide: `directory.rows.publications` in step 03.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `number` | الرقم الترتيبي (01, 02, …) | \"01\" |\n| `nameAr` | الاسم بالعربية | \"تقرير التنمية الحضرية العربية 2024\" |\n| `nameEn` | الاسم بالإنجليزية | \"Arab Urban Development Report 2024\" |\n| `descriptionAr` | الوصف بالعربية | \"تقرير سنوي يرصد التطورات في التنمية الحضرية.\" |\n| `descriptionEn` | الوصف بالإنجليزية | \"Annual report monitoring urban development trends.\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
                                             },
                                             "response": []
                                         },
@@ -10513,7 +10537,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nاستخدم `id` من استجابة الإنشاء."
+                                                "description": "**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory publications. Build guide: `directory.rows.publications` in step 03.استخدم `id` من استجابة الإنشاء."
                                             },
                                             "response": []
                                         },
@@ -10554,7 +10578,7 @@
                                                     "mode": "raw",
                                                     "raw": "{\n    \"number\": \"01\",\n    \"nameAr\": \"تقرير التنمية الحضرية العربية 2024\",\n    \"nameEn\": \"Arab Urban Development Report 2024\",\n    \"descriptionAr\": \"تقرير سنوي يرصد التطورات في التنمية الحضرية.\",\n    \"descriptionEn\": \"Annual report monitoring urban development trends.\",\n    \"sortOrder\": 0\n}"
                                                 },
-                                                "description": "**الغرض | Purpose:** تحديث سجل موجود (PUT/PATCH).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n**جسم التحديث كامل** — نفس حقول الإنشاء.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `number` | الرقم الترتيبي (01, 02, …) | \"01\" |\n| `nameAr` | الاسم بالعربية | \"تقرير التنمية الحضرية العربية 2024\" |\n| `nameEn` | الاسم بالإنجليزية | \"Arab Urban Development Report 2024\" |\n| `descriptionAr` | الوصف بالعربية | \"تقرير سنوي يرصد التطورات في التنمية الحضرية.\" |\n| `descriptionEn` | الوصف بالإنجليزية | \"Annual report monitoring urban development trends.\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
+                                                "description": "**الغرض | Purpose:** تحديث سجل موجود (PUT/PATCH).\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory publications. Build guide: `directory.rows.publications` in step 03.**جسم التحديث كامل** — نفس حقول الإنشاء.\n\n### المعاملات (Body Parameters)\n\n| الحقل | الوصف | مثال |\n|-------|--------|------|\n| `number` | الرقم الترتيبي (01, 02, …) | \"01\" |\n| `nameAr` | الاسم بالعربية | \"تقرير التنمية الحضرية العربية 2024\" |\n| `nameEn` | الاسم بالإنجليزية | \"Arab Urban Development Report 2024\" |\n| `descriptionAr` | الوصف بالعربية | \"تقرير سنوي يرصد التطورات في التنمية الحضرية.\" |\n| `descriptionEn` | الوصف بالإنجليزية | \"Annual report monitoring urban development trends.\" |\n| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |"
                                             },
                                             "response": []
                                         },
@@ -10587,7 +10611,7 @@
                                                         "{{id}}"
                                                     ]
                                                 },
-                                                "description": "**الغرض | Purpose:** حذف سجل نهائياً.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\n"
+                                                "description": "**الغرض | Purpose:** حذف سجل نهائياً.\n\n**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.\n\n**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).\n\nDirectory publications. Build guide: `directory.rows.publications` in step 03."
                                             },
                                             "response": []
                                         },

@@ -5,6 +5,7 @@ import { UrbanPoliciesHeroTabs } from "@/app/components/programs/urban-policies/
 import { UrbanPoliciesTabPanels } from "@/app/components/programs/urban-policies/sections";
 import type {
   DevelopmentPortalContent,
+  UrbanPoliciesReportsContent,
   UrbanPoliciesSectionContent,
 } from "@/app/components/programs/urban-policies/shared/types";
 import { useRouter } from "@/i18n/routing";
@@ -39,8 +40,8 @@ type Props = {
   backLabel: string;
   developmentPortal: DevelopmentPortalContent;
   developmentIndex: UrbanPoliciesSectionContent;
-  innovationLab: UrbanPoliciesSectionContent;
-  practiceReports: UrbanPoliciesSectionContent;
+  innovationLab: UrbanPoliciesReportsContent;
+  practiceReports: UrbanPoliciesReportsContent;
 };
 
 export function UrbanPoliciesPageClient({

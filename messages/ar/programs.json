@@ -328,12 +328,58 @@
     "innovationLab": {
       "title": "معمل الابتكار الحضري للمدن العربية",
       "intro": "مساحة تجريبية لتطوير حلول مبتكرة للتحديات الحضرية، من خلال ربط المدن العربية بالخبرات العالمية وتشجيع تبني التقنيات والممارسات الحديثة في التخطيط والإدارة الحضرية.",
-      "image": "/urban-policies/3.gif"
+      "image": "/urban-policies/3.gif",
+      "video": "/urban-policies/innovation-lab.mp4",
+      "videoPoster": "/urban-policies/3.gif",
+      "projectsTitle": "المشاريع التي تم تنفيذها",
+      "viewIssue": "عرض الإصدار",
+      "projects": [
+        {
+          "title": "مختبر الابتكار الحضري: من الفكرة إلى التطبيق",
+          "date": "DEC 29, 2025",
+          "image": "/our-sources/1.png",
+          "href": "#"
+        },
+        {
+          "title": "حلول ذكية لإدارة النفايات في المدن العربية",
+          "date": "DEC 29, 2025",
+          "image": "/our-sources/2.png",
+          "href": "#"
+        },
+        {
+          "title": "منصة ربط المدن العربية بالخبرات العالمية",
+          "date": "MAY 29, 2025",
+          "image": "/our-sources/3.png",
+          "href": "#"
+        }
+      ]
     },
     "practiceReports": {
       "title": "تقارير للممارسات والسياسات الحضرية",
       "intro": "سلسلة من التقارير والدراسات التطبيقية التي توثق أفضل الممارسات والسياسات الحضرية في المدن العربية، وتقدم توصيات عملية لدعم صناع القرار في البلديات والأمانات.",
-      "image": "/urban-policies/4.gif"
+      "image": "/urban-policies/4.gif",
+      "projectsTitle": "المشاريع التي تم تنفيذها",
+      "viewIssue": "عرض الإصدار",
+      "projects": [
+        {
+          "title": "التخضير التشاركي للأحياء في المدن العربية",
+          "date": "DEC 29, 2025",
+          "image": "/our-sources/1.png",
+          "href": "#"
+        },
+        {
+          "title": "التخضير التشاركي: تجارب عالمية",
+          "date": "DEC 29, 2025",
+          "image": "/our-sources/2.png",
+          "href": "#"
+        },
+        {
+          "title": "60 مشروع تخضير حضري",
+          "date": "DEC 29, 2025",
+          "image": "/our-sources/3.png",
+          "href": "#"
+        }
+      ]
     }
   },
   "partnerships": {

@@ -3,6 +3,21 @@ import type { PortalDirectoryTab } from "@/lib/programs-urban-policies-directory
 
 export type UrbanPoliciesSectionContent = PartnershipSectionContent;
 
+export type UrbanPoliciesProjectItem = {
+  title: string;
+  date: string;
+  image: string;
+  href: string;
+};
+
+export type UrbanPoliciesReportsContent = PartnershipSectionContent & {
+  video?: string;
+  videoPoster?: string;
+  projectsTitle?: string;
+  viewIssue?: string;
+  projects?: UrbanPoliciesProjectItem[];
+};
+
 export type PortalDirectoryCityRow = {
   number: string;
   name: string;

@@ -3,8 +3,10 @@
 import type { UrbanPoliciesTab } from "@/lib/programs-urban-policies";
 import { PartnershipSectionPanel } from "@/app/components/programs/partnerships/sections/section-panel";
 import { DevelopmentPortalPanel } from "@/app/components/programs/urban-policies/sections/development-portal-panel";
+import { UrbanPoliciesReportsPanel } from "@/app/components/programs/urban-policies/sections/reports-panel";
 import type {
   DevelopmentPortalContent,
+  UrbanPoliciesReportsContent,
   UrbanPoliciesSectionContent,
 } from "@/app/components/programs/urban-policies/shared/types";
 
@@ -15,8 +17,8 @@ type Props = {
   onBack: () => void;
   developmentPortal: DevelopmentPortalContent;
   developmentIndex: UrbanPoliciesSectionContent;
-  innovationLab: UrbanPoliciesSectionContent;
-  practiceReports: UrbanPoliciesSectionContent;
+  innovationLab: UrbanPoliciesReportsContent;
+  practiceReports: UrbanPoliciesReportsContent;
 };
 
 export function UrbanPoliciesTabPanels({
@@ -42,11 +44,11 @@ export function UrbanPoliciesTabPanels({
       );
     case "innovationLab":
       return (
-        <PartnershipSectionPanel content={innovationLab} {...panelProps} />
+        <UrbanPoliciesReportsPanel content={innovationLab} {...panelProps} />
       );
     case "practiceReports":
       return (
-        <PartnershipSectionPanel content={practiceReports} {...panelProps} />
+        <UrbanPoliciesReportsPanel content={practiceReports} {...panelProps} />
       );
     default:
       return null;

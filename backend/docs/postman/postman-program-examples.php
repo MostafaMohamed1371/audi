@@ -99,10 +99,6 @@ function postmanSectionFullBodyFromProgramsJson(array $section, string $tabKey):
     $body = $section;
     unset($body['title'], $body['intro'], $body['image']);
 
-    if ($tabKey === 'developmentPortal' && isset($body['directory']['rows'])) {
-        unset($body['directory']['rows']);
-    }
-
     return $body;
 }
 
@@ -235,6 +231,162 @@ function postmanExpertsSectionBody(): array
 function postmanUrbanPoliciesProgramBody(): array
 {
     return postmanProgramBodyFromJson('urban-policies', 0);
+}
+
+/**
+ * Urban policies build — full body from programs.json (includes directory.rows on developmentPortal).
+ *
+ * @return array<string, mixed>
+ */
+function postmanUrbanPoliciesSectionLegacyFromJson(string $tabKey, int $sortOrder): array
+{
+    return postmanSectionLegacyFromJson('urban-policies', $tabKey, $sortOrder, fullBody: true);
+}
+
+function postmanUrbanPoliciesTabLabelAr(string $tabKey): string
+{
+    return match ($tabKey) {
+        'developmentPortal' => 'بوابة التنمية الحضرية العربية',
+        'developmentIndex' => 'مؤشر التنمية الحضرية',
+        'innovationLab' => 'معمل الابتكار الحضري',
+        'practiceReports' => 'تقارير الممارسات والسياسات',
+        default => $tabKey,
+    };
+}
+
+function postmanUrbanPoliciesDetailsStepName(string $tabKey, int $step): string
+{
+    $label = postmanUrbanPoliciesTabLabelAr($tabKey);
+    $fields = match ($tabKey) {
+        'developmentPortal' => 'paragraphs + directory + مساهمة',
+        'developmentIndex' => 'intro',
+        'innovationLab' => 'intro + video + projects[]',
+        'practiceReports' => 'intro + projects[]',
+        default => 'intro + body',
+    };
+
+    return sprintf('%02d — [تفاصيل] %s — %s — program-section-details', $step, $label, $fields);
+}
+
+function postmanUrbanPoliciesBuildFolderGuide(): string
+{
+    return <<<'MD'
+### كيف تبني كل تبويب؟ (خطوتان)
+
+| الخطوة | Endpoint | ماذا تخزّن؟ | أين يظهر على الموقع؟ |
+|--------|----------|------------|----------------------|
+| **أ — قسم** | `POST /api/admin/program-sections` | `programId`, `tabKey`, **عنوان التبويب**, **صورة البطاقة** | بطاقات «اقسام البرنامج» |
+| **ب — تفاصيل** | `POST /api/admin/program-section-details` | `programSectionId`, `introAr/En`, **`bodyAr/En` كامل** | صفحة `?tab=` |
+
+**تبويب بوابة التنمية (`developmentPortal`):** ضع **`directory.rows`** (مدن، مشاريع، منظمات، منشورات) داخل **`bodyAr.directory`** في خطوة التفاصيل (03) — **لا** طلبات `directory/*` منفصلة في دليل البناء.
+
+الخادم ينسّخ `directory.rows` تلقائياً إلى جداول `directory_*` عند حفظ التفاصيل.
+
+**تسميات الصفحة** (`back`, `sectionsLabel`): من i18n أو اختياري `about_content` (`program_urban-policies`).
+
+Verify: `GET /api/v1/programs/urban-policies` + `GET /api/v1/programs/urban-policies/directory`
+MD;
+}
+
+function postmanUrbanPoliciesTabFolderDescription(string $tabKey, int $sectionStep, int $detailsStep): string
+{
+    $label = postmanUrbanPoliciesTabLabelAr($tabKey);
+    $bodyFields = postmanUrbanPoliciesDetailsBodyFieldsGuide($tabKey);
+    $extra = postmanUrbanPoliciesTabExtraGuide($tabKey);
+
+    return "**تبويب: {$label}** (`?tab={$tabKey}`) — خطوات {$sectionStep}–{$detailsStep}\n\n"
+        ."**{$sectionStep} — قسم:** عنوان + صورة → يحفظ `{{programSectionId}}`\n\n"
+        ."**{$detailsStep} — تفاصيل:**\n{$bodyFields}"
+        .($extra !== '' ? "\n\n{$extra}" : '');
+}
+
+function postmanUrbanPoliciesSectionStepDescription(string $tabKey, int $step): string
+{
+    $label = postmanUrbanPoliciesTabLabelAr($tabKey);
+
+    return "**الخطوة {$step} — قسم التبويب (عنوان + صورة)**\n\n"
+        ."تبويب: **{$label}** (`tabKey: {$tabKey}`)\n\n"
+        ."**Body:** `programId`, `tabKey`, `titleAr`, `titleEn`, `imageUrl`, `sortOrder`\n\n"
+        ."يحفظ **`{{programSectionId}}`** للخطوة التالية.\n\n"
+        ."**Public:** `GET /api/v1/programs/urban-policies` → `sections.{$tabKey}.title`, `.image`";
+}
+
+function postmanUrbanPoliciesDetailsStepDescription(string $tabKey, int $step): string
+{
+    $label = postmanUrbanPoliciesTabLabelAr($tabKey);
+    $bodyFields = postmanUrbanPoliciesDetailsBodyFieldsGuide($tabKey);
+    $extra = postmanUrbanPoliciesTabExtraGuide($tabKey);
+
+    return "**الخطوة {$step} — تفاصيل التبويب**\n\n"
+        ."تبويب: **{$label}** — بعد القسم في الخطوة ".($step - 1)."\n\n"
+        ."**Body:** `programSectionId`, `introAr`, `introEn`, `bodyAr`, `bodyEn`\n\n"
+        ."**حقول المحتوى:**\n{$bodyFields}\n\n"
+        ."**الموقع:** `/ar/برامجنا/برنامج-السياسات-الحضرية?tab={$tabKey}`"
+        .($extra !== '' ? "\n\n{$extra}" : '');
+}
+
+function postmanUrbanPoliciesDetailsBodyFieldsGuide(string $tabKey): string
+{
+    return match ($tabKey) {
+        'developmentPortal' => <<<'MD'
+| الحقل | على الموقع |
+|-------|------------|
+| `bodyAr.paragraphs[]` | فقرات المقدمة |
+| `bodyAr.contributeTitle` + `contributionTypes` | قسم «ساهم من خلال…» |
+| `bodyAr.contributionForm` | نموذج المساهمة (يُرسل إلى `POST /api/v1/programs/urban-policies/contribute`) |
+| `bodyAr.directory` | دليل المدن (فيديو، عناوين، تبويبات، أعمدة) |
+| `bodyAr.directory.rows.cities[]` | جدول المدن |
+| `bodyAr.directory.rows.projects[]` | جدول المشاريع |
+| `bodyAr.directory.rows.organizations[]` | جدول المنظمات |
+| `bodyAr.directory.rows.publications[]` | جدول المنشورات |
+MD,
+        'developmentIndex' => <<<'MD'
+| الحقل | على الموقع |
+|-------|------------|
+| `introAr/En` | فقرة المقدمة تحت العنوان |
+MD,
+        'innovationLab' => <<<'MD'
+| الحقل | على الموقع |
+|-------|------------|
+| `introAr/En` | فقرة المقدمة أعلى الصفحة |
+| `bodyAr.video` | فيديو معمل الابتكار (`?tab=innovationLab`) |
+| `bodyAr.videoPoster` | صورة غلاف الفيديو |
+| `bodyAr.projectsTitle` | عنوان «المشاريع التي تم تنفيذها» |
+| `bodyAr.viewIssue` | نص زر «عرض الإصدار» |
+| `bodyAr.projects[]` | بطاقات المشاريع — `{title, date, image, href}` |
+MD,
+        'practiceReports' => <<<'MD'
+| الحقل | على الموقع |
+|-------|------------|
+| `introAr/En` | فقرة المقدمة أعلى الصفحة |
+| `bodyAr.projectsTitle` | عنوان «المشاريع التي تم تنفيذها» |
+| `bodyAr.viewIssue` | نص زر «عرض الإصدار» |
+| `bodyAr.projects[]` | بطاقات التقارير — `{title, date, image, href}` |
+MD,
+        default => '- راجع `messages/ar/programs.json` → `urbanPolicies.'.$tabKey.'`',
+    };
+}
+
+function postmanUrbanPoliciesTabExtraGuide(string $tabKey): string
+{
+    return match ($tabKey) {
+        'developmentPortal' => '**`directory.rows` في `bodyAr/En`:** يُنسّخ تلقائياً إلى `directory/cities|projects|organizations|publications`. صفوف الدليل تظهر عبر `GET /api/v1/programs/urban-policies/directory`.',
+        default => '',
+    };
+}
+
+function postmanUrbanPoliciesTabContentGuide(): string
+{
+    return <<<'MD'
+### محتوى كل تبويب — Urban Policies (?tab=)
+
+| `?tab=` | خطوات | قسم | تفاصيل | داخل body |
+|---------|--------|-----|--------|-----------|
+| `developmentPortal` | 02–03 | 02 | 03 | paragraphs, directory, `directory.rows` |
+| `developmentIndex` | 04–05 | 04 | 05 | `intro` |
+| `innovationLab` | 06–07 | 06 | 07 | `intro`, `video`, `projects[]` |
+| `practiceReports` | 08–09 | 08 | 09 | `intro`, `projects[]` |
+MD;
 }
 
 /**
@@ -700,7 +852,7 @@ function postmanProgramsSectionGuide(): string
 
 | Page on site (Arabic URL) | API slug | Public endpoint |
 |---------------------------|----------|-----------------|
-| [/برامجنا/برنامج-السياسات-الحضرية](https://audi-ten.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية) | `urban-policies` | `GET /api/v1/programs/urban-policies` |
+| [/برامجنا/برنامج-السياسات-الحضرية](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية) | `urban-policies` | `GET /api/v1/programs/urban-policies` |
 | [/برامجنا/مركز-دعم-المدن](https://audi-ten.vercel.app/ar/برامجنا/مركز-دعم-المدن) | `training` | `GET /api/v1/programs/training` |
 | [/برامجنا/الشراكات](https://audi-ten.vercel.app/ar/برامجنا/الشراكات) | `partnerships` | `GET /api/v1/programs/partnerships` |
 

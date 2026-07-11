@@ -319,12 +319,58 @@
     "innovationLab": {
       "title": "Urban Innovation Lab for Arab Cities",
       "intro": "An experimental space for developing innovative solutions to urban challenges by connecting Arab cities with global expertise and encouraging the adoption of modern technologies and practices in urban planning and management.",
-      "image": "/urban-policies/3.gif"
+      "image": "/urban-policies/3.gif",
+      "video": "/urban-policies/innovation-lab.mp4",
+      "videoPoster": "/urban-policies/3.gif",
+      "projectsTitle": "Implemented Projects",
+      "viewIssue": "View Issue",
+      "projects": [
+        {
+          "title": "Urban Innovation Lab: From Idea to Implementation",
+          "date": "DEC 29, 2025",
+          "image": "/our-sources/1.png",
+          "href": "#"
+        },
+        {
+          "title": "Smart Solutions for Waste Management in Arab Cities",
+          "date": "DEC 29, 2025",
+          "image": "/our-sources/2.png",
+          "href": "#"
+        },
+        {
+          "title": "Platform Connecting Arab Cities with Global Expertise",
+          "date": "MAY 29, 2025",
+          "image": "/our-sources/3.png",
+          "href": "#"
+        }
+      ]
     },
     "practiceReports": {
       "title": "Urban Practices and Policies Reports",
       "intro": "A series of applied reports and studies documenting best urban practices and policies in Arab cities, with practical recommendations to support decision-makers in municipalities.",
-      "image": "/urban-policies/4.gif"
+      "image": "/urban-policies/4.gif",
+      "projectsTitle": "Implemented Projects",
+      "viewIssue": "View Issue",
+      "projects": [
+        {
+          "title": "Participatory Greening of Neighborhoods in Arab Cities",
+          "date": "DEC 29, 2025",
+          "image": "/our-sources/1.png",
+          "href": "#"
+        },
+        {
+          "title": "Participatory Greening: Global Experiences",
+          "date": "DEC 29, 2025",
+          "image": "/our-sources/2.png",
+          "href": "#"
+        },
+        {
+          "title": "60 Urban Greening Projects",
+          "date": "DEC 29, 2025",
+          "image": "/our-sources/3.png",
+          "href": "#"
+        }
+      ]
     }
   },
   "partnerships": {

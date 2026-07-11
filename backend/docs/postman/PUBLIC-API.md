@@ -449,7 +449,7 @@ Admin: `focus-areas` by slug.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: `00 — بناء برنامج السياسات الحضرية` + `directory/*`.
+Admin: `00 — بناء برنامج السياسات الحضرية` (9 خطوات).
 
 ---
 
@@ -515,7 +515,7 @@ Admin: `00 — بناء برنامج الشراكات` (9 خطوات).
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Admin: directory/cities|projects|organizations|publications.
+Directory rows: include `directory.rows` in **program-section-details** step 03, or edit via `directory/*` CRUD.
 
 ---
 
