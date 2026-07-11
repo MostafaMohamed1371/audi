@@ -203,6 +203,15 @@
           "interventionFields": "Intervention Fields",
           "interventionTypes": "Intervention Types"
         },
+        "projectDescriptionTitle": "Project Description",
+        "projectValuesTitle": "Project Values and Guiding Ideas:",
+        "projectPolicyToolsTitle": "Public Policy Tools Used in the Project",
+        "viewSourceLabel": "View Source",
+        "foundersTitle": "Founders",
+        "referencesAccordionTitle": "Project Link, Notes and References",
+        "projectLinkLabel": "Project Link",
+        "notesLabel": "Notes",
+        "referencesLabel": "References",
         "cta": {
           "title": "Help Build Better Arab Cities",
           "description": "Join a network of municipalities, researchers, and practitioners in a pioneering experience",
@@ -291,45 +300,106 @@
           "projects": [
             {
               "number": "01",
+              "slug": "cairo",
               "city": "Cairo",
               "country": "Egypt",
               "startDate": "2020",
-              "endDate": "2024"
+              "endDate": "2024",
+              "layout": "rich",
+              "heroImage": "/urban-policies/development-portal/projects/cairo-project-hero.png",
+              "mapImage": "/urban-policies/development-portal/projects/cairo-map.png",
+              "valuesContent": "Heritage preservation, urban quality of life",
+              "policyToolsContent": "Infrastructure and facilities, planning, systems and legislation",
+              "sources": [
+                { "name": "Suez", "image": "/urban-policies/development-portal/projects/sources/cairo-source-suez.png" },
+                { "name": "Alamein", "image": "/urban-policies/development-portal/projects/sources/cairo-source-alamein.png" },
+                { "name": "Port Said", "image": "/urban-policies/development-portal/projects/sources/cairo-source-port-said.png" }
+              ],
+              "founders": [
+                { "role": "Owner / Developer (Public)", "name": "Dr. Faisal bin Abdulaziz" },
+                { "role": "Consultant / Designer", "name": "Eng. Abdulrahman Al-Zaabi" },
+                { "role": "Funder", "name": "Mr. Khaled Khairy" },
+                { "role": "Contractor / Implementer", "name": "Mr. Mohammed Majed Al-Ghalib" }
+              ],
+              "references": {
+                "projectLink": "https://example.com/cairo-project",
+                "notes": "The project includes an initial implementation phase covering basic infrastructure development and improvements to the main road network in the target area.",
+                "references": [
+                  "Cairo Urban Development Report 2024",
+                  "Arab Urban Policy Guide",
+                  "Project Feasibility Study – Ministry of Housing"
+                ]
+              },
+              "relatedProjects": [
+                { "city": "Alexandria", "country": "Egypt", "dateRange": "2006 - 2011", "image": "/urban-policies/development-portal/projects/related-projects/cairo-related-alexandria.png" },
+                { "city": "Fayoum", "country": "Egypt", "dateRange": "2006 - 2011", "image": "/urban-policies/development-portal/projects/related-projects/cairo-related-fayoum.png" },
+                { "city": "Cairo", "country": "Egypt", "dateRange": "2006 - 2011", "image": "/urban-policies/development-portal/projects/related-projects/cairo-related-cairo.png" }
+              ]
             },
             {
               "number": "02",
+              "slug": "riyadh",
               "city": "Riyadh",
               "country": "Saudi Arabia",
               "startDate": "2019",
-              "endDate": "2023"
+              "endDate": "2023",
+              "layout": "simple",
+              "heroImage": "/urban-policies/development-portal/projects/hero.png",
+              "mapImage": "/urban-policies/development-portal/projects/cairo-map.png",
+              "valuesContent": "Sustainable urban development, improved quality of life",
+              "policyToolsContent": "Urban planning, infrastructure, systems and legislation"
             },
             {
               "number": "03",
+              "slug": "kuwait",
               "city": "Kuwait City",
               "country": "Kuwait",
               "startDate": "2018",
-              "endDate": "Ongoing"
+              "endDate": "Ongoing",
+              "layout": "simple",
+              "heroImage": "/urban-policies/development-portal/projects/hero.png",
+              "mapImage": "/urban-policies/development-portal/projects/cairo-map.png",
+              "valuesContent": "Urban development, environmental sustainability",
+              "policyToolsContent": "Planning, facilities, systems and legislation"
             },
             {
               "number": "04",
+              "slug": "dubai",
               "city": "Dubai",
               "country": "UAE",
               "startDate": "2021",
-              "endDate": "2025"
+              "endDate": "2025",
+              "layout": "simple",
+              "heroImage": "/urban-policies/development-portal/projects/hero.png",
+              "mapImage": "/urban-policies/development-portal/projects/cairo-map.png",
+              "valuesContent": "Urban innovation, quality of life",
+              "policyToolsContent": "Planning, infrastructure, systems and legislation"
             },
             {
               "number": "05",
+              "slug": "tunis",
               "city": "Tunis",
               "country": "Tunisia",
               "startDate": "2017",
-              "endDate": "2022"
+              "endDate": "2022",
+              "layout": "simple",
+              "heroImage": "/urban-policies/development-portal/projects/hero.png",
+              "mapImage": "/urban-policies/development-portal/projects/cairo-map.png",
+              "valuesContent": "Heritage preservation, urban development",
+              "policyToolsContent": "Planning, facilities, systems and legislation"
             },
             {
               "number": "06",
+              "slug": "manama",
               "city": "Manama",
               "country": "Bahrain",
               "startDate": "2020",
-              "endDate": "Ongoing"
+              "endDate": "Ongoing",
+              "layout": "simple",
+              "heroImage": "/urban-policies/development-portal/projects/hero.png",
+              "mapImage": "/urban-policies/development-portal/projects/cairo-map.png",
+              "valuesContent": "Sustainable development, infrastructure improvement",
+              "policyToolsContent": "Urban planning, infrastructure, systems and legislation"
             }
           ],
           "organizations": [

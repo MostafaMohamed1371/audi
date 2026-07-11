@@ -212,6 +212,15 @@
           "interventionFields": "مجالات التدخل",
           "interventionTypes": "نوع التدخل"
         },
+        "projectDescriptionTitle": "وصف المشروع",
+        "projectValuesTitle": "القيم و الأفكار الموجهة للمشروع:",
+        "projectPolicyToolsTitle": "أدوات السياسات العامة المعتمدة في المشروع",
+        "viewSourceLabel": "رؤية المصدر",
+        "foundersTitle": "المؤسسون",
+        "referencesAccordionTitle": "رابط المشروع، ملاحظات ومراجع",
+        "projectLinkLabel": "رابط المشروع",
+        "notesLabel": "ملاحظات",
+        "referencesLabel": "مراجع",
         "cta": {
           "title": "شارك في بناء مدن عربية أفضل",
           "description": "انضم إلى شبكة البلديات والباحثين والممارسين في تجربة ريادية",
@@ -300,45 +309,106 @@
           "projects": [
             {
               "number": "01",
+              "slug": "cairo",
               "city": "القاهرة",
               "country": "مصر",
               "startDate": "2020",
-              "endDate": "2024"
+              "endDate": "2024",
+              "layout": "rich",
+              "heroImage": "/urban-policies/development-portal/projects/cairo-project-hero.png",
+              "mapImage": "/urban-policies/development-portal/projects/cairo-map.png",
+              "valuesContent": "الحفاظ على التراث، جودة الحياة الحضرية",
+              "policyToolsContent": "بناء المرافق والبنى التحتية، تخطيط، أنظمة و تشريعات",
+              "sources": [
+                { "name": "السويس", "image": "/urban-policies/development-portal/projects/sources/cairo-source-suez.png" },
+                { "name": "العلمين", "image": "/urban-policies/development-portal/projects/sources/cairo-source-alamein.png" },
+                { "name": "بورسعيد", "image": "/urban-policies/development-portal/projects/sources/cairo-source-port-said.png" }
+              ],
+              "founders": [
+                { "role": "المالك / المطور (عام)", "name": "د. فيصل بن عبدالعزيز" },
+                { "role": "الاستشاري / المصمم", "name": "م. عبدالرحمن الزعبي" },
+                { "role": "الممول", "name": "أ. خالد خيري" },
+                { "role": "المقاول / المنفذ", "name": "أ. محمد ماجد الغالب" }
+              ],
+              "references": {
+                "projectLink": "https://example.com/cairo-project",
+                "notes": "يتضمن المشروع مرحلة تنفيذ أولى شملت تطوير البنية التحتية الأساسية وتحسين شبكة الطرق الرئيسية في المنطقة المستهدفة.",
+                "references": [
+                  "تقرير التنمية الحضرية لمدينة القاهرة 2024",
+                  "دليل السياسات الحضرية العربية",
+                  "دراسة جدوى المشروع – وزارة الإسكان"
+                ]
+              },
+              "relatedProjects": [
+                { "city": "الاسكندرية", "country": "مصر", "dateRange": "2006 - 2011", "image": "/urban-policies/development-portal/projects/related-projects/cairo-related-alexandria.png" },
+                { "city": "الفيوم", "country": "مصر", "dateRange": "2006 - 2011", "image": "/urban-policies/development-portal/projects/related-projects/cairo-related-fayoum.png" },
+                { "city": "القاهرة", "country": "مصر", "dateRange": "2006 - 2011", "image": "/urban-policies/development-portal/projects/related-projects/cairo-related-cairo.png" }
+              ]
             },
             {
               "number": "02",
+              "slug": "riyadh",
               "city": "الرياض",
               "country": "السعودية",
               "startDate": "2019",
-              "endDate": "2023"
+              "endDate": "2023",
+              "layout": "simple",
+              "heroImage": "/urban-policies/development-portal/projects/hero.png",
+              "mapImage": "/urban-policies/development-portal/projects/cairo-map.png",
+              "valuesContent": "التنمية الحضرية المستدامة، تحسين جودة الحياة",
+              "policyToolsContent": "تخطيط عمراني، بنية تحتية، أنظمة وتشريعات"
             },
             {
               "number": "03",
+              "slug": "kuwait",
               "city": "الكويت",
               "country": "الكويت",
               "startDate": "2018",
-              "endDate": "العمل مستمر"
+              "endDate": "العمل مستمر",
+              "layout": "simple",
+              "heroImage": "/urban-policies/development-portal/projects/hero.png",
+              "mapImage": "/urban-policies/development-portal/projects/cairo-map.png",
+              "valuesContent": "التطوير الحضري، الاستدامة البيئية",
+              "policyToolsContent": "تخطيط، بناء المرافق، أنظمة و تشريعات"
             },
             {
               "number": "04",
+              "slug": "dubai",
               "city": "دبي",
               "country": "الإمارات",
               "startDate": "2021",
-              "endDate": "2025"
+              "endDate": "2025",
+              "layout": "simple",
+              "heroImage": "/urban-policies/development-portal/projects/hero.png",
+              "mapImage": "/urban-policies/development-portal/projects/cairo-map.png",
+              "valuesContent": "الابتكار الحضري، جودة الحياة",
+              "policyToolsContent": "تخطيط، بنية تحتية، أنظمة وتشريعات"
             },
             {
               "number": "05",
+              "slug": "tunis",
               "city": "تونس",
               "country": "تونس",
               "startDate": "2017",
-              "endDate": "2022"
+              "endDate": "2022",
+              "layout": "simple",
+              "heroImage": "/urban-policies/development-portal/projects/hero.png",
+              "mapImage": "/urban-policies/development-portal/projects/cairo-map.png",
+              "valuesContent": "الحفاظ على التراث، التنمية الحضرية",
+              "policyToolsContent": "تخطيط، بناء المرافق، أنظمة و تشريعات"
             },
             {
               "number": "06",
+              "slug": "manama",
               "city": "المنامة",
               "country": "البحرين",
               "startDate": "2020",
-              "endDate": "العمل مستمر"
+              "endDate": "العمل مستمر",
+              "layout": "simple",
+              "heroImage": "/urban-policies/development-portal/projects/hero.png",
+              "mapImage": "/urban-policies/development-portal/projects/cairo-map.png",
+              "valuesContent": "التنمية المستدامة، تحسين البنية التحتية",
+              "policyToolsContent": "تخطيط عمراني، بنية تحتية، أنظمة وتشريعات"
             }
           ],
           "organizations": [

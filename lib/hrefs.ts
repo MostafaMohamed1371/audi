@@ -28,3 +28,4 @@ export function focusAreaHref(slug: string): AppHref {
 }
 
 export { directoryCityHref } from "@/lib/directory-cities";
+export { directoryProjectHref } from "@/lib/directory-projects";

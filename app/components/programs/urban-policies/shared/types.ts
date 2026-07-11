@@ -27,10 +27,29 @@ export type PortalDirectoryCityRow = {
 
 export type PortalDirectoryProjectRow = {
   number: string;
+  slug?: string;
   city: string;
   country: string;
   startDate: string;
   endDate: string;
+  layout?: "simple" | "rich";
+  heroImage?: string;
+  mapImage?: string;
+  valuesContent?: string;
+  policyToolsContent?: string;
+  sources?: { name: string; image: string }[];
+  founders?: { role: string; name: string }[];
+  references?: {
+    projectLink?: string;
+    notes?: string;
+    references?: string[];
+  };
+  relatedProjects?: {
+    city: string;
+    country: string;
+    dateRange: string;
+    image?: string;
+  }[];
 };
 
 export type PortalDirectoryOrganizationRow = {
@@ -101,6 +120,15 @@ export type PortalDirectoryContent = {
   commentSuccess?: string;
   commentError?: string;
   organizationFields?: PortalDirectoryOrganizationFields;
+  projectDescriptionTitle?: string;
+  projectValuesTitle?: string;
+  projectPolicyToolsTitle?: string;
+  viewSourceLabel?: string;
+  foundersTitle?: string;
+  referencesAccordionTitle?: string;
+  projectLinkLabel?: string;
+  notesLabel?: string;
+  referencesLabel?: string;
   cta?: {
     title: string;
     description: string;

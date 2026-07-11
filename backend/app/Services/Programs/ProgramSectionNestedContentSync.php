@@ -198,8 +198,8 @@ class ProgramSectionNestedContentSync
                     'country_en' => (string) ($enRow['country'] ?? ($row['country'] ?? '')),
                     'start_date' => $row['startDate'] ?? null,
                     'end_date' => $row['endDate'] ?? null,
-                    'detail_ar' => $this->normalizeDetail($row['detail'] ?? null),
-                    'detail_en' => $this->normalizeDetail($enRow['detail'] ?? ($row['detail'] ?? null)),
+                    'detail_ar' => $this->normalizeDetail($this->projectDetailFromRow($row)),
+                    'detail_en' => $this->normalizeDetail($this->projectDetailFromRow($enRow)),
                     'sort_order' => $index,
                 ],
             );
@@ -348,6 +348,39 @@ class ProgramSectionNestedContentSync
             'interventionFields',
             'interventionTypes',
             'socialLinks',
+        ];
+
+        $detail = [];
+        foreach ($keys as $key) {
+            if (array_key_exists($key, $row)) {
+                $detail[$key] = $row[$key];
+            }
+        }
+
+        if (isset($row['detail']) && is_array($row['detail'])) {
+            $detail = array_merge($detail, $row['detail']);
+        }
+
+        return $detail === [] ? null : $detail;
+    }
+
+    /**
+     * @param  array<string, mixed>  $row
+     * @return array<string, mixed>|null
+     */
+    private function projectDetailFromRow(array $row): ?array
+    {
+        $keys = [
+            'slug',
+            'layout',
+            'heroImage',
+            'mapImage',
+            'valuesContent',
+            'policyToolsContent',
+            'sources',
+            'founders',
+            'references',
+            'relatedProjects',
         ];
 
         $detail = [];

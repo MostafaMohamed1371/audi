@@ -242,8 +242,8 @@ class ProgramsSeeder extends Seeder
                     'country_en' => $enRow['country'] ?? ($row['country'] ?? ''),
                     'start_date' => $row['startDate'] ?? null,
                     'end_date' => $row['endDate'] ?? null,
-                    'detail_ar' => $row['detail'] ?? null,
-                    'detail_en' => $enRow['detail'] ?? ($row['detail'] ?? null),
+                    'detail_ar' => $this->projectDetailFromRow($row),
+                    'detail_en' => $this->projectDetailFromRow($enRow),
                 ],
             );
 
@@ -396,7 +396,10 @@ class ProgramsSeeder extends Seeder
 
         $data = json_decode(File::get($path), true) ?? [];
 
-        return $this->mergeDirectoryCityDetails($data, $locale);
+        return $this->mergeDirectoryProjectDetails(
+            $this->mergeDirectoryCityDetails($data, $locale),
+            $locale,
+        );
     }
 
     /**
@@ -435,6 +438,44 @@ class ProgramsSeeder extends Seeder
     }
 
     /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    private function mergeDirectoryProjectDetails(array $data, string $locale): array
+    {
+        $rows = $data['urbanPolicies']['developmentPortal']['directory']['rows']['projects'] ?? null;
+        if (! is_array($rows)) {
+            return $data;
+        }
+
+        foreach ($rows as $index => $row) {
+            if (! is_array($row)) {
+                continue;
+            }
+
+            $slug = $row['slug'] ?? null;
+            if (! is_string($slug) || $slug === '') {
+                continue;
+            }
+
+            $detailPath = base_path("../messages/data/{$slug}-project-detail.{$locale}.json");
+            if (! File::exists($detailPath)) {
+                continue;
+            }
+
+            $detail = json_decode(File::get($detailPath), true);
+            if (is_array($detail)) {
+                $data['urbanPolicies']['developmentPortal']['directory']['rows']['projects'][$index] = array_merge(
+                    $row,
+                    $detail,
+                );
+            }
+        }
+
+        return $data;
+    }
+
+    /**
      * @param  array<string, mixed>  $row
      * @return array<string, mixed>|null
      */
@@ -455,6 +496,39 @@ class ProgramsSeeder extends Seeder
             'interventionFields',
             'interventionTypes',
             'socialLinks',
+        ];
+
+        $detail = [];
+        foreach ($keys as $key) {
+            if (array_key_exists($key, $row)) {
+                $detail[$key] = $row[$key];
+            }
+        }
+
+        if (isset($row['detail']) && is_array($row['detail'])) {
+            $detail = array_merge($detail, $row['detail']);
+        }
+
+        return $detail === [] ? null : $detail;
+    }
+
+    /**
+     * @param  array<string, mixed>  $row
+     * @return array<string, mixed>|null
+     */
+    private function projectDetailFromRow(array $row): ?array
+    {
+        $keys = [
+            'slug',
+            'layout',
+            'heroImage',
+            'mapImage',
+            'valuesContent',
+            'policyToolsContent',
+            'sources',
+            'founders',
+            'references',
+            'relatedProjects',
         ];
 
         $detail = [];

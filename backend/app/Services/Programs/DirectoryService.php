@@ -259,11 +259,13 @@ class DirectoryService
             'projects' => [
                 'id' => $row->id,
                 'number' => $row->number,
+                'slug' => is_array($row->detail_ar) ? ($row->detail_ar['slug'] ?? null) : null,
                 'city' => $isAr ? $row->city_ar : $row->city_en,
                 'country' => $isAr ? $row->country_ar : $row->country_en,
                 'startDate' => $row->start_date,
                 'endDate' => $row->end_date,
                 'title' => trim(($isAr ? $row->city_ar : $row->city_en).', '.($isAr ? $row->country_ar : $row->country_en)),
+                ...$this->projectProfileFields($row, $isAr),
             ],
             'organizations', 'publications' => [
                 'id' => $row->id,
@@ -308,6 +310,32 @@ class DirectoryService
             'interventionFields',
             'interventionTypes',
             'socialLinks',
+        ];
+
+        return array_intersect_key($detail, array_flip($keys));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function projectProfileFields(Model $row, bool $isAr): array
+    {
+        $detail = $isAr ? ($row->detail_ar ?? []) : ($row->detail_en ?? []);
+        if (! is_array($detail)) {
+            return [];
+        }
+
+        $keys = [
+            'slug',
+            'layout',
+            'heroImage',
+            'mapImage',
+            'valuesContent',
+            'policyToolsContent',
+            'sources',
+            'founders',
+            'references',
+            'relatedProjects',
         ];
 
         return array_intersect_key($detail, array_flip($keys));

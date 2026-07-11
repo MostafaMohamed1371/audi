@@ -17,6 +17,7 @@ function postmanLoadProgramsJson(string $locale): array
         $path = dirname(__DIR__, 3).'/messages/'.$locale.'/programs.json';
         $cache[$locale] = json_decode((string) file_get_contents($path), true, 512, JSON_THROW_ON_ERROR);
         $cache[$locale] = postmanMergeDirectoryCityDetails($cache[$locale], $locale);
+        $cache[$locale] = postmanMergeDirectoryProjectDetails($cache[$locale], $locale);
     }
 
     return $cache[$locale];
@@ -52,6 +53,46 @@ function postmanMergeDirectoryCityDetails(array $data, string $locale): array
 
         $detail = json_decode((string) file_get_contents($detailPath), true, 512, JSON_THROW_ON_ERROR);
         $data['urbanPolicies']['developmentPortal']['directory']['rows']['cities'][$index]['detail'] = $detail;
+    }
+
+    return $data;
+}
+
+/**
+ * Merge project detail pages from messages/data/{slug}-project-detail.{locale}.json
+ *
+ * @param  array<string, mixed>  $data
+ * @return array<string, mixed>
+ */
+function postmanMergeDirectoryProjectDetails(array $data, string $locale): array
+{
+    $rows = $data['urbanPolicies']['developmentPortal']['directory']['rows']['projects'] ?? null;
+    if (! is_array($rows)) {
+        return $data;
+    }
+
+    foreach ($rows as $index => $row) {
+        if (! is_array($row)) {
+            continue;
+        }
+
+        $slug = $row['slug'] ?? null;
+        if (! is_string($slug) || $slug === '') {
+            continue;
+        }
+
+        $detailPath = dirname(__DIR__, 3).'/messages/data/'.$slug.'-project-detail.'.$locale.'.json';
+        if (! is_file($detailPath)) {
+            continue;
+        }
+
+        $detail = json_decode((string) file_get_contents($detailPath), true, 512, JSON_THROW_ON_ERROR);
+        if (is_array($detail)) {
+            $data['urbanPolicies']['developmentPortal']['directory']['rows']['projects'][$index] = array_merge(
+                $row,
+                $detail,
+            );
+        }
     }
 
     return $data;
@@ -209,9 +250,126 @@ function postmanDirectoryOrganizationDetailPagesGuide(): string
         .implode("\n", $lines);
 }
 
+/**
+ * Project detail pages — matches live site /المشاريع/{slug}.
+ *
+ * @return array<int, array{number: string, slug: string, labelAr: string, labelEn: string}>
+ */
+function postmanDirectoryProjectDetailPages(): array
+{
+    return [
+        ['number' => '01', 'slug' => 'cairo', 'labelAr' => 'القاهرة', 'labelEn' => 'Cairo'],
+        ['number' => '02', 'slug' => 'riyadh', 'labelAr' => 'الرياض', 'labelEn' => 'Riyadh'],
+        ['number' => '03', 'slug' => 'kuwait', 'labelAr' => 'الكويت', 'labelEn' => 'Kuwait'],
+        ['number' => '04', 'slug' => 'dubai', 'labelAr' => 'دبي', 'labelEn' => 'Dubai'],
+        ['number' => '05', 'slug' => 'tunis', 'labelAr' => 'تونس', 'labelEn' => 'Tunis'],
+        ['number' => '06', 'slug' => 'manama', 'labelAr' => 'المنامة', 'labelEn' => 'Manama'],
+    ];
+}
+
+/**
+ * @return array<string, mixed>
+ */
+function postmanDirectoryProjectDetailExampleAr(): array
+{
+    return postmanDirectoryProjectProfileFromRow(
+        postmanLoadProgramsJson('ar')['urbanPolicies']['developmentPortal']['directory']['rows']['projects'][0] ?? []
+    );
+}
+
+/**
+ * @return array<string, mixed>
+ */
+function postmanDirectoryProjectDetailExampleEn(): array
+{
+    return postmanDirectoryProjectProfileFromRow(
+        postmanLoadProgramsJson('en')['urbanPolicies']['developmentPortal']['directory']['rows']['projects'][0] ?? []
+    );
+}
+
+/**
+ * @return array<string, mixed>
+ */
+function postmanDirectoryProjectSimpleDetailExampleAr(): array
+{
+    $path = dirname(__DIR__, 3).'/messages/data/riyadh-project-detail.ar.json';
+
+    return is_file($path)
+        ? json_decode((string) file_get_contents($path), true, 512, JSON_THROW_ON_ERROR)
+        : [];
+}
+
+/**
+ * @return array<string, mixed>
+ */
+function postmanDirectoryProjectSimpleDetailExampleEn(): array
+{
+    $path = dirname(__DIR__, 3).'/messages/data/riyadh-project-detail.en.json';
+
+    return is_file($path)
+        ? json_decode((string) file_get_contents($path), true, 512, JSON_THROW_ON_ERROR)
+        : [];
+}
+
+/**
+ * @param  array<string, mixed>  $row
+ * @return array<string, mixed>
+ */
+function postmanDirectoryProjectProfileFromRow(array $row): array
+{
+    $keys = [
+        'slug',
+        'layout',
+        'heroImage',
+        'mapImage',
+        'valuesContent',
+        'policyToolsContent',
+        'sources',
+        'founders',
+        'references',
+        'relatedProjects',
+    ];
+
+    return array_intersect_key($row, array_flip($keys));
+}
+
+function postmanDirectoryProjectDetailPagesGuide(): string
+{
+    $layouts = [
+        'cairo' => 'rich — مصادر + مؤسسون + مراجع + مشاريع ذات صلة',
+        'riyadh' => 'simple — وصف + قيم + أدوات سياسات',
+        'kuwait' => 'simple',
+        'dubai' => 'simple',
+        'tunis' => 'simple',
+        'manama' => 'simple',
+    ];
+
+    $lines = array_map(
+        fn (array $project) => sprintf(
+            '| `%s` | `%s` | %s | %s | [/المشاريع/%s](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/%s) |',
+            $project['number'],
+            $project['slug'],
+            $project['labelAr'],
+            $layouts[$project['slug']] ?? 'simple',
+            $project['slug'],
+            $project['slug'],
+        ),
+        postmanDirectoryProjectDetailPages(),
+    );
+
+    return "**صفحات المشاريع على الموقع | Project detail pages**\n\n"
+        ."List tab: `?tab=developmentPortal&directory=projects`. Detail slug URL: `/بوابة-التنمية/المشاريع/{slug}`.\n\n"
+        ."| رقم | slug | المشروع | layout | رابط الموقع |\n|-----|------|---------|--------|-------------|\n"
+        .implode("\n", $lines);
+}
+
 function postmanDirectoryGuides(): string
 {
-    return postmanDirectoryCityDetailPagesGuide()."\n\n".postmanDirectoryOrganizationDetailPagesGuide();
+    return postmanDirectoryCityDetailPagesGuide()
+        ."\n\n"
+        .postmanDirectoryOrganizationDetailPagesGuide()
+        ."\n\n"
+        .postmanDirectoryProjectDetailPagesGuide();
 }
 
 function postmanProgramJsonKey(string $slug): string
@@ -529,7 +687,7 @@ function postmanUrbanPoliciesDetailsBodyFieldsGuide(string $tabKey): string
 | `bodyAr.contributionForm` | نموذج المساهمة (يُرسل إلى `POST /api/v1/programs/urban-policies/contribute`) |
 | `bodyAr.directory` | دليل المدن (فيديو، عناوين، تبويبات، أعمدة، تسميات النقاش) |
 | `bodyAr.directory.rows.cities[]` | جدول المدن + `detail` + `discussions[]` |
-| `bodyAr.directory.rows.projects[]` | جدول المشاريع + `detail` + `discussions[]` |
+| `bodyAr.directory.rows.projects[]` | جدول المشاريع — `{number, slug, city, country, startDate, endDate, layout, heroImage, mapImage, valuesContent, policyToolsContent, sources[], founders[], references{}, relatedProjects[]}` |
 | `bodyAr.directory.rows.organizations[]` | جدول المنظمات — `{number, name, type, country, countryCode, address, phone, email, website, founded, employees, budget, interventionAreas, interventionFields[], interventionTypes[], socialLinks[]}` |
 | `bodyAr.directory.organizationFields` | تسميات حقول صفحة تفاصيل المنظمة |
 | `bodyAr.directory.rows.publications[]` | جدول المنشورات + `detail` + `discussions[]` |
@@ -577,7 +735,7 @@ MD,
 function postmanUrbanPoliciesTabExtraGuide(string $tabKey): string
 {
     return match ($tabKey) {
-        'developmentPortal' => '**`directory.rows` في `bodyAr/En`:** يُنسّخ تلقائياً إلى `directory_*` + `directory_discussions`. تفاصيل المدن: `messages/data/{slug}-detail.{ar,en}.json` (6 مدن). المنظمات: `directory.rows.organizations[]` (4 منظمات — PLATFORMA كاملة + 3 مختصرة). القائمة: `GET /api/v1/programs/urban-policies/directory?tab=organizations`. التفاصيل: `GET .../directory/organizations/{01–04}`.',
+        'developmentPortal' => '**`directory.rows` في `bodyAr/En`:** يُنسّخ تلقائياً إلى `directory_*`. المدن: `messages/data/{slug}-detail.{ar,en}.json`. المشاريع: `messages/data/{slug}-project-detail.{ar,en}.json` (cairo=rich, riyadh/kuwait/dubai/tunis/manama=simple). المنظمات: `directory.rows.organizations[]`.',
         default => '',
     };
 }

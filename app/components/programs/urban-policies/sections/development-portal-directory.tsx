@@ -6,6 +6,10 @@ import {
   directoryCityHref,
   isDirectoryCitySlug,
 } from "@/lib/directory-cities";
+import {
+  directoryProjectHref,
+  isDirectoryProjectSlug,
+} from "@/lib/directory-projects";
 import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { ChevronDown, List, MapPin, RotateCcw, Search } from "lucide-react";
@@ -281,10 +285,21 @@ export function DevelopmentPortalDirectory({
                             <span className="text-sm text-secondary sm:text-base">
                               {row.endDate}
                             </span>
-                            <SeeMoreButton
-                              label={content.seeMoreLabel}
-                              onClick={() => onOpenItem(row.number)}
-                            />
+                            {"slug" in row &&
+                            typeof row.slug === "string" &&
+                            isDirectoryProjectSlug(row.slug) ? (
+                              <Link
+                                href={directoryProjectHref(row.slug)}
+                                className="rounded-lg bg-primary px-4 py-2 text-center text-xs font-bold text-white transition-colors hover:bg-primary/90 sm:px-5 sm:text-sm"
+                              >
+                                {content.seeMoreLabel}
+                              </Link>
+                            ) : (
+                              <SeeMoreButton
+                                label={content.seeMoreLabel}
+                                onClick={() => onOpenItem(row.number)}
+                              />
+                            )}
                           </>
                         ) : isOrganizations && "type" in row ? (
                           <>

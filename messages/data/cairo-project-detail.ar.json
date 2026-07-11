@@ -1,0 +1,57 @@
+{
+  "slug": "cairo",
+  "layout": "rich",
+  "heroImage": "/urban-policies/development-portal/projects/cairo-project-hero.png",
+  "mapImage": "/urban-policies/development-portal/projects/cairo-map.png",
+  "valuesContent": "الحفاظ على التراث، جودة الحياة الحضرية",
+  "policyToolsContent": "بناء المرافق والبنى التحتية، تخطيط، أنظمة و تشريعات",
+  "sources": [
+    {
+      "name": "السويس",
+      "image": "/urban-policies/development-portal/projects/sources/cairo-source-suez.png"
+    },
+    {
+      "name": "العلمين",
+      "image": "/urban-policies/development-portal/projects/sources/cairo-source-alamein.png"
+    },
+    {
+      "name": "بورسعيد",
+      "image": "/urban-policies/development-portal/projects/sources/cairo-source-port-said.png"
+    }
+  ],
+  "founders": [
+    { "role": "المالك / المطور (عام)", "name": "د. فيصل بن عبدالعزيز" },
+    { "role": "الاستشاري / المصمم", "name": "م. عبدالرحمن الزعبي" },
+    { "role": "الممول", "name": "أ. خالد خيري" },
+    { "role": "المقاول / المنفذ", "name": "أ. محمد ماجد الغالب" }
+  ],
+  "references": {
+    "projectLink": "https://example.com/cairo-project",
+    "notes": "يتضمن المشروع مرحلة تنفيذ أولى شملت تطوير البنية التحتية الأساسية وتحسين شبكة الطرق الرئيسية في المنطقة المستهدفة.",
+    "references": [
+      "تقرير التنمية الحضرية لمدينة القاهرة 2024",
+      "دليل السياسات الحضرية العربية",
+      "دراسة جدوى المشروع – وزارة الإسكان"
+    ]
+  },
+  "relatedProjects": [
+    {
+      "city": "الاسكندرية",
+      "country": "مصر",
+      "dateRange": "2006 - 2011",
+      "image": "/urban-policies/development-portal/projects/related-projects/cairo-related-alexandria.png"
+    },
+    {
+      "city": "الفيوم",
+      "country": "مصر",
+      "dateRange": "2006 - 2011",
+      "image": "/urban-policies/development-portal/projects/related-projects/cairo-related-fayoum.png"
+    },
+    {
+      "city": "القاهرة",
+      "country": "مصر",
+      "dateRange": "2006 - 2011",
+      "image": "/urban-policies/development-portal/projects/related-projects/cairo-related-cairo.png"
+    }
+  ]
+}

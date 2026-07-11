@@ -70,6 +70,15 @@ type Props = {
     sourceLabel?: string;
     relatedProjectsTitle?: string;
     organizationFields?: Record<string, string>;
+    projectDescriptionTitle?: string;
+    projectValuesTitle?: string;
+    projectPolicyToolsTitle?: string;
+    viewSourceLabel?: string;
+    foundersTitle?: string;
+    referencesAccordionTitle?: string;
+    projectLinkLabel?: string;
+    notesLabel?: string;
+    referencesLabel?: string;
     directoryCta?: {
       title?: string;
       description?: string;
@@ -84,6 +93,9 @@ type Props = {
 function itemTitle(item: Record<string, unknown>, detail: DetailContent): string {
   if (typeof detail.title === "string") return detail.title;
   if (typeof item.title === "string") return item.title;
+  if (typeof item.city === "string" && typeof item.country === "string") {
+    return `${item.city}, ${item.country}`;
+  }
   if (typeof item.name === "string") return item.name.split("،")[0]?.split(",")[0]?.trim() ?? item.name;
   return String(item.number ?? "");
 }
@@ -293,6 +305,254 @@ function OrganizationProfileSection({
   );
 }
 
+type ProjectProfile = {
+  layout?: "simple" | "rich";
+  heroImage?: string;
+  mapImage?: string;
+  valuesContent?: string;
+  policyToolsContent?: string;
+  sources?: { name: string; image: string }[];
+  founders?: { role: string; name: string }[];
+  references?: {
+    projectLink?: string;
+    notes?: string;
+    references?: string[];
+  };
+  relatedProjects?: RelatedProject[];
+};
+
+function projectProfileFromItem(
+  item: Record<string, unknown>,
+  detail: Record<string, unknown>,
+): ProjectProfile {
+  const merged = { ...detail, ...item } as ProjectProfile;
+  const nestedDetail = item.detail;
+  if (nestedDetail && typeof nestedDetail === "object") {
+    return { ...merged, ...(nestedDetail as ProjectProfile) };
+  }
+  return merged;
+}
+
+function ProjectProfileSection({
+  profile,
+  labels,
+  locationLabel,
+  isRtl,
+}: {
+  profile: ProjectProfile;
+  labels: {
+    projectDescriptionTitle?: string;
+    projectValuesTitle?: string;
+    projectPolicyToolsTitle?: string;
+    viewSourceLabel?: string;
+    foundersTitle?: string;
+    referencesAccordionTitle?: string;
+    projectLinkLabel?: string;
+    notesLabel?: string;
+    referencesLabel?: string;
+    relatedProjectsTitle?: string;
+  };
+  locationLabel?: string;
+  isRtl: boolean;
+}) {
+  const layout = profile.layout === "rich" ? "rich" : "simple";
+
+  const descriptionBlock = (
+    <section className="space-y-5">
+      <h2 className="text-xl font-bold text-secondary sm:text-2xl">
+        {labels.projectDescriptionTitle ?? "Project Description"}
+      </h2>
+      {profile.valuesContent ? (
+        <div>
+          <h3 className="mb-2 text-lg font-bold text-secondary">
+            {labels.projectValuesTitle ?? "Values"}
+          </h3>
+          <p className="text-base leading-8 text-[#4d5a6f] sm:text-lg">{profile.valuesContent}</p>
+        </div>
+      ) : null}
+      {profile.policyToolsContent ? (
+        <div>
+          <h3 className="mb-2 text-lg font-bold text-secondary">
+            {labels.projectPolicyToolsTitle ?? "Policy Tools"}
+          </h3>
+          <p className="text-base leading-8 text-[#4d5a6f] sm:text-lg">
+            {profile.policyToolsContent}
+          </p>
+        </div>
+      ) : null}
+    </section>
+  );
+
+  const mapBlock =
+    profile.mapImage ? (
+      <div className="space-y-3">
+        <div className="relative aspect-video overflow-hidden rounded-xl bg-[#eef6fa]">
+          <Image
+            src={profile.mapImage}
+            alt={locationLabel ?? ""}
+            fill
+            className="object-contain p-4"
+            sizes="(max-width: 768px) 100vw, 768px"
+          />
+        </div>
+        {locationLabel ? (
+          <p className="text-center text-lg font-bold text-secondary">{locationLabel}</p>
+        ) : null}
+      </div>
+    ) : null;
+
+  if (layout === "simple") {
+    return (
+      <div className="space-y-8">
+        {descriptionBlock}
+        {mapBlock}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-8">
+      {profile.heroImage || profile.mapImage ? (
+        <div className="grid gap-4 lg:grid-cols-2">
+          {profile.heroImage ? (
+            <div className="relative aspect-video overflow-hidden rounded-xl">
+              <Image
+                src={profile.heroImage}
+                alt=""
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 480px"
+              />
+            </div>
+          ) : null}
+          {profile.mapImage ? (
+            <div className="relative aspect-video overflow-hidden rounded-xl bg-[#eef6fa]">
+              <Image
+                src={profile.mapImage}
+                alt=""
+                fill
+                className="object-contain p-4"
+                sizes="(max-width: 768px) 100vw, 480px"
+              />
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+
+      {descriptionBlock}
+
+      {layout === "rich" && profile.sources && profile.sources.length > 0 ? (
+        <div className="grid gap-4 sm:grid-cols-3">
+          {profile.sources.map((source) => (
+            <article
+              key={source.name}
+              className="overflow-hidden rounded-xl bg-[#eef6fa]"
+              dir={isRtl ? "rtl" : "ltr"}
+            >
+              <div className="relative aspect-4/3">
+                <Image
+                  src={source.image}
+                  alt={source.name}
+                  fill
+                  className="object-cover"
+                  sizes="240px"
+                />
+              </div>
+              <div className="p-4 text-center">
+                <h3 className="mb-2 text-base font-bold text-secondary">{source.name}</h3>
+                <span className="text-sm font-medium text-primary">
+                  {labels.viewSourceLabel ?? "View Source"}
+                </span>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : null}
+
+      {layout === "rich" && profile.founders && profile.founders.length > 0 ? (
+        <section>
+          <h2 className="mb-4 text-xl font-bold text-secondary sm:text-2xl">
+            {labels.foundersTitle ?? "Founders"}
+          </h2>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {profile.founders.map((founder) => (
+              <div
+                key={`${founder.role}-${founder.name}`}
+                className="rounded-xl border border-[#00709E14] bg-[#eef6fa] p-4"
+              >
+                <p className="mb-1 text-sm font-bold text-primary">{founder.role}</p>
+                <p className="text-base text-secondary">{founder.name}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {layout === "rich" && profile.references ? (
+        <section className="rounded-xl border border-[#00709E14] bg-white p-5">
+          <h2 className="mb-4 text-xl font-bold text-secondary sm:text-2xl">
+            {labels.referencesAccordionTitle ?? "References"}
+          </h2>
+          {profile.references.projectLink ? (
+            <p className="mb-3 text-sm text-[#4d5a6f]">
+              <span className="font-bold text-secondary">
+                {labels.projectLinkLabel ?? "Project Link"}:
+              </span>{" "}
+              <a
+                href={profile.references.projectLink}
+                className="text-primary hover:underline"
+                dir="ltr"
+              >
+                {profile.references.projectLink}
+              </a>
+            </p>
+          ) : null}
+          {profile.references.notes ? (
+            <p className="mb-3 text-sm leading-7 text-[#4d5a6f]">
+              <span className="font-bold text-secondary">{labels.notesLabel ?? "Notes"}:</span>{" "}
+              {profile.references.notes}
+            </p>
+          ) : null}
+          {profile.references.references && profile.references.references.length > 0 ? (
+            <div>
+              <p className="mb-2 text-sm font-bold text-secondary">
+                {labels.referencesLabel ?? "References"}
+              </p>
+              <ul
+                className={cn(
+                  "list-disc space-y-1 ps-5 text-sm leading-7 text-[#4d5a6f]",
+                  isRtl ? "text-right" : "text-left",
+                )}
+              >
+                {profile.references.references.map((reference) => (
+                  <li key={reference}>{reference}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
+
+      {layout === "rich" && profile.relatedProjects && profile.relatedProjects.length > 0 ? (
+        <div className="rounded-2xl bg-white p-6 shadow-[1px_1px_18.6px_0px_#111F421C] sm:p-8">
+          <h2 className="mb-6 text-xl font-bold text-secondary sm:text-2xl">
+            {labels.relatedProjectsTitle ?? "Related Projects"}
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {profile.relatedProjects.map((project) => (
+              <RelatedProjectCard
+                key={`${project.city}-${project.country}-${project.dateRange}`}
+                project={project}
+                isRtl={isRtl}
+              />
+            ))}
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 export function DirectoryItemDetailPanel({
   tab,
   number,
@@ -335,21 +595,29 @@ export function DirectoryItemDetailPanel({
   const discussions = data?.discussions ?? [];
   const layout = detail.layout === "rich" ? "rich" : "simple";
   const isOrganization = tab === "organizations";
+  const isProject = tab === "projects";
   const showDiscussions = tab === "cities" && layout === "rich";
   const organizationProfile = isOrganization
     ? organizationProfileFromItem(item, detail as Record<string, unknown>)
     : null;
+  const projectProfile = isProject
+    ? projectProfileFromItem(item, detail as Record<string, unknown>)
+    : null;
   const title = itemTitle(item, detail);
   const country = isOrganization
     ? (organizationProfile?.country ?? "")
-    : detail.country ??
+    : isProject
+      ? ""
+      : detail.country ??
       (typeof item.name === "string"
         ? item.name.split("،").slice(1).join("،").trim() ||
           item.name.split(",").slice(1).join(",").trim()
         : "");
   const subtitle = isOrganization
     ? organizationProfile?.type ?? ""
-    : [
+    : isProject
+      ? ""
+      : [
         typeof item.description === "string" ? item.description : "",
         detail.population ? `(${detail.population})` : "",
       ]
@@ -431,6 +699,24 @@ export function DirectoryItemDetailPanel({
                 <OrganizationProfileSection
                   profile={organizationProfile}
                   labels={ui.organizationFields ?? {}}
+                  isRtl={isRtl}
+                />
+              ) : isProject && projectProfile ? (
+                <ProjectProfileSection
+                  profile={projectProfile}
+                  locationLabel={title}
+                  labels={{
+                    projectDescriptionTitle: ui.projectDescriptionTitle,
+                    projectValuesTitle: ui.projectValuesTitle,
+                    projectPolicyToolsTitle: ui.projectPolicyToolsTitle,
+                    viewSourceLabel: ui.viewSourceLabel,
+                    foundersTitle: ui.foundersTitle,
+                    referencesAccordionTitle: ui.referencesAccordionTitle,
+                    projectLinkLabel: ui.projectLinkLabel,
+                    notesLabel: ui.notesLabel,
+                    referencesLabel: ui.referencesLabel,
+                    relatedProjectsTitle: ui.relatedProjectsTitle,
+                  }}
                   isRtl={isRtl}
                 />
               ) : sections.length > 0 ? (

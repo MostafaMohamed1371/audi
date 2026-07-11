@@ -52,6 +52,10 @@ export const pathnames = {
     ar: "/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/[slug]",
     en: "/our-programs/urban-policy-research/development-portal/cities/[slug]",
   },
+  "/programs/urban-policies/development-portal/projects/[slug]": {
+    ar: "/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/[slug]",
+    en: "/our-programs/urban-policy-research/development-portal/projects/[slug]",
+  },
   "/programs/training": {
     ar: "/برامجنا/مركز-دعم-المدن",
     en: "/our-programs/training-capacity-development",

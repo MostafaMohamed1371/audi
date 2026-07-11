@@ -1,35 +1,56 @@
 import type { DirectoryItemDetail, DirectoryTab } from "@/lib/api";
 
-type OrganizationRow = {
+type DirectoryRow = Record<string, unknown> & {
   number: string;
-  name: string;
-  type?: string;
-  country?: string;
-  countryCode?: string;
-  address?: string;
-  phone?: string;
-  email?: string;
-  website?: string;
-  founded?: string;
-  employees?: string;
-  budget?: string;
-  interventionAreas?: string;
-  interventionFields?: string[];
-  interventionTypes?: string[];
-  socialLinks?: { platform: string; href: string }[];
-  detail?: Record<string, unknown>;
   discussions?: { author: string; body: string }[];
+  detail?: Record<string, unknown>;
 };
 
 type ProgramsMessages = {
   urbanPolicies: {
     developmentPortal: {
       directory: {
-        rows: Record<string, OrganizationRow[]>;
+        rows: Record<string, DirectoryRow[]>;
       };
     };
   };
 };
+
+const ORGANIZATION_PROFILE_KEYS = [
+  "type",
+  "country",
+  "countryCode",
+  "address",
+  "phone",
+  "email",
+  "website",
+  "founded",
+  "employees",
+  "budget",
+  "interventionAreas",
+  "interventionFields",
+  "interventionTypes",
+  "socialLinks",
+] as const;
+
+const PROJECT_PROFILE_KEYS = [
+  "slug",
+  "layout",
+  "heroImage",
+  "mapImage",
+  "valuesContent",
+  "policyToolsContent",
+  "sources",
+  "founders",
+  "references",
+  "relatedProjects",
+] as const;
+
+function pickProfile(row: DirectoryRow, keys: readonly string[]) {
+  return Object.fromEntries(
+    keys.filter((key) => row[key] !== undefined).map((key) => [key, row[key]]),
+  );
+}
 
 export async function getFallbackDirectoryItem(
   locale: string,
@@ -45,30 +66,48 @@ export async function getFallbackDirectoryItem(
     return null;
   }
 
-  const profileKeys = [
-    "type",
-    "country",
-    "countryCode",
-    "address",
-    "phone",
-    "email",
-    "website",
-    "founded",
-    "employees",
-    "budget",
-    "interventionAreas",
-    "interventionFields",
-    "interventionTypes",
-    "socialLinks",
-  ] as const;
+  if (tab === "projects") {
+    const profile = pickProfile(row, PROJECT_PROFILE_KEYS);
+    const city = String(row.city ?? "");
+    const country = String(row.country ?? "");
 
-  const profile = Object.fromEntries(
-    profileKeys
-      .filter((key) => row[key] !== undefined)
-      .map((key) => [key, row[key]]),
-  );
+    return {
+      tab,
+      number,
+      item: {
+        number: row.number,
+        city,
+        country,
+        startDate: row.startDate,
+        endDate: row.endDate,
+        title: `${city}, ${country}`,
+        detail: row.detail ?? profile,
+        ...profile,
+      },
+      discussions: [],
+      ui: {},
+    };
+  }
 
-  const detail = row.detail ?? (tab === "organizations" ? profile : undefined);
+  if (tab === "organizations") {
+    const profile = pickProfile(row, ORGANIZATION_PROFILE_KEYS);
+    const name = String(row.name ?? "");
+
+    return {
+      tab,
+      number,
+      item: {
+        number: row.number,
+        name,
+        description: row.type ?? row.description,
+        detail: row.detail ?? profile,
+        ...profile,
+      },
+      discussions: [],
+      ui: {},
+    };
+  }
+
   const discussions = (row.discussions ?? []).map((discussion, index) => ({
     id: index + 1,
     author: discussion.author,
@@ -78,13 +117,7 @@ export async function getFallbackDirectoryItem(
   return {
     tab,
     number,
-    item: {
-      number: row.number,
-      name: row.name,
-      description: row.type ?? (row as { description?: string }).description,
-      detail,
-      ...profile,
-    },
+    item: row,
     discussions,
     ui: {},
   };

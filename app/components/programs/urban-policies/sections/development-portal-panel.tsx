@@ -208,6 +208,15 @@ export function DevelopmentPortalPanel({
             sourceLabel: content.directory.sourceLabel,
             relatedProjectsTitle: content.directory.relatedProjectsTitle,
             organizationFields: content.directory.organizationFields,
+            projectDescriptionTitle: content.directory.projectDescriptionTitle,
+            projectValuesTitle: content.directory.projectValuesTitle,
+            projectPolicyToolsTitle: content.directory.projectPolicyToolsTitle,
+            viewSourceLabel: content.directory.viewSourceLabel,
+            foundersTitle: content.directory.foundersTitle,
+            referencesAccordionTitle: content.directory.referencesAccordionTitle,
+            projectLinkLabel: content.directory.projectLinkLabel,
+            notesLabel: content.directory.notesLabel,
+            referencesLabel: content.directory.referencesLabel,
             directoryCta: content.directory.cta,
           }}
           onBack={closeDirectoryItem}

@@ -541,6 +541,19 @@ List tab: `?tab=developmentPortal&directory=organizations`. List shows **type** 
 | `03` | الاتحاد الدولي للمواصلات العامة | [?item=03](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=03) |
 | `04` | المجلس الأوروبي للبلديات والمناطق | [?item=04](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=04) |
 
+**صفحات المشاريع على الموقع | Project detail pages**
+
+List tab: `?tab=developmentPortal&directory=projects`. Detail slug URL: `/بوابة-التنمية/المشاريع/{slug}`.
+
+| رقم | slug | المشروع | layout | رابط الموقع |
+|-----|------|---------|--------|-------------|
+| `01` | `cairo` | القاهرة | rich — مصادر + مؤسسون + مراجع + مشاريع ذات صلة | [/المشاريع/cairo](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/cairo) |
+| `02` | `riyadh` | الرياض | simple — وصف + قيم + أدوات سياسات | [/المشاريع/riyadh](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/riyadh) |
+| `03` | `kuwait` | الكويت | simple | [/المشاريع/kuwait](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/kuwait) |
+| `04` | `dubai` | دبي | simple | [/المشاريع/dubai](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/dubai) |
+| `05` | `tunis` | تونس | simple | [/المشاريع/tunis](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/tunis) |
+| `06` | `manama` | المنامة | simple | [/المشاريع/manama](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/manama) |
+
 ---
 
 #### تفاصيل المدن — City Detail Pages
@@ -737,6 +750,122 @@ Live: [?directory=organizations&item=04](https://audi-w.vercel.app/ar/برامج
 
 ---
 
+#### تفاصيل المشاريع — Project Detail Pages
+
+#### GET `/api/v1/programs/urban-policies/directory/projects/01`
+
+**الاسم | Name:** القاهرة — Cairo — Get Project Detail — cairo
+
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/projects/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Live: [/المشاريع/cairo](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/cairo). Admin: step 03 `directory.rows.projects[]`.
+
+---
+
+#### GET `/api/v1/programs/urban-policies/directory/projects/02`
+
+**الاسم | Name:** الرياض — Riyadh — Get Project Detail — riyadh
+
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/projects/02` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Live: [/المشاريع/riyadh](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/riyadh). Admin: step 03 `directory.rows.projects[]`.
+
+---
+
+#### GET `/api/v1/programs/urban-policies/directory/projects/03`
+
+**الاسم | Name:** الكويت — Kuwait — Get Project Detail — kuwait
+
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/projects/03` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Live: [/المشاريع/kuwait](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/kuwait). Admin: step 03 `directory.rows.projects[]`.
+
+---
+
+#### GET `/api/v1/programs/urban-policies/directory/projects/04`
+
+**الاسم | Name:** دبي — Dubai — Get Project Detail — dubai
+
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/projects/04` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Live: [/المشاريع/dubai](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/dubai). Admin: step 03 `directory.rows.projects[]`.
+
+---
+
+#### GET `/api/v1/programs/urban-policies/directory/projects/05`
+
+**الاسم | Name:** تونس — Tunis — Get Project Detail — tunis
+
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/projects/05` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Live: [/المشاريع/tunis](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/tunis). Admin: step 03 `directory.rows.projects[]`.
+
+---
+
+#### GET `/api/v1/programs/urban-policies/directory/projects/06`
+
+**الاسم | Name:** المنامة — Manama — Get Project Detail — manama
+
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/projects/06` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Live: [/المشاريع/manama](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/manama). Admin: step 03 `directory.rows.projects[]`.
+
+---
+
 #### GET `/api/v1/programs/urban-policies/directory/{{directoryTab}}/{{directoryNumber}}`
 
 **الاسم | Name:** تفاصيل عنصر الدليل (متغير) — Get Directory Item Detail (variables)
@@ -752,7 +881,7 @@ Live: [?directory=organizations&item=04](https://audi-w.vercel.app/ar/برامج
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Set `directoryTab` to `cities|organizations|projects|publications` and `directoryNumber` accordingly. See folders **تفاصيل المدن** and **تفاصيل المنظمات**.
+Set `directoryTab` to `cities|organizations|projects|publications` and `directoryNumber` accordingly. See folders **تفاصيل المدن**, **تفاصيل المنظمات**, **تفاصيل المشاريع**.
 
 **صفحات المدن على الموقع | City detail pages**
 
@@ -777,6 +906,19 @@ List tab: `?tab=developmentPortal&directory=organizations`. List shows **type** 
 | `02` | منظمة التعاون والتنمية الاقتصادية | [?item=02](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=02) |
 | `03` | الاتحاد الدولي للمواصلات العامة | [?item=03](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=03) |
 | `04` | المجلس الأوروبي للبلديات والمناطق | [?item=04](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=04) |
+
+**صفحات المشاريع على الموقع | Project detail pages**
+
+List tab: `?tab=developmentPortal&directory=projects`. Detail slug URL: `/بوابة-التنمية/المشاريع/{slug}`.
+
+| رقم | slug | المشروع | layout | رابط الموقع |
+|-----|------|---------|--------|-------------|
+| `01` | `cairo` | القاهرة | rich — مصادر + مؤسسون + مراجع + مشاريع ذات صلة | [/المشاريع/cairo](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/cairo) |
+| `02` | `riyadh` | الرياض | simple — وصف + قيم + أدوات سياسات | [/المشاريع/riyadh](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/riyadh) |
+| `03` | `kuwait` | الكويت | simple | [/المشاريع/kuwait](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/kuwait) |
+| `04` | `dubai` | دبي | simple | [/المشاريع/dubai](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/dubai) |
+| `05` | `tunis` | تونس | simple | [/المشاريع/tunis](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/tunis) |
+| `06` | `manama` | المنامة | simple | [/المشاريع/manama](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المشاريع/manama) |
 
 ---
 

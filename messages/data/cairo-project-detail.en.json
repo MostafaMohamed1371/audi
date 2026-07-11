@@ -1,0 +1,57 @@
+{
+  "slug": "cairo",
+  "layout": "rich",
+  "heroImage": "/urban-policies/development-portal/projects/cairo-project-hero.png",
+  "mapImage": "/urban-policies/development-portal/projects/cairo-map.png",
+  "valuesContent": "Heritage preservation, urban quality of life",
+  "policyToolsContent": "Infrastructure and facilities, planning, systems and legislation",
+  "sources": [
+    {
+      "name": "Suez",
+      "image": "/urban-policies/development-portal/projects/sources/cairo-source-suez.png"
+    },
+    {
+      "name": "Alamein",
+      "image": "/urban-policies/development-portal/projects/sources/cairo-source-alamein.png"
+    },
+    {
+      "name": "Port Said",
+      "image": "/urban-policies/development-portal/projects/sources/cairo-source-port-said.png"
+    }
+  ],
+  "founders": [
+    { "role": "Owner / Developer (Public)", "name": "Dr. Faisal bin Abdulaziz" },
+    { "role": "Consultant / Designer", "name": "Eng. Abdulrahman Al-Zaabi" },
+    { "role": "Funder", "name": "Mr. Khaled Khairy" },
+    { "role": "Contractor / Implementer", "name": "Mr. Mohammed Majed Al-Ghalib" }
+  ],
+  "references": {
+    "projectLink": "https://example.com/cairo-project",
+    "notes": "The project includes an initial implementation phase covering basic infrastructure development and improvements to the main road network in the target area.",
+    "references": [
+      "Cairo Urban Development Report 2024",
+      "Arab Urban Policy Guide",
+      "Project Feasibility Study – Ministry of Housing"
+    ]
+  },
+  "relatedProjects": [
+    {
+      "city": "Alexandria",
+      "country": "Egypt",
+      "dateRange": "2006 - 2011",
+      "image": "/urban-policies/development-portal/projects/related-projects/cairo-related-alexandria.png"
+    },
+    {
+      "city": "Fayoum",
+      "country": "Egypt",
+      "dateRange": "2006 - 2011",
+      "image": "/urban-policies/development-portal/projects/related-projects/cairo-related-fayoum.png"
+    },
+    {
+      "city": "Cairo",
+      "country": "Egypt",
+      "dateRange": "2006 - 2011",
+      "image": "/urban-policies/development-portal/projects/related-projects/cairo-related-cairo.png"
+    }
+  ]
+}
