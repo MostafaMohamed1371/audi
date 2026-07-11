@@ -59,6 +59,8 @@ class DirectoryCityController extends Controller
             'descriptionEn' => ['nullable', 'string'],
             'countryCode' => ['nullable', 'string', 'size:2'],
             'citySize' => ['nullable', 'string', 'max:50'],
+            'detailAr' => ['nullable', 'array'],
+            'detailEn' => ['nullable', 'array'],
             'sortOrder' => ['sometimes', 'integer', 'min:0'],
         ]);
 
@@ -70,6 +72,8 @@ class DirectoryCityController extends Controller
             'description_en' => $validated['descriptionEn'] ?? null,
             'country_code' => isset($validated['countryCode']) ? strtoupper($validated['countryCode']) : null,
             'city_size' => $validated['citySize'] ?? null,
+            'detail_ar' => $validated['detailAr'] ?? null,
+            'detail_en' => $validated['detailEn'] ?? null,
             'sort_order' => $validated['sortOrder'] ?? 0,
         ]);
 
@@ -91,6 +95,8 @@ class DirectoryCityController extends Controller
             'descriptionEn' => ['sometimes', 'nullable', 'string'],
             'countryCode' => ['sometimes', 'nullable', 'string', 'size:2'],
             'citySize' => ['sometimes', 'nullable', 'string', 'max:50'],
+            'detailAr' => ['sometimes', 'nullable', 'array'],
+            'detailEn' => ['sometimes', 'nullable', 'array'],
             'sortOrder' => ['sometimes', 'integer', 'min:0'],
         ]);
 
@@ -118,6 +124,12 @@ class DirectoryCityController extends Controller
         }
         if (array_key_exists('citySize', $validated)) {
             $payload['city_size'] = $validated['citySize'];
+        }
+        if (array_key_exists('detailAr', $validated)) {
+            $payload['detail_ar'] = $validated['detailAr'];
+        }
+        if (array_key_exists('detailEn', $validated)) {
+            $payload['detail_en'] = $validated['detailEn'];
         }
         if (array_key_exists('sortOrder', $validated)) {
             $payload['sort_order'] = $validated['sortOrder'];
@@ -160,6 +172,8 @@ class DirectoryCityController extends Controller
             'descriptionEn' => $city->description_en,
             'countryCode' => $city->country_code,
             'citySize' => $city->city_size,
+            'detailAr' => $city->detail_ar,
+            'detailEn' => $city->detail_en,
             'sortOrder' => $city->sort_order,
             'createdAt' => $city->created_at?->toIso8601String(),
             'updatedAt' => $city->updated_at?->toIso8601String(),

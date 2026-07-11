@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Programs;
 
 use App\Models\DirectoryCity;
+use App\Models\DirectoryDiscussion;
 use App\Models\DirectoryOrganization;
 use App\Models\DirectoryProject;
 use App\Models\DirectoryPublication;
@@ -155,9 +156,13 @@ class ProgramSectionNestedContentSync
                     'description_en' => (string) ($enRow['description'] ?? $description) ?: null,
                     'country_code' => null,
                     'city_size' => $this->inferCitySize($description),
+                    'detail_ar' => $this->normalizeDetail($this->cityDetailFromRow($row)),
+                    'detail_en' => $this->normalizeDetail($this->cityDetailFromRow($enRow)),
                     'sort_order' => $index,
                 ],
             );
+
+            $this->syncDiscussions('cities', $number, $row['discussions'] ?? [], $enRow['discussions'] ?? []);
         }
 
         DirectoryCity::query()->whereNotIn('number', $numbers)->delete();
@@ -193,9 +198,13 @@ class ProgramSectionNestedContentSync
                     'country_en' => (string) ($enRow['country'] ?? ($row['country'] ?? '')),
                     'start_date' => $row['startDate'] ?? null,
                     'end_date' => $row['endDate'] ?? null,
+                    'detail_ar' => $this->normalizeDetail($row['detail'] ?? null),
+                    'detail_en' => $this->normalizeDetail($enRow['detail'] ?? ($row['detail'] ?? null)),
                     'sort_order' => $index,
                 ],
             );
+
+            $this->syncDiscussions('projects', $number, $row['discussions'] ?? [], $enRow['discussions'] ?? []);
         }
 
         DirectoryProject::query()->whereNotIn('number', $numbers)->delete();
@@ -221,7 +230,7 @@ class ProgramSectionNestedContentSync
             $number = (string) ($row['number'] ?? (string) ($index + 1));
             $numbers[] = $number;
             $enRow = is_array($enRows[$index] ?? null) ? $enRows[$index] : $row;
-            $description = (string) ($row['description'] ?? '');
+            $description = (string) ($row['type'] ?? $row['description'] ?? '');
 
             DirectoryOrganization::query()->updateOrCreate(
                 ['number' => $number],
@@ -229,10 +238,14 @@ class ProgramSectionNestedContentSync
                     'name_ar' => (string) ($row['name'] ?? ''),
                     'name_en' => (string) ($enRow['name'] ?? ($row['name'] ?? '')),
                     'description_ar' => $description !== '' ? $description : null,
-                    'description_en' => (string) ($enRow['description'] ?? $description) ?: null,
+                    'description_en' => (string) ($enRow['type'] ?? $enRow['description'] ?? $description) ?: null,
+                    'detail_ar' => $this->normalizeDetail($this->organizationDetailFromRow($row)),
+                    'detail_en' => $this->normalizeDetail($this->organizationDetailFromRow($enRow)),
                     'sort_order' => $index,
                 ],
             );
+
+            $this->syncDiscussions('organizations', $number, $row['discussions'] ?? [], $enRow['discussions'] ?? []);
         }
 
         DirectoryOrganization::query()->whereNotIn('number', $numbers)->delete();
@@ -267,9 +280,13 @@ class ProgramSectionNestedContentSync
                     'name_en' => (string) ($enRow['name'] ?? ($row['name'] ?? '')),
                     'description_ar' => $description !== '' ? $description : null,
                     'description_en' => (string) ($enRow['description'] ?? $description) ?: null,
+                    'detail_ar' => $this->normalizeDetail($row['detail'] ?? null),
+                    'detail_en' => $this->normalizeDetail($enRow['detail'] ?? ($row['detail'] ?? null)),
                     'sort_order' => $index,
                 ],
             );
+
+            $this->syncDiscussions('publications', $number, $row['discussions'] ?? [], $enRow['discussions'] ?? []);
         }
 
         DirectoryPublication::query()->whereNotIn('number', $numbers)->delete();
@@ -290,5 +307,110 @@ class ProgramSectionNestedContentSync
         }
 
         return null;
+    }
+
+    /**
+     * @param  array<string, mixed>  $row
+     * @return array<string, mixed>|null
+     */
+    private function cityDetailFromRow(array $row): ?array
+    {
+        $detail = $row['detail'] ?? null;
+        if (! is_array($detail)) {
+            $detail = [];
+        }
+
+        if (isset($row['slug']) && is_string($row['slug'])) {
+            $detail['slug'] = $row['slug'];
+        }
+
+        return $detail === [] ? null : $detail;
+    }
+
+    /**
+     * @param  array<string, mixed>  $row
+     * @return array<string, mixed>|null
+     */
+    private function organizationDetailFromRow(array $row): ?array
+    {
+        $keys = [
+            'type',
+            'country',
+            'countryCode',
+            'address',
+            'phone',
+            'email',
+            'website',
+            'founded',
+            'employees',
+            'budget',
+            'interventionAreas',
+            'interventionFields',
+            'interventionTypes',
+            'socialLinks',
+        ];
+
+        $detail = [];
+        foreach ($keys as $key) {
+            if (array_key_exists($key, $row)) {
+                $detail[$key] = $row[$key];
+            }
+        }
+
+        if (isset($row['detail']) && is_array($row['detail'])) {
+            $detail = array_merge($detail, $row['detail']);
+        }
+
+        return $detail === [] ? null : $detail;
+    }
+
+    /**
+     * @param  mixed  $detail
+     * @return array<string, mixed>|null
+     */
+    private function normalizeDetail(mixed $detail): ?array
+    {
+        if (! is_array($detail) || $detail === []) {
+            return null;
+        }
+
+        return ImageUrl::mapBodyPaths($detail) ?? $detail;
+    }
+
+    /**
+     * @param  array<int, mixed>  $arDiscussions
+     * @param  array<int, mixed>  $enDiscussions
+     */
+    private function syncDiscussions(string $type, string $number, array $arDiscussions, array $enDiscussions): void
+    {
+        if ($arDiscussions === []) {
+            return;
+        }
+
+        DirectoryDiscussion::query()
+            ->where('directory_type', $type)
+            ->where('directory_number', $number)
+            ->delete();
+
+        foreach ($arDiscussions as $index => $discussion) {
+            if (! is_array($discussion)) {
+                continue;
+            }
+
+            $enDiscussion = is_array($enDiscussions[$index] ?? null) ? $enDiscussions[$index] : $discussion;
+            $author = (string) ($discussion['author'] ?? '');
+            $enAuthor = (string) ($enDiscussion['author'] ?? $author);
+
+            DirectoryDiscussion::query()->create([
+                'directory_type' => $type,
+                'directory_number' => $number,
+                'author_name_ar' => $author,
+                'author_name_en' => $enAuthor,
+                'body_ar' => (string) ($discussion['body'] ?? ''),
+                'body_en' => (string) ($enDiscussion['body'] ?? ($discussion['body'] ?? '')),
+                'is_approved' => true,
+                'sort_order' => $index,
+            ]);
+        }
     }
 }

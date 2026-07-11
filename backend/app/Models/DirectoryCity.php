@@ -22,6 +22,16 @@ class DirectoryCity extends Model
   'description_en',
   'country_code',
   'city_size',
+  'detail_ar',
+  'detail_en',
   'sort_order',
 ];
+
+    protected function casts(): array
+    {
+        return [
+            'detail_ar' => 'array',
+            'detail_en' => 'array',
+        ];
+    }
 }

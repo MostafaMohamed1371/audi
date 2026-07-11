@@ -71,6 +71,7 @@ export function UrbanPoliciesPageClient({
       if (tab !== "developmentPortal") {
         params.delete("directory");
       }
+      params.delete("item");
       nextRouter.push(`?${params.toString()}`, { scroll: true });
     },
     [nextRouter, searchParams],

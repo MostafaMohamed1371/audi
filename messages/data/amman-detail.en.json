@@ -1,0 +1,23 @@
+{
+  "slug": "amman",
+  "layout": "simple",
+  "title": "Amman",
+  "country": "Jordan",
+  "population": "4,000,000 inhabitants",
+  "sections": [
+    {
+      "title": "Geographic Location and Area",
+      "paragraphs": [
+        "Amman is located in northern Jordan on the Amman mountain range and is the political and economic capital of the Hashemite Kingdom of Jordan.",
+        "The city extends over more than 750 square kilometers and includes hillside neighborhoods that reflect its distinctive urban character.",
+        "Amman enjoys a strategic location in the heart of the Levant and serves as a regional hub for business and services."
+      ]
+    }
+  ],
+  "cta": {
+    "title": "Help Build Better Arab Cities",
+    "description": "Join a network of municipalities, researchers, and practitioners in a pioneering experience",
+    "button": "Contact Us",
+    "href": "/en/contact"
+  }
+}

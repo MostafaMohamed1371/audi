@@ -6,12 +6,15 @@ namespace App\Services\Programs;
 
 use App\Models\AboutContent;
 use App\Models\DirectoryCity;
+use App\Models\DirectoryDiscussion;
 use App\Models\DirectoryOrganization;
 use App\Models\DirectoryProject;
 use App\Models\DirectoryPublication;
 use App\Models\ProgramSection;
+use App\Support\ImageUrl;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use InvalidArgumentException;
 
 class DirectoryService
@@ -23,9 +26,7 @@ class DirectoryService
      */
     public function getDirectory(string $tab, ?string $locale = null, array $filters = []): array
     {
-        if (! in_array($tab, self::TABS, true)) {
-            throw new InvalidArgumentException("Unknown directory tab: {$tab}");
-        }
+        $this->assertTab($tab);
 
         $isAr = ($locale ?? app()->getLocale()) === 'ar';
         $limit = min(max((int) ($filters['limit'] ?? 20), 1), 100);
@@ -61,14 +62,89 @@ class DirectoryService
     /**
      * @return array<string, mixed>
      */
+    public function getItem(string $tab, string $number, ?string $locale = null): array
+    {
+        $this->assertTab($tab);
+
+        $isAr = ($locale ?? app()->getLocale()) === 'ar';
+        $row = $this->queryForTab($tab)->where('number', $number)->first();
+
+        if (! $row) {
+            throw new ModelNotFoundException("Directory item [{$tab}/{$number}] not found.");
+        }
+
+        $ui = $this->directoryUiMeta($isAr);
+
+        return [
+            'tab' => $tab,
+            'number' => $row->number,
+            'item' => $this->mapRow($tab, $row, $isAr, includeDetail: true),
+            'discussions' => $this->mapDiscussions($tab, $number, $isAr),
+            'ui' => [
+                'discussionTitle' => $ui['discussionTitle'] ?? null,
+                'addCommentLabel' => $ui['addCommentLabel'] ?? null,
+                'authorNameLabel' => $ui['authorNameLabel'] ?? null,
+                'commentBodyLabel' => $ui['commentBodyLabel'] ?? null,
+                'submitCommentLabel' => $ui['submitCommentLabel'] ?? null,
+                'backToListLabel' => $ui['backToListLabel'] ?? null,
+                'shareLabel' => $ui['shareLabel'] ?? null,
+                'downloadLabel' => $ui['downloadLabel'] ?? null,
+                'addressLabel' => $ui['addressLabel'] ?? null,
+                'sourceLabel' => $ui['sourceLabel'] ?? null,
+                'relatedProjectsTitle' => $ui['relatedProjectsTitle'] ?? null,
+            ],
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function storeDiscussion(
+        string $tab,
+        string $number,
+        string $authorName,
+        string $body,
+        ?string $locale = null,
+    ): array {
+        $this->assertTab($tab);
+
+        $row = $this->queryForTab($tab)->where('number', $number)->first();
+        if (! $row) {
+            throw new ModelNotFoundException("Directory item [{$tab}/{$number}] not found.");
+        }
+
+        $isAr = ($locale ?? app()->getLocale()) === 'ar';
+
+        $discussion = DirectoryDiscussion::query()->create([
+            'directory_type' => $tab,
+            'directory_number' => $number,
+            'author_name_ar' => $isAr ? $authorName : $authorName,
+            'author_name_en' => $isAr ? $authorName : $authorName,
+            'body_ar' => $isAr ? $body : $body,
+            'body_en' => $isAr ? $body : $body,
+            'is_approved' => false,
+            'sort_order' => DirectoryDiscussion::query()
+                ->where('directory_type', $tab)
+                ->where('directory_number', $number)
+                ->count(),
+        ]);
+
+        return $this->mapDiscussion($discussion, $isAr);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
     private function directoryUiMeta(bool $isAr): array
     {
         $section = ProgramSection::query()
             ->whereHas('program', fn ($q) => $q->where('slug', 'urban-policies'))
             ->where('tab_key', 'developmentPortal')
+            ->with('details')
             ->first();
 
-        $body = $isAr ? ($section?->body_ar ?? []) : ($section?->body_en ?? []);
+        $detail = $section?->details;
+        $body = $isAr ? ($detail?->body_ar ?? []) : ($detail?->body_en ?? []);
         $directory = is_array($body) ? ($body['directory'] ?? []) : [];
 
         if (isset($directory['rows'])) {
@@ -86,6 +162,13 @@ class DirectoryService
             'organizations' => DirectoryOrganization::query(),
             'publications' => DirectoryPublication::query(),
         };
+    }
+
+    private function assertTab(string $tab): void
+    {
+        if (! in_array($tab, self::TABS, true)) {
+            throw new InvalidArgumentException("Unknown directory tab: {$tab}");
+        }
     }
 
     /**
@@ -130,30 +213,103 @@ class DirectoryService
     }
 
     /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function mapDiscussions(string $tab, string $number, bool $isAr): array
+    {
+        return DirectoryDiscussion::query()
+            ->where('directory_type', $tab)
+            ->where('directory_number', $number)
+            ->where('is_approved', true)
+            ->ordered()
+            ->get()
+            ->map(fn (DirectoryDiscussion $discussion) => $this->mapDiscussion($discussion, $isAr))
+            ->values()
+            ->all();
+    }
+
+    /**
      * @return array<string, mixed>
      */
-    private function mapRow(string $tab, Model $row, bool $isAr): array
+    private function mapDiscussion(DirectoryDiscussion $discussion, bool $isAr): array
     {
-        return match ($tab) {
+        return [
+            'id' => $discussion->id,
+            'author' => $isAr ? $discussion->author_name_ar : $discussion->author_name_en,
+            'body' => $isAr ? $discussion->body_ar : $discussion->body_en,
+            'createdAt' => $discussion->created_at?->toIso8601String(),
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function mapRow(string $tab, Model $row, bool $isAr, bool $includeDetail = false): array
+    {
+        $base = match ($tab) {
             'cities' => [
+                'id' => $row->id,
                 'number' => $row->number,
+                'slug' => is_array($row->detail_ar) ? ($row->detail_ar['slug'] ?? null) : null,
                 'name' => $isAr ? $row->name_ar : $row->name_en,
                 'description' => $isAr ? $row->description_ar : $row->description_en,
                 'countryCode' => $row->country_code,
                 'citySize' => $row->city_size,
             ],
             'projects' => [
+                'id' => $row->id,
                 'number' => $row->number,
                 'city' => $isAr ? $row->city_ar : $row->city_en,
                 'country' => $isAr ? $row->country_ar : $row->country_en,
                 'startDate' => $row->start_date,
                 'endDate' => $row->end_date,
+                'title' => trim(($isAr ? $row->city_ar : $row->city_en).', '.($isAr ? $row->country_ar : $row->country_en)),
             ],
             'organizations', 'publications' => [
+                'id' => $row->id,
                 'number' => $row->number,
                 'name' => $isAr ? $row->name_ar : $row->name_en,
                 'description' => $isAr ? $row->description_ar : $row->description_en,
+                ...$this->organizationProfileFields($row, $isAr),
             ],
         };
+
+        if ($includeDetail) {
+            $detail = $isAr ? ($row->detail_ar ?? []) : ($row->detail_en ?? []);
+            $detail = is_array($detail) ? $detail : [];
+            $base['detail'] = ImageUrl::mapBodyPaths($detail) ?? $detail;
+        }
+
+        return $base;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function organizationProfileFields(Model $row, bool $isAr): array
+    {
+        $detail = $isAr ? ($row->detail_ar ?? []) : ($row->detail_en ?? []);
+        if (! is_array($detail)) {
+            return [];
+        }
+
+        $keys = [
+            'type',
+            'country',
+            'countryCode',
+            'address',
+            'phone',
+            'email',
+            'website',
+            'founded',
+            'employees',
+            'budget',
+            'interventionAreas',
+            'interventionFields',
+            'interventionTypes',
+            'socialLinks',
+        ];
+
+        return array_intersect_key($detail, array_flip($keys));
     }
 }

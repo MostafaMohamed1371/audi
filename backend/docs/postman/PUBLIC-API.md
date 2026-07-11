@@ -515,7 +515,294 @@ Admin: `00 — بناء برنامج الشراكات` (9 خطوات).
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory rows: include `directory.rows` in **program-section-details** step 03, or edit via `directory/*` CRUD.
+Directory list. Build: step 03 `directory.rows`. Detail page: `GET .../directory/{tab}/{number}`.
+
+**صفحات المدن على الموقع | City detail pages**
+
+`detail.layout`: **`rich`** = Al Baha (images, figures, related projects, discussions). **`simple`** = Riyadh, Jeddah, Cairo, Amman, Beirut (geography text + CTA only — no images, no discussions on live site).
+
+| رقم | slug | المدينة | layout | رابط الموقع |
+|-----|------|---------|--------|-------------|
+| `01` | `al-baha` | الباحة | rich — صور + نقاشات | [/al-baha](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/al-baha) |
+| `02` | `riyadh` | الرياض | simple — نص فقط | [/riyadh](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/riyadh) |
+| `03` | `jeddah` | جدة | simple — نص فقط | [/jeddah](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/jeddah) |
+| `04` | `cairo` | القاهرة | simple — نص فقط | [/cairo](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/cairo) |
+| `05` | `amman` | عمان | simple — نص فقط | [/amman](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/amman) |
+| `06` | `beirut` | بيروت | simple — نص فقط | [/beirut](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/beirut) |
+
+**صفحات المنظمات على الموقع | Organization detail pages**
+
+List tab: `?tab=developmentPortal&directory=organizations`. List shows **type** + **country** (with flag). Detail (`?item=01`–`04`) shows org **name** + profile fields (`organizationFields`).
+
+| رقم | المنظمة | رابط الموقع |
+|-----|---------|-------------|
+| `01` | PLATFORMA | [?item=01](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=01) |
+| `02` | منظمة التعاون والتنمية الاقتصادية | [?item=02](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=02) |
+| `03` | الاتحاد الدولي للمواصلات العامة | [?item=03](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=03) |
+| `04` | المجلس الأوروبي للبلديات والمناطق | [?item=04](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=04) |
+
+---
+
+#### تفاصيل المدن — City Detail Pages
+
+#### GET `/api/v1/programs/urban-policies/directory/cities/01`
+
+**الاسم | Name:** الباحة — Al Baha — Get City Detail — al-baha
+
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/cities/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Live: [audi-w.vercel.app/.../المدن/al-baha](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/al-baha). Admin: step 03 `directory.rows.cities[]` + `messages/data/al-baha-detail.{ar,en}.json`.
+
+---
+
+#### GET `/api/v1/programs/urban-policies/directory/cities/02`
+
+**الاسم | Name:** الرياض — Riyadh — Get City Detail — riyadh
+
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/cities/02` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Live: [audi-w.vercel.app/.../المدن/riyadh](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/riyadh). Admin: step 03 `directory.rows.cities[]` + `messages/data/riyadh-detail.{ar,en}.json`.
+
+---
+
+#### GET `/api/v1/programs/urban-policies/directory/cities/03`
+
+**الاسم | Name:** جدة — Jeddah — Get City Detail — jeddah
+
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/cities/03` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Live: [audi-w.vercel.app/.../المدن/jeddah](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/jeddah). Admin: step 03 `directory.rows.cities[]` + `messages/data/jeddah-detail.{ar,en}.json`.
+
+---
+
+#### GET `/api/v1/programs/urban-policies/directory/cities/04`
+
+**الاسم | Name:** القاهرة — Cairo — Get City Detail — cairo
+
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/cities/04` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Live: [audi-w.vercel.app/.../المدن/cairo](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/cairo). Admin: step 03 `directory.rows.cities[]` + `messages/data/cairo-detail.{ar,en}.json`.
+
+---
+
+#### GET `/api/v1/programs/urban-policies/directory/cities/05`
+
+**الاسم | Name:** عمان — Amman — Get City Detail — amman
+
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/cities/05` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Live: [audi-w.vercel.app/.../المدن/amman](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/amman). Admin: step 03 `directory.rows.cities[]` + `messages/data/amman-detail.{ar,en}.json`.
+
+---
+
+#### GET `/api/v1/programs/urban-policies/directory/cities/06`
+
+**الاسم | Name:** بيروت — Beirut — Get City Detail — beirut
+
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/cities/06` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Live: [audi-w.vercel.app/.../المدن/beirut](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/beirut). Admin: step 03 `directory.rows.cities[]` + `messages/data/beirut-detail.{ar,en}.json`.
+
+---
+
+#### تفاصيل المنظمات — Organization Detail Pages
+
+#### GET `/api/v1/programs/urban-policies/directory/organizations/01`
+
+**الاسم | Name:** PLATFORMA — PLATFORMA — Get Organization Detail — 01
+
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/organizations/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Live: [?directory=organizations&item=01](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=01). Admin: step 03 `directory.rows.organizations[]`.
+
+---
+
+#### GET `/api/v1/programs/urban-policies/directory/organizations/02`
+
+**الاسم | Name:** منظمة التعاون والتنمية الاقتصادية — OECD — Get Organization Detail — 02
+
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/organizations/02` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Live: [?directory=organizations&item=02](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=02). Admin: step 03 `directory.rows.organizations[]`.
+
+---
+
+#### GET `/api/v1/programs/urban-policies/directory/organizations/03`
+
+**الاسم | Name:** الاتحاد الدولي للمواصلات العامة — UITP — Get Organization Detail — 03
+
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/organizations/03` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Live: [?directory=organizations&item=03](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=03). Admin: step 03 `directory.rows.organizations[]`.
+
+---
+
+#### GET `/api/v1/programs/urban-policies/directory/organizations/04`
+
+**الاسم | Name:** المجلس الأوروبي للبلديات والمناطق — CEMR — Get Organization Detail — 04
+
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/organizations/04` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Live: [?directory=organizations&item=04](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=04). Admin: step 03 `directory.rows.organizations[]`.
+
+---
+
+#### GET `/api/v1/programs/urban-policies/directory/{{directoryTab}}/{{directoryNumber}}`
+
+**الاسم | Name:** تفاصيل عنصر الدليل (متغير) — Get Directory Item Detail (variables)
+
+**الغرض | Purpose:** قراءة بيانات عامة من الخادم (لغة واحدة لكل طلب).
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/{tab}/{number}` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Set `directoryTab` to `cities|organizations|projects|publications` and `directoryNumber` accordingly. See folders **تفاصيل المدن** and **تفاصيل المنظمات**.
+
+**صفحات المدن على الموقع | City detail pages**
+
+`detail.layout`: **`rich`** = Al Baha (images, figures, related projects, discussions). **`simple`** = Riyadh, Jeddah, Cairo, Amman, Beirut (geography text + CTA only — no images, no discussions on live site).
+
+| رقم | slug | المدينة | layout | رابط الموقع |
+|-----|------|---------|--------|-------------|
+| `01` | `al-baha` | الباحة | rich — صور + نقاشات | [/al-baha](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/al-baha) |
+| `02` | `riyadh` | الرياض | simple — نص فقط | [/riyadh](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/riyadh) |
+| `03` | `jeddah` | جدة | simple — نص فقط | [/jeddah](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/jeddah) |
+| `04` | `cairo` | القاهرة | simple — نص فقط | [/cairo](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/cairo) |
+| `05` | `amman` | عمان | simple — نص فقط | [/amman](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/amman) |
+| `06` | `beirut` | بيروت | simple — نص فقط | [/beirut](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/beirut) |
+
+**صفحات المنظمات على الموقع | Organization detail pages**
+
+List tab: `?tab=developmentPortal&directory=organizations`. List shows **type** + **country** (with flag). Detail (`?item=01`–`04`) shows org **name** + profile fields (`organizationFields`).
+
+| رقم | المنظمة | رابط الموقع |
+|-----|---------|-------------|
+| `01` | PLATFORMA | [?item=01](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=01) |
+| `02` | منظمة التعاون والتنمية الاقتصادية | [?item=02](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=02) |
+| `03` | الاتحاد الدولي للمواصلات العامة | [?item=03](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=03) |
+| `04` | المجلس الأوروبي للبلديات والمناطق | [?item=04](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=04) |
+
+---
+
+#### POST `/api/v1/programs/urban-policies/directory/{{directoryTab}}/{{directoryNumber}}/discussions`
+
+**الاسم | Name:** إضافة تعليق على عنصر الدليل — Post Directory Discussion
+
+**الغرض | Purpose:** إرسال نموذج أو بيانات من زائر الموقع.
+
+**المصادقة | Auth:** غير مطلوب (واجهة عامة)
+**اللغة | Language:** `Accept-Language: {{locale}}` أو `?locale=ar|en`
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `authorName` | authorName | "د. سارة العتيبي" |
+| `body` | body | "تعليق جديد حول هذا العنصر في الدليل." |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/{tab}/{number}/discussions` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Public comment (pending approval). Admin review: `directory/discussions`.
 
 ---
 

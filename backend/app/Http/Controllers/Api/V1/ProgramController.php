@@ -47,4 +47,45 @@ class ProgramController extends Controller
             return response()->json(['message' => 'Invalid directory tab.'], 422);
         }
     }
+
+    public function directoryItem(Request $request, string $tab, string $number): JsonResponse
+    {
+        try {
+            $locale = $request->attributes->get('locale', app()->getLocale());
+
+            return response()->json($this->directory->getItem($tab, $number, $locale));
+        } catch (ModelNotFoundException) {
+            return response()->json(['message' => 'Directory item not found.'], 404);
+        } catch (InvalidArgumentException) {
+            return response()->json(['message' => 'Invalid directory tab.'], 422);
+        }
+    }
+
+    public function storeDirectoryDiscussion(Request $request, string $tab, string $number): JsonResponse
+    {
+        try {
+            $validated = $request->validate([
+                'authorName' => ['required', 'string', 'max:255'],
+                'body' => ['required', 'string', 'max:5000'],
+            ]);
+
+            $locale = $request->attributes->get('locale', app()->getLocale());
+            $discussion = $this->directory->storeDiscussion(
+                $tab,
+                $number,
+                $validated['authorName'],
+                $validated['body'],
+                $locale,
+            );
+
+            return response()->json([
+                'message' => 'Discussion submitted for review.',
+                'data' => $discussion,
+            ], 201);
+        } catch (ModelNotFoundException) {
+            return response()->json(['message' => 'Directory item not found.'], 404);
+        } catch (InvalidArgumentException) {
+            return response()->json(['message' => 'Invalid directory tab.'], 422);
+        }
+    }
 }

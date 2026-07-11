@@ -420,6 +420,8 @@ CREATE TABLE IF NOT EXISTS "directory_cities"(
   "description_en" text,
   "country_code" varchar,
   "city_size" varchar,
+  "detail_ar" text,
+  "detail_en" text,
   "sort_order" integer not null default '0',
   "created_at" datetime,
   "updated_at" datetime
@@ -433,6 +435,8 @@ CREATE TABLE IF NOT EXISTS "directory_projects"(
   "country_en" varchar not null,
   "start_date" varchar,
   "end_date" varchar,
+  "detail_ar" text,
+  "detail_en" text,
   "sort_order" integer not null default '0',
   "created_at" datetime,
   "updated_at" datetime
@@ -444,6 +448,8 @@ CREATE TABLE IF NOT EXISTS "directory_organizations"(
   "name_en" varchar not null,
   "description_ar" text,
   "description_en" text,
+  "detail_ar" text,
+  "detail_en" text,
   "sort_order" integer not null default '0',
   "created_at" datetime,
   "updated_at" datetime
@@ -455,10 +461,26 @@ CREATE TABLE IF NOT EXISTS "directory_publications"(
   "name_en" varchar not null,
   "description_ar" text,
   "description_en" text,
+  "detail_ar" text,
+  "detail_en" text,
   "sort_order" integer not null default '0',
   "created_at" datetime,
   "updated_at" datetime
 );
+CREATE TABLE IF NOT EXISTS "directory_discussions"(
+  "id" integer primary key autoincrement not null,
+  "directory_type" varchar not null,
+  "directory_number" varchar not null,
+  "author_name_ar" varchar not null,
+  "author_name_en" varchar not null,
+  "body_ar" text not null,
+  "body_en" text not null,
+  "is_approved" tinyint(1) not null default '1',
+  "sort_order" integer not null default '0',
+  "created_at" datetime,
+  "updated_at" datetime
+);
+CREATE INDEX "directory_discussions_type_number_index" on "directory_discussions"("directory_type", "directory_number");
 CREATE TABLE IF NOT EXISTS "resources"(
   "id" integer primary key autoincrement not null,
   "slug" varchar not null,

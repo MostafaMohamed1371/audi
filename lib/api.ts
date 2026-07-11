@@ -557,6 +557,50 @@ export async function fetchAllDirectoryRows(locale: string) {
   ) as Record<DirectoryTab, Record<string, unknown>[]>;
 }
 
+export type DirectoryItemDetail = {
+  tab: DirectoryTab;
+  number: string;
+  item: Record<string, unknown>;
+  discussions: { id: number; author: string; body: string; createdAt?: string }[];
+  ui: {
+    discussionTitle?: string;
+    addCommentLabel?: string;
+    authorNameLabel?: string;
+    commentBodyLabel?: string;
+    submitCommentLabel?: string;
+    backToListLabel?: string;
+    shareLabel?: string;
+    downloadLabel?: string;
+    addressLabel?: string;
+    sourceLabel?: string;
+    relatedProjectsTitle?: string;
+  };
+};
+
+export async function fetchDirectoryItem(
+  tab: DirectoryTab,
+  number: string,
+  locale: string,
+): Promise<DirectoryItemDetail | null> {
+  return apiGet<DirectoryItemDetail>(
+    `/api/v1/programs/urban-policies/directory/${tab}/${encodeURIComponent(number)}`,
+    locale,
+  );
+}
+
+export async function submitDirectoryDiscussion(
+  tab: DirectoryTab,
+  number: string,
+  payload: { authorName: string; body: string },
+  locale: string,
+): Promise<{ message: string; data: { id: number; author: string; body: string } }> {
+  return apiPost(
+    `/api/v1/programs/urban-policies/directory/${tab}/${encodeURIComponent(number)}/discussions`,
+    locale,
+    payload,
+  );
+}
+
 export async function submitPortalContribution(
   payload: {
     type: PortalContributionType;

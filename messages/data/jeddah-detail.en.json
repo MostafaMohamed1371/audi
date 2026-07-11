@@ -1,0 +1,23 @@
+{
+  "slug": "jeddah",
+  "layout": "simple",
+  "title": "Jeddah",
+  "country": "Saudi Arabia",
+  "population": "4,700,000 inhabitants",
+  "sections": [
+    {
+      "title": "Geographic Location and Area",
+      "paragraphs": [
+        "Jeddah is located on the Red Sea coast in western Saudi Arabia and is the main gateway for pilgrims and Umrah visitors.",
+        "The city extends over more than 1,600 square kilometers and includes a vital seaport and a growing economic zone.",
+        "Jeddah is known for its long coastal corniche and diverse tourism facilities, making it one of the region's leading coastal cities."
+      ]
+    }
+  ],
+  "cta": {
+    "title": "Help Build Better Arab Cities",
+    "description": "Join a network of municipalities, researchers, and practitioners in a pioneering experience",
+    "button": "Contact Us",
+    "href": "/en/contact"
+  }
+}

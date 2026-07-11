@@ -1,0 +1,678 @@
+"use client";
+
+import {
+  fetchDirectoryItem,
+  submitDirectoryDiscussion,
+  type DirectoryItemDetail,
+  type DirectoryTab,
+} from "@/lib/api";
+import { getFallbackDirectoryItem } from "@/lib/directory-item-fallback";
+import { cn } from "@/lib/utils";
+import { Download, Share2 } from "lucide-react";
+import { useLocale } from "next-intl";
+import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
+
+type DetailSection = {
+  title?: string;
+  paragraphs?: string[];
+  bullets?: string[];
+  image?: string;
+  figures?: {
+    image: string;
+    caption?: string;
+    address?: string;
+    source?: string;
+  }[];
+};
+
+type RelatedProject = {
+  city: string;
+  country: string;
+  dateRange: string;
+  image?: string;
+  href?: string;
+};
+
+type DetailContent = {
+  layout?: "simple" | "rich";
+  title?: string;
+  country?: string;
+  population?: string;
+  paragraphs?: string[];
+  image?: string;
+  sections?: DetailSection[];
+  relatedProjects?: RelatedProject[];
+  cta?: {
+    title?: string;
+    description?: string;
+    button?: string;
+    href?: string;
+  };
+};
+
+type Props = {
+  tab: DirectoryTab;
+  number: string;
+  isRtl: boolean;
+  fallbackUi: {
+    discussionTitle?: string;
+    addCommentLabel?: string;
+    authorNameLabel?: string;
+    commentBodyLabel?: string;
+    submitCommentLabel?: string;
+    backToListLabel?: string;
+    commentSuccess?: string;
+    commentError?: string;
+    shareLabel?: string;
+    downloadLabel?: string;
+    addressLabel?: string;
+    sourceLabel?: string;
+    relatedProjectsTitle?: string;
+    organizationFields?: Record<string, string>;
+    directoryCta?: {
+      title?: string;
+      description?: string;
+      button?: string;
+      href?: string;
+    };
+  };
+  initialData?: DirectoryItemDetail | null;
+  onBack: () => void;
+};
+
+function itemTitle(item: Record<string, unknown>, detail: DetailContent): string {
+  if (typeof detail.title === "string") return detail.title;
+  if (typeof item.title === "string") return item.title;
+  if (typeof item.name === "string") return item.name.split("،")[0]?.split(",")[0]?.trim() ?? item.name;
+  return String(item.number ?? "");
+}
+
+function RelatedProjectCard({
+  project,
+  isRtl,
+}: {
+  project: RelatedProject;
+  isRtl: boolean;
+}) {
+  const content = (
+    <>
+      {project.image ? (
+        <div className="relative mb-3 aspect-4/3 overflow-hidden rounded-xl">
+          <Image
+            src={project.image}
+            alt={`${project.city}, ${project.country}`}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 240px"
+          />
+        </div>
+      ) : null}
+      <p className="text-sm font-bold text-secondary">
+        {project.city}, {project.country}
+      </p>
+      <p className="mt-1 text-xs text-primary">{project.dateRange}</p>
+    </>
+  );
+
+  if (project.href) {
+    return (
+      <a
+        href={project.href}
+        className="block rounded-xl bg-[#eef6fa] p-4 transition-colors hover:bg-[#e3f1f7]"
+        dir={isRtl ? "rtl" : "ltr"}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <article className="rounded-xl bg-[#eef6fa] p-4" dir={isRtl ? "rtl" : "ltr"}>
+      {content}
+    </article>
+  );
+}
+
+type OrganizationProfile = {
+  type?: string;
+  country?: string;
+  countryCode?: string;
+  address?: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  founded?: string;
+  employees?: string;
+  budget?: string;
+  interventionAreas?: string;
+  interventionFields?: string[];
+  interventionTypes?: string[];
+  socialLinks?: { platform: string; href: string }[];
+};
+
+function organizationProfileFromItem(
+  item: Record<string, unknown>,
+  detail: Record<string, unknown>,
+): OrganizationProfile {
+  const merged = { ...detail, ...item } as OrganizationProfile;
+  const nestedDetail = item.detail;
+  if (nestedDetail && typeof nestedDetail === "object") {
+    return { ...merged, ...(nestedDetail as OrganizationProfile) };
+  }
+  return merged;
+}
+
+function OrganizationCountryFlag({ code }: { code?: string }) {
+  if (!code) {
+    return null;
+  }
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={`https://flagcdn.com/w20/${code.toLowerCase()}.png`}
+      alt=""
+      width={20}
+      height={15}
+      className="inline-block size-5 rounded-sm object-cover"
+    />
+  );
+}
+
+function OrganizationProfileSection({
+  profile,
+  labels,
+  isRtl,
+}: {
+  profile: OrganizationProfile;
+  labels: Record<string, string>;
+  isRtl: boolean;
+}) {
+  const scalarFields: (keyof OrganizationProfile)[] = [
+    "address",
+    "phone",
+    "email",
+    "website",
+    "type",
+    "founded",
+    "employees",
+    "budget",
+    "interventionAreas",
+  ];
+
+  return (
+    <div className="space-y-8">
+      <div className="grid gap-4 sm:grid-cols-2">
+        {scalarFields.map((field) => {
+          const value = profile[field];
+          if (typeof value !== "string" || value === "") {
+            return null;
+          }
+
+          const label = labels[field] ?? field;
+          const content =
+            field === "website" || field === "email" ? (
+              <a
+                href={field === "email" ? `mailto:${value}` : value}
+                className="text-primary hover:underline"
+                dir="ltr"
+              >
+                {value}
+              </a>
+            ) : (
+              <span>{value}</span>
+            );
+
+          return (
+            <div
+              key={field}
+              className="rounded-xl border border-[#00709E14] bg-[#eef6fa] p-4"
+            >
+              <p className="mb-1 text-xs font-bold uppercase tracking-wide text-primary">
+                {label}
+              </p>
+              <p className="text-sm leading-7 text-secondary sm:text-base">{content}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      {profile.interventionFields && profile.interventionFields.length > 0 ? (
+        <div>
+          <h2 className="mb-4 text-xl font-bold text-secondary sm:text-2xl">
+            {labels.interventionFields ?? "Intervention Fields"}
+          </h2>
+          <ul
+            className={cn(
+              "list-disc space-y-2 ps-5 text-base leading-8 text-[#4d5a6f]",
+              isRtl ? "text-right" : "text-left",
+            )}
+          >
+            {profile.interventionFields.map((entry) => (
+              <li key={entry}>{entry}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      {profile.interventionTypes && profile.interventionTypes.length > 0 ? (
+        <div>
+          <h2 className="mb-4 text-xl font-bold text-secondary sm:text-2xl">
+            {labels.interventionTypes ?? "Intervention Types"}
+          </h2>
+          <ul
+            className={cn(
+              "list-disc space-y-2 ps-5 text-base leading-8 text-[#4d5a6f]",
+              isRtl ? "text-right" : "text-left",
+            )}
+          >
+            {profile.interventionTypes.map((entry) => (
+              <li key={entry}>{entry}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      {profile.socialLinks && profile.socialLinks.length > 0 ? (
+        <div className="flex flex-wrap gap-3">
+          {profile.socialLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg border border-[#00709E26] px-4 py-2 text-sm font-medium text-primary hover:bg-[#f4f6f8]"
+            >
+              {link.platform}
+            </a>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+export function DirectoryItemDetailPanel({
+  tab,
+  number,
+  isRtl,
+  fallbackUi,
+  initialData,
+  onBack,
+}: Props) {
+  const locale = useLocale();
+  const [data, setData] = useState<DirectoryItemDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [authorName, setAuthorName] = useState("");
+  const [body, setBody] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    const response = await fetchDirectoryItem(tab, number, locale);
+    if (response) {
+      setData(response);
+    } else if (initialData) {
+      setData(initialData);
+    } else {
+      setData(await getFallbackDirectoryItem(locale, tab, number));
+    }
+    setLoading(false);
+  }, [initialData, locale, number, tab]);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  const ui = { ...fallbackUi, ...data?.ui };
+  const item = data?.item ?? {};
+  const detail = (item.detail ?? {}) as DetailContent;
+  const legacyParagraphs = detail.paragraphs ?? [];
+  const sections = detail.sections ?? [];
+  const discussions = data?.discussions ?? [];
+  const layout = detail.layout === "rich" ? "rich" : "simple";
+  const isOrganization = tab === "organizations";
+  const showDiscussions = tab === "cities" && layout === "rich";
+  const organizationProfile = isOrganization
+    ? organizationProfileFromItem(item, detail as Record<string, unknown>)
+    : null;
+  const title = itemTitle(item, detail);
+  const country = isOrganization
+    ? (organizationProfile?.country ?? "")
+    : detail.country ??
+      (typeof item.name === "string"
+        ? item.name.split("،").slice(1).join("،").trim() ||
+          item.name.split(",").slice(1).join(",").trim()
+        : "");
+  const subtitle = isOrganization
+    ? organizationProfile?.type ?? ""
+    : [
+        typeof item.description === "string" ? item.description : "",
+        detail.population ? `(${detail.population})` : "",
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+  const onSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setSubmitting(true);
+    setMessage(null);
+    setError(null);
+
+    try {
+      await submitDirectoryDiscussion(tab, number, { authorName, body }, locale);
+      setAuthorName("");
+      setBody("");
+      setMessage(ui.commentSuccess ?? "Submitted.");
+      await load();
+    } catch {
+      setError(ui.commentError ?? "Error.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="bg-[#f4f6f8] py-10 sm:py-14">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6">
+        <button
+          type="button"
+          onClick={onBack}
+          className="mb-6 text-sm font-medium text-primary hover:underline"
+        >
+          {ui.backToListLabel ?? "Back"}
+        </button>
+
+        {loading ? (
+          <p className="text-secondary">...</p>
+        ) : (
+          <div dir={isRtl ? "rtl" : "ltr"} className="space-y-8">
+            <div className="rounded-2xl bg-white p-6 shadow-[1px_1px_18.6px_0px_#111F421C] sm:p-8">
+              <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <h1 className="mb-2 text-3xl font-bold text-secondary sm:text-4xl">
+                    {title}
+                  </h1>
+                  {country ? (
+                    <p className="mb-2 flex items-center gap-2 text-base text-[#4d5a6f]">
+                      {isOrganization ? (
+                        <OrganizationCountryFlag code={organizationProfile?.countryCode} />
+                      ) : null}
+                      {country}
+                    </p>
+                  ) : null}
+                  {subtitle ? (
+                    <p className="text-sm text-[#4d5a6f] sm:text-base">{subtitle}</p>
+                  ) : null}
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-2 rounded-lg border border-[#00709E26] px-4 py-2 text-sm font-medium text-secondary hover:bg-[#f4f6f8]"
+                  >
+                    <Share2 className="size-4" />
+                    {ui.shareLabel ?? "Share"}
+                  </button>
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-2 rounded-lg border border-[#00709E26] px-4 py-2 text-sm font-medium text-secondary hover:bg-[#f4f6f8]"
+                  >
+                    <Download className="size-4" />
+                    {ui.downloadLabel ?? "Download"}
+                  </button>
+                </div>
+              </div>
+
+              {isOrganization && organizationProfile ? (
+                <OrganizationProfileSection
+                  profile={organizationProfile}
+                  labels={ui.organizationFields ?? {}}
+                  isRtl={isRtl}
+                />
+              ) : sections.length > 0 ? (
+                <div className="space-y-10">
+                  {sections.map((section) => (
+                    <section key={section.title ?? section.paragraphs?.[0]} className="space-y-5">
+                      {section.title ? (
+                        <h2 className="text-xl font-bold text-secondary sm:text-2xl">
+                          {section.title}
+                        </h2>
+                      ) : null}
+
+                      {section.image ? (
+                        <div className="relative aspect-video overflow-hidden rounded-xl">
+                          <Image
+                            src={section.image}
+                            alt={section.title ?? title}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 768px"
+                          />
+                        </div>
+                      ) : null}
+
+                      {section.paragraphs?.map((paragraph) => (
+                        <p
+                          key={paragraph}
+                          className="text-base leading-8 text-[#4d5a6f] sm:text-lg sm:leading-9"
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+
+                      {section.figures && section.figures.length > 0 ? (
+                        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                          {section.figures.map((figure) => (
+                            <figure key={figure.caption ?? figure.image} className="space-y-3">
+                              <div className="relative aspect-4/3 overflow-hidden rounded-xl">
+                                <Image
+                                  src={figure.image}
+                                  alt={figure.caption ?? title}
+                                  fill
+                                  className="object-cover"
+                                  sizes="(max-width: 768px) 100vw, 240px"
+                                />
+                              </div>
+                              {figure.caption ? (
+                                <figcaption className="text-sm font-medium text-secondary">
+                                  {figure.caption}
+                                </figcaption>
+                              ) : null}
+                              {figure.address ? (
+                                <p className="text-xs text-[#4d5a6f]">
+                                  <span className="font-bold text-secondary">
+                                    {ui.addressLabel ?? "Address"}:
+                                  </span>{" "}
+                                  {figure.address}
+                                </p>
+                              ) : null}
+                              {figure.source ? (
+                                <p className="text-xs text-[#4d5a6f]">
+                                  <span className="font-bold text-secondary">
+                                    {ui.sourceLabel ?? "Source"}:
+                                  </span>{" "}
+                                  {figure.source}
+                                </p>
+                              ) : null}
+                            </figure>
+                          ))}
+                        </div>
+                      ) : null}
+
+                      {section.bullets && section.bullets.length > 0 ? (
+                        <ul
+                          className={cn(
+                            "list-disc space-y-2 ps-5 text-base leading-8 text-[#4d5a6f]",
+                            isRtl ? "text-right" : "text-left",
+                          )}
+                        >
+                          {section.bullets.map((bullet) => (
+                            <li key={bullet}>{bullet}</li>
+                          ))}
+                        </ul>
+                      ) : null}
+                    </section>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {detail.image ? (
+                    <div className="relative mb-6 aspect-video overflow-hidden rounded-xl">
+                      <Image
+                        src={detail.image}
+                        alt={title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 768px"
+                      />
+                    </div>
+                  ) : null}
+                  {legacyParagraphs.map((paragraph) => (
+                    <p
+                      key={paragraph}
+                      className="text-base leading-8 text-[#4d5a6f] sm:text-lg sm:leading-9"
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {detail.relatedProjects && detail.relatedProjects.length > 0 ? (
+              <div className="rounded-2xl bg-white p-6 shadow-[1px_1px_18.6px_0px_#111F421C] sm:p-8">
+                <h2 className="mb-6 text-xl font-bold text-secondary sm:text-2xl">
+                  {ui.relatedProjectsTitle ?? "Related Projects"}
+                </h2>
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {detail.relatedProjects.map((project) => (
+                    <RelatedProjectCard
+                      key={`${project.city}-${project.country}`}
+                      project={project}
+                      isRtl={isRtl}
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            {detail.cta?.title ? (
+              <div className="rounded-2xl bg-primary px-6 py-8 text-center text-white sm:px-10 sm:py-10">
+                <h2 className="mb-3 text-2xl font-bold sm:text-3xl">{detail.cta.title}</h2>
+                {detail.cta.description ? (
+                  <p className="mx-auto mb-6 max-w-2xl text-sm leading-7 text-white/90 sm:text-base">
+                    {detail.cta.description}
+                  </p>
+                ) : null}
+                {detail.cta.href ? (
+                  <a
+                    href={detail.cta.href}
+                    className="inline-flex rounded-lg bg-white px-6 py-3 text-sm font-bold text-primary hover:bg-white/90"
+                  >
+                    {detail.cta.button ?? "Contact"}
+                  </a>
+                ) : null}
+              </div>
+            ) : ui.directoryCta?.title ? (
+              <div className="rounded-2xl bg-primary px-6 py-8 text-center text-white sm:px-10 sm:py-10">
+                <h2 className="mb-3 text-2xl font-bold sm:text-3xl">{ui.directoryCta.title}</h2>
+                {ui.directoryCta.description ? (
+                  <p className="mx-auto mb-6 max-w-2xl text-sm leading-7 text-white/90 sm:text-base">
+                    {ui.directoryCta.description}
+                  </p>
+                ) : null}
+                {ui.directoryCta.href ? (
+                  <a
+                    href={ui.directoryCta.href}
+                    className="inline-flex rounded-lg bg-white px-6 py-3 text-sm font-bold text-primary hover:bg-white/90"
+                  >
+                    {ui.directoryCta.button ?? "Contact"}
+                  </a>
+                ) : null}
+              </div>
+            ) : null}
+
+            {showDiscussions ? (
+            <div className="rounded-2xl bg-white p-6 shadow-[1px_1px_18.6px_0px_#111F421C] sm:p-8">
+              <h3 className="mb-6 text-xl font-bold text-secondary sm:text-2xl">
+                {ui.discussionTitle ?? "Discussion"}
+              </h3>
+
+              <div className="mb-8 space-y-4">
+                {discussions.length === 0 ? (
+                  <p className="text-sm text-[#4d5a6f]">
+                    {ui.addCommentLabel ?? "Add a comment"}
+                  </p>
+                ) : (
+                  discussions.map((discussion) => (
+                    <article
+                      key={discussion.id}
+                      className="rounded-xl border border-[#00709E14] bg-[#eef6fa] p-4"
+                    >
+                      <p className="mb-2 text-sm font-bold text-secondary">
+                        {discussion.author}
+                      </p>
+                      <p className="text-sm leading-7 text-[#4d5a6f] sm:text-base">
+                        {discussion.body}
+                      </p>
+                    </article>
+                  ))
+                )}
+              </div>
+
+              <form onSubmit={onSubmit} className="space-y-4">
+                <h4 className="text-base font-bold text-secondary">
+                  {ui.addCommentLabel ?? "Add a comment"}
+                </h4>
+
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-secondary">
+                    {ui.authorNameLabel ?? "Name"}
+                  </span>
+                  <input
+                    type="text"
+                    required
+                    value={authorName}
+                    onChange={(e) => setAuthorName(e.target.value)}
+                    className="h-11 w-full rounded-lg border border-[#00709E26] bg-white px-4 text-sm text-secondary outline-none focus:border-primary"
+                  />
+                </label>
+
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-secondary">
+                    {ui.commentBodyLabel ?? "Comment"}
+                  </span>
+                  <textarea
+                    required
+                    rows={4}
+                    value={body}
+                    onChange={(e) => setBody(e.target.value)}
+                    className="w-full rounded-lg border border-[#00709E26] bg-white px-4 py-3 text-sm text-secondary outline-none focus:border-primary"
+                  />
+                </label>
+
+                {message ? (
+                  <p className="text-sm text-green-700">{message}</p>
+                ) : null}
+                {error ? <p className="text-sm text-red-600">{error}</p> : null}
+
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="rounded-lg bg-primary px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-primary/90 disabled:opacity-60"
+                >
+                  {ui.submitCommentLabel ?? "Submit"}
+                </button>
+              </form>
+            </div>
+            ) : null}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

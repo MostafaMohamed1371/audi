@@ -20,6 +20,16 @@ class DirectoryPublication extends Model
   'name_en',
   'description_ar',
   'description_en',
+  'detail_ar',
+  'detail_en',
   'sort_order',
 ];
+
+    protected function casts(): array
+    {
+        return [
+            'detail_ar' => 'array',
+            'detail_en' => 'array',
+        ];
+    }
 }

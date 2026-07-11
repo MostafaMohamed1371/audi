@@ -2,15 +2,56 @@
 
 import type { PortalDirectoryContent } from "@/app/components/programs/urban-policies/shared/types";
 import type { PortalDirectoryTab } from "@/lib/programs-urban-policies-directory";
+import {
+  directoryCityHref,
+  isDirectoryCitySlug,
+} from "@/lib/directory-cities";
+import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { ChevronDown, List, MapPin, RotateCcw, Search } from "lucide-react";
 import { useCallback, useState } from "react";
+
+function CountryFlag({ code }: { code?: string }) {
+  if (!code) {
+    return null;
+  }
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={`https://flagcdn.com/w20/${code.toLowerCase()}.png`}
+      alt=""
+      width={20}
+      height={15}
+      className="inline-block size-4 rounded-sm object-cover"
+    />
+  );
+}
+
+function SeeMoreButton({
+  label,
+  onClick,
+}: {
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="rounded-lg bg-primary px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-primary/90 sm:px-5 sm:text-sm"
+    >
+      {label}
+    </button>
+  );
+}
 
 type Props = {
   content: PortalDirectoryContent;
   activeTab: PortalDirectoryTab;
   isRtl: boolean;
   onTabChange: (tab: PortalDirectoryTab) => void;
+  onOpenItem: (number: string) => void;
 };
 
 function FilterSelect({ label, isRtl }: { label: string; isRtl: boolean }) {
@@ -40,12 +81,16 @@ export function DevelopmentPortalDirectory({
   activeTab,
   isRtl,
   onTabChange,
+  onOpenItem,
 }: Props) {
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
 
   const resetFilters = useCallback(() => {}, []);
 
   const isProjects = activeTab === "projects";
+  const isOrganizations = activeTab === "organizations";
+  const isPublications = activeTab === "publications";
+  const simpleGrid = "120px minmax(0, 1fr) 140px";
   const rows = content.rows[activeTab] ?? [];
 
   return (
@@ -170,8 +215,8 @@ export function DevelopmentPortalDirectory({
                     className="grid bg-primary px-4 py-3 text-sm font-bold text-white sm:px-6 sm:text-base"
                     style={{
                       gridTemplateColumns: isProjects
-                        ? "repeat(5, minmax(0, 1fr))"
-                        : "120px minmax(0, 1fr) 140px",
+                        ? "repeat(5, minmax(0, 1fr)) 140px"
+                        : simpleGrid,
                     }}
                   >
                     {isProjects ? (
@@ -181,6 +226,19 @@ export function DevelopmentPortalDirectory({
                         <span>{content.columns.projects.country}</span>
                         <span>{content.columns.projects.startDate}</span>
                         <span>{content.columns.projects.endDate}</span>
+                        <span>{content.columns.cities.details}</span>
+                      </>
+                    ) : isOrganizations ? (
+                      <>
+                        <span>{content.columns.organizations.number}</span>
+                        <span>{content.columns.organizations.organization}</span>
+                        <span>{content.columns.organizations.details}</span>
+                      </>
+                    ) : isPublications ? (
+                      <>
+                        <span>{content.columns.publications.number}</span>
+                        <span>{content.columns.publications.publication}</span>
+                        <span>{content.columns.publications.details}</span>
                       </>
                     ) : (
                       <>
@@ -202,8 +260,8 @@ export function DevelopmentPortalDirectory({
                         )}
                         style={{
                           gridTemplateColumns: isProjects
-                            ? "repeat(5, minmax(0, 1fr))"
-                            : "120px minmax(0, 1fr) 140px",
+                            ? "repeat(5, minmax(0, 1fr)) 140px"
+                            : simpleGrid,
                         }}
                       >
                         {isProjects && "city" in row ? (
@@ -223,6 +281,29 @@ export function DevelopmentPortalDirectory({
                             <span className="text-sm text-secondary sm:text-base">
                               {row.endDate}
                             </span>
+                            <SeeMoreButton
+                              label={content.seeMoreLabel}
+                              onClick={() => onOpenItem(row.number)}
+                            />
+                          </>
+                        ) : isOrganizations && "type" in row ? (
+                          <>
+                            <span className="text-sm font-bold text-secondary sm:text-base">
+                              #{row.number}
+                            </span>
+                            <div>
+                              <p className="text-sm font-bold text-secondary sm:text-base">
+                                {row.type}
+                              </p>
+                              <p className="mt-1 flex items-center gap-2 text-xs leading-6 text-[#4d5a6f] sm:text-sm">
+                                <CountryFlag code={row.countryCode} />
+                                {row.country}
+                              </p>
+                            </div>
+                            <SeeMoreButton
+                              label={content.seeMoreLabel}
+                              onClick={() => onOpenItem(row.number)}
+                            />
                           </>
                         ) : "name" in row ? (
                           <>
@@ -233,18 +314,28 @@ export function DevelopmentPortalDirectory({
                               <p className="text-sm font-bold text-secondary sm:text-base">
                                 {row.name}
                               </p>
-                              {row.description ? (
+                              {"description" in row && row.description ? (
                                 <p className="mt-1 text-xs leading-6 text-[#4d5a6f] sm:text-sm">
                                   {row.description}
                                 </p>
                               ) : null}
                             </div>
-                            <button
-                              type="button"
-                              className="rounded-lg bg-primary px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-primary/90 sm:px-5 sm:text-sm"
-                            >
-                              {content.seeMoreLabel}
-                            </button>
+                            {activeTab === "cities" &&
+                            "slug" in row &&
+                            typeof row.slug === "string" &&
+                            isDirectoryCitySlug(row.slug) ? (
+                              <Link
+                                href={directoryCityHref(row.slug)}
+                                className="rounded-lg bg-primary px-4 py-2 text-center text-xs font-bold text-white transition-colors hover:bg-primary/90 sm:px-5 sm:text-sm"
+                              >
+                                {content.seeMoreLabel}
+                              </Link>
+                            ) : (
+                              <SeeMoreButton
+                                label={content.seeMoreLabel}
+                                onClick={() => onOpenItem(row.number)}
+                              />
+                            )}
                           </>
                         ) : null}
                       </div>

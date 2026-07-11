@@ -2,6 +2,7 @@
 
 import { PanelWrapper } from "@/app/components/programs/training/shared/panel-wrapper";
 import { DevelopmentPortalDirectory } from "@/app/components/programs/urban-policies/sections/development-portal-directory";
+import { DirectoryItemDetailPanel } from "@/app/components/programs/urban-policies/sections/directory-item-detail";
 import { PortalContributionForm } from "@/app/components/programs/urban-policies/sections/portal-contribution-form";
 import type { DevelopmentPortalContent } from "@/app/components/programs/urban-policies/shared/types";
 import {
@@ -35,6 +36,7 @@ export function DevelopmentPortalPanel({
   const [showContributionForm, setShowContributionForm] = useState(false);
 
   const directoryParam = searchParams.get("directory");
+  const itemParam = searchParams.get("item");
   const activeDirectoryTab =
     directoryParam && isPortalDirectoryTab(directoryParam)
       ? directoryParam
@@ -54,10 +56,30 @@ export function DevelopmentPortalPanel({
     (tab: PortalDirectoryTab) => {
       const params = new URLSearchParams(searchParams.toString());
       params.set("directory", tab);
+      params.delete("item");
       nextRouter.push(`?${params.toString()}`, { scroll: false });
     },
     [nextRouter, searchParams],
   );
+
+  const openDirectoryItem = useCallback(
+    (number: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("tab", "developmentPortal");
+      if (activeDirectoryTab) {
+        params.set("directory", activeDirectoryTab);
+      }
+      params.set("item", number);
+      nextRouter.push(`?${params.toString()}`, { scroll: false });
+    },
+    [activeDirectoryTab, nextRouter, searchParams],
+  );
+
+  const closeDirectoryItem = useCallback(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("item");
+    nextRouter.push(`?${params.toString()}`, { scroll: false });
+  }, [nextRouter, searchParams]);
 
   useEffect(() => {
     if (activeDirectoryTab && directoryRef.current) {
@@ -166,13 +188,38 @@ export function DevelopmentPortalPanel({
         </div>
       </section>
 
-      {activeDirectoryTab ? (
+      {activeDirectoryTab && itemParam ? (
+        <DirectoryItemDetailPanel
+          tab={activeDirectoryTab}
+          number={itemParam}
+          isRtl={isRtl}
+          fallbackUi={{
+            discussionTitle: content.directory.discussionTitle,
+            addCommentLabel: content.directory.addCommentLabel,
+            authorNameLabel: content.directory.authorNameLabel,
+            commentBodyLabel: content.directory.commentBodyLabel,
+            submitCommentLabel: content.directory.submitCommentLabel,
+            backToListLabel: content.directory.backToListLabel,
+            commentSuccess: content.directory.commentSuccess,
+            commentError: content.directory.commentError,
+            shareLabel: content.directory.shareLabel,
+            downloadLabel: content.directory.downloadLabel,
+            addressLabel: content.directory.addressLabel,
+            sourceLabel: content.directory.sourceLabel,
+            relatedProjectsTitle: content.directory.relatedProjectsTitle,
+            organizationFields: content.directory.organizationFields,
+            directoryCta: content.directory.cta,
+          }}
+          onBack={closeDirectoryItem}
+        />
+      ) : activeDirectoryTab ? (
         <div ref={directoryRef}>
           <DevelopmentPortalDirectory
             content={content.directory}
             activeTab={activeDirectoryTab}
             isRtl={isRtl}
             onTabChange={setDirectoryTab}
+            onOpenItem={openDirectoryItem}
           />
         </div>
       ) : null}

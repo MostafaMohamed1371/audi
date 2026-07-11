@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\Admin\TrainingCourseController;
 use App\Http\Controllers\Api\Admin\ExpertController;
 use App\Http\Controllers\Api\Admin\FocusAreaController;
 use App\Http\Controllers\Api\Admin\DirectoryCityController;
+use App\Http\Controllers\Api\Admin\DirectoryDiscussionController;
 use App\Http\Controllers\Api\Admin\DirectoryProjectController;
 use App\Http\Controllers\Api\Admin\DirectoryOrganizationController;
 use App\Http\Controllers\Api\Admin\DirectoryPublicationController;
@@ -93,6 +94,9 @@ Route::prefix('v1')->middleware('locale')->group(function () {
     });
 
     Route::prefix('programs')->group(function () {
+        Route::get('/urban-policies/directory/{tab}/{number}', [ProgramController::class, 'directoryItem']);
+        Route::post('/urban-policies/directory/{tab}/{number}/discussions', [ProgramController::class, 'storeDirectoryDiscussion'])
+            ->middleware('throttle:10,1');
         Route::get('/urban-policies/directory', [ProgramController::class, 'directory']);
         Route::post('/urban-policies/contribute', [PortalContributionController::class, 'store'])
             ->middleware('throttle:10,1');
@@ -300,6 +304,13 @@ Route::prefix('admin')->group(function () {
         Route::get('directory/publications/{directoryPublication}', [DirectoryPublicationController::class, 'show']);
         Route::put('directory/publications/{directoryPublication}', [DirectoryPublicationController::class, 'update']);
         Route::delete('directory/publications/{directoryPublication}', [DirectoryPublicationController::class, 'destroy']);
+
+        Route::get('directory/discussions', [DirectoryDiscussionController::class, 'index']);
+        Route::post('directory/discussions', [DirectoryDiscussionController::class, 'store']);
+        Route::post('directory/discussions/reorder', [DirectoryDiscussionController::class, 'reorder']);
+        Route::get('directory/discussions/{directoryDiscussion}', [DirectoryDiscussionController::class, 'show']);
+        Route::put('directory/discussions/{directoryDiscussion}', [DirectoryDiscussionController::class, 'update']);
+        Route::delete('directory/discussions/{directoryDiscussion}', [DirectoryDiscussionController::class, 'destroy']);
 
         Route::get('portal-contributions', [AdminPortalContributionController::class, 'index']);
         Route::get('portal-contributions/{portalContribution}', [AdminPortalContributionController::class, 'show']);

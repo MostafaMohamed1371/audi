@@ -1,0 +1,23 @@
+{
+  "slug": "riyadh",
+  "layout": "simple",
+  "title": "Riyadh",
+  "country": "Saudi Arabia",
+  "population": "7,000,000 inhabitants",
+  "sections": [
+    {
+      "title": "Geographic Location and Area",
+      "paragraphs": [
+        "Riyadh is located in the center of Saudi Arabia on the Najd plateau and is the political and administrative capital of the Kingdom.",
+        "The city covers more than 1,900 square kilometers and is experiencing rapid urban growth that reflects its central role in the national economy.",
+        "Riyadh enjoys a strategic location connecting it to all regions of the Kingdom, with modern infrastructure and leading economic and educational centers."
+      ]
+    }
+  ],
+  "cta": {
+    "title": "Help Build Better Arab Cities",
+    "description": "Join a network of municipalities, researchers, and practitioners in a pioneering experience",
+    "button": "Contact Us",
+    "href": "/en/contact"
+  }
+}

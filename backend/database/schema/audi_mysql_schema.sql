@@ -433,6 +433,8 @@ CREATE TABLE IF NOT EXISTS `directory_cities`(
   `description_en` TEXT,
   `country_code` VARCHAR(255),
   `city_size` VARCHAR(255),
+  `detail_ar` JSON,
+  `detail_en` JSON,
   `sort_order` BIGINT UNSIGNED NOT NULL default '0',
   `created_at` TIMESTAMP NULL,
   `updated_at` TIMESTAMP NULL
@@ -446,6 +448,8 @@ CREATE TABLE IF NOT EXISTS `directory_projects`(
   `country_en` VARCHAR(255) NOT NULL,
   `start_date` VARCHAR(255),
   `end_date` VARCHAR(255),
+  `detail_ar` JSON,
+  `detail_en` JSON,
   `sort_order` BIGINT UNSIGNED NOT NULL default '0',
   `created_at` TIMESTAMP NULL,
   `updated_at` TIMESTAMP NULL
@@ -457,6 +461,8 @@ CREATE TABLE IF NOT EXISTS `directory_organizations`(
   `name_en` VARCHAR(255) NOT NULL,
   `description_ar` TEXT,
   `description_en` TEXT,
+  `detail_ar` JSON,
+  `detail_en` JSON,
   `sort_order` BIGINT UNSIGNED NOT NULL default '0',
   `created_at` TIMESTAMP NULL,
   `updated_at` TIMESTAMP NULL
@@ -468,9 +474,25 @@ CREATE TABLE IF NOT EXISTS `directory_publications`(
   `name_en` VARCHAR(255) NOT NULL,
   `description_ar` TEXT,
   `description_en` TEXT,
+  `detail_ar` JSON,
+  `detail_en` JSON,
   `sort_order` BIGINT UNSIGNED NOT NULL default '0',
   `created_at` TIMESTAMP NULL,
   `updated_at` TIMESTAMP NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE IF NOT EXISTS `directory_discussions`(
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `directory_type` VARCHAR(255) NOT NULL,
+  `directory_number` VARCHAR(255) NOT NULL,
+  `author_ar` VARCHAR(255) NOT NULL,
+  `author_en` VARCHAR(255) NOT NULL,
+  `body_ar` TEXT NOT NULL,
+  `body_en` TEXT NOT NULL,
+  `is_approved` TINYINT(1) NOT NULL default '0',
+  `sort_order` BIGINT UNSIGNED NOT NULL default '0',
+  `created_at` TIMESTAMP NULL,
+  `updated_at` TIMESTAMP NULL,
+  INDEX `directory_discussions_type_number_index` (`directory_type`, `directory_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE IF NOT EXISTS `resources`(
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,

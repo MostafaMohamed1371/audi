@@ -26,3 +26,5 @@ export function mediaArticleHref(
 export function focusAreaHref(slug: string): AppHref {
   return { pathname: "/strategy/focus-areas/[slug]", params: { slug } };
 }
+
+export { directoryCityHref } from "@/lib/directory-cities";

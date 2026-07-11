@@ -1,0 +1,104 @@
+{
+  "slug": "al-baha",
+  "layout": "rich",
+  "title": "Al Baha",
+  "country": "Saudi Arabia",
+  "population": "750,000 inhabitants",
+  "sections": [
+    {
+      "title": "Geographic Location and Area",
+      "paragraphs": [
+        "Al Baha region is located in the southwest of Saudi Arabia, midway between Asir and Makkah regions and the major cities between them (Abha, Jeddah, Makkah, and Taif). The city sits at about 2,150 m above sea level. It is one of the smallest regions in the Kingdom, with an area of 11,016.5 km² (0.5% of the Kingdom's total area). The governorate of Al Baha covers about 340.28 km² and includes three administrative centers: Al Far'ah, Bani Dhubyan, and the urban scope of Al Baha city.",
+        "Al Baha is connected to Taif and Abha via the main highway (Taif–Al Baha–Abha), known within the city as King Abdulaziz Road. It is also linked to Al Aqiq governorate via King Fahd Road (Al Aqiq Road) and to the coastal route (Makkah–Jizan) via Al Makhwah pass. This junction gave Al Baha strategic importance and influenced regional movement patterns, encouraging migration especially toward Makkah.",
+        "The city has many tourist landmarks, including Raghadan Forest, Prince Hussam Park, and Khayrah waterfalls about 17 km away. Al Souq, Al Hussam, Al Hijaz, and Al Nuzha districts form the city center and are among the oldest neighborhoods. Al Souq district is distinctive for its renovated old market."
+      ],
+      "figures": [
+        {
+          "image": "/urban-policies/cities/al-baha-municipality.jpg",
+          "caption": "Al Baha Municipality building.",
+          "address": "Al Baha Municipality building.",
+          "source": "Al Baha Municipality."
+        },
+        {
+          "image": "/urban-policies/cities/al-baha-hussam-park.jpg",
+          "caption": "Hussam Park.",
+          "address": "Hussam Park.",
+          "source": "Al Baha Municipality."
+        },
+        {
+          "image": "/urban-policies/cities/al-baha-university.jpg",
+          "caption": "University of Al Baha.",
+          "address": "University of Al Baha.",
+          "source": "Al Baha Municipality."
+        }
+      ]
+    },
+    {
+      "title": "Environmental Context",
+      "paragraphs": [
+        "Al Baha is a mountainous city. A key topographic feature is the escarpment of the Sarawat Mountains along the southwestern edge, matching the development protection boundary and the 2028 urban scope boundary. Ground elevation is higher along the southwestern boundary and slopes toward the northern boundary.",
+        "The climate is cooler than most Saudi cities, especially in summer, due to elevation. Wind direction and speed vary throughout the year because of air mass movement and pressure distribution.",
+        "Water sources are diverse: a 600 mm ductile iron line from Arda with design capacity of 40,000 m³/day and actual capacity of 9,606 m³/day dedicated to Al Baha, plus groundwater wells (private and government). Rainfall throughout the year supports natural forests.",
+        "Forests and parks are major landmarks and tourism drivers. Municipal environmental projects include completing the sewage network (phase 2), transferring treated water surplus, increasing green cover (Al Shurooq Park), and preserving groundwater by replacing it with treated wastewater."
+      ]
+    },
+    {
+      "title": "Housing in the City",
+      "paragraphs": [
+        "Total dwellings in Al Baha reached 48,525 in 2021. Residential units account for 46% (22,587), commercial 8% (3,881), rented 41% (9,380), and owned 32% (7,333) per GASTAT (2022).",
+        "Climate and topography encouraged agriculture and shaped land ownership, with private ownership dominating developable areas. Unplanned urban growth on agricultural land limited government land for planning.",
+        "Recommended housing policies include:"
+      ],
+      "bullets": [
+        "Rely on the private sector for most housing units with mortgage and financing support.",
+        "Encourage real estate developers to provide distinctive housing patterns.",
+        "Adopt apartment buildings as a core element of the proposed housing program."
+      ]
+    },
+    {
+      "title": "City Economy",
+      "image": "/urban-policies/cities/al-baha-economy.jpg",
+      "paragraphs": [
+        "The economic base relies mainly on service, administrative, and commercial functions, with declining agriculture and limited industry, while tourism is expected to grow.",
+        "Commercial activity is the main driver (54% of establishments, highest average capital at SAR 5.5 million), followed by services (24%), construction (19%), and industry (2.3%). Agriculture remains culturally significant with terraced fields; productive agricultural land is 50.9% of 3,709.73 hectares inside the development protection boundary.",
+        "Key proposed projects for local economic development:"
+      ],
+      "bullets": [
+        "Develop the central area as the commercial and service heart of the city.",
+        "Create and develop main squares, plazas, and pedestrian routes.",
+        "Upgrade existing tourist parks to reduce pressure on Raghadan Park.",
+        "Develop commercial and service centers.",
+        "Upgrade main road infrastructure."
+      ]
+    }
+  ],
+  "relatedProjects": [
+    {
+      "city": "Alexandria",
+      "country": "Egypt",
+      "dateRange": "2006 - 2011",
+      "image": "/urban-policies/cities/alexandria.jpg",
+      "href": "#"
+    },
+    {
+      "city": "Fayoum",
+      "country": "Egypt",
+      "dateRange": "2006 - 2011",
+      "image": "/urban-policies/cities/fayoum.jpg",
+      "href": "#"
+    },
+    {
+      "city": "Cairo",
+      "country": "Egypt",
+      "dateRange": "2006 - 2011",
+      "image": "/urban-policies/cities/cairo.jpg",
+      "href": "#"
+    }
+  ],
+  "cta": {
+    "title": "Help Build Better Arab Cities",
+    "description": "Join a network of municipalities, researchers, and practitioners in a pioneering experience",
+    "button": "Contact Us",
+    "href": "/en/contact"
+  }
+}

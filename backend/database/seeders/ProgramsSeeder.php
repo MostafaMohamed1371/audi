@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\AboutContent;
 use App\Models\DirectoryCity;
+use App\Models\DirectoryDiscussion;
 use App\Models\DirectoryOrganization;
 use App\Models\DirectoryProject;
 use App\Models\DirectoryPublication;
@@ -205,57 +206,125 @@ class ProgramsSeeder extends Seeder
     private function seedDirectory(array $ar, array $en): void
     {
         $rows = $ar['urbanPolicies']['developmentPortal']['directory']['rows'] ?? [];
+        $enRows = $en['urbanPolicies']['developmentPortal']['directory']['rows'] ?? [];
 
         foreach ($rows['cities'] ?? [] as $index => $row) {
+            $enRow = $enRows['cities'][$index] ?? $row;
+            $number = $row['number'] ?? (string) ($index + 1);
+
             DirectoryCity::query()->updateOrCreate(
-                ['number' => $row['number'] ?? (string) ($index + 1)],
+                ['number' => $number],
                 [
                     'name_ar' => $row['name'] ?? '',
-                    'name_en' => $row['name'] ?? '',
+                    'name_en' => $enRow['name'] ?? ($row['name'] ?? ''),
                     'description_ar' => $row['description'] ?? null,
-                    'description_en' => $row['description'] ?? null,
+                    'description_en' => $enRow['description'] ?? ($row['description'] ?? null),
                     'country_code' => null,
                     'city_size' => $this->inferCitySize($row['description'] ?? ''),
+                    'detail_ar' => $row['detail'] ?? null,
+                    'detail_en' => $enRow['detail'] ?? ($row['detail'] ?? null),
                 ],
             );
+
+            $this->seedDirectoryDiscussions('cities', $number, $row['discussions'] ?? [], $enRow['discussions'] ?? []);
         }
 
         foreach ($rows['projects'] ?? [] as $index => $row) {
+            $enRow = $enRows['projects'][$index] ?? $row;
+            $number = $row['number'] ?? (string) ($index + 1);
+
             DirectoryProject::query()->updateOrCreate(
-                ['number' => $row['number'] ?? (string) ($index + 1)],
+                ['number' => $number],
                 [
                     'city_ar' => $row['city'] ?? '',
-                    'city_en' => $row['city'] ?? '',
+                    'city_en' => $enRow['city'] ?? ($row['city'] ?? ''),
                     'country_ar' => $row['country'] ?? '',
-                    'country_en' => $row['country'] ?? '',
+                    'country_en' => $enRow['country'] ?? ($row['country'] ?? ''),
                     'start_date' => $row['startDate'] ?? null,
                     'end_date' => $row['endDate'] ?? null,
+                    'detail_ar' => $row['detail'] ?? null,
+                    'detail_en' => $enRow['detail'] ?? ($row['detail'] ?? null),
                 ],
             );
+
+            $this->seedDirectoryDiscussions('projects', $number, $row['discussions'] ?? [], $enRow['discussions'] ?? []);
         }
 
         foreach ($rows['organizations'] ?? [] as $index => $row) {
+            $enRow = $enRows['organizations'][$index] ?? $row;
+            $number = $row['number'] ?? (string) ($index + 1);
+
             DirectoryOrganization::query()->updateOrCreate(
-                ['number' => $row['number'] ?? (string) ($index + 1)],
+                ['number' => $number],
                 [
                     'name_ar' => $row['name'] ?? '',
-                    'name_en' => $row['name'] ?? '',
-                    'description_ar' => $row['description'] ?? null,
-                    'description_en' => $row['description'] ?? null,
+                    'name_en' => $enRow['name'] ?? ($row['name'] ?? ''),
+                    'description_ar' => $row['type'] ?? ($row['description'] ?? null),
+                    'description_en' => $enRow['type'] ?? ($enRow['description'] ?? ($row['description'] ?? null)),
+                    'detail_ar' => $this->organizationDetailFromRow($row),
+                    'detail_en' => $this->organizationDetailFromRow($enRow),
                 ],
             );
+
+            $this->seedDirectoryDiscussions('organizations', $number, $row['discussions'] ?? [], $enRow['discussions'] ?? []);
         }
 
         foreach ($rows['publications'] ?? [] as $index => $row) {
+            $enRow = $enRows['publications'][$index] ?? $row;
+            $number = $row['number'] ?? (string) ($index + 1);
+
             DirectoryPublication::query()->updateOrCreate(
-                ['number' => $row['number'] ?? (string) ($index + 1)],
+                ['number' => $number],
                 [
                     'name_ar' => $row['name'] ?? '',
-                    'name_en' => $row['name'] ?? '',
+                    'name_en' => $enRow['name'] ?? ($row['name'] ?? ''),
                     'description_ar' => $row['description'] ?? null,
-                    'description_en' => $row['description'] ?? null,
+                    'description_en' => $enRow['description'] ?? ($row['description'] ?? null),
+                    'detail_ar' => $row['detail'] ?? null,
+                    'detail_en' => $enRow['detail'] ?? ($row['detail'] ?? null),
                 ],
             );
+
+            $this->seedDirectoryDiscussions('publications', $number, $row['discussions'] ?? [], $enRow['discussions'] ?? []);
+        }
+    }
+
+    /**
+     * @param  array<int, mixed>  $arDiscussions
+     * @param  array<int, mixed>  $enDiscussions
+     */
+    private function seedDirectoryDiscussions(
+        string $type,
+        string $number,
+        array $arDiscussions,
+        array $enDiscussions,
+    ): void {
+        if ($arDiscussions === []) {
+            return;
+        }
+
+        DirectoryDiscussion::query()
+            ->where('directory_type', $type)
+            ->where('directory_number', $number)
+            ->delete();
+
+        foreach ($arDiscussions as $index => $discussion) {
+            if (! is_array($discussion)) {
+                continue;
+            }
+
+            $enDiscussion = is_array($enDiscussions[$index] ?? null) ? $enDiscussions[$index] : $discussion;
+
+            DirectoryDiscussion::query()->create([
+                'directory_type' => $type,
+                'directory_number' => $number,
+                'author_name_ar' => $discussion['author'] ?? '',
+                'author_name_en' => $enDiscussion['author'] ?? ($discussion['author'] ?? ''),
+                'body_ar' => $discussion['body'] ?? '',
+                'body_en' => $enDiscussion['body'] ?? ($discussion['body'] ?? ''),
+                'is_approved' => true,
+                'sort_order' => $index,
+            ]);
         }
     }
 
@@ -325,6 +394,80 @@ class ProgramsSeeder extends Seeder
             return [];
         }
 
-        return json_decode(File::get($path), true) ?? [];
+        $data = json_decode(File::get($path), true) ?? [];
+
+        return $this->mergeDirectoryCityDetails($data, $locale);
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    private function mergeDirectoryCityDetails(array $data, string $locale): array
+    {
+        $rows = $data['urbanPolicies']['developmentPortal']['directory']['rows']['cities'] ?? null;
+        if (! is_array($rows)) {
+            return $data;
+        }
+
+        foreach ($rows as $index => $row) {
+            if (! is_array($row)) {
+                continue;
+            }
+
+            $slug = $row['slug'] ?? null;
+            if (! is_string($slug) || $slug === '') {
+                continue;
+            }
+
+            $detailPath = base_path("../messages/data/{$slug}-detail.{$locale}.json");
+            if (! File::exists($detailPath)) {
+                continue;
+            }
+
+            $detail = json_decode(File::get($detailPath), true);
+            if (is_array($detail)) {
+                $data['urbanPolicies']['developmentPortal']['directory']['rows']['cities'][$index]['detail'] = $detail;
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param  array<string, mixed>  $row
+     * @return array<string, mixed>|null
+     */
+    private function organizationDetailFromRow(array $row): ?array
+    {
+        $keys = [
+            'type',
+            'country',
+            'countryCode',
+            'address',
+            'phone',
+            'email',
+            'website',
+            'founded',
+            'employees',
+            'budget',
+            'interventionAreas',
+            'interventionFields',
+            'interventionTypes',
+            'socialLinks',
+        ];
+
+        $detail = [];
+        foreach ($keys as $key) {
+            if (array_key_exists($key, $row)) {
+                $detail[$key] = $row[$key];
+            }
+        }
+
+        if (isset($row['detail']) && is_array($row['detail'])) {
+            $detail = array_merge($detail, $row['detail']);
+        }
+
+        return $detail === [] ? null : $detail;
     }
 }

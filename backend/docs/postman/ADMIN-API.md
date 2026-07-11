@@ -4554,7 +4554,7 @@ Verify: `GET /api/v1/programs/urban-policies` + `GET /api/v1/programs/urban-poli
 
 | `?tab=` | خطوات | قسم | تفاصيل | داخل body |
 |---------|--------|-----|--------|-----------|
-| `developmentPortal` | 02–03 | 02 | 03 | paragraphs, directory, `directory.rows` |
+| `developmentPortal` | 02–03 | 02 | 03 | paragraphs, directory, `directory.rows` + detail + discussions |
 | `developmentIndex` | 04–05 | 04 | 05 | `intro` |
 | `innovationLab` | 06–07 | 06 | 07 | `intro`, `video`, `projects[]` |
 | `practiceReports` | 08–09 | 08 | 09 | `intro`, `projects[]` |
@@ -4608,13 +4608,27 @@ URL: [برنامج السياسات الحضرية](https://audi-w.vercel.app/ar
 | `bodyAr.paragraphs[]` | فقرات المقدمة |
 | `bodyAr.contributeTitle` + `contributionTypes` | قسم «ساهم من خلال…» |
 | `bodyAr.contributionForm` | نموذج المساهمة (يُرسل إلى `POST /api/v1/programs/urban-policies/contribute`) |
-| `bodyAr.directory` | دليل المدن (فيديو، عناوين، تبويبات، أعمدة) |
-| `bodyAr.directory.rows.cities[]` | جدول المدن |
-| `bodyAr.directory.rows.projects[]` | جدول المشاريع |
-| `bodyAr.directory.rows.organizations[]` | جدول المنظمات |
-| `bodyAr.directory.rows.publications[]` | جدول المنشورات |
+| `bodyAr.directory` | دليل المدن (فيديو، عناوين، تبويبات، أعمدة، تسميات النقاش) |
+| `bodyAr.directory.rows.cities[]` | جدول المدن + `detail` + `discussions[]` |
+| `bodyAr.directory.rows.projects[]` | جدول المشاريع + `detail` + `discussions[]` |
+| `bodyAr.directory.rows.organizations[]` | جدول المنظمات — `{number, name, type, country, countryCode, address, phone, email, website, founded, employees, budget, interventionAreas, interventionFields[], interventionTypes[], socialLinks[]}` |
+| `bodyAr.directory.organizationFields` | تسميات حقول صفحة تفاصيل المنظمة |
+| `bodyAr.directory.rows.publications[]` | جدول المنشورات + `detail` + `discussions[]` |
+| `bodyAr.directory.discussionTitle` | عنوان قسم النقاش في صفحة التفاصيل |
+| `bodyAr.directory.shareLabel` / `downloadLabel` | أزرار مشاركة / تحميل في صفحة المدينة |
+| `bodyAr.directory.addressLabel` / `sourceLabel` | تسميات تعليقات الصور |
+| `bodyAr.directory.relatedProjectsTitle` | عنوان «مشاريع ذات صلة» |
+| `bodyAr.directory.rows.cities[].slug` | رابط الصفحة — مثل `al-baha` |
+| `bodyAr.directory.rows.*.detail.title` | اسم المدينة في صفحة التفاصيل |
+| `bodyAr.directory.rows.*.detail.country` | الدولة تحت العنوان |
+| `bodyAr.directory.rows.*.detail.population` | عدد السكان — `(750,000 نسمة)` |
+| `bodyAr.directory.rows.*.detail.sections[]` | أقسام المحتوى — `{title, paragraphs[], bullets?, image?, figures?}` |
+| `bodyAr.directory.rows.*.detail.sections[].figures[]` | صور مع `{image, caption, address, source}` |
+| `bodyAr.directory.rows.*.detail.relatedProjects[]` | مشاريع ذات صلة — `{city, country, dateRange, image, href}` |
+| `bodyAr.directory.rows.*.detail.cta` | دعوة للتواصل — `{title, description, button, href}` |
+| `bodyAr.directory.rows.*.discussions[]` | تعليقات النقاش — `{author, body}` |
 
-**`directory.rows` في `bodyAr/En`:** يُنسّخ تلقائياً إلى `directory/cities|projects|organizations|publications`. صفوف الدليل تظهر عبر `GET /api/v1/programs/urban-policies/directory`.
+**`directory.rows` في `bodyAr/En`:** يُنسّخ تلقائياً إلى `directory_*` + `directory_discussions`. تفاصيل المدن: `messages/data/{slug}-detail.{ar,en}.json` (6 مدن). المنظمات: `directory.rows.organizations[]` (4 منظمات — PLATFORMA كاملة + 3 مختصرة). القائمة: `GET /api/v1/programs/urban-policies/directory?tab=organizations`. التفاصيل: `GET .../directory/organizations/{01–04}`.
 
 #### POST `/api/admin/program-sections`
 
@@ -4655,7 +4669,7 @@ URL: [برنامج السياسات الحضرية](https://audi-w.vercel.app/ar
 
 #### POST `/api/admin/program-section-details`
 
-**الاسم | Name:** 03 — [تفاصيل] بوابة التنمية الحضرية العربية — paragraphs + directory + مساهمة — program-section-details
+**الاسم | Name:** 03 — [تفاصيل] بوابة التنمية الحضرية العربية — paragraphs + directory + detail + discussions — program-section-details
 
 **الغرض | Purpose:** إرسال بيانات جديدة أو تنفيذ عملية.
 
@@ -4702,6 +4716,34 @@ URL: [برنامج السياسات الحضرية](https://audi-w.vercel.app/ar
 | `bodyAr.directory.viewMapLabel` | viewMapLabel | "الخريطة" |
 | `bodyAr.directory.mapPlaceholder` | mapPlaceholder | "عرض الخريطة قيد التطوير" |
 | `bodyAr.directory.seeMoreLabel` | seeMoreLabel | "رؤية المزيد" |
+| `bodyAr.directory.shareLabel` | shareLabel | "مشاركة" |
+| `bodyAr.directory.downloadLabel` | downloadLabel | "تحميل" |
+| `bodyAr.directory.addressLabel` | addressLabel | "العنوان" |
+| `bodyAr.directory.sourceLabel` | sourceLabel | "المصدر" |
+| `bodyAr.directory.relatedProjectsTitle` | relatedProjectsTitle | "مشاريع ذات صلة" |
+| `bodyAr.directory.discussionTitle` | discussionTitle | "النقاش" |
+| `bodyAr.directory.addCommentLabel` | addCommentLabel | "أضف تعليقاً" |
+| `bodyAr.directory.authorNameLabel` | authorNameLabel | "الاسم" |
+| `bodyAr.directory.commentBodyLabel` | commentBodyLabel | "التعليق" |
+| `bodyAr.directory.submitCommentLabel` | submitCommentLabel | "إرسال التعليق" |
+| `bodyAr.directory.backToListLabel` | backToListLabel | "العودة إلى القائمة" |
+| `bodyAr.directory.commentSuccess` | commentSuccess | "تم إرسال تعليقك وسيُراجع قبل النشر." |
+| `bodyAr.directory.commentError` | commentError | "تعذر إرسال التعليق. حاول مرة أخرى." |
+| `bodyAr.directory.organizationFields.address` | address | "العنوان" |
+| `bodyAr.directory.organizationFields.phone` | رقم الهاتف | "رقم الهاتف" |
+| `bodyAr.directory.organizationFields.email` | البريد الإلكتروني | "البريد الالكتروني" |
+| `bodyAr.directory.organizationFields.website` | website | "الموقع الالكتروني" |
+| `bodyAr.directory.organizationFields.type` | النوع (director|president، publications|cities|organizations، …) | "نوع المنظمة" |
+| `bodyAr.directory.organizationFields.founded` | founded | "سنة التأسيس" |
+| `bodyAr.directory.organizationFields.employees` | employees | "عدد الموظفين" |
+| `bodyAr.directory.organizationFields.budget` | budget | "اجمالية الميزانية" |
+| `bodyAr.directory.organizationFields.interventionAreas` | interventionAreas | "مناطق التدخل" |
+| `bodyAr.directory.organizationFields.interventionFields` | interventionFields | "مجالات التدخل" |
+| `bodyAr.directory.organizationFields.interventionTypes` | interventionTypes | "نوع التدخل" |
+| `bodyAr.directory.cta.title` | العنوان | "شارك في بناء مدن عربية أفضل" |
+| `bodyAr.directory.cta.description` | description | "انضم إلى شبكة البلديات والباحثين والممارسين في… |
+| `bodyAr.directory.cta.button` | button | "تواصل معنا" |
+| `bodyAr.directory.cta.href` | رابط اختياري (mailto:, tel:) | "\/ar\/تواصل-معنا" |
 | `bodyAr.directory.tabs` | tabs | [{"id":"cities","label":"المدن"},{"id":"project… |
 | `bodyAr.directory.columns.cities.number` | الرقم الترتيبي (01, 02, …) | "الرقم" |
 | `bodyAr.directory.columns.cities.name` | الاسم | "اسم المدينة" |
@@ -4711,9 +4753,15 @@ URL: [برنامج السياسات الحضرية](https://audi-w.vercel.app/ar
 | `bodyAr.directory.columns.projects.country` | country | "الدولة" |
 | `bodyAr.directory.columns.projects.startDate` | تاريخ البداية | "التاريخ" |
 | `bodyAr.directory.columns.projects.endDate` | تاريخ النهاية | "تاريخ النهاية" |
-| `bodyAr.directory.rows.cities` | مصفوفة المدن للاستيراد | [{"number":"01","name":"الباحة، المملكة العربية… |
+| `bodyAr.directory.columns.organizations.number` | الرقم الترتيبي (01, 02, …) | "الرقم" |
+| `bodyAr.directory.columns.organizations.organization` | organization | "المنظمة" |
+| `bodyAr.directory.columns.organizations.details` | details | "تفاصيل" |
+| `bodyAr.directory.columns.publications.number` | الرقم الترتيبي (01, 02, …) | "الرقم" |
+| `bodyAr.directory.columns.publications.publication` | publication | "المنشور" |
+| `bodyAr.directory.columns.publications.details` | details | "تفاصيل" |
+| `bodyAr.directory.rows.cities` | مصفوفة المدن للاستيراد | [{"number":"01","slug":"al-baha","name":"الباحة… |
 | `bodyAr.directory.rows.projects` | projects | [{"number":"01","city":"القاهرة","country":"مصر… |
-| `bodyAr.directory.rows.organizations` | organizations | [{"number":"01","name":"منظمة المدن العربية","d… |
+| `bodyAr.directory.rows.organizations` | organizations | [{"number":"01","name":"PLATFORMA","type":"منظم… |
 | `bodyAr.directory.rows.publications` | publications | [{"number":"01","name":"تقرير التنمية الحضرية ا… |
 | `bodyEn.paragraphs` | paragraphs | ["The Arab Urban Development Portal is a platfo… |
 | `bodyEn.contributeTitle` | contributeTitle | "Contribute by providing information about" |
@@ -4749,6 +4797,34 @@ URL: [برنامج السياسات الحضرية](https://audi-w.vercel.app/ar
 | `bodyEn.directory.viewMapLabel` | viewMapLabel | "Map" |
 | `bodyEn.directory.mapPlaceholder` | mapPlaceholder | "Map view coming soon" |
 | `bodyEn.directory.seeMoreLabel` | seeMoreLabel | "See More" |
+| `bodyEn.directory.shareLabel` | shareLabel | "Share" |
+| `bodyEn.directory.downloadLabel` | downloadLabel | "Download" |
+| `bodyEn.directory.addressLabel` | addressLabel | "Address" |
+| `bodyEn.directory.sourceLabel` | sourceLabel | "Source" |
+| `bodyEn.directory.relatedProjectsTitle` | relatedProjectsTitle | "Related Projects" |
+| `bodyEn.directory.discussionTitle` | discussionTitle | "Discussion" |
+| `bodyEn.directory.addCommentLabel` | addCommentLabel | "Add a comment" |
+| `bodyEn.directory.authorNameLabel` | authorNameLabel | "Name" |
+| `bodyEn.directory.commentBodyLabel` | commentBodyLabel | "Comment" |
+| `bodyEn.directory.submitCommentLabel` | submitCommentLabel | "Submit comment" |
+| `bodyEn.directory.backToListLabel` | backToListLabel | "Back to list" |
+| `bodyEn.directory.commentSuccess` | commentSuccess | "Your comment was submitted and will be reviewe… |
+| `bodyEn.directory.commentError` | commentError | "Could not submit your comment. Please try again." |
+| `bodyEn.directory.organizationFields.address` | address | "Address" |
+| `bodyEn.directory.organizationFields.phone` | رقم الهاتف | "Phone" |
+| `bodyEn.directory.organizationFields.email` | البريد الإلكتروني | "Email" |
+| `bodyEn.directory.organizationFields.website` | website | "Website" |
+| `bodyEn.directory.organizationFields.type` | النوع (director|president، publications|cities|organizations، …) | "Organization Type" |
+| `bodyEn.directory.organizationFields.founded` | founded | "Year Founded" |
+| `bodyEn.directory.organizationFields.employees` | employees | "Number of Employees" |
+| `bodyEn.directory.organizationFields.budget` | budget | "Total Budget" |
+| `bodyEn.directory.organizationFields.interventionAreas` | interventionAreas | "Intervention Areas" |
+| `bodyEn.directory.organizationFields.interventionFields` | interventionFields | "Intervention Fields" |
+| `bodyEn.directory.organizationFields.interventionTypes` | interventionTypes | "Intervention Types" |
+| `bodyEn.directory.cta.title` | العنوان | "Help Build Better Arab Cities" |
+| `bodyEn.directory.cta.description` | description | "Join a network of municipalities, researchers,… |
+| `bodyEn.directory.cta.button` | button | "Contact Us" |
+| `bodyEn.directory.cta.href` | رابط اختياري (mailto:, tel:) | "\/en\/contact-us" |
 | `bodyEn.directory.tabs` | tabs | [{"id":"cities","label":"Cities"},{"id":"projec… |
 | `bodyEn.directory.columns.cities.number` | الرقم الترتيبي (01, 02, …) | "No." |
 | `bodyEn.directory.columns.cities.name` | الاسم | "City Name" |
@@ -4758,9 +4834,15 @@ URL: [برنامج السياسات الحضرية](https://audi-w.vercel.app/ar
 | `bodyEn.directory.columns.projects.country` | country | "Country" |
 | `bodyEn.directory.columns.projects.startDate` | تاريخ البداية | "Start Date" |
 | `bodyEn.directory.columns.projects.endDate` | تاريخ النهاية | "End Date" |
-| `bodyEn.directory.rows.cities` | مصفوفة المدن للاستيراد | [{"number":"01","name":"Al Baha, Saudi Arabia",… |
+| `bodyEn.directory.columns.organizations.number` | الرقم الترتيبي (01, 02, …) | "No." |
+| `bodyEn.directory.columns.organizations.organization` | organization | "Organization" |
+| `bodyEn.directory.columns.organizations.details` | details | "Details" |
+| `bodyEn.directory.columns.publications.number` | الرقم الترتيبي (01, 02, …) | "No." |
+| `bodyEn.directory.columns.publications.publication` | publication | "Publication" |
+| `bodyEn.directory.columns.publications.details` | details | "Details" |
+| `bodyEn.directory.rows.cities` | مصفوفة المدن للاستيراد | [{"number":"01","slug":"al-baha","name":"Al Bah… |
 | `bodyEn.directory.rows.projects` | projects | [{"number":"01","city":"Cairo","country":"Egypt… |
-| `bodyEn.directory.rows.organizations` | organizations | [{"number":"01","name":"Organization of Arab Ci… |
+| `bodyEn.directory.rows.organizations` | organizations | [{"number":"01","name":"PLATFORMA","type":"Inte… |
 | `bodyEn.directory.rows.publications` | publications | [{"number":"01","name":"Arab Urban Development … |
 
 #### Notes | ملاحظات
@@ -4781,15 +4863,29 @@ URL: [برنامج السياسات الحضرية](https://audi-w.vercel.app/ar
 | `bodyAr.paragraphs[]` | فقرات المقدمة |
 | `bodyAr.contributeTitle` + `contributionTypes` | قسم «ساهم من خلال…» |
 | `bodyAr.contributionForm` | نموذج المساهمة (يُرسل إلى `POST /api/v1/programs/urban-policies/contribute`) |
-| `bodyAr.directory` | دليل المدن (فيديو، عناوين، تبويبات، أعمدة) |
-| `bodyAr.directory.rows.cities[]` | جدول المدن |
-| `bodyAr.directory.rows.projects[]` | جدول المشاريع |
-| `bodyAr.directory.rows.organizations[]` | جدول المنظمات |
-| `bodyAr.directory.rows.publications[]` | جدول المنشورات |
+| `bodyAr.directory` | دليل المدن (فيديو، عناوين، تبويبات، أعمدة، تسميات النقاش) |
+| `bodyAr.directory.rows.cities[]` | جدول المدن + `detail` + `discussions[]` |
+| `bodyAr.directory.rows.projects[]` | جدول المشاريع + `detail` + `discussions[]` |
+| `bodyAr.directory.rows.organizations[]` | جدول المنظمات — `{number, name, type, country, countryCode, address, phone, email, website, founded, employees, budget, interventionAreas, interventionFields[], interventionTypes[], socialLinks[]}` |
+| `bodyAr.directory.organizationFields` | تسميات حقول صفحة تفاصيل المنظمة |
+| `bodyAr.directory.rows.publications[]` | جدول المنشورات + `detail` + `discussions[]` |
+| `bodyAr.directory.discussionTitle` | عنوان قسم النقاش في صفحة التفاصيل |
+| `bodyAr.directory.shareLabel` / `downloadLabel` | أزرار مشاركة / تحميل في صفحة المدينة |
+| `bodyAr.directory.addressLabel` / `sourceLabel` | تسميات تعليقات الصور |
+| `bodyAr.directory.relatedProjectsTitle` | عنوان «مشاريع ذات صلة» |
+| `bodyAr.directory.rows.cities[].slug` | رابط الصفحة — مثل `al-baha` |
+| `bodyAr.directory.rows.*.detail.title` | اسم المدينة في صفحة التفاصيل |
+| `bodyAr.directory.rows.*.detail.country` | الدولة تحت العنوان |
+| `bodyAr.directory.rows.*.detail.population` | عدد السكان — `(750,000 نسمة)` |
+| `bodyAr.directory.rows.*.detail.sections[]` | أقسام المحتوى — `{title, paragraphs[], bullets?, image?, figures?}` |
+| `bodyAr.directory.rows.*.detail.sections[].figures[]` | صور مع `{image, caption, address, source}` |
+| `bodyAr.directory.rows.*.detail.relatedProjects[]` | مشاريع ذات صلة — `{city, country, dateRange, image, href}` |
+| `bodyAr.directory.rows.*.detail.cta` | دعوة للتواصل — `{title, description, button, href}` |
+| `bodyAr.directory.rows.*.discussions[]` | تعليقات النقاش — `{author, body}` |
 
 **الموقع:** `/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal`
 
-**`directory.rows` في `bodyAr/En`:** يُنسّخ تلقائياً إلى `directory/cities|projects|organizations|publications`. صفوف الدليل تظهر عبر `GET /api/v1/programs/urban-policies/directory`.
+**`directory.rows` في `bodyAr/En`:** يُنسّخ تلقائياً إلى `directory_*` + `directory_discussions`. تفاصيل المدن: `messages/data/{slug}-detail.{ar,en}.json` (6 مدن). المنظمات: `directory.rows.organizations[]` (4 منظمات — PLATFORMA كاملة + 3 مختصرة). القائمة: `GET /api/v1/programs/urban-policies/directory?tab=organizations`. التفاصيل: `GET .../directory/organizations/{01–04}`.
 
 ---
 
@@ -5426,6 +5522,34 @@ After section create: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageU
 | `bodyAr.directory.viewMapLabel` | viewMapLabel | "الخريطة" |
 | `bodyAr.directory.mapPlaceholder` | mapPlaceholder | "عرض الخريطة قيد التطوير" |
 | `bodyAr.directory.seeMoreLabel` | seeMoreLabel | "رؤية المزيد" |
+| `bodyAr.directory.shareLabel` | shareLabel | "مشاركة" |
+| `bodyAr.directory.downloadLabel` | downloadLabel | "تحميل" |
+| `bodyAr.directory.addressLabel` | addressLabel | "العنوان" |
+| `bodyAr.directory.sourceLabel` | sourceLabel | "المصدر" |
+| `bodyAr.directory.relatedProjectsTitle` | relatedProjectsTitle | "مشاريع ذات صلة" |
+| `bodyAr.directory.discussionTitle` | discussionTitle | "النقاش" |
+| `bodyAr.directory.addCommentLabel` | addCommentLabel | "أضف تعليقاً" |
+| `bodyAr.directory.authorNameLabel` | authorNameLabel | "الاسم" |
+| `bodyAr.directory.commentBodyLabel` | commentBodyLabel | "التعليق" |
+| `bodyAr.directory.submitCommentLabel` | submitCommentLabel | "إرسال التعليق" |
+| `bodyAr.directory.backToListLabel` | backToListLabel | "العودة إلى القائمة" |
+| `bodyAr.directory.commentSuccess` | commentSuccess | "تم إرسال تعليقك وسيُراجع قبل النشر." |
+| `bodyAr.directory.commentError` | commentError | "تعذر إرسال التعليق. حاول مرة أخرى." |
+| `bodyAr.directory.organizationFields.address` | address | "العنوان" |
+| `bodyAr.directory.organizationFields.phone` | رقم الهاتف | "رقم الهاتف" |
+| `bodyAr.directory.organizationFields.email` | البريد الإلكتروني | "البريد الالكتروني" |
+| `bodyAr.directory.organizationFields.website` | website | "الموقع الالكتروني" |
+| `bodyAr.directory.organizationFields.type` | النوع (director|president، publications|cities|organizations، …) | "نوع المنظمة" |
+| `bodyAr.directory.organizationFields.founded` | founded | "سنة التأسيس" |
+| `bodyAr.directory.organizationFields.employees` | employees | "عدد الموظفين" |
+| `bodyAr.directory.organizationFields.budget` | budget | "اجمالية الميزانية" |
+| `bodyAr.directory.organizationFields.interventionAreas` | interventionAreas | "مناطق التدخل" |
+| `bodyAr.directory.organizationFields.interventionFields` | interventionFields | "مجالات التدخل" |
+| `bodyAr.directory.organizationFields.interventionTypes` | interventionTypes | "نوع التدخل" |
+| `bodyAr.directory.cta.title` | العنوان | "شارك في بناء مدن عربية أفضل" |
+| `bodyAr.directory.cta.description` | description | "انضم إلى شبكة البلديات والباحثين والممارسين في… |
+| `bodyAr.directory.cta.button` | button | "تواصل معنا" |
+| `bodyAr.directory.cta.href` | رابط اختياري (mailto:, tel:) | "\/ar\/تواصل-معنا" |
 | `bodyAr.directory.tabs` | tabs | [{"id":"cities","label":"المدن"},{"id":"project… |
 | `bodyAr.directory.columns.cities.number` | الرقم الترتيبي (01, 02, …) | "الرقم" |
 | `bodyAr.directory.columns.cities.name` | الاسم | "اسم المدينة" |
@@ -5435,6 +5559,12 @@ After section create: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageU
 | `bodyAr.directory.columns.projects.country` | country | "الدولة" |
 | `bodyAr.directory.columns.projects.startDate` | تاريخ البداية | "التاريخ" |
 | `bodyAr.directory.columns.projects.endDate` | تاريخ النهاية | "تاريخ النهاية" |
+| `bodyAr.directory.columns.organizations.number` | الرقم الترتيبي (01, 02, …) | "الرقم" |
+| `bodyAr.directory.columns.organizations.organization` | organization | "المنظمة" |
+| `bodyAr.directory.columns.organizations.details` | details | "تفاصيل" |
+| `bodyAr.directory.columns.publications.number` | الرقم الترتيبي (01, 02, …) | "الرقم" |
+| `bodyAr.directory.columns.publications.publication` | publication | "المنشور" |
+| `bodyAr.directory.columns.publications.details` | details | "تفاصيل" |
 | `bodyEn.paragraphs` | paragraphs | ["The Arab Urban Development Portal is a platfo… |
 | `bodyEn.contributeTitle` | contributeTitle | "Contribute by providing information about" |
 | `bodyEn.contributeDescription` | contributeDescription | "You can help enrich the portal by sharing info… |
@@ -5469,6 +5599,34 @@ After section create: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageU
 | `bodyEn.directory.viewMapLabel` | viewMapLabel | "Map" |
 | `bodyEn.directory.mapPlaceholder` | mapPlaceholder | "Map view coming soon" |
 | `bodyEn.directory.seeMoreLabel` | seeMoreLabel | "See More" |
+| `bodyEn.directory.shareLabel` | shareLabel | "Share" |
+| `bodyEn.directory.downloadLabel` | downloadLabel | "Download" |
+| `bodyEn.directory.addressLabel` | addressLabel | "Address" |
+| `bodyEn.directory.sourceLabel` | sourceLabel | "Source" |
+| `bodyEn.directory.relatedProjectsTitle` | relatedProjectsTitle | "Related Projects" |
+| `bodyEn.directory.discussionTitle` | discussionTitle | "Discussion" |
+| `bodyEn.directory.addCommentLabel` | addCommentLabel | "Add a comment" |
+| `bodyEn.directory.authorNameLabel` | authorNameLabel | "Name" |
+| `bodyEn.directory.commentBodyLabel` | commentBodyLabel | "Comment" |
+| `bodyEn.directory.submitCommentLabel` | submitCommentLabel | "Submit comment" |
+| `bodyEn.directory.backToListLabel` | backToListLabel | "Back to list" |
+| `bodyEn.directory.commentSuccess` | commentSuccess | "Your comment was submitted and will be reviewe… |
+| `bodyEn.directory.commentError` | commentError | "Could not submit your comment. Please try again." |
+| `bodyEn.directory.organizationFields.address` | address | "Address" |
+| `bodyEn.directory.organizationFields.phone` | رقم الهاتف | "Phone" |
+| `bodyEn.directory.organizationFields.email` | البريد الإلكتروني | "Email" |
+| `bodyEn.directory.organizationFields.website` | website | "Website" |
+| `bodyEn.directory.organizationFields.type` | النوع (director|president، publications|cities|organizations، …) | "Organization Type" |
+| `bodyEn.directory.organizationFields.founded` | founded | "Year Founded" |
+| `bodyEn.directory.organizationFields.employees` | employees | "Number of Employees" |
+| `bodyEn.directory.organizationFields.budget` | budget | "Total Budget" |
+| `bodyEn.directory.organizationFields.interventionAreas` | interventionAreas | "Intervention Areas" |
+| `bodyEn.directory.organizationFields.interventionFields` | interventionFields | "Intervention Fields" |
+| `bodyEn.directory.organizationFields.interventionTypes` | interventionTypes | "Intervention Types" |
+| `bodyEn.directory.cta.title` | العنوان | "Help Build Better Arab Cities" |
+| `bodyEn.directory.cta.description` | description | "Join a network of municipalities, researchers,… |
+| `bodyEn.directory.cta.button` | button | "Contact Us" |
+| `bodyEn.directory.cta.href` | رابط اختياري (mailto:, tel:) | "\/en\/contact-us" |
 | `bodyEn.directory.tabs` | tabs | [{"id":"cities","label":"Cities"},{"id":"projec… |
 | `bodyEn.directory.columns.cities.number` | الرقم الترتيبي (01, 02, …) | "No." |
 | `bodyEn.directory.columns.cities.name` | الاسم | "City Name" |
@@ -5478,6 +5636,12 @@ After section create: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageU
 | `bodyEn.directory.columns.projects.country` | country | "Country" |
 | `bodyEn.directory.columns.projects.startDate` | تاريخ البداية | "Start Date" |
 | `bodyEn.directory.columns.projects.endDate` | تاريخ النهاية | "End Date" |
+| `bodyEn.directory.columns.organizations.number` | الرقم الترتيبي (01, 02, …) | "No." |
+| `bodyEn.directory.columns.organizations.organization` | organization | "Organization" |
+| `bodyEn.directory.columns.organizations.details` | details | "Details" |
+| `bodyEn.directory.columns.publications.number` | الرقم الترتيبي (01, 02, …) | "No." |
+| `bodyEn.directory.columns.publications.publication` | publication | "Publication" |
+| `bodyEn.directory.columns.publications.details` | details | "Details" |
 
 #### Notes | ملاحظات
 
@@ -5556,6 +5720,34 @@ After section create: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageU
 | `bodyAr.directory.viewMapLabel` | viewMapLabel | "الخريطة" |
 | `bodyAr.directory.mapPlaceholder` | mapPlaceholder | "عرض الخريطة قيد التطوير" |
 | `bodyAr.directory.seeMoreLabel` | seeMoreLabel | "رؤية المزيد" |
+| `bodyAr.directory.shareLabel` | shareLabel | "مشاركة" |
+| `bodyAr.directory.downloadLabel` | downloadLabel | "تحميل" |
+| `bodyAr.directory.addressLabel` | addressLabel | "العنوان" |
+| `bodyAr.directory.sourceLabel` | sourceLabel | "المصدر" |
+| `bodyAr.directory.relatedProjectsTitle` | relatedProjectsTitle | "مشاريع ذات صلة" |
+| `bodyAr.directory.discussionTitle` | discussionTitle | "النقاش" |
+| `bodyAr.directory.addCommentLabel` | addCommentLabel | "أضف تعليقاً" |
+| `bodyAr.directory.authorNameLabel` | authorNameLabel | "الاسم" |
+| `bodyAr.directory.commentBodyLabel` | commentBodyLabel | "التعليق" |
+| `bodyAr.directory.submitCommentLabel` | submitCommentLabel | "إرسال التعليق" |
+| `bodyAr.directory.backToListLabel` | backToListLabel | "العودة إلى القائمة" |
+| `bodyAr.directory.commentSuccess` | commentSuccess | "تم إرسال تعليقك وسيُراجع قبل النشر." |
+| `bodyAr.directory.commentError` | commentError | "تعذر إرسال التعليق. حاول مرة أخرى." |
+| `bodyAr.directory.organizationFields.address` | address | "العنوان" |
+| `bodyAr.directory.organizationFields.phone` | رقم الهاتف | "رقم الهاتف" |
+| `bodyAr.directory.organizationFields.email` | البريد الإلكتروني | "البريد الالكتروني" |
+| `bodyAr.directory.organizationFields.website` | website | "الموقع الالكتروني" |
+| `bodyAr.directory.organizationFields.type` | النوع (director|president، publications|cities|organizations، …) | "نوع المنظمة" |
+| `bodyAr.directory.organizationFields.founded` | founded | "سنة التأسيس" |
+| `bodyAr.directory.organizationFields.employees` | employees | "عدد الموظفين" |
+| `bodyAr.directory.organizationFields.budget` | budget | "اجمالية الميزانية" |
+| `bodyAr.directory.organizationFields.interventionAreas` | interventionAreas | "مناطق التدخل" |
+| `bodyAr.directory.organizationFields.interventionFields` | interventionFields | "مجالات التدخل" |
+| `bodyAr.directory.organizationFields.interventionTypes` | interventionTypes | "نوع التدخل" |
+| `bodyAr.directory.cta.title` | العنوان | "شارك في بناء مدن عربية أفضل" |
+| `bodyAr.directory.cta.description` | description | "انضم إلى شبكة البلديات والباحثين والممارسين في… |
+| `bodyAr.directory.cta.button` | button | "تواصل معنا" |
+| `bodyAr.directory.cta.href` | رابط اختياري (mailto:, tel:) | "\/ar\/تواصل-معنا" |
 | `bodyAr.directory.tabs` | tabs | [{"id":"cities","label":"المدن"},{"id":"project… |
 | `bodyAr.directory.columns.cities.number` | الرقم الترتيبي (01, 02, …) | "الرقم" |
 | `bodyAr.directory.columns.cities.name` | الاسم | "اسم المدينة" |
@@ -5565,6 +5757,12 @@ After section create: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageU
 | `bodyAr.directory.columns.projects.country` | country | "الدولة" |
 | `bodyAr.directory.columns.projects.startDate` | تاريخ البداية | "التاريخ" |
 | `bodyAr.directory.columns.projects.endDate` | تاريخ النهاية | "تاريخ النهاية" |
+| `bodyAr.directory.columns.organizations.number` | الرقم الترتيبي (01, 02, …) | "الرقم" |
+| `bodyAr.directory.columns.organizations.organization` | organization | "المنظمة" |
+| `bodyAr.directory.columns.organizations.details` | details | "تفاصيل" |
+| `bodyAr.directory.columns.publications.number` | الرقم الترتيبي (01, 02, …) | "الرقم" |
+| `bodyAr.directory.columns.publications.publication` | publication | "المنشور" |
+| `bodyAr.directory.columns.publications.details` | details | "تفاصيل" |
 | `bodyEn.paragraphs` | paragraphs | ["The Arab Urban Development Portal is a platfo… |
 | `bodyEn.contributeTitle` | contributeTitle | "Contribute by providing information about" |
 | `bodyEn.contributeDescription` | contributeDescription | "You can help enrich the portal by sharing info… |
@@ -5599,6 +5797,34 @@ After section create: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageU
 | `bodyEn.directory.viewMapLabel` | viewMapLabel | "Map" |
 | `bodyEn.directory.mapPlaceholder` | mapPlaceholder | "Map view coming soon" |
 | `bodyEn.directory.seeMoreLabel` | seeMoreLabel | "See More" |
+| `bodyEn.directory.shareLabel` | shareLabel | "Share" |
+| `bodyEn.directory.downloadLabel` | downloadLabel | "Download" |
+| `bodyEn.directory.addressLabel` | addressLabel | "Address" |
+| `bodyEn.directory.sourceLabel` | sourceLabel | "Source" |
+| `bodyEn.directory.relatedProjectsTitle` | relatedProjectsTitle | "Related Projects" |
+| `bodyEn.directory.discussionTitle` | discussionTitle | "Discussion" |
+| `bodyEn.directory.addCommentLabel` | addCommentLabel | "Add a comment" |
+| `bodyEn.directory.authorNameLabel` | authorNameLabel | "Name" |
+| `bodyEn.directory.commentBodyLabel` | commentBodyLabel | "Comment" |
+| `bodyEn.directory.submitCommentLabel` | submitCommentLabel | "Submit comment" |
+| `bodyEn.directory.backToListLabel` | backToListLabel | "Back to list" |
+| `bodyEn.directory.commentSuccess` | commentSuccess | "Your comment was submitted and will be reviewe… |
+| `bodyEn.directory.commentError` | commentError | "Could not submit your comment. Please try again." |
+| `bodyEn.directory.organizationFields.address` | address | "Address" |
+| `bodyEn.directory.organizationFields.phone` | رقم الهاتف | "Phone" |
+| `bodyEn.directory.organizationFields.email` | البريد الإلكتروني | "Email" |
+| `bodyEn.directory.organizationFields.website` | website | "Website" |
+| `bodyEn.directory.organizationFields.type` | النوع (director|president، publications|cities|organizations، …) | "Organization Type" |
+| `bodyEn.directory.organizationFields.founded` | founded | "Year Founded" |
+| `bodyEn.directory.organizationFields.employees` | employees | "Number of Employees" |
+| `bodyEn.directory.organizationFields.budget` | budget | "Total Budget" |
+| `bodyEn.directory.organizationFields.interventionAreas` | interventionAreas | "Intervention Areas" |
+| `bodyEn.directory.organizationFields.interventionFields` | interventionFields | "Intervention Fields" |
+| `bodyEn.directory.organizationFields.interventionTypes` | interventionTypes | "Intervention Types" |
+| `bodyEn.directory.cta.title` | العنوان | "Help Build Better Arab Cities" |
+| `bodyEn.directory.cta.description` | description | "Join a network of municipalities, researchers,… |
+| `bodyEn.directory.cta.button` | button | "Contact Us" |
+| `bodyEn.directory.cta.href` | رابط اختياري (mailto:, tel:) | "\/en\/contact-us" |
 | `bodyEn.directory.tabs` | tabs | [{"id":"cities","label":"Cities"},{"id":"projec… |
 | `bodyEn.directory.columns.cities.number` | الرقم الترتيبي (01, 02, …) | "No." |
 | `bodyEn.directory.columns.cities.name` | الاسم | "City Name" |
@@ -5608,6 +5834,12 @@ After section create: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageU
 | `bodyEn.directory.columns.projects.country` | country | "Country" |
 | `bodyEn.directory.columns.projects.startDate` | تاريخ البداية | "Start Date" |
 | `bodyEn.directory.columns.projects.endDate` | تاريخ النهاية | "End Date" |
+| `bodyEn.directory.columns.organizations.number` | الرقم الترتيبي (01, 02, …) | "No." |
+| `bodyEn.directory.columns.organizations.organization` | organization | "Organization" |
+| `bodyEn.directory.columns.organizations.details` | details | "Details" |
+| `bodyEn.directory.columns.publications.number` | الرقم الترتيبي (01, 02, …) | "No." |
+| `bodyEn.directory.columns.publications.publication` | publication | "Publication" |
+| `bodyEn.directory.columns.publications.details` | details | "Details" |
 
 #### Notes | ملاحظات
 
@@ -5939,11 +6171,11 @@ Experts carousel on ?tab=experts. Build guide: `experts[]` inside **program-sect
 
 #### Notes | ملاحظات
 
-**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+**Public match:** `GET /api/v1/programs/urban-policies/directory/cities/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory cities. Build guide: `directory.rows.cities` in developmentPortal details step 03.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
+Directory cities. Build guide: `directory.rows.cities` + `detail.sections[]` in developmentPortal step 03. Live example: [Al Baha](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/al-baha).قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
 
 ---
 
@@ -5960,21 +6192,43 @@ Directory cities. Build guide: `directory.rows.cities` in developmentPortal deta
 | الحقل | الوصف | مثال |
 |-------|--------|------|
 | `number` | الرقم الترتيبي (01, 02, …) | "01" |
-| `nameAr` | الاسم بالعربية | "الرياض، المملكة العربية السعودية" |
-| `nameEn` | الاسم بالإنجليزية | "Riyadh, Saudi Arabia" |
-| `descriptionAr` | الوصف بالعربية | "عاصمة المملكة وواحدة من أكبر المدن في المنطقة." |
-| `descriptionEn` | الوصف بالإنجليزية | "Capital of the Kingdom and one of the largest … |
+| `nameAr` | الاسم بالعربية | "الباحة، المملكة العربية السعودية" |
+| `nameEn` | الاسم بالإنجليزية | "Al Baha, Saudi Arabia" |
+| `descriptionAr` | الوصف بالعربية | "مدينة صغيرة أو متوسطة الحجم" |
+| `descriptionEn` | الوصف بالإنجليزية | "Small or medium-sized city" |
 | `countryCode` | رمز الدولة | "SA" |
-| `citySize` | حجم المدينة (large|medium|small) | "large" |
+| `citySize` | حجم المدينة (large|medium|small) | "medium" |
+| `detailAr.slug` | المعرّف اللatinي للرابط (مثل: training) | "al-baha" |
+| `detailAr.layout` | layout | "rich" |
+| `detailAr.title` | العنوان | "الباحة" |
+| `detailAr.country` | country | "المملكة العربية السعودية" |
+| `detailAr.population` | population | "750,000 نسمة" |
+| `detailAr.sections` | sections | [{"title":"الموقع الجغرافي والمساحة","paragraph… |
+| `detailAr.relatedProjects` | relatedProjects | [{"city":"الاسكندرية","country":"مصر","dateRang… |
+| `detailAr.cta.title` | العنوان | "شارك في بناء مدن عربية أفضل" |
+| `detailAr.cta.description` | description | "انضم إلى شبكة البلديات والباحثين والممارسين في… |
+| `detailAr.cta.button` | button | "تواصل معنا" |
+| `detailAr.cta.href` | رابط اختياري (mailto:, tel:) | "\/ar\/تواصل-معنا" |
+| `detailEn.slug` | المعرّف اللatinي للرابط (مثل: training) | "al-baha" |
+| `detailEn.layout` | layout | "rich" |
+| `detailEn.title` | العنوان | "Al Baha" |
+| `detailEn.country` | country | "Saudi Arabia" |
+| `detailEn.population` | population | "750,000 inhabitants" |
+| `detailEn.sections` | sections | [{"title":"Geographic Location and Area","parag… |
+| `detailEn.relatedProjects` | relatedProjects | [{"city":"Alexandria","country":"Egypt","dateRa… |
+| `detailEn.cta.title` | العنوان | "Help Build Better Arab Cities" |
+| `detailEn.cta.description` | description | "Join a network of municipalities, researchers,… |
+| `detailEn.cta.button` | button | "Contact Us" |
+| `detailEn.cta.href` | رابط اختياري (mailto:, tel:) | "\/en\/contact" |
 | `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 
 #### Notes | ملاحظات
 
-**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+**Public match:** `GET /api/v1/programs/urban-policies/directory/cities/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory cities. Build guide: `directory.rows.cities` in developmentPortal details step 03.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
+Directory cities. Build guide: `directory.rows.cities` + `detail.sections[]` in developmentPortal step 03. Live example: [Al Baha](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/al-baha).**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
 
 ---
 
@@ -5988,11 +6242,11 @@ Directory cities. Build guide: `directory.rows.cities` in developmentPortal deta
 
 #### Notes | ملاحظات
 
-**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+**Public match:** `GET /api/v1/programs/urban-policies/directory/cities/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory cities. Build guide: `directory.rows.cities` in developmentPortal details step 03.استخدم `id` من استجابة الإنشاء.
+Directory cities. Build guide: `directory.rows.cities` + `detail.sections[]` in developmentPortal step 03. Live example: [Al Baha](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/al-baha).استخدم `id` من استجابة الإنشاء.
 
 ---
 
@@ -6009,21 +6263,43 @@ Directory cities. Build guide: `directory.rows.cities` in developmentPortal deta
 | الحقل | الوصف | مثال |
 |-------|--------|------|
 | `number` | الرقم الترتيبي (01, 02, …) | "01" |
-| `nameAr` | الاسم بالعربية | "الرياض، المملكة العربية السعودية" |
-| `nameEn` | الاسم بالإنجليزية | "Riyadh, Saudi Arabia" |
-| `descriptionAr` | الوصف بالعربية | "عاصمة المملكة وواحدة من أكبر المدن في المنطقة." |
-| `descriptionEn` | الوصف بالإنجليزية | "Capital of the Kingdom and one of the largest … |
+| `nameAr` | الاسم بالعربية | "الباحة، المملكة العربية السعودية" |
+| `nameEn` | الاسم بالإنجليزية | "Al Baha, Saudi Arabia" |
+| `descriptionAr` | الوصف بالعربية | "مدينة صغيرة أو متوسطة الحجم" |
+| `descriptionEn` | الوصف بالإنجليزية | "Small or medium-sized city" |
 | `countryCode` | رمز الدولة | "SA" |
-| `citySize` | حجم المدينة (large|medium|small) | "large" |
+| `citySize` | حجم المدينة (large|medium|small) | "medium" |
+| `detailAr.slug` | المعرّف اللatinي للرابط (مثل: training) | "al-baha" |
+| `detailAr.layout` | layout | "rich" |
+| `detailAr.title` | العنوان | "الباحة" |
+| `detailAr.country` | country | "المملكة العربية السعودية" |
+| `detailAr.population` | population | "750,000 نسمة" |
+| `detailAr.sections` | sections | [{"title":"الموقع الجغرافي والمساحة","paragraph… |
+| `detailAr.relatedProjects` | relatedProjects | [{"city":"الاسكندرية","country":"مصر","dateRang… |
+| `detailAr.cta.title` | العنوان | "شارك في بناء مدن عربية أفضل" |
+| `detailAr.cta.description` | description | "انضم إلى شبكة البلديات والباحثين والممارسين في… |
+| `detailAr.cta.button` | button | "تواصل معنا" |
+| `detailAr.cta.href` | رابط اختياري (mailto:, tel:) | "\/ar\/تواصل-معنا" |
+| `detailEn.slug` | المعرّف اللatinي للرابط (مثل: training) | "al-baha" |
+| `detailEn.layout` | layout | "rich" |
+| `detailEn.title` | العنوان | "Al Baha" |
+| `detailEn.country` | country | "Saudi Arabia" |
+| `detailEn.population` | population | "750,000 inhabitants" |
+| `detailEn.sections` | sections | [{"title":"Geographic Location and Area","parag… |
+| `detailEn.relatedProjects` | relatedProjects | [{"city":"Alexandria","country":"Egypt","dateRa… |
+| `detailEn.cta.title` | العنوان | "Help Build Better Arab Cities" |
+| `detailEn.cta.description` | description | "Join a network of municipalities, researchers,… |
+| `detailEn.cta.button` | button | "Contact Us" |
+| `detailEn.cta.href` | رابط اختياري (mailto:, tel:) | "\/en\/contact" |
 | `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 
 #### Notes | ملاحظات
 
-**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+**Public match:** `GET /api/v1/programs/urban-policies/directory/cities/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory cities. Build guide: `directory.rows.cities` in developmentPortal details step 03.**جسم التحديث كامل** — نفس حقول الإنشاء.
+Directory cities. Build guide: `directory.rows.cities` + `detail.sections[]` in developmentPortal step 03. Live example: [Al Baha](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/al-baha).**جسم التحديث كامل** — نفس حقول الإنشاء.
 
 ---
 
@@ -6037,11 +6313,11 @@ Directory cities. Build guide: `directory.rows.cities` in developmentPortal deta
 
 #### Notes | ملاحظات
 
-**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+**Public match:** `GET /api/v1/programs/urban-policies/directory/cities/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory cities. Build guide: `directory.rows.cities` in developmentPortal details step 03.
+Directory cities. Build guide: `directory.rows.cities` + `detail.sections[]` in developmentPortal step 03. Live example: [Al Baha](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/al-baha).
 
 ---
 
@@ -6231,11 +6507,11 @@ Directory projects. Build guide: `directory.rows.projects` in step 03.
 
 #### Notes | ملاحظات
 
-**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+**Public match:** `GET /api/v1/programs/urban-policies/directory/organizations/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory organizations. Build guide: `directory.rows.organizations` in step 03.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
+Directory organizations. Build guide: `directory.rows.organizations` in step 03. Live list: [organizations tab](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations).قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
 
 ---
 
@@ -6252,19 +6528,47 @@ Directory organizations. Build guide: `directory.rows.organizations` in step 03.
 | الحقل | الوصف | مثال |
 |-------|--------|------|
 | `number` | الرقم الترتيبي (01, 02, …) | "01" |
-| `nameAr` | الاسم بالعربية | "برنامج الأمم المتحدة للمستوطنات البشرية" |
-| `nameEn` | الاسم بالإنجليزية | "UN-Habitat" |
-| `descriptionAr` | الوصف بالعربية | "منظمة الأمم المتحدة المعنية بالمستوطنات البشرية." |
-| `descriptionEn` | الوصف بالإنجليزية | "UN agency for human settlements." |
+| `nameAr` | الاسم بالعربية | "PLATFORMA" |
+| `nameEn` | الاسم بالإنجليزية | "PLATFORMA" |
+| `descriptionAr` | الوصف بالعربية | "منظمة دولية" |
+| `descriptionEn` | الوصف بالإنجليزية | "International Organization" |
+| `detailAr.type` | النوع (director|president، publications|cities|organizations، …) | "منظمة دولية" |
+| `detailAr.country` | country | "بلجيكا" |
+| `detailAr.countryCode` | رمز الدولة | "BE" |
+| `detailAr.address` | address | "1 Square de Meeûs, 1000 Brussels, Belgium" |
+| `detailAr.phone` | رقم الهاتف | "+32 2 265 09 30" |
+| `detailAr.email` | البريد الإلكتروني | "platforma@ccre-cemr.org" |
+| `detailAr.website` | website | "https:\/\/platforma-dev.eu\/" |
+| `detailAr.founded` | founded | "2008" |
+| `detailAr.employees` | employees | "0-10" |
+| `detailAr.budget` | budget | "N.A." |
+| `detailAr.interventionAreas` | interventionAreas | "عالمي" |
+| `detailAr.interventionFields` | interventionFields | ["التغير المناخي","التعليم","التنمية الاقتصادية… |
+| `detailAr.interventionTypes` | interventionTypes | ["الاتصال والشراكات","تطوير البرامج \/ المشاريع… |
+| `detailAr.socialLinks` | socialLinks | [{"platform":"youtube","href":"https:\/\/www.yo… |
+| `detailEn.type` | النوع (director|president، publications|cities|organizations، …) | "International Organization" |
+| `detailEn.country` | country | "Belgium" |
+| `detailEn.countryCode` | رمز الدولة | "BE" |
+| `detailEn.address` | address | "1 Square de Meeûs, 1000 Brussels, Belgium" |
+| `detailEn.phone` | رقم الهاتف | "+32 2 265 09 30" |
+| `detailEn.email` | البريد الإلكتروني | "platforma@ccre-cemr.org" |
+| `detailEn.website` | website | "https:\/\/platforma-dev.eu\/" |
+| `detailEn.founded` | founded | "2008" |
+| `detailEn.employees` | employees | "0-10" |
+| `detailEn.budget` | budget | "N.A." |
+| `detailEn.interventionAreas` | interventionAreas | "Global" |
+| `detailEn.interventionFields` | interventionFields | ["Climate Change","Education","Local Economic D… |
+| `detailEn.interventionTypes` | interventionTypes | ["Communication and Partnerships","Program and … |
+| `detailEn.socialLinks` | socialLinks | [{"platform":"youtube","href":"https:\/\/www.yo… |
 | `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 
 #### Notes | ملاحظات
 
-**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+**Public match:** `GET /api/v1/programs/urban-policies/directory/organizations/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory organizations. Build guide: `directory.rows.organizations` in step 03.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
+Directory organizations. Build guide: `directory.rows.organizations` in step 03. Live list: [organizations tab](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations).**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
 
 ---
 
@@ -6278,11 +6582,11 @@ Directory organizations. Build guide: `directory.rows.organizations` in step 03.
 
 #### Notes | ملاحظات
 
-**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+**Public match:** `GET /api/v1/programs/urban-policies/directory/organizations/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory organizations. Build guide: `directory.rows.organizations` in step 03.استخدم `id` من استجابة الإنشاء.
+Directory organizations. Build guide: `directory.rows.organizations` in step 03. Live list: [organizations tab](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations).استخدم `id` من استجابة الإنشاء.
 
 ---
 
@@ -6299,19 +6603,47 @@ Directory organizations. Build guide: `directory.rows.organizations` in step 03.
 | الحقل | الوصف | مثال |
 |-------|--------|------|
 | `number` | الرقم الترتيبي (01, 02, …) | "01" |
-| `nameAr` | الاسم بالعربية | "برنامج الأمم المتحدة للمستوطنات البشرية" |
-| `nameEn` | الاسم بالإنجليزية | "UN-Habitat" |
-| `descriptionAr` | الوصف بالعربية | "منظمة الأمم المتحدة المعنية بالمستوطنات البشرية." |
-| `descriptionEn` | الوصف بالإنجليزية | "UN agency for human settlements." |
+| `nameAr` | الاسم بالعربية | "PLATFORMA" |
+| `nameEn` | الاسم بالإنجليزية | "PLATFORMA" |
+| `descriptionAr` | الوصف بالعربية | "منظمة دولية" |
+| `descriptionEn` | الوصف بالإنجليزية | "International Organization" |
+| `detailAr.type` | النوع (director|president، publications|cities|organizations، …) | "منظمة دولية" |
+| `detailAr.country` | country | "بلجيكا" |
+| `detailAr.countryCode` | رمز الدولة | "BE" |
+| `detailAr.address` | address | "1 Square de Meeûs, 1000 Brussels, Belgium" |
+| `detailAr.phone` | رقم الهاتف | "+32 2 265 09 30" |
+| `detailAr.email` | البريد الإلكتروني | "platforma@ccre-cemr.org" |
+| `detailAr.website` | website | "https:\/\/platforma-dev.eu\/" |
+| `detailAr.founded` | founded | "2008" |
+| `detailAr.employees` | employees | "0-10" |
+| `detailAr.budget` | budget | "N.A." |
+| `detailAr.interventionAreas` | interventionAreas | "عالمي" |
+| `detailAr.interventionFields` | interventionFields | ["التغير المناخي","التعليم","التنمية الاقتصادية… |
+| `detailAr.interventionTypes` | interventionTypes | ["الاتصال والشراكات","تطوير البرامج \/ المشاريع… |
+| `detailAr.socialLinks` | socialLinks | [{"platform":"youtube","href":"https:\/\/www.yo… |
+| `detailEn.type` | النوع (director|president، publications|cities|organizations، …) | "International Organization" |
+| `detailEn.country` | country | "Belgium" |
+| `detailEn.countryCode` | رمز الدولة | "BE" |
+| `detailEn.address` | address | "1 Square de Meeûs, 1000 Brussels, Belgium" |
+| `detailEn.phone` | رقم الهاتف | "+32 2 265 09 30" |
+| `detailEn.email` | البريد الإلكتروني | "platforma@ccre-cemr.org" |
+| `detailEn.website` | website | "https:\/\/platforma-dev.eu\/" |
+| `detailEn.founded` | founded | "2008" |
+| `detailEn.employees` | employees | "0-10" |
+| `detailEn.budget` | budget | "N.A." |
+| `detailEn.interventionAreas` | interventionAreas | "Global" |
+| `detailEn.interventionFields` | interventionFields | ["Climate Change","Education","Local Economic D… |
+| `detailEn.interventionTypes` | interventionTypes | ["Communication and Partnerships","Program and … |
+| `detailEn.socialLinks` | socialLinks | [{"platform":"youtube","href":"https:\/\/www.yo… |
 | `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 
 #### Notes | ملاحظات
 
-**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+**Public match:** `GET /api/v1/programs/urban-policies/directory/organizations/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory organizations. Build guide: `directory.rows.organizations` in step 03.**جسم التحديث كامل** — نفس حقول الإنشاء.
+Directory organizations. Build guide: `directory.rows.organizations` in step 03. Live list: [organizations tab](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations).**جسم التحديث كامل** — نفس حقول الإنشاء.
 
 ---
 
@@ -6325,11 +6657,11 @@ Directory organizations. Build guide: `directory.rows.organizations` in step 03.
 
 #### Notes | ملاحظات
 
-**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+**Public match:** `GET /api/v1/programs/urban-policies/directory/organizations/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory organizations. Build guide: `directory.rows.organizations` in step 03.
+Directory organizations. Build guide: `directory.rows.organizations` in step 03. Live list: [organizations tab](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations).
 
 ---
 
@@ -6377,7 +6709,7 @@ Directory organizations. Build guide: `directory.rows.organizations` in step 03.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory publications. Build guide: `directory.rows.publications` in step 03.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
+Directory publications. Build guide: `directory.rows.publications` in step 03. Detail: `GET .../directory/publications/{number}`.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
 
 ---
 
@@ -6406,7 +6738,7 @@ Directory publications. Build guide: `directory.rows.publications` in step 03.ق
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory publications. Build guide: `directory.rows.publications` in step 03.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
+Directory publications. Build guide: `directory.rows.publications` in step 03. Detail: `GET .../directory/publications/{number}`.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
 
 ---
 
@@ -6424,7 +6756,7 @@ Directory publications. Build guide: `directory.rows.publications` in step 03.**
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory publications. Build guide: `directory.rows.publications` in step 03.استخدم `id` من استجابة الإنشاء.
+Directory publications. Build guide: `directory.rows.publications` in step 03. Detail: `GET .../directory/publications/{number}`.استخدم `id` من استجابة الإنشاء.
 
 ---
 
@@ -6453,7 +6785,7 @@ Directory publications. Build guide: `directory.rows.publications` in step 03.ا
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory publications. Build guide: `directory.rows.publications` in step 03.**جسم التحديث كامل** — نفس حقول الإنشاء.
+Directory publications. Build guide: `directory.rows.publications` in step 03. Detail: `GET .../directory/publications/{number}`.**جسم التحديث كامل** — نفس حقول الإنشاء.
 
 ---
 
@@ -6471,13 +6803,159 @@ Directory publications. Build guide: `directory.rows.publications` in step 03.**
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory publications. Build guide: `directory.rows.publications` in step 03.
+Directory publications. Build guide: `directory.rows.publications` in step 03. Detail: `GET .../directory/publications/{number}`.
 
 ---
 
 #### POST `/api/admin/directory/publications/reorder`
 
 **الاسم | Name:** إعادة الترتيب — Reorder منشور
+
+**الغرض | Purpose:** تغيير ترتيب العرض عبر sortOrder.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `items` | قائمة العناصر (إعادة ترتيب أو إحصائيات) | [{"id":1,"sortOrder":0},{"id":2,"sortOrder":1}] |
+
+#### Notes | ملاحظات
+
+إعادة ترتيب العناصر — `items[].id` + `items[].sortOrder`.
+
+---
+
+#### نقاشات الدليل — Directory Discussions
+
+#### GET `/api/admin/directory/discussions`
+
+**الاسم | Name:** عرض القائمة — List Directory Discussion
+
+**الغرض | Purpose:** عرض قائمة paginated مع حقول ثنائية اللغة (*Ar/*En).
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Query Parameters | معاملات الرابط
+
+| المعامل | الوصف | مثال |
+|---------|--------|------|
+| `page` | رقم الصفحة | `1` |
+| `limit` | عدد النتائج في الصفحة | `20` |
+| `search` | بحث نصي | `` |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/cities/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Discussion threads on directory item detail pages. Build guide: `discussions[]` inside `directory.rows.*` in step 03.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
+
+---
+
+#### POST `/api/admin/directory/discussions`
+
+**الاسم | Name:** إنشاء — Create تعليق
+
+**الغرض | Purpose:** إنشاء سجل جديد في قاعدة البيانات.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `directoryType` | directoryType | "cities" |
+| `directoryNumber` | directoryNumber | "01" |
+| `authorNameAr` | authorNameAr | "د. سارة العتيبي" |
+| `authorNameEn` | authorNameEn | "Dr. Sarah Al-Otaibi" |
+| `bodyAr` | محتوى JSON بالعربية (فقرات، تسميات، أقسام) | "مناقشة حول التخضير الحضري في المدن الصغيرة." |
+| `bodyEn` | محتوى JSON بالإنجليزية | "Discussion on urban greening in small cities." |
+| `isApproved` | isApproved | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/cities/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Discussion threads on directory item detail pages. Build guide: `discussions[]` inside `directory.rows.*` in step 03.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
+
+---
+
+#### GET `/api/admin/directory/discussions/{{id}}`
+
+**الاسم | Name:** عرض — Show تعليق
+
+**الغرض | Purpose:** عرض تفاصيل سجل واحد بالمعرّف {{id}}.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/cities/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Discussion threads on directory item detail pages. Build guide: `discussions[]` inside `directory.rows.*` in step 03.استخدم `id` من استجابة الإنشاء.
+
+---
+
+#### PUT `/api/admin/directory/discussions/{{id}}`
+
+**الاسم | Name:** تحديث — Update تعليق
+
+**الغرض | Purpose:** تحديث سجل موجود (PUT/PATCH).
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Body Parameters | معاملات الجسم (JSON)
+
+| الحقل | الوصف | مثال |
+|-------|--------|------|
+| `directoryType` | directoryType | "cities" |
+| `directoryNumber` | directoryNumber | "01" |
+| `authorNameAr` | authorNameAr | "د. سارة العتيبي" |
+| `authorNameEn` | authorNameEn | "Dr. Sarah Al-Otaibi" |
+| `bodyAr` | محتوى JSON بالعربية (فقرات، تسميات، أقسام) | "مناقشة حول التخضير الحضري في المدن الصغيرة." |
+| `bodyEn` | محتوى JSON بالإنجليزية | "Discussion on urban greening in small cities." |
+| `isApproved` | isApproved | true |
+| `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/cities/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Discussion threads on directory item detail pages. Build guide: `discussions[]` inside `directory.rows.*` in step 03.**جسم التحديث كامل** — نفس حقول الإنشاء.
+
+---
+
+#### DELETE `/api/admin/directory/discussions/{{id}}`
+
+**الاسم | Name:** حذف — Delete تعليق
+
+**الغرض | Purpose:** حذف سجل نهائياً.
+
+**المصادقة | Auth:** Bearer `{{adminToken}}` (مطلوب)
+
+#### Notes | ملاحظات
+
+**Public match:** `GET /api/v1/programs/urban-policies/directory/cities/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+
+**Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
+
+Discussion threads on directory item detail pages. Build guide: `discussions[]` inside `directory.rows.*` in step 03.
+
+---
+
+#### POST `/api/admin/directory/discussions/reorder`
+
+**الاسم | Name:** إعادة الترتيب — Reorder تعليق
 
 **الغرض | Purpose:** تغيير ترتيب العرض عبر sortOrder.
 

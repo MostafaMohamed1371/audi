@@ -20,6 +20,7 @@ export type UrbanPoliciesReportsContent = PartnershipSectionContent & {
 
 export type PortalDirectoryCityRow = {
   number: string;
+  slug?: string;
   name: string;
   description: string;
 };
@@ -30,6 +31,45 @@ export type PortalDirectoryProjectRow = {
   country: string;
   startDate: string;
   endDate: string;
+};
+
+export type PortalDirectoryOrganizationRow = {
+  number: string;
+  name: string;
+  type: string;
+  country: string;
+  countryCode?: string;
+  address?: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  founded?: string;
+  employees?: string;
+  budget?: string;
+  interventionAreas?: string;
+  interventionFields?: string[];
+  interventionTypes?: string[];
+  socialLinks?: { platform: string; href: string }[];
+};
+
+export type PortalDirectoryPublicationRow = {
+  number: string;
+  name: string;
+  description: string;
+};
+
+export type PortalDirectoryOrganizationFields = {
+  address: string;
+  phone: string;
+  email: string;
+  website: string;
+  type: string;
+  founded: string;
+  employees: string;
+  budget: string;
+  interventionAreas: string;
+  interventionFields: string;
+  interventionTypes: string;
 };
 
 export type PortalDirectoryContent = {
@@ -47,6 +87,26 @@ export type PortalDirectoryContent = {
   viewMapLabel: string;
   mapPlaceholder: string;
   seeMoreLabel: string;
+  shareLabel?: string;
+  downloadLabel?: string;
+  addressLabel?: string;
+  sourceLabel?: string;
+  relatedProjectsTitle?: string;
+  discussionTitle?: string;
+  addCommentLabel?: string;
+  authorNameLabel?: string;
+  commentBodyLabel?: string;
+  submitCommentLabel?: string;
+  backToListLabel?: string;
+  commentSuccess?: string;
+  commentError?: string;
+  organizationFields?: PortalDirectoryOrganizationFields;
+  cta?: {
+    title: string;
+    description: string;
+    button: string;
+    href?: string;
+  };
   tabs: { id: PortalDirectoryTab; label: string }[];
   columns: {
     cities: { number: string; name: string; details: string };
@@ -57,11 +117,15 @@ export type PortalDirectoryContent = {
       startDate: string;
       endDate: string;
     };
+    organizations: { number: string; organization: string; details: string };
+    publications: { number: string; publication: string; details: string };
   };
-  rows: Record<
-    PortalDirectoryTab,
-    PortalDirectoryCityRow[] | PortalDirectoryProjectRow[]
-  >;
+  rows: {
+    cities: PortalDirectoryCityRow[];
+    projects: PortalDirectoryProjectRow[];
+    organizations: PortalDirectoryOrganizationRow[];
+    publications: PortalDirectoryPublicationRow[];
+  };
 };
 
 export type DevelopmentPortalContent = {

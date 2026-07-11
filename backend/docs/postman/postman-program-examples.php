@@ -16,9 +16,202 @@ function postmanLoadProgramsJson(string $locale): array
     if (! isset($cache[$locale])) {
         $path = dirname(__DIR__, 3).'/messages/'.$locale.'/programs.json';
         $cache[$locale] = json_decode((string) file_get_contents($path), true, 512, JSON_THROW_ON_ERROR);
+        $cache[$locale] = postmanMergeDirectoryCityDetails($cache[$locale], $locale);
     }
 
     return $cache[$locale];
+}
+
+/**
+ * Merge full city detail pages from messages/data/{slug}-detail.{locale}.json
+ *
+ * @param  array<string, mixed>  $data
+ * @return array<string, mixed>
+ */
+function postmanMergeDirectoryCityDetails(array $data, string $locale): array
+{
+    $rows = $data['urbanPolicies']['developmentPortal']['directory']['rows']['cities'] ?? null;
+    if (! is_array($rows)) {
+        return $data;
+    }
+
+    foreach ($rows as $index => $row) {
+        if (! is_array($row)) {
+            continue;
+        }
+
+        $slug = $row['slug'] ?? null;
+        if (! is_string($slug) || $slug === '') {
+            continue;
+        }
+
+        $detailPath = dirname(__DIR__, 3).'/messages/data/'.$slug.'-detail.'.$locale.'.json';
+        if (! is_file($detailPath)) {
+            continue;
+        }
+
+        $detail = json_decode((string) file_get_contents($detailPath), true, 512, JSON_THROW_ON_ERROR);
+        $data['urbanPolicies']['developmentPortal']['directory']['rows']['cities'][$index]['detail'] = $detail;
+    }
+
+    return $data;
+}
+
+/**
+ * @return array<string, mixed>
+ */
+function postmanDirectoryCityDetailExampleAr(): array
+{
+    $path = dirname(__DIR__, 3).'/messages/data/al-baha-detail.ar.json';
+
+    return is_file($path)
+        ? json_decode((string) file_get_contents($path), true, 512, JSON_THROW_ON_ERROR)
+        : [];
+}
+
+/**
+ * @return array<string, mixed>
+ */
+function postmanDirectoryCityDetailExampleEn(): array
+{
+    $path = dirname(__DIR__, 3).'/messages/data/al-baha-detail.en.json';
+
+    return is_file($path)
+        ? json_decode((string) file_get_contents($path), true, 512, JSON_THROW_ON_ERROR)
+        : [];
+}
+
+/**
+ * City detail pages — matches live site /المدن/{slug}.
+ *
+ * @return array<int, array{number: string, slug: string, labelAr: string, labelEn: string}>
+ */
+function postmanDirectoryCityDetailPages(): array
+{
+    return [
+        ['number' => '01', 'slug' => 'al-baha', 'labelAr' => 'الباحة', 'labelEn' => 'Al Baha'],
+        ['number' => '02', 'slug' => 'riyadh', 'labelAr' => 'الرياض', 'labelEn' => 'Riyadh'],
+        ['number' => '03', 'slug' => 'jeddah', 'labelAr' => 'جدة', 'labelEn' => 'Jeddah'],
+        ['number' => '04', 'slug' => 'cairo', 'labelAr' => 'القاهرة', 'labelEn' => 'Cairo'],
+        ['number' => '05', 'slug' => 'amman', 'labelAr' => 'عمان', 'labelEn' => 'Amman'],
+        ['number' => '06', 'slug' => 'beirut', 'labelAr' => 'بيروت', 'labelEn' => 'Beirut'],
+    ];
+}
+
+function postmanDirectoryCityDetailPagesGuide(): string
+{
+    $layouts = [
+        'al-baha' => 'rich — صور + نقاشات',
+        'riyadh' => 'simple — نص فقط',
+        'jeddah' => 'simple — نص فقط',
+        'cairo' => 'simple — نص فقط',
+        'amman' => 'simple — نص فقط',
+        'beirut' => 'simple — نص فقط',
+    ];
+
+    $lines = array_map(
+        fn (array $city) => sprintf(
+            '| `%s` | `%s` | %s | %s | [/%s](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية/بوابة-التنمية/المدن/%s) |',
+            $city['number'],
+            $city['slug'],
+            $city['labelAr'],
+            $layouts[$city['slug']] ?? 'simple',
+            $city['slug'],
+            $city['slug'],
+        ),
+        postmanDirectoryCityDetailPages(),
+    );
+
+    return "**صفحات المدن على الموقع | City detail pages**\n\n"
+        ."`detail.layout`: **`rich`** = Al Baha (images, figures, related projects, discussions). "
+        ."**`simple`** = Riyadh, Jeddah, Cairo, Amman, Beirut (geography text + CTA only — no images, no discussions on live site).\n\n"
+        ."| رقم | slug | المدينة | layout | رابط الموقع |\n|-----|------|---------|--------|-------------|\n"
+        .implode("\n", $lines);
+}
+
+/**
+ * Organization detail pages — matches live site ?directory=organizations&item=01–04.
+ *
+ * @return array<int, array{number: string, labelAr: string, labelEn: string}>
+ */
+function postmanDirectoryOrganizationDetailPages(): array
+{
+    return [
+        ['number' => '01', 'labelAr' => 'PLATFORMA', 'labelEn' => 'PLATFORMA'],
+        ['number' => '02', 'labelAr' => 'منظمة التعاون والتنمية الاقتصادية', 'labelEn' => 'OECD'],
+        ['number' => '03', 'labelAr' => 'الاتحاد الدولي للمواصلات العامة', 'labelEn' => 'UITP'],
+        ['number' => '04', 'labelAr' => 'المجلس الأوروبي للبلديات والمناطق', 'labelEn' => 'CEMR'],
+    ];
+}
+
+/**
+ * @return array<string, mixed>
+ */
+function postmanDirectoryOrganizationDetailExampleAr(): array
+{
+    return postmanDirectoryOrganizationProfileFromRow(
+        postmanLoadProgramsJson('ar')['urbanPolicies']['developmentPortal']['directory']['rows']['organizations'][0] ?? []
+    );
+}
+
+/**
+ * @return array<string, mixed>
+ */
+function postmanDirectoryOrganizationDetailExampleEn(): array
+{
+    return postmanDirectoryOrganizationProfileFromRow(
+        postmanLoadProgramsJson('en')['urbanPolicies']['developmentPortal']['directory']['rows']['organizations'][0] ?? []
+    );
+}
+
+/**
+ * @param  array<string, mixed>  $row
+ * @return array<string, mixed>
+ */
+function postmanDirectoryOrganizationProfileFromRow(array $row): array
+{
+    $keys = [
+        'type',
+        'country',
+        'countryCode',
+        'address',
+        'phone',
+        'email',
+        'website',
+        'founded',
+        'employees',
+        'budget',
+        'interventionAreas',
+        'interventionFields',
+        'interventionTypes',
+        'socialLinks',
+    ];
+
+    return array_intersect_key($row, array_flip($keys));
+}
+
+function postmanDirectoryOrganizationDetailPagesGuide(): string
+{
+    $lines = array_map(
+        fn (array $org) => sprintf(
+            '| `%s` | %s | [?item=%s](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations&item=%s) |',
+            $org['number'],
+            $org['labelAr'],
+            $org['number'],
+            $org['number'],
+        ),
+        postmanDirectoryOrganizationDetailPages(),
+    );
+
+    return "**صفحات المنظمات على الموقع | Organization detail pages**\n\n"
+        ."List tab: `?tab=developmentPortal&directory=organizations`. List shows **type** + **country** (with flag). Detail (`?item=01`–`04`) shows org **name** + profile fields (`organizationFields`).\n\n"
+        ."| رقم | المنظمة | رابط الموقع |\n|-----|---------|-------------|\n"
+        .implode("\n", $lines);
+}
+
+function postmanDirectoryGuides(): string
+{
+    return postmanDirectoryCityDetailPagesGuide()."\n\n".postmanDirectoryOrganizationDetailPagesGuide();
 }
 
 function postmanProgramJsonKey(string $slug): string
@@ -258,7 +451,7 @@ function postmanUrbanPoliciesDetailsStepName(string $tabKey, int $step): string
 {
     $label = postmanUrbanPoliciesTabLabelAr($tabKey);
     $fields = match ($tabKey) {
-        'developmentPortal' => 'paragraphs + directory + مساهمة',
+        'developmentPortal' => 'paragraphs + directory + detail + discussions',
         'developmentIndex' => 'intro',
         'innovationLab' => 'intro + video + projects[]',
         'practiceReports' => 'intro + projects[]',
@@ -334,11 +527,25 @@ function postmanUrbanPoliciesDetailsBodyFieldsGuide(string $tabKey): string
 | `bodyAr.paragraphs[]` | فقرات المقدمة |
 | `bodyAr.contributeTitle` + `contributionTypes` | قسم «ساهم من خلال…» |
 | `bodyAr.contributionForm` | نموذج المساهمة (يُرسل إلى `POST /api/v1/programs/urban-policies/contribute`) |
-| `bodyAr.directory` | دليل المدن (فيديو، عناوين، تبويبات، أعمدة) |
-| `bodyAr.directory.rows.cities[]` | جدول المدن |
-| `bodyAr.directory.rows.projects[]` | جدول المشاريع |
-| `bodyAr.directory.rows.organizations[]` | جدول المنظمات |
-| `bodyAr.directory.rows.publications[]` | جدول المنشورات |
+| `bodyAr.directory` | دليل المدن (فيديو، عناوين، تبويبات، أعمدة، تسميات النقاش) |
+| `bodyAr.directory.rows.cities[]` | جدول المدن + `detail` + `discussions[]` |
+| `bodyAr.directory.rows.projects[]` | جدول المشاريع + `detail` + `discussions[]` |
+| `bodyAr.directory.rows.organizations[]` | جدول المنظمات — `{number, name, type, country, countryCode, address, phone, email, website, founded, employees, budget, interventionAreas, interventionFields[], interventionTypes[], socialLinks[]}` |
+| `bodyAr.directory.organizationFields` | تسميات حقول صفحة تفاصيل المنظمة |
+| `bodyAr.directory.rows.publications[]` | جدول المنشورات + `detail` + `discussions[]` |
+| `bodyAr.directory.discussionTitle` | عنوان قسم النقاش في صفحة التفاصيل |
+| `bodyAr.directory.shareLabel` / `downloadLabel` | أزرار مشاركة / تحميل في صفحة المدينة |
+| `bodyAr.directory.addressLabel` / `sourceLabel` | تسميات تعليقات الصور |
+| `bodyAr.directory.relatedProjectsTitle` | عنوان «مشاريع ذات صلة» |
+| `bodyAr.directory.rows.cities[].slug` | رابط الصفحة — مثل `al-baha` |
+| `bodyAr.directory.rows.*.detail.title` | اسم المدينة في صفحة التفاصيل |
+| `bodyAr.directory.rows.*.detail.country` | الدولة تحت العنوان |
+| `bodyAr.directory.rows.*.detail.population` | عدد السكان — `(750,000 نسمة)` |
+| `bodyAr.directory.rows.*.detail.sections[]` | أقسام المحتوى — `{title, paragraphs[], bullets?, image?, figures?}` |
+| `bodyAr.directory.rows.*.detail.sections[].figures[]` | صور مع `{image, caption, address, source}` |
+| `bodyAr.directory.rows.*.detail.relatedProjects[]` | مشاريع ذات صلة — `{city, country, dateRange, image, href}` |
+| `bodyAr.directory.rows.*.detail.cta` | دعوة للتواصل — `{title, description, button, href}` |
+| `bodyAr.directory.rows.*.discussions[]` | تعليقات النقاش — `{author, body}` |
 MD,
         'developmentIndex' => <<<'MD'
 | الحقل | على الموقع |
@@ -370,7 +577,7 @@ MD,
 function postmanUrbanPoliciesTabExtraGuide(string $tabKey): string
 {
     return match ($tabKey) {
-        'developmentPortal' => '**`directory.rows` في `bodyAr/En`:** يُنسّخ تلقائياً إلى `directory/cities|projects|organizations|publications`. صفوف الدليل تظهر عبر `GET /api/v1/programs/urban-policies/directory`.',
+        'developmentPortal' => '**`directory.rows` في `bodyAr/En`:** يُنسّخ تلقائياً إلى `directory_*` + `directory_discussions`. تفاصيل المدن: `messages/data/{slug}-detail.{ar,en}.json` (6 مدن). المنظمات: `directory.rows.organizations[]` (4 منظمات — PLATFORMA كاملة + 3 مختصرة). القائمة: `GET /api/v1/programs/urban-policies/directory?tab=organizations`. التفاصيل: `GET .../directory/organizations/{01–04}`.',
         default => '',
     };
 }
@@ -382,7 +589,7 @@ function postmanUrbanPoliciesTabContentGuide(): string
 
 | `?tab=` | خطوات | قسم | تفاصيل | داخل body |
 |---------|--------|-----|--------|-----------|
-| `developmentPortal` | 02–03 | 02 | 03 | paragraphs, directory, `directory.rows` |
+| `developmentPortal` | 02–03 | 02 | 03 | paragraphs, directory, `directory.rows` + detail + discussions |
 | `developmentIndex` | 04–05 | 04 | 05 | `intro` |
 | `innovationLab` | 06–07 | 06 | 07 | `intro`, `video`, `projects[]` |
 | `practiceReports` | 08–09 | 08 | 09 | `intro`, `projects[]` |

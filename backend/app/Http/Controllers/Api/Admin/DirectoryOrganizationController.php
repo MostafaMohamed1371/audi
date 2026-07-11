@@ -37,6 +37,8 @@ class DirectoryOrganizationController extends Controller
             'nameEn' => ['required', 'string', 'max:255'],
             'descriptionAr' => ['nullable', 'string'],
             'descriptionEn' => ['nullable', 'string'],
+            'detailAr' => ['nullable', 'array'],
+            'detailEn' => ['nullable', 'array'],
             'sortOrder' => ['sometimes', 'integer', 'min:0'],
         ]);
 
@@ -46,6 +48,8 @@ class DirectoryOrganizationController extends Controller
             'name_en' => $validated['nameEn'],
             'description_ar' => $validated['descriptionAr'] ?? null,
             'description_en' => $validated['descriptionEn'] ?? null,
+            'detail_ar' => $validated['detailAr'] ?? null,
+            'detail_en' => $validated['detailEn'] ?? null,
             'sort_order' => $validated['sortOrder'] ?? 0,
         ]);
 
@@ -65,6 +69,8 @@ class DirectoryOrganizationController extends Controller
             'nameEn' => ['sometimes', 'string', 'max:255'],
             'descriptionAr' => ['sometimes', 'nullable', 'string'],
             'descriptionEn' => ['sometimes', 'nullable', 'string'],
+            'detailAr' => ['sometimes', 'nullable', 'array'],
+            'detailEn' => ['sometimes', 'nullable', 'array'],
             'sortOrder' => ['sometimes', 'integer', 'min:0'],
         ]);
 
@@ -84,6 +90,12 @@ class DirectoryOrganizationController extends Controller
         }
         if (array_key_exists('descriptionEn', $validated)) {
             $payload['description_en'] = $validated['descriptionEn'];
+        }
+        if (array_key_exists('detailAr', $validated)) {
+            $payload['detail_ar'] = $validated['detailAr'];
+        }
+        if (array_key_exists('detailEn', $validated)) {
+            $payload['detail_en'] = $validated['detailEn'];
         }
         if (array_key_exists('sortOrder', $validated)) {
             $payload['sort_order'] = $validated['sortOrder'];
@@ -124,6 +136,8 @@ class DirectoryOrganizationController extends Controller
             'nameEn' => $organization->name_en,
             'descriptionAr' => $organization->description_ar,
             'descriptionEn' => $organization->description_en,
+            'detailAr' => $organization->detail_ar,
+            'detailEn' => $organization->detail_en,
             'sortOrder' => $organization->sort_order,
             'createdAt' => $organization->created_at?->toIso8601String(),
             'updatedAt' => $organization->updated_at?->toIso8601String(),

@@ -186,6 +186,38 @@
         "viewMapLabel": "الخريطة",
         "mapPlaceholder": "عرض الخريطة قيد التطوير",
         "seeMoreLabel": "رؤية المزيد",
+        "shareLabel": "مشاركة",
+        "downloadLabel": "تحميل",
+        "addressLabel": "العنوان",
+        "sourceLabel": "المصدر",
+        "relatedProjectsTitle": "مشاريع ذات صلة",
+        "discussionTitle": "النقاش",
+        "addCommentLabel": "أضف تعليقاً",
+        "authorNameLabel": "الاسم",
+        "commentBodyLabel": "التعليق",
+        "submitCommentLabel": "إرسال التعليق",
+        "backToListLabel": "العودة إلى القائمة",
+        "commentSuccess": "تم إرسال تعليقك وسيُراجع قبل النشر.",
+        "commentError": "تعذر إرسال التعليق. حاول مرة أخرى.",
+        "organizationFields": {
+          "address": "العنوان",
+          "phone": "رقم الهاتف",
+          "email": "البريد الالكتروني",
+          "website": "الموقع الالكتروني",
+          "type": "نوع المنظمة",
+          "founded": "سنة التأسيس",
+          "employees": "عدد الموظفين",
+          "budget": "اجمالية الميزانية",
+          "interventionAreas": "مناطق التدخل",
+          "interventionFields": "مجالات التدخل",
+          "interventionTypes": "نوع التدخل"
+        },
+        "cta": {
+          "title": "شارك في بناء مدن عربية أفضل",
+          "description": "انضم إلى شبكة البلديات والباحثين والممارسين في تجربة ريادية",
+          "button": "تواصل معنا",
+          "href": "/ar/تواصل-معنا"
+        },
         "tabs": [
           { "id": "cities", "label": "المدن" },
           { "id": "projects", "label": "المشاريع" },
@@ -204,37 +236,63 @@
             "country": "الدولة",
             "startDate": "التاريخ",
             "endDate": "تاريخ النهاية"
+          },
+          "organizations": {
+            "number": "الرقم",
+            "organization": "المنظمة",
+            "details": "تفاصيل"
+          },
+          "publications": {
+            "number": "الرقم",
+            "publication": "المنشور",
+            "details": "تفاصيل"
           }
         },
         "rows": {
           "cities": [
             {
               "number": "01",
+              "slug": "al-baha",
               "name": "الباحة، المملكة العربية السعودية",
-              "description": "مدينة صغيرة أو متوسطة الحجم"
+              "description": "مدينة صغيرة أو متوسطة الحجم",
+              "discussions": [
+                {
+                  "author": "د. سارة العتيبي",
+                  "body": "مناقشة قيّمة حول إمكانات التخضير الحضري في المدن الصغيرة والمتوسطة في العالم العربي."
+                },
+                {
+                  "author": "م. خالد المنصور",
+                  "body": "هل توجد بيانات محدثة عن مشاريع البنية التحتية الخضراء في الباحة؟"
+                }
+              ]
             },
             {
               "number": "02",
+              "slug": "riyadh",
               "name": "الرياض، المملكة العربية السعودية",
               "description": "مدينة كبيرة الحجم"
             },
             {
               "number": "03",
+              "slug": "jeddah",
               "name": "جدة، المملكة العربية السعودية",
               "description": "مدينة كبيرة الحجم"
             },
             {
               "number": "04",
+              "slug": "cairo",
               "name": "القاهرة، جمهورية مصر العربية",
               "description": "مدينة كبيرة الحجم"
             },
             {
               "number": "05",
+              "slug": "amman",
               "name": "عمان، المملكة الأردنية الهاشمية",
               "description": "مدينة متوسطة الحجم"
             },
             {
               "number": "06",
+              "slug": "beirut",
               "name": "بيروت، الجمهورية اللبنانية",
               "description": "مدينة كبيرة الحجم"
             }
@@ -286,18 +344,55 @@
           "organizations": [
             {
               "number": "01",
-              "name": "منظمة المدن العربية",
-              "description": "منظمة إقليمية حكومية"
+              "name": "PLATFORMA",
+              "type": "منظمة دولية",
+              "country": "بلجيكا",
+              "countryCode": "BE",
+              "address": "1 Square de Meeûs, 1000 Brussels, Belgium",
+              "phone": "+32 2 265 09 30",
+              "email": "platforma@ccre-cemr.org",
+              "website": "https://platforma-dev.eu/",
+              "founded": "2008",
+              "employees": "0-10",
+              "budget": "N.A.",
+              "interventionAreas": "عالمي",
+              "interventionFields": [
+                "التغير المناخي",
+                "التعليم",
+                "التنمية الاقتصادية المحلية",
+                "حوكمة المدن / البلديات",
+                "الشراكة بين القطاع العام والخاص"
+              ],
+              "interventionTypes": [
+                "الاتصال والشراكات",
+                "تطوير البرامج / المشاريع",
+                "بلورة الاستراتيجيات"
+              ],
+              "socialLinks": [
+                { "platform": "youtube", "href": "https://www.youtube.com/user/CCRECEMR" },
+                { "platform": "x", "href": "https://x.com/CCRECEMR" }
+              ]
             },
             {
               "number": "02",
-              "name": "الموئل الأمم المتحدة (UN-Habitat)",
-              "description": "منظمة دولية"
+              "name": "منظمة التعاون والتنمية الاقتصادية",
+              "type": "منظمة دولية",
+              "country": "البرتغال",
+              "countryCode": "PT"
             },
             {
               "number": "03",
-              "name": "اتحاد البلديات العربية",
-              "description": "منظمة بلدية"
+              "name": "الاتحاد الدولي للمواصلات العامة",
+              "type": "منظمة دولية",
+              "country": "ألمانيا",
+              "countryCode": "DE"
+            },
+            {
+              "number": "04",
+              "name": "المجلس الأوروبي للبلديات والمناطق",
+              "type": "منظمة دولية",
+              "country": "بلجيكا",
+              "countryCode": "BE"
             }
           ],
           "publications": [

@@ -39,6 +39,8 @@ class DirectoryProjectController extends Controller
             'countryEn' => ['required', 'string', 'max:255'],
             'startDate' => ['nullable', 'string', 'max:50'],
             'endDate' => ['nullable', 'string', 'max:50'],
+            'detailAr' => ['nullable', 'array'],
+            'detailEn' => ['nullable', 'array'],
             'sortOrder' => ['sometimes', 'integer', 'min:0'],
         ]);
 
@@ -50,6 +52,8 @@ class DirectoryProjectController extends Controller
             'country_en' => $validated['countryEn'],
             'start_date' => $validated['startDate'] ?? null,
             'end_date' => $validated['endDate'] ?? null,
+            'detail_ar' => $validated['detailAr'] ?? null,
+            'detail_en' => $validated['detailEn'] ?? null,
             'sort_order' => $validated['sortOrder'] ?? 0,
         ]);
 
@@ -71,6 +75,8 @@ class DirectoryProjectController extends Controller
             'countryEn' => ['sometimes', 'string', 'max:255'],
             'startDate' => ['sometimes', 'nullable', 'string', 'max:50'],
             'endDate' => ['sometimes', 'nullable', 'string', 'max:50'],
+            'detailAr' => ['sometimes', 'nullable', 'array'],
+            'detailEn' => ['sometimes', 'nullable', 'array'],
             'sortOrder' => ['sometimes', 'integer', 'min:0'],
         ]);
 
@@ -96,6 +102,12 @@ class DirectoryProjectController extends Controller
         }
         if (array_key_exists('endDate', $validated)) {
             $payload['end_date'] = $validated['endDate'];
+        }
+        if (array_key_exists('detailAr', $validated)) {
+            $payload['detail_ar'] = $validated['detailAr'];
+        }
+        if (array_key_exists('detailEn', $validated)) {
+            $payload['detail_en'] = $validated['detailEn'];
         }
         if (array_key_exists('sortOrder', $validated)) {
             $payload['sort_order'] = $validated['sortOrder'];
@@ -138,6 +150,8 @@ class DirectoryProjectController extends Controller
             'countryEn' => $project->country_en,
             'startDate' => $project->start_date,
             'endDate' => $project->end_date,
+            'detailAr' => $project->detail_ar,
+            'detailEn' => $project->detail_en,
             'sortOrder' => $project->sort_order,
             'createdAt' => $project->created_at?->toIso8601String(),
             'updatedAt' => $project->updated_at?->toIso8601String(),

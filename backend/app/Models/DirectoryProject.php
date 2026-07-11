@@ -22,6 +22,16 @@ class DirectoryProject extends Model
   'country_en',
   'start_date',
   'end_date',
+  'detail_ar',
+  'detail_en',
   'sort_order',
 ];
+
+    protected function casts(): array
+    {
+        return [
+            'detail_ar' => 'array',
+            'detail_en' => 'array',
+        ];
+    }
 }

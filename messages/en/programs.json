@@ -177,6 +177,38 @@
         "viewMapLabel": "Map",
         "mapPlaceholder": "Map view coming soon",
         "seeMoreLabel": "See More",
+        "shareLabel": "Share",
+        "downloadLabel": "Download",
+        "addressLabel": "Address",
+        "sourceLabel": "Source",
+        "relatedProjectsTitle": "Related Projects",
+        "discussionTitle": "Discussion",
+        "addCommentLabel": "Add a comment",
+        "authorNameLabel": "Name",
+        "commentBodyLabel": "Comment",
+        "submitCommentLabel": "Submit comment",
+        "backToListLabel": "Back to list",
+        "commentSuccess": "Your comment was submitted and will be reviewed before publishing.",
+        "commentError": "Could not submit your comment. Please try again.",
+        "organizationFields": {
+          "address": "Address",
+          "phone": "Phone",
+          "email": "Email",
+          "website": "Website",
+          "type": "Organization Type",
+          "founded": "Year Founded",
+          "employees": "Number of Employees",
+          "budget": "Total Budget",
+          "interventionAreas": "Intervention Areas",
+          "interventionFields": "Intervention Fields",
+          "interventionTypes": "Intervention Types"
+        },
+        "cta": {
+          "title": "Help Build Better Arab Cities",
+          "description": "Join a network of municipalities, researchers, and practitioners in a pioneering experience",
+          "button": "Contact Us",
+          "href": "/en/contact-us"
+        },
         "tabs": [
           { "id": "cities", "label": "Cities" },
           { "id": "projects", "label": "Projects" },
@@ -195,37 +227,63 @@
             "country": "Country",
             "startDate": "Start Date",
             "endDate": "End Date"
+          },
+          "organizations": {
+            "number": "No.",
+            "organization": "Organization",
+            "details": "Details"
+          },
+          "publications": {
+            "number": "No.",
+            "publication": "Publication",
+            "details": "Details"
           }
         },
         "rows": {
           "cities": [
             {
               "number": "01",
+              "slug": "al-baha",
               "name": "Al Baha, Saudi Arabia",
-              "description": "Small or medium-sized city"
+              "description": "Small or medium-sized city",
+              "discussions": [
+                {
+                  "author": "Dr. Sarah Al-Otaibi",
+                  "body": "A valuable discussion on urban greening opportunities in small and medium Arab cities."
+                },
+                {
+                  "author": "Eng. Khaled Al-Mansour",
+                  "body": "Is there updated data on green infrastructure projects in Al Baha?"
+                }
+              ]
             },
             {
               "number": "02",
+              "slug": "riyadh",
               "name": "Riyadh, Saudi Arabia",
               "description": "Large city"
             },
             {
               "number": "03",
+              "slug": "jeddah",
               "name": "Jeddah, Saudi Arabia",
               "description": "Large city"
             },
             {
               "number": "04",
+              "slug": "cairo",
               "name": "Cairo, Egypt",
               "description": "Large city"
             },
             {
               "number": "05",
+              "slug": "amman",
               "name": "Amman, Jordan",
               "description": "Medium-sized city"
             },
             {
               "number": "06",
+              "slug": "beirut",
               "name": "Beirut, Lebanon",
               "description": "Large city"
             }
@@ -277,18 +335,55 @@
           "organizations": [
             {
               "number": "01",
-              "name": "Organization of Arab Cities",
-              "description": "Regional intergovernmental organization"
+              "name": "PLATFORMA",
+              "type": "International Organization",
+              "country": "Belgium",
+              "countryCode": "BE",
+              "address": "1 Square de Meeûs, 1000 Brussels, Belgium",
+              "phone": "+32 2 265 09 30",
+              "email": "platforma@ccre-cemr.org",
+              "website": "https://platforma-dev.eu/",
+              "founded": "2008",
+              "employees": "0-10",
+              "budget": "N.A.",
+              "interventionAreas": "Global",
+              "interventionFields": [
+                "Climate Change",
+                "Education",
+                "Local Economic Development",
+                "Municipal Governance",
+                "Public-Private Partnership"
+              ],
+              "interventionTypes": [
+                "Communication and Partnerships",
+                "Program and Project Development",
+                "Strategy Formulation"
+              ],
+              "socialLinks": [
+                { "platform": "youtube", "href": "https://www.youtube.com/user/CCRECEMR" },
+                { "platform": "x", "href": "https://x.com/CCRECEMR" }
+              ]
             },
             {
               "number": "02",
-              "name": "UN-Habitat",
-              "description": "International organization"
+              "name": "Organization for Economic Cooperation and Development",
+              "type": "International Organization",
+              "country": "Portugal",
+              "countryCode": "PT"
             },
             {
               "number": "03",
-              "name": "Union of Arab Municipalities",
-              "description": "Municipal organization"
+              "name": "International Association of Public Transport",
+              "type": "International Organization",
+              "country": "Germany",
+              "countryCode": "DE"
+            },
+            {
+              "number": "04",
+              "name": "Council of European Municipalities and Regions",
+              "type": "International Organization",
+              "country": "Belgium",
+              "countryCode": "BE"
             }
           ],
           "publications": [
