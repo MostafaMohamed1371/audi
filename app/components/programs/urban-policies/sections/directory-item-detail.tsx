@@ -8,10 +8,11 @@ import {
 } from "@/lib/api";
 import { getFallbackDirectoryItem } from "@/lib/directory-item-fallback";
 import { cn } from "@/lib/utils";
-import { Download, Share2 } from "lucide-react";
+import { Download, Share2, X } from "lucide-react";
 import { useLocale } from "next-intl";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
+import type { PortalDirectoryPublicationFields } from "@/app/components/programs/urban-policies/shared/types";
 
 type DetailSection = {
   title?: string;
@@ -70,6 +71,7 @@ type Props = {
     sourceLabel?: string;
     relatedProjectsTitle?: string;
     organizationFields?: Record<string, string>;
+    publicationFields?: Partial<PortalDirectoryPublicationFields>;
     projectDescriptionTitle?: string;
     projectValuesTitle?: string;
     projectPolicyToolsTitle?: string;
@@ -301,6 +303,226 @@ function OrganizationProfileSection({
           ))}
         </div>
       ) : null}
+    </div>
+  );
+}
+
+type PublicationLanguage = { code: string; label: string };
+
+type PublicationProfile = {
+  name?: string;
+  organizationName?: string;
+  organizationType?: string;
+  publicationCountry?: string;
+  languages?: PublicationLanguage[];
+  publicationDate?: string;
+  publicationType?: string;
+  topics?: string[];
+  publicationLink?: string;
+  coverImage?: string;
+  languageVersions?: {
+    ar?: { label: string; href?: string };
+    en?: { label: string; href?: string };
+  };
+};
+
+function publicationProfileFromItem(
+  item: Record<string, unknown>,
+  detail: Record<string, unknown>,
+): PublicationProfile {
+  const merged = { ...detail, ...item } as PublicationProfile;
+  const nestedDetail = item.detail;
+  if (nestedDetail && typeof nestedDetail === "object") {
+    return { ...merged, ...(nestedDetail as PublicationProfile) };
+  }
+  return merged;
+}
+
+function PublicationProfileSection({
+  profile,
+  labels,
+  isRtl,
+  onClose,
+}: {
+  profile: PublicationProfile;
+  labels: Partial<PortalDirectoryPublicationFields>;
+  isRtl: boolean;
+  onClose: () => void;
+}) {
+  const title = profile.name ?? "";
+  const languageVersionAr = profile.languageVersions?.ar;
+  const languageVersionEn = profile.languageVersions?.en;
+
+  const fieldRows: { key: keyof PortalDirectoryPublicationFields; content: ReactNode }[] = [
+    {
+      key: "organizationName",
+      content: profile.organizationName ? (
+        <p className="text-base font-bold text-secondary sm:text-lg">{profile.organizationName}</p>
+      ) : null,
+    },
+    {
+      key: "organizationType",
+      content: profile.organizationType ? (
+        <p className="rounded-lg bg-[#eef6fa] px-3 py-2 text-sm leading-7 text-secondary sm:text-base">
+          {profile.organizationType}
+        </p>
+      ) : null,
+    },
+    {
+      key: "publicationCountry",
+      content:
+        profile.publicationCountry && profile.publicationCountry.trim() !== "" ? (
+          <p className="text-sm leading-7 text-secondary sm:text-base">
+            {profile.publicationCountry}
+          </p>
+        ) : null,
+    },
+    {
+      key: "languages",
+      content:
+        profile.languages && profile.languages.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {profile.languages.map((language) => (
+              <span
+                key={language.code}
+                className="rounded-full border border-primary bg-[#eef6fa] px-4 py-1.5 text-sm font-medium text-primary"
+              >
+                {language.label}
+              </span>
+            ))}
+          </div>
+        ) : null,
+    },
+    {
+      key: "publicationDate",
+      content: profile.publicationDate ? (
+        <p className="text-sm leading-7 text-secondary sm:text-base">{profile.publicationDate}</p>
+      ) : null,
+    },
+    {
+      key: "publicationType",
+      content: profile.publicationType ? (
+        <p className="text-sm leading-7 text-secondary sm:text-base">{profile.publicationType}</p>
+      ) : null,
+    },
+    {
+      key: "topics",
+      content:
+        profile.topics && profile.topics.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {profile.topics.map((topic) => (
+              <span
+                key={topic}
+                className="rounded-full border border-[#00709E33] bg-white px-3 py-1.5 text-sm text-secondary"
+              >
+                {topic}
+              </span>
+            ))}
+          </div>
+        ) : null,
+    },
+    {
+      key: "publicationLink",
+      content: profile.publicationLink ? (
+        <a
+          href={profile.publicationLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="break-all text-sm text-primary hover:underline sm:text-base"
+          dir="ltr"
+        >
+          {profile.publicationLink}
+        </a>
+      ) : null,
+    },
+  ];
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4">
+      <div
+        dir={isRtl ? "rtl" : "ltr"}
+        className="relative max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-2xl bg-white p-5 shadow-xl sm:p-8"
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-4 left-4 inline-flex size-9 items-center justify-center rounded-full border border-[#00709E26] text-secondary hover:bg-[#f4f6f8]"
+          aria-label="Close"
+        >
+          <X className="size-4" />
+        </button>
+
+        <h2 className="mb-8 text-center text-2xl font-bold text-secondary sm:text-3xl">
+          {labels.detailsTitle ?? "Publication Details"}
+        </h2>
+
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+          <div className="space-y-5">
+            {fieldRows.map(({ key, content }) => {
+              if (!content) {
+                return null;
+              }
+
+              return (
+                <div
+                  key={key}
+                  className="grid gap-2 border-b border-[#00709E14] pb-4 sm:grid-cols-[160px_minmax(0,1fr)] sm:items-start sm:gap-4"
+                >
+                  <p className="text-sm font-bold text-primary sm:text-base">
+                    {labels[key] ?? key}
+                  </p>
+                  <div>{content}</div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="relative min-h-[320px] overflow-hidden rounded-2xl bg-[#0b2a4a] sm:min-h-[420px]">
+            {profile.coverImage ? (
+              <Image
+                src={profile.coverImage}
+                alt={title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 420px"
+              />
+            ) : null}
+            <div className="absolute inset-0 bg-linear-to-t from-[#041428f2] via-[#04142866] to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 space-y-3 p-6 text-white">
+              {profile.publicationDate ? (
+                <p className="text-sm font-medium text-white/85">{profile.publicationDate}</p>
+              ) : null}
+              {title ? (
+                <h3 className="text-xl font-bold leading-9 sm:text-2xl sm:leading-10">{title}</h3>
+              ) : null}
+              <div className="h-1 w-16 rounded-full bg-primary" />
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 flex flex-wrap justify-center gap-3 sm:gap-4">
+          {languageVersionAr ? (
+            <a
+              href={languageVersionAr.href ?? profile.publicationLink ?? "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="min-w-[180px] rounded-xl bg-secondary px-6 py-3.5 text-center text-sm font-bold text-white transition-colors hover:bg-secondary/90 sm:text-base"
+            >
+              {languageVersionAr.label || labels.inArabicLabel || "In Arabic"}
+            </a>
+          ) : null}
+          {languageVersionEn ? (
+            <a
+              href={languageVersionEn.href ?? profile.publicationLink ?? "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="min-w-[180px] rounded-xl bg-primary px-6 py-3.5 text-center text-sm font-bold text-white transition-colors hover:bg-primary/90 sm:text-base"
+            >
+              {languageVersionEn.label || labels.inEnglishLabel || "In English"}
+            </a>
+          ) : null}
+        </div>
+      </div>
     </div>
   );
 }
@@ -596,6 +818,7 @@ export function DirectoryItemDetailPanel({
   const layout = detail.layout === "rich" ? "rich" : "simple";
   const isOrganization = tab === "organizations";
   const isProject = tab === "projects";
+  const isPublication = tab === "publications";
   const showDiscussions = tab === "cities" && layout === "rich";
   const organizationProfile = isOrganization
     ? organizationProfileFromItem(item, detail as Record<string, unknown>)
@@ -603,10 +826,13 @@ export function DirectoryItemDetailPanel({
   const projectProfile = isProject
     ? projectProfileFromItem(item, detail as Record<string, unknown>)
     : null;
+  const publicationProfile = isPublication
+    ? publicationProfileFromItem(item, detail as Record<string, unknown>)
+    : null;
   const title = itemTitle(item, detail);
   const country = isOrganization
     ? (organizationProfile?.country ?? "")
-    : isProject
+    : isProject || isPublication
       ? ""
       : detail.country ??
       (typeof item.name === "string"
@@ -615,7 +841,7 @@ export function DirectoryItemDetailPanel({
         : "");
   const subtitle = isOrganization
     ? organizationProfile?.type ?? ""
-    : isProject
+    : isProject || isPublication
       ? ""
       : [
         typeof item.description === "string" ? item.description : "",
@@ -642,6 +868,27 @@ export function DirectoryItemDetailPanel({
       setSubmitting(false);
     }
   };
+
+  if (isPublication && publicationProfile) {
+    if (loading) {
+      return (
+        <div className="bg-[#f4f6f8] py-10 sm:py-14">
+          <div className="mx-auto max-w-4xl px-4 sm:px-6">
+            <p className="text-secondary">...</p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <PublicationProfileSection
+        profile={{ ...publicationProfile, name: title }}
+        labels={ui.publicationFields ?? {}}
+        isRtl={isRtl}
+        onClose={onBack}
+      />
+    );
+  }
 
   return (
     <div className="bg-[#f4f6f8] py-10 sm:py-14">

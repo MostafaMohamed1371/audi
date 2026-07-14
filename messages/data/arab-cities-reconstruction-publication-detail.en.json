@@ -1,0 +1,18 @@
+{
+  "organizationName": "Arab Bureau for Urban Information",
+  "organizationType": "Regional organization (operates in more than one Arab country)",
+  "publicationCountry": "",
+  "languages": [
+    { "code": "ar", "label": "Arabic" },
+    { "code": "en", "label": "English" }
+  ],
+  "publicationDate": "December - 2025",
+  "publicationType": "Report",
+  "topics": ["Risk Management", "Housing", "Other", "Urban Culture"],
+  "publicationLink": "https://example.com/arab-cities-reconstruction",
+  "coverImage": "/urban-policies/development-portal/publications/cover-01.png",
+  "languageVersions": {
+    "ar": { "label": "In Arabic", "href": "https://example.com/arab-cities-reconstruction/ar" },
+    "en": { "label": "In English", "href": "https://example.com/arab-cities-reconstruction/en" }
+  }
+}

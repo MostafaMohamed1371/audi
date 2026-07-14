@@ -280,8 +280,8 @@ class ProgramsSeeder extends Seeder
                     'name_en' => $enRow['name'] ?? ($row['name'] ?? ''),
                     'description_ar' => $row['description'] ?? null,
                     'description_en' => $enRow['description'] ?? ($row['description'] ?? null),
-                    'detail_ar' => $row['detail'] ?? null,
-                    'detail_en' => $enRow['detail'] ?? ($row['detail'] ?? null),
+                    'detail_ar' => $this->publicationDetailFromRow($row),
+                    'detail_en' => $this->publicationDetailFromRow($enRow),
                 ],
             );
 
@@ -529,6 +529,39 @@ class ProgramsSeeder extends Seeder
             'founders',
             'references',
             'relatedProjects',
+        ];
+
+        $detail = [];
+        foreach ($keys as $key) {
+            if (array_key_exists($key, $row)) {
+                $detail[$key] = $row[$key];
+            }
+        }
+
+        if (isset($row['detail']) && is_array($row['detail'])) {
+            $detail = array_merge($detail, $row['detail']);
+        }
+
+        return $detail === [] ? null : $detail;
+    }
+
+    /**
+     * @param  array<string, mixed>  $row
+     * @return array<string, mixed>|null
+     */
+    private function publicationDetailFromRow(array $row): ?array
+    {
+        $keys = [
+            'organizationName',
+            'organizationType',
+            'publicationCountry',
+            'languages',
+            'publicationDate',
+            'publicationType',
+            'topics',
+            'publicationLink',
+            'coverImage',
+            'languageVersions',
         ];
 
         $detail = [];

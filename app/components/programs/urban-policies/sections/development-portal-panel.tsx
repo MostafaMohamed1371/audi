@@ -188,6 +188,18 @@ export function DevelopmentPortalPanel({
         </div>
       </section>
 
+      {activeDirectoryTab ? (
+        <div ref={directoryRef} className={itemParam && activeDirectoryTab !== "publications" ? "hidden" : undefined}>
+          <DevelopmentPortalDirectory
+            content={content.directory}
+            activeTab={activeDirectoryTab}
+            isRtl={isRtl}
+            onTabChange={setDirectoryTab}
+            onOpenItem={openDirectoryItem}
+          />
+        </div>
+      ) : null}
+
       {activeDirectoryTab && itemParam ? (
         <DirectoryItemDetailPanel
           tab={activeDirectoryTab}
@@ -208,6 +220,7 @@ export function DevelopmentPortalPanel({
             sourceLabel: content.directory.sourceLabel,
             relatedProjectsTitle: content.directory.relatedProjectsTitle,
             organizationFields: content.directory.organizationFields,
+            publicationFields: content.directory.publicationFields,
             projectDescriptionTitle: content.directory.projectDescriptionTitle,
             projectValuesTitle: content.directory.projectValuesTitle,
             projectPolicyToolsTitle: content.directory.projectPolicyToolsTitle,
@@ -221,16 +234,6 @@ export function DevelopmentPortalPanel({
           }}
           onBack={closeDirectoryItem}
         />
-      ) : activeDirectoryTab ? (
-        <div ref={directoryRef}>
-          <DevelopmentPortalDirectory
-            content={content.directory}
-            activeTab={activeDirectoryTab}
-            isRtl={isRtl}
-            onTabChange={setDirectoryTab}
-            onOpenItem={openDirectoryItem}
-          />
-        </div>
       ) : null}
     </>
   );

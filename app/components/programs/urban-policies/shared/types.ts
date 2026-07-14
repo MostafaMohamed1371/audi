@@ -75,6 +75,33 @@ export type PortalDirectoryPublicationRow = {
   number: string;
   name: string;
   description: string;
+  organizationName?: string;
+  organizationType?: string;
+  publicationCountry?: string;
+  languages?: { code: string; label: string }[];
+  publicationDate?: string;
+  publicationType?: string;
+  topics?: string[];
+  publicationLink?: string;
+  coverImage?: string;
+  languageVersions?: {
+    ar?: { label: string; href?: string };
+    en?: { label: string; href?: string };
+  };
+};
+
+export type PortalDirectoryPublicationFields = {
+  detailsTitle: string;
+  organizationName: string;
+  organizationType: string;
+  publicationCountry: string;
+  languages: string;
+  publicationDate: string;
+  publicationType: string;
+  topics: string;
+  publicationLink: string;
+  inArabicLabel: string;
+  inEnglishLabel: string;
 };
 
 export type PortalDirectoryOrganizationFields = {
@@ -120,6 +147,7 @@ export type PortalDirectoryContent = {
   commentSuccess?: string;
   commentError?: string;
   organizationFields?: PortalDirectoryOrganizationFields;
+  publicationFields?: PortalDirectoryPublicationFields;
   projectDescriptionTitle?: string;
   projectValuesTitle?: string;
   projectPolicyToolsTitle?: string;

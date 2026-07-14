@@ -203,6 +203,19 @@
           "interventionFields": "Intervention Fields",
           "interventionTypes": "Intervention Types"
         },
+        "publicationFields": {
+          "detailsTitle": "Publication Details",
+          "organizationName": "Organization Name",
+          "organizationType": "Organization Type",
+          "publicationCountry": "Publication Country",
+          "languages": "Language",
+          "publicationDate": "Publication Date",
+          "publicationType": "Publication Type",
+          "topics": "Publication Topic",
+          "publicationLink": "Publication Link",
+          "inArabicLabel": "In Arabic",
+          "inEnglishLabel": "In English"
+        },
         "projectDescriptionTitle": "Project Description",
         "projectValuesTitle": "Project Values and Guiding Ideas:",
         "projectPolicyToolsTitle": "Public Policy Tools Used in the Project",
@@ -459,18 +472,65 @@
           "publications": [
             {
               "number": "01",
-              "name": "Arab Urban Development Report 2024",
-              "description": "Annual report"
+              "name": "Reconstruction of Arab Cities and Post-Crisis Recovery",
+              "description": "Report",
+              "organizationName": "Arab Bureau for Urban Information",
+              "organizationType": "Regional organization (operates in more than one Arab country)",
+              "publicationCountry": "",
+              "languages": [
+                { "code": "ar", "label": "Arabic" },
+                { "code": "en", "label": "English" }
+              ],
+              "publicationDate": "December - 2025",
+              "publicationType": "Report",
+              "topics": ["Risk Management", "Housing", "Other", "Urban Culture"],
+              "publicationLink": "https://example.com/arab-cities-reconstruction",
+              "coverImage": "/urban-policies/development-portal/publications/cover-01.png",
+              "languageVersions": {
+                "ar": { "label": "In Arabic", "href": "https://example.com/arab-cities-reconstruction/ar" },
+                "en": { "label": "In English", "href": "https://example.com/arab-cities-reconstruction/en" }
+              }
             },
             {
               "number": "02",
-              "name": "Urban Policy Guide",
-              "description": "Reference publication"
+              "name": "Green Infrastructure in Arab Cities",
+              "description": "Study",
+              "organizationName": "Arab Urban Development Institute",
+              "organizationType": "Regional organization",
+              "publicationCountry": "Saudi Arabia",
+              "languages": [
+                { "code": "ar", "label": "Arabic" },
+                { "code": "en", "label": "English" }
+              ],
+              "publicationDate": "November - 2025",
+              "publicationType": "Study",
+              "topics": ["Environment", "Infrastructure", "Other"],
+              "publicationLink": "https://example.com/green-infrastructure",
+              "coverImage": "/urban-policies/development-portal/publications/cover-02.png",
+              "languageVersions": {
+                "ar": { "label": "In Arabic", "href": "https://example.com/green-infrastructure/ar" },
+                "en": { "label": "In English", "href": "https://example.com/green-infrastructure/en" }
+              }
             },
             {
               "number": "03",
-              "name": "Smart Cities Study in the Arab World",
-              "description": "Research study"
+              "name": "Urban Policy Guide for Arab Cities",
+              "description": "Guide",
+              "organizationName": "Arab Urban Development Institute",
+              "organizationType": "Regional organization",
+              "publicationCountry": "Saudi Arabia",
+              "languages": [
+                { "code": "ar", "label": "Arabic" }
+              ],
+              "publicationDate": "October - 2025",
+              "publicationType": "Guide",
+              "topics": ["Urban Policy", "Planning", "Other"],
+              "publicationLink": "https://example.com/urban-policy-guide",
+              "coverImage": "/urban-policies/development-portal/publications/cover-03.png",
+              "languageVersions": {
+                "ar": { "label": "In Arabic", "href": "https://example.com/urban-policy-guide/ar" },
+                "en": { "label": "In English", "href": "https://example.com/urban-policy-guide/en" }
+              }
             }
           ]
         }

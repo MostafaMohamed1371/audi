@@ -4613,7 +4613,8 @@ URL: [برنامج السياسات الحضرية](https://audi-w.vercel.app/ar
 | `bodyAr.directory.rows.projects[]` | جدول المشاريع — `{number, slug, city, country, startDate, endDate, layout, heroImage, mapImage, valuesContent, policyToolsContent, sources[], founders[], references{}, relatedProjects[]}` |
 | `bodyAr.directory.rows.organizations[]` | جدول المنظمات — `{number, name, type, country, countryCode, address, phone, email, website, founded, employees, budget, interventionAreas, interventionFields[], interventionTypes[], socialLinks[]}` |
 | `bodyAr.directory.organizationFields` | تسميات حقول صفحة تفاصيل المنظمة |
-| `bodyAr.directory.rows.publications[]` | جدول المنشورات + `detail` + `discussions[]` |
+| `bodyAr.directory.rows.publications[]` | جدول المنشورات — `{number, name, description, organizationName, organizationType, publicationCountry, languages[], publicationDate, publicationType, topics[], publicationLink, coverImage, languageVersions}` |
+| `bodyAr.directory.publicationFields` | تسميات نافذة «تفاصيل المنشور» (اسم المنظمة، نوع المنظمة، بلد النشر، اللغة، تاريخ النشر، نوع النشر، موضوع النشر، رابط النشر) |
 | `bodyAr.directory.discussionTitle` | عنوان قسم النقاش في صفحة التفاصيل |
 | `bodyAr.directory.shareLabel` / `downloadLabel` | أزرار مشاركة / تحميل في صفحة المدينة |
 | `bodyAr.directory.addressLabel` / `sourceLabel` | تسميات تعليقات الصور |
@@ -4628,7 +4629,7 @@ URL: [برنامج السياسات الحضرية](https://audi-w.vercel.app/ar
 | `bodyAr.directory.rows.*.detail.cta` | دعوة للتواصل — `{title, description, button, href}` |
 | `bodyAr.directory.rows.*.discussions[]` | تعليقات النقاش — `{author, body}` |
 
-**`directory.rows` في `bodyAr/En`:** يُنسّخ تلقائياً إلى `directory_*`. المدن: `messages/data/{slug}-detail.{ar,en}.json`. المشاريع: `messages/data/{slug}-project-detail.{ar,en}.json` (cairo=rich, riyadh/kuwait/dubai/tunis/manama=simple). المنظمات: `directory.rows.organizations[]`.
+**`directory.rows` في `bodyAr/En`:** يُنسّخ تلقائياً إلى `directory_*`. المدن: `messages/data/{slug}-detail.{ar,en}.json`. المشاريع: `messages/data/{slug}-project-detail.{ar,en}.json` (cairo=rich, riyadh/kuwait/dubai/tunis/manama=simple). المنظمات: `directory.rows.organizations[]`. المنشورات: `directory.rows.publications[]` — نافذة تفاصيل المنشور تطابق الحقول: organizationName, organizationType, publicationCountry, languages, publicationDate, publicationType, topics, publicationLink, coverImage.
 
 #### POST `/api/admin/program-sections`
 
@@ -4740,6 +4741,17 @@ URL: [برنامج السياسات الحضرية](https://audi-w.vercel.app/ar
 | `bodyAr.directory.organizationFields.interventionAreas` | interventionAreas | "مناطق التدخل" |
 | `bodyAr.directory.organizationFields.interventionFields` | interventionFields | "مجالات التدخل" |
 | `bodyAr.directory.organizationFields.interventionTypes` | interventionTypes | "نوع التدخل" |
+| `bodyAr.directory.publicationFields.detailsTitle` | detailsTitle | "تفاصيل المنشور" |
+| `bodyAr.directory.publicationFields.organizationName` | اسم الجهة/المؤسسة | "اسم المنظمة" |
+| `bodyAr.directory.publicationFields.organizationType` | organizationType | "نوع المنظمة" |
+| `bodyAr.directory.publicationFields.publicationCountry` | publicationCountry | "بلد النشر" |
+| `bodyAr.directory.publicationFields.languages` | languages | "اللغة" |
+| `bodyAr.directory.publicationFields.publicationDate` | publicationDate | "تاريخ النشر" |
+| `bodyAr.directory.publicationFields.publicationType` | publicationType | "نوع النشر" |
+| `bodyAr.directory.publicationFields.topics` | topics | "موضوع النشر" |
+| `bodyAr.directory.publicationFields.publicationLink` | publicationLink | "رابط النشر" |
+| `bodyAr.directory.publicationFields.inArabicLabel` | inArabicLabel | "باللغة العربية" |
+| `bodyAr.directory.publicationFields.inEnglishLabel` | inEnglishLabel | "باللغة الانجليزية" |
 | `bodyAr.directory.projectDescriptionTitle` | projectDescriptionTitle | "وصف المشروع" |
 | `bodyAr.directory.projectValuesTitle` | projectValuesTitle | "القيم و الأفكار الموجهة للمشروع:" |
 | `bodyAr.directory.projectPolicyToolsTitle` | projectPolicyToolsTitle | "أدوات السياسات العامة المعتمدة في المشروع" |
@@ -4771,7 +4783,7 @@ URL: [برنامج السياسات الحضرية](https://audi-w.vercel.app/ar
 | `bodyAr.directory.rows.cities` | مصفوفة المدن للاستيراد | [{"number":"01","slug":"al-baha","name":"الباحة… |
 | `bodyAr.directory.rows.projects` | projects | [{"number":"01","slug":"cairo","city":"القاهرة"… |
 | `bodyAr.directory.rows.organizations` | organizations | [{"number":"01","name":"PLATFORMA","type":"منظم… |
-| `bodyAr.directory.rows.publications` | publications | [{"number":"01","name":"تقرير التنمية الحضرية ا… |
+| `bodyAr.directory.rows.publications` | publications | [{"number":"01","name":"إعادة إعمار المدن العرب… |
 | `bodyEn.paragraphs` | paragraphs | ["The Arab Urban Development Portal is a platfo… |
 | `bodyEn.contributeTitle` | contributeTitle | "Contribute by providing information about" |
 | `bodyEn.contributeDescription` | contributeDescription | "You can help enrich the portal by sharing info… |
@@ -4830,6 +4842,17 @@ URL: [برنامج السياسات الحضرية](https://audi-w.vercel.app/ar
 | `bodyEn.directory.organizationFields.interventionAreas` | interventionAreas | "Intervention Areas" |
 | `bodyEn.directory.organizationFields.interventionFields` | interventionFields | "Intervention Fields" |
 | `bodyEn.directory.organizationFields.interventionTypes` | interventionTypes | "Intervention Types" |
+| `bodyEn.directory.publicationFields.detailsTitle` | detailsTitle | "Publication Details" |
+| `bodyEn.directory.publicationFields.organizationName` | اسم الجهة/المؤسسة | "Organization Name" |
+| `bodyEn.directory.publicationFields.organizationType` | organizationType | "Organization Type" |
+| `bodyEn.directory.publicationFields.publicationCountry` | publicationCountry | "Publication Country" |
+| `bodyEn.directory.publicationFields.languages` | languages | "Language" |
+| `bodyEn.directory.publicationFields.publicationDate` | publicationDate | "Publication Date" |
+| `bodyEn.directory.publicationFields.publicationType` | publicationType | "Publication Type" |
+| `bodyEn.directory.publicationFields.topics` | topics | "Publication Topic" |
+| `bodyEn.directory.publicationFields.publicationLink` | publicationLink | "Publication Link" |
+| `bodyEn.directory.publicationFields.inArabicLabel` | inArabicLabel | "In Arabic" |
+| `bodyEn.directory.publicationFields.inEnglishLabel` | inEnglishLabel | "In English" |
 | `bodyEn.directory.projectDescriptionTitle` | projectDescriptionTitle | "Project Description" |
 | `bodyEn.directory.projectValuesTitle` | projectValuesTitle | "Project Values and Guiding Ideas:" |
 | `bodyEn.directory.projectPolicyToolsTitle` | projectPolicyToolsTitle | "Public Policy Tools Used in the Project" |
@@ -4861,7 +4884,7 @@ URL: [برنامج السياسات الحضرية](https://audi-w.vercel.app/ar
 | `bodyEn.directory.rows.cities` | مصفوفة المدن للاستيراد | [{"number":"01","slug":"al-baha","name":"Al Bah… |
 | `bodyEn.directory.rows.projects` | projects | [{"number":"01","slug":"cairo","city":"Cairo","… |
 | `bodyEn.directory.rows.organizations` | organizations | [{"number":"01","name":"PLATFORMA","type":"Inte… |
-| `bodyEn.directory.rows.publications` | publications | [{"number":"01","name":"Arab Urban Development … |
+| `bodyEn.directory.rows.publications` | publications | [{"number":"01","name":"Reconstruction of Arab … |
 
 #### Notes | ملاحظات
 
@@ -4886,7 +4909,8 @@ URL: [برنامج السياسات الحضرية](https://audi-w.vercel.app/ar
 | `bodyAr.directory.rows.projects[]` | جدول المشاريع — `{number, slug, city, country, startDate, endDate, layout, heroImage, mapImage, valuesContent, policyToolsContent, sources[], founders[], references{}, relatedProjects[]}` |
 | `bodyAr.directory.rows.organizations[]` | جدول المنظمات — `{number, name, type, country, countryCode, address, phone, email, website, founded, employees, budget, interventionAreas, interventionFields[], interventionTypes[], socialLinks[]}` |
 | `bodyAr.directory.organizationFields` | تسميات حقول صفحة تفاصيل المنظمة |
-| `bodyAr.directory.rows.publications[]` | جدول المنشورات + `detail` + `discussions[]` |
+| `bodyAr.directory.rows.publications[]` | جدول المنشورات — `{number, name, description, organizationName, organizationType, publicationCountry, languages[], publicationDate, publicationType, topics[], publicationLink, coverImage, languageVersions}` |
+| `bodyAr.directory.publicationFields` | تسميات نافذة «تفاصيل المنشور» (اسم المنظمة، نوع المنظمة، بلد النشر، اللغة، تاريخ النشر، نوع النشر، موضوع النشر، رابط النشر) |
 | `bodyAr.directory.discussionTitle` | عنوان قسم النقاش في صفحة التفاصيل |
 | `bodyAr.directory.shareLabel` / `downloadLabel` | أزرار مشاركة / تحميل في صفحة المدينة |
 | `bodyAr.directory.addressLabel` / `sourceLabel` | تسميات تعليقات الصور |
@@ -4903,7 +4927,7 @@ URL: [برنامج السياسات الحضرية](https://audi-w.vercel.app/ar
 
 **الموقع:** `/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal`
 
-**`directory.rows` في `bodyAr/En`:** يُنسّخ تلقائياً إلى `directory_*`. المدن: `messages/data/{slug}-detail.{ar,en}.json`. المشاريع: `messages/data/{slug}-project-detail.{ar,en}.json` (cairo=rich, riyadh/kuwait/dubai/tunis/manama=simple). المنظمات: `directory.rows.organizations[]`.
+**`directory.rows` في `bodyAr/En`:** يُنسّخ تلقائياً إلى `directory_*`. المدن: `messages/data/{slug}-detail.{ar,en}.json`. المشاريع: `messages/data/{slug}-project-detail.{ar,en}.json` (cairo=rich, riyadh/kuwait/dubai/tunis/manama=simple). المنظمات: `directory.rows.organizations[]`. المنشورات: `directory.rows.publications[]` — نافذة تفاصيل المنشور تطابق الحقول: organizationName, organizationType, publicationCountry, languages, publicationDate, publicationType, topics, publicationLink, coverImage.
 
 ---
 
@@ -5564,6 +5588,17 @@ After section create: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageU
 | `bodyAr.directory.organizationFields.interventionAreas` | interventionAreas | "مناطق التدخل" |
 | `bodyAr.directory.organizationFields.interventionFields` | interventionFields | "مجالات التدخل" |
 | `bodyAr.directory.organizationFields.interventionTypes` | interventionTypes | "نوع التدخل" |
+| `bodyAr.directory.publicationFields.detailsTitle` | detailsTitle | "تفاصيل المنشور" |
+| `bodyAr.directory.publicationFields.organizationName` | اسم الجهة/المؤسسة | "اسم المنظمة" |
+| `bodyAr.directory.publicationFields.organizationType` | organizationType | "نوع المنظمة" |
+| `bodyAr.directory.publicationFields.publicationCountry` | publicationCountry | "بلد النشر" |
+| `bodyAr.directory.publicationFields.languages` | languages | "اللغة" |
+| `bodyAr.directory.publicationFields.publicationDate` | publicationDate | "تاريخ النشر" |
+| `bodyAr.directory.publicationFields.publicationType` | publicationType | "نوع النشر" |
+| `bodyAr.directory.publicationFields.topics` | topics | "موضوع النشر" |
+| `bodyAr.directory.publicationFields.publicationLink` | publicationLink | "رابط النشر" |
+| `bodyAr.directory.publicationFields.inArabicLabel` | inArabicLabel | "باللغة العربية" |
+| `bodyAr.directory.publicationFields.inEnglishLabel` | inEnglishLabel | "باللغة الانجليزية" |
 | `bodyAr.directory.projectDescriptionTitle` | projectDescriptionTitle | "وصف المشروع" |
 | `bodyAr.directory.projectValuesTitle` | projectValuesTitle | "القيم و الأفكار الموجهة للمشروع:" |
 | `bodyAr.directory.projectPolicyToolsTitle` | projectPolicyToolsTitle | "أدوات السياسات العامة المعتمدة في المشروع" |
@@ -5650,6 +5685,17 @@ After section create: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageU
 | `bodyEn.directory.organizationFields.interventionAreas` | interventionAreas | "Intervention Areas" |
 | `bodyEn.directory.organizationFields.interventionFields` | interventionFields | "Intervention Fields" |
 | `bodyEn.directory.organizationFields.interventionTypes` | interventionTypes | "Intervention Types" |
+| `bodyEn.directory.publicationFields.detailsTitle` | detailsTitle | "Publication Details" |
+| `bodyEn.directory.publicationFields.organizationName` | اسم الجهة/المؤسسة | "Organization Name" |
+| `bodyEn.directory.publicationFields.organizationType` | organizationType | "Organization Type" |
+| `bodyEn.directory.publicationFields.publicationCountry` | publicationCountry | "Publication Country" |
+| `bodyEn.directory.publicationFields.languages` | languages | "Language" |
+| `bodyEn.directory.publicationFields.publicationDate` | publicationDate | "Publication Date" |
+| `bodyEn.directory.publicationFields.publicationType` | publicationType | "Publication Type" |
+| `bodyEn.directory.publicationFields.topics` | topics | "Publication Topic" |
+| `bodyEn.directory.publicationFields.publicationLink` | publicationLink | "Publication Link" |
+| `bodyEn.directory.publicationFields.inArabicLabel` | inArabicLabel | "In Arabic" |
+| `bodyEn.directory.publicationFields.inEnglishLabel` | inEnglishLabel | "In English" |
 | `bodyEn.directory.projectDescriptionTitle` | projectDescriptionTitle | "Project Description" |
 | `bodyEn.directory.projectValuesTitle` | projectValuesTitle | "Project Values and Guiding Ideas:" |
 | `bodyEn.directory.projectPolicyToolsTitle` | projectPolicyToolsTitle | "Public Policy Tools Used in the Project" |
@@ -5780,6 +5826,17 @@ After section create: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageU
 | `bodyAr.directory.organizationFields.interventionAreas` | interventionAreas | "مناطق التدخل" |
 | `bodyAr.directory.organizationFields.interventionFields` | interventionFields | "مجالات التدخل" |
 | `bodyAr.directory.organizationFields.interventionTypes` | interventionTypes | "نوع التدخل" |
+| `bodyAr.directory.publicationFields.detailsTitle` | detailsTitle | "تفاصيل المنشور" |
+| `bodyAr.directory.publicationFields.organizationName` | اسم الجهة/المؤسسة | "اسم المنظمة" |
+| `bodyAr.directory.publicationFields.organizationType` | organizationType | "نوع المنظمة" |
+| `bodyAr.directory.publicationFields.publicationCountry` | publicationCountry | "بلد النشر" |
+| `bodyAr.directory.publicationFields.languages` | languages | "اللغة" |
+| `bodyAr.directory.publicationFields.publicationDate` | publicationDate | "تاريخ النشر" |
+| `bodyAr.directory.publicationFields.publicationType` | publicationType | "نوع النشر" |
+| `bodyAr.directory.publicationFields.topics` | topics | "موضوع النشر" |
+| `bodyAr.directory.publicationFields.publicationLink` | publicationLink | "رابط النشر" |
+| `bodyAr.directory.publicationFields.inArabicLabel` | inArabicLabel | "باللغة العربية" |
+| `bodyAr.directory.publicationFields.inEnglishLabel` | inEnglishLabel | "باللغة الانجليزية" |
 | `bodyAr.directory.projectDescriptionTitle` | projectDescriptionTitle | "وصف المشروع" |
 | `bodyAr.directory.projectValuesTitle` | projectValuesTitle | "القيم و الأفكار الموجهة للمشروع:" |
 | `bodyAr.directory.projectPolicyToolsTitle` | projectPolicyToolsTitle | "أدوات السياسات العامة المعتمدة في المشروع" |
@@ -5866,6 +5923,17 @@ After section create: `introAr/En`, `bodyAr/En`. Optional `titleAr/En` + `imageU
 | `bodyEn.directory.organizationFields.interventionAreas` | interventionAreas | "Intervention Areas" |
 | `bodyEn.directory.organizationFields.interventionFields` | interventionFields | "Intervention Fields" |
 | `bodyEn.directory.organizationFields.interventionTypes` | interventionTypes | "Intervention Types" |
+| `bodyEn.directory.publicationFields.detailsTitle` | detailsTitle | "Publication Details" |
+| `bodyEn.directory.publicationFields.organizationName` | اسم الجهة/المؤسسة | "Organization Name" |
+| `bodyEn.directory.publicationFields.organizationType` | organizationType | "Organization Type" |
+| `bodyEn.directory.publicationFields.publicationCountry` | publicationCountry | "Publication Country" |
+| `bodyEn.directory.publicationFields.languages` | languages | "Language" |
+| `bodyEn.directory.publicationFields.publicationDate` | publicationDate | "Publication Date" |
+| `bodyEn.directory.publicationFields.publicationType` | publicationType | "Publication Type" |
+| `bodyEn.directory.publicationFields.topics` | topics | "Publication Topic" |
+| `bodyEn.directory.publicationFields.publicationLink` | publicationLink | "Publication Link" |
+| `bodyEn.directory.publicationFields.inArabicLabel` | inArabicLabel | "In Arabic" |
+| `bodyEn.directory.publicationFields.inEnglishLabel` | inEnglishLabel | "In English" |
 | `bodyEn.directory.projectDescriptionTitle` | projectDescriptionTitle | "Project Description" |
 | `bodyEn.directory.projectValuesTitle` | projectValuesTitle | "Project Values and Guiding Ideas:" |
 | `bodyEn.directory.projectPolicyToolsTitle` | projectPolicyToolsTitle | "Public Policy Tools Used in the Project" |
@@ -6807,11 +6875,11 @@ Directory organizations. Build guide: `directory.rows.organizations` in step 03.
 
 #### Notes | ملاحظات
 
-**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+**Public match:** `GET /api/v1/programs/urban-policies/directory/publications/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory publications. Build guide: `directory.rows.publications` in step 03. Detail: `GET .../directory/publications/{number}`.قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
+Directory publications. Build guide: `directory.rows.publications` in step 03. Modal fields match screenshot «تفاصيل المنشور»: organizationName, organizationType, publicationCountry, languages, publicationDate, publicationType, topics, publicationLink, coverImage, languageVersions. Live: [?directory=publications&item=01](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=publications&item=01).قائمة الإدارة — تُرجع حقول `*Ar` و `*En` معاً.
 
 ---
 
@@ -6828,19 +6896,45 @@ Directory publications. Build guide: `directory.rows.publications` in step 03. D
 | الحقل | الوصف | مثال |
 |-------|--------|------|
 | `number` | الرقم الترتيبي (01, 02, …) | "01" |
-| `nameAr` | الاسم بالعربية | "تقرير التنمية الحضرية العربية 2024" |
-| `nameEn` | الاسم بالإنجليزية | "Arab Urban Development Report 2024" |
-| `descriptionAr` | الوصف بالعربية | "تقرير سنوي يرصد التطورات في التنمية الحضرية." |
-| `descriptionEn` | الوصف بالإنجليزية | "Annual report monitoring urban development tre… |
+| `nameAr` | الاسم بالعربية | "إعادة إعمار المدن العربية والتعافي بعد الأزمات" |
+| `nameEn` | الاسم بالإنجليزية | "Reconstruction of Arab Cities and Post-Crisis … |
+| `descriptionAr` | الوصف بالعربية | "تقرير" |
+| `descriptionEn` | الوصف بالإنجليزية | "Report" |
+| `detailAr.organizationName` | اسم الجهة/المؤسسة | "المكتب العربي للإعلام للمدن" |
+| `detailAr.organizationType` | organizationType | "منظمة إقليمية (تعمل في أكثر من بلد عربي)" |
+| `detailAr.publicationCountry` | publicationCountry | "" |
+| `detailAr.languages` | languages | [{"code":"ar","label":"العربية"},{"code":"en","… |
+| `detailAr.publicationDate` | publicationDate | "ديسمبر - 2025" |
+| `detailAr.publicationType` | publicationType | "تقرير" |
+| `detailAr.topics` | topics | ["إدارة المخاطر","السكن","أخرى","الثقافة الحضرية"] |
+| `detailAr.publicationLink` | publicationLink | "https:\/\/example.com\/arab-cities-reconstruct… |
+| `detailAr.coverImage` | coverImage | "\/urban-policies\/development-portal\/publicat… |
+| `detailAr.languageVersions.ar.label` | التسمية (مثل: البريد الإلكتروني) | "باللغة العربية" |
+| `detailAr.languageVersions.ar.href` | رابط اختياري (mailto:, tel:) | "https:\/\/example.com\/arab-cities-reconstruct… |
+| `detailAr.languageVersions.en.label` | التسمية (مثل: البريد الإلكتروني) | "باللغة الانجليزية" |
+| `detailAr.languageVersions.en.href` | رابط اختياري (mailto:, tel:) | "https:\/\/example.com\/arab-cities-reconstruct… |
+| `detailEn.organizationName` | اسم الجهة/المؤسسة | "Arab Bureau for Urban Information" |
+| `detailEn.organizationType` | organizationType | "Regional organization (operates in more than o… |
+| `detailEn.publicationCountry` | publicationCountry | "" |
+| `detailEn.languages` | languages | [{"code":"ar","label":"Arabic"},{"code":"en","l… |
+| `detailEn.publicationDate` | publicationDate | "December - 2025" |
+| `detailEn.publicationType` | publicationType | "Report" |
+| `detailEn.topics` | topics | ["Risk Management","Housing","Other","Urban Cul… |
+| `detailEn.publicationLink` | publicationLink | "https:\/\/example.com\/arab-cities-reconstruct… |
+| `detailEn.coverImage` | coverImage | "\/urban-policies\/development-portal\/publicat… |
+| `detailEn.languageVersions.ar.label` | التسمية (مثل: البريد الإلكتروني) | "In Arabic" |
+| `detailEn.languageVersions.ar.href` | رابط اختياري (mailto:, tel:) | "https:\/\/example.com\/arab-cities-reconstruct… |
+| `detailEn.languageVersions.en.label` | التسمية (مثل: البريد الإلكتروني) | "In English" |
+| `detailEn.languageVersions.en.href` | رابط اختياري (mailto:, tel:) | "https:\/\/example.com\/arab-cities-reconstruct… |
 | `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 
 #### Notes | ملاحظات
 
-**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+**Public match:** `GET /api/v1/programs/urban-policies/directory/publications/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory publications. Build guide: `directory.rows.publications` in step 03. Detail: `GET .../directory/publications/{number}`.**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
+Directory publications. Build guide: `directory.rows.publications` in step 03. Modal fields match screenshot «تفاصيل المنشور»: organizationName, organizationType, publicationCountry, languages, publicationDate, publicationType, topics, publicationLink, coverImage, languageVersions. Live: [?directory=publications&item=01](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=publications&item=01).**جسم الطلب كامل** — جميع الحقول ثنائية اللغة حيث ينطبق.
 
 ---
 
@@ -6854,11 +6948,11 @@ Directory publications. Build guide: `directory.rows.publications` in step 03. D
 
 #### Notes | ملاحظات
 
-**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+**Public match:** `GET /api/v1/programs/urban-policies/directory/publications/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory publications. Build guide: `directory.rows.publications` in step 03. Detail: `GET .../directory/publications/{number}`.استخدم `id` من استجابة الإنشاء.
+Directory publications. Build guide: `directory.rows.publications` in step 03. Modal fields match screenshot «تفاصيل المنشور»: organizationName, organizationType, publicationCountry, languages, publicationDate, publicationType, topics, publicationLink, coverImage, languageVersions. Live: [?directory=publications&item=01](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=publications&item=01).استخدم `id` من استجابة الإنشاء.
 
 ---
 
@@ -6875,19 +6969,45 @@ Directory publications. Build guide: `directory.rows.publications` in step 03. D
 | الحقل | الوصف | مثال |
 |-------|--------|------|
 | `number` | الرقم الترتيبي (01, 02, …) | "01" |
-| `nameAr` | الاسم بالعربية | "تقرير التنمية الحضرية العربية 2024" |
-| `nameEn` | الاسم بالإنجليزية | "Arab Urban Development Report 2024" |
-| `descriptionAr` | الوصف بالعربية | "تقرير سنوي يرصد التطورات في التنمية الحضرية." |
-| `descriptionEn` | الوصف بالإنجليزية | "Annual report monitoring urban development tre… |
+| `nameAr` | الاسم بالعربية | "إعادة إعمار المدن العربية والتعافي بعد الأزمات" |
+| `nameEn` | الاسم بالإنجليزية | "Reconstruction of Arab Cities and Post-Crisis … |
+| `descriptionAr` | الوصف بالعربية | "تقرير" |
+| `descriptionEn` | الوصف بالإنجليزية | "Report" |
+| `detailAr.organizationName` | اسم الجهة/المؤسسة | "المكتب العربي للإعلام للمدن" |
+| `detailAr.organizationType` | organizationType | "منظمة إقليمية (تعمل في أكثر من بلد عربي)" |
+| `detailAr.publicationCountry` | publicationCountry | "" |
+| `detailAr.languages` | languages | [{"code":"ar","label":"العربية"},{"code":"en","… |
+| `detailAr.publicationDate` | publicationDate | "ديسمبر - 2025" |
+| `detailAr.publicationType` | publicationType | "تقرير" |
+| `detailAr.topics` | topics | ["إدارة المخاطر","السكن","أخرى","الثقافة الحضرية"] |
+| `detailAr.publicationLink` | publicationLink | "https:\/\/example.com\/arab-cities-reconstruct… |
+| `detailAr.coverImage` | coverImage | "\/urban-policies\/development-portal\/publicat… |
+| `detailAr.languageVersions.ar.label` | التسمية (مثل: البريد الإلكتروني) | "باللغة العربية" |
+| `detailAr.languageVersions.ar.href` | رابط اختياري (mailto:, tel:) | "https:\/\/example.com\/arab-cities-reconstruct… |
+| `detailAr.languageVersions.en.label` | التسمية (مثل: البريد الإلكتروني) | "باللغة الانجليزية" |
+| `detailAr.languageVersions.en.href` | رابط اختياري (mailto:, tel:) | "https:\/\/example.com\/arab-cities-reconstruct… |
+| `detailEn.organizationName` | اسم الجهة/المؤسسة | "Arab Bureau for Urban Information" |
+| `detailEn.organizationType` | organizationType | "Regional organization (operates in more than o… |
+| `detailEn.publicationCountry` | publicationCountry | "" |
+| `detailEn.languages` | languages | [{"code":"ar","label":"Arabic"},{"code":"en","l… |
+| `detailEn.publicationDate` | publicationDate | "December - 2025" |
+| `detailEn.publicationType` | publicationType | "Report" |
+| `detailEn.topics` | topics | ["Risk Management","Housing","Other","Urban Cul… |
+| `detailEn.publicationLink` | publicationLink | "https:\/\/example.com\/arab-cities-reconstruct… |
+| `detailEn.coverImage` | coverImage | "\/urban-policies\/development-portal\/publicat… |
+| `detailEn.languageVersions.ar.label` | التسمية (مثل: البريد الإلكتروني) | "In Arabic" |
+| `detailEn.languageVersions.ar.href` | رابط اختياري (mailto:, tel:) | "https:\/\/example.com\/arab-cities-reconstruct… |
+| `detailEn.languageVersions.en.label` | التسمية (مثل: البريد الإلكتروني) | "In English" |
+| `detailEn.languageVersions.en.href` | رابط اختياري (mailto:, tel:) | "https:\/\/example.com\/arab-cities-reconstruct… |
 | `sortOrder` | ترتيب العرض (0 = الأول) | 0 |
 
 #### Notes | ملاحظات
 
-**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+**Public match:** `GET /api/v1/programs/urban-policies/directory/publications/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory publications. Build guide: `directory.rows.publications` in step 03. Detail: `GET .../directory/publications/{number}`.**جسم التحديث كامل** — نفس حقول الإنشاء.
+Directory publications. Build guide: `directory.rows.publications` in step 03. Modal fields match screenshot «تفاصيل المنشور»: organizationName, organizationType, publicationCountry, languages, publicationDate, publicationType, topics, publicationLink, coverImage, languageVersions. Live: [?directory=publications&item=01](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=publications&item=01).**جسم التحديث كامل** — نفس حقول الإنشاء.
 
 ---
 
@@ -6901,11 +7021,11 @@ Directory publications. Build guide: `directory.rows.publications` in step 03. D
 
 #### Notes | ملاحظات
 
-**Public match:** `GET /api/v1/programs/urban-policies/directory` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
+**Public match:** `GET /api/v1/programs/urban-policies/directory/publications/01` — returns locale-resolved fields (`title`, `name`, …) from admin `*Ar/*En` columns.
 
 **Locale:** set collection variable `locale` to `ar` or `en` (or use `Accept-Language` header).
 
-Directory publications. Build guide: `directory.rows.publications` in step 03. Detail: `GET .../directory/publications/{number}`.
+Directory publications. Build guide: `directory.rows.publications` in step 03. Modal fields match screenshot «تفاصيل المنشور»: organizationName, organizationType, publicationCountry, languages, publicationDate, publicationType, topics, publicationLink, coverImage, languageVersions. Live: [?directory=publications&item=01](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=publications&item=01).
 
 ---
 

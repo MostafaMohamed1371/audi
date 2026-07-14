@@ -280,8 +280,8 @@ class ProgramSectionNestedContentSync
                     'name_en' => (string) ($enRow['name'] ?? ($row['name'] ?? '')),
                     'description_ar' => $description !== '' ? $description : null,
                     'description_en' => (string) ($enRow['description'] ?? $description) ?: null,
-                    'detail_ar' => $this->normalizeDetail($row['detail'] ?? null),
-                    'detail_en' => $this->normalizeDetail($enRow['detail'] ?? ($row['detail'] ?? null)),
+                    'detail_ar' => $this->normalizeDetail($this->publicationDetailFromRow($row)),
+                    'detail_en' => $this->normalizeDetail($this->publicationDetailFromRow($enRow)),
                     'sort_order' => $index,
                 ],
             );
@@ -381,6 +381,39 @@ class ProgramSectionNestedContentSync
             'founders',
             'references',
             'relatedProjects',
+        ];
+
+        $detail = [];
+        foreach ($keys as $key) {
+            if (array_key_exists($key, $row)) {
+                $detail[$key] = $row[$key];
+            }
+        }
+
+        if (isset($row['detail']) && is_array($row['detail'])) {
+            $detail = array_merge($detail, $row['detail']);
+        }
+
+        return $detail === [] ? null : $detail;
+    }
+
+    /**
+     * @param  array<string, mixed>  $row
+     * @return array<string, mixed>|null
+     */
+    private function publicationDetailFromRow(array $row): ?array
+    {
+        $keys = [
+            'organizationName',
+            'organizationType',
+            'publicationCountry',
+            'languages',
+            'publicationDate',
+            'publicationType',
+            'topics',
+            'publicationLink',
+            'coverImage',
+            'languageVersions',
         ];
 
         $detail = [];

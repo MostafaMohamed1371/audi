@@ -369,7 +369,85 @@ function postmanDirectoryGuides(): string
         ."\n\n"
         .postmanDirectoryOrganizationDetailPagesGuide()
         ."\n\n"
-        .postmanDirectoryProjectDetailPagesGuide();
+        .postmanDirectoryProjectDetailPagesGuide()
+        ."\n\n"
+        .postmanDirectoryPublicationDetailPagesGuide();
+}
+
+/**
+ * Publication detail pages — matches live modal «تفاصيل المنشور».
+ *
+ * @return array<int, array{number: string, labelAr: string, labelEn: string}>
+ */
+function postmanDirectoryPublicationDetailPages(): array
+{
+    return [
+        ['number' => '01', 'labelAr' => 'إعادة إعمار المدن العربية', 'labelEn' => 'Arab Cities Reconstruction'],
+        ['number' => '02', 'labelAr' => 'البنية التحتية الخضراء', 'labelEn' => 'Green Infrastructure'],
+        ['number' => '03', 'labelAr' => 'دليل السياسات الحضرية', 'labelEn' => 'Urban Policy Guide'],
+    ];
+}
+
+/**
+ * @return array<string, mixed>
+ */
+function postmanDirectoryPublicationDetailExampleAr(): array
+{
+    return postmanDirectoryPublicationProfileFromRow(
+        postmanLoadProgramsJson('ar')['urbanPolicies']['developmentPortal']['directory']['rows']['publications'][0] ?? []
+    );
+}
+
+/**
+ * @return array<string, mixed>
+ */
+function postmanDirectoryPublicationDetailExampleEn(): array
+{
+    return postmanDirectoryPublicationProfileFromRow(
+        postmanLoadProgramsJson('en')['urbanPolicies']['developmentPortal']['directory']['rows']['publications'][0] ?? []
+    );
+}
+
+/**
+ * @param  array<string, mixed>  $row
+ * @return array<string, mixed>
+ */
+function postmanDirectoryPublicationProfileFromRow(array $row): array
+{
+    $keys = [
+        'organizationName',
+        'organizationType',
+        'publicationCountry',
+        'languages',
+        'publicationDate',
+        'publicationType',
+        'topics',
+        'publicationLink',
+        'coverImage',
+        'languageVersions',
+    ];
+
+    return array_intersect_key($row, array_flip($keys));
+}
+
+function postmanDirectoryPublicationDetailPagesGuide(): string
+{
+    $lines = array_map(
+        fn (array $pub) => sprintf(
+            '| `%s` | %s | [?item=%s](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=publications&item=%s) |',
+            $pub['number'],
+            $pub['labelAr'],
+            $pub['number'],
+            $pub['number'],
+        ),
+        postmanDirectoryPublicationDetailPages(),
+    );
+
+    return "**صفحات المنشورات على الموقع | Publication detail pages**\n\n"
+        ."List tab: `?tab=developmentPortal&directory=publications`. Detail (`?item=01`–`03`) opens modal **تفاصيل المنشور** with fields from the screenshot:\n"
+        ."`organizationName`, `organizationType`, `publicationCountry`, `languages[]`, `publicationDate`, `publicationType`, `topics[]`, `publicationLink`, `coverImage`, `languageVersions`.\n\n"
+        ."| رقم | المنشور | رابط الموقع |\n|-----|---------|-------------|\n"
+        .implode("\n", $lines);
 }
 
 function postmanProgramJsonKey(string $slug): string
@@ -690,7 +768,8 @@ function postmanUrbanPoliciesDetailsBodyFieldsGuide(string $tabKey): string
 | `bodyAr.directory.rows.projects[]` | جدول المشاريع — `{number, slug, city, country, startDate, endDate, layout, heroImage, mapImage, valuesContent, policyToolsContent, sources[], founders[], references{}, relatedProjects[]}` |
 | `bodyAr.directory.rows.organizations[]` | جدول المنظمات — `{number, name, type, country, countryCode, address, phone, email, website, founded, employees, budget, interventionAreas, interventionFields[], interventionTypes[], socialLinks[]}` |
 | `bodyAr.directory.organizationFields` | تسميات حقول صفحة تفاصيل المنظمة |
-| `bodyAr.directory.rows.publications[]` | جدول المنشورات + `detail` + `discussions[]` |
+| `bodyAr.directory.rows.publications[]` | جدول المنشورات — `{number, name, description, organizationName, organizationType, publicationCountry, languages[], publicationDate, publicationType, topics[], publicationLink, coverImage, languageVersions}` |
+| `bodyAr.directory.publicationFields` | تسميات نافذة «تفاصيل المنشور» (اسم المنظمة، نوع المنظمة، بلد النشر، اللغة، تاريخ النشر، نوع النشر، موضوع النشر، رابط النشر) |
 | `bodyAr.directory.discussionTitle` | عنوان قسم النقاش في صفحة التفاصيل |
 | `bodyAr.directory.shareLabel` / `downloadLabel` | أزرار مشاركة / تحميل في صفحة المدينة |
 | `bodyAr.directory.addressLabel` / `sourceLabel` | تسميات تعليقات الصور |
@@ -735,7 +814,7 @@ MD,
 function postmanUrbanPoliciesTabExtraGuide(string $tabKey): string
 {
     return match ($tabKey) {
-        'developmentPortal' => '**`directory.rows` في `bodyAr/En`:** يُنسّخ تلقائياً إلى `directory_*`. المدن: `messages/data/{slug}-detail.{ar,en}.json`. المشاريع: `messages/data/{slug}-project-detail.{ar,en}.json` (cairo=rich, riyadh/kuwait/dubai/tunis/manama=simple). المنظمات: `directory.rows.organizations[]`.',
+        'developmentPortal' => '**`directory.rows` في `bodyAr/En`:** يُنسّخ تلقائياً إلى `directory_*`. المدن: `messages/data/{slug}-detail.{ar,en}.json`. المشاريع: `messages/data/{slug}-project-detail.{ar,en}.json` (cairo=rich, riyadh/kuwait/dubai/tunis/manama=simple). المنظمات: `directory.rows.organizations[]`. المنشورات: `directory.rows.publications[]` — نافذة تفاصيل المنشور تطابق الحقول: organizationName, organizationType, publicationCountry, languages, publicationDate, publicationType, topics, publicationLink, coverImage.',
         default => '',
     };
 }

@@ -484,9 +484,25 @@ $publicPrograms = folder('البرامج — Programs', [
         ),
         postmanDirectoryProjectDetailPages(),
     )),
+    folder('تفاصيل المنشورات — Publication Detail Pages', array_map(
+        fn (array $pub) => publicReq(
+            $pub['labelAr'].' — '.$pub['labelEn'],
+            'Get Publication Detail — '.$pub['number'],
+            'GET',
+            '/api/v1/programs/urban-policies/directory/publications/'.$pub['number'],
+            [
+                'headers' => [$localeHeader],
+                'description' => publicMatch(
+                    '/api/v1/programs/urban-policies/directory/publications/'.$pub['number'],
+                    'Live: [?directory=publications&item='.$pub['number'].']('.'https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=publications&item='.$pub['number'].'). Admin: step 03 `directory.rows.publications[]` + fields from «تفاصيل المنشور» modal.',
+                ),
+            ],
+        ),
+        postmanDirectoryPublicationDetailPages(),
+    )),
     publicReq('تفاصيل عنصر الدليل (متغير)', 'Get Directory Item Detail (variables)', 'GET', '/api/v1/programs/urban-policies/directory/{{directoryTab}}/{{directoryNumber}}', [
         'headers' => [$localeHeader],
-        'description' => publicMatch('/api/v1/programs/urban-policies/directory/{tab}/{number}', 'Set `directoryTab` to `cities|organizations|projects|publications` and `directoryNumber` accordingly. See folders **تفاصيل المدن**, **تفاصيل المنظمات**, **تفاصيل المشاريع**.')."\n\n".postmanDirectoryGuides(),
+        'description' => publicMatch('/api/v1/programs/urban-policies/directory/{tab}/{number}', 'Set `directoryTab` to `cities|organizations|projects|publications` and `directoryNumber` accordingly. See folders **تفاصيل المدن**, **تفاصيل المنظمات**, **تفاصيل المشاريع**, **تفاصيل المنشورات**.')."\n\n".postmanDirectoryGuides(),
     ]),
     publicReq('إضافة تعليق على عنصر الدليل', 'Post Directory Discussion', 'POST', '/api/v1/programs/urban-policies/directory/{{directoryTab}}/{{directoryNumber}}/discussions', [
         'headers' => [$localeHeader],
@@ -1357,12 +1373,14 @@ MD),
     ], ['publicPath' => '/api/v1/programs/urban-policies/directory/organizations/01', 'labelAr' => 'منظمة', 'description' => 'Directory organizations. Build guide: `directory.rows.organizations` in step 03. Live list: [organizations tab](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=organizations).'])),
     postmanAdminFolder('دليل المنشورات', 'Directory Publications', adminCrud('directory/publications', 'Directory Publication', [
         'number' => '01',
-        'nameAr' => 'تقرير التنمية الحضرية العربية 2024',
-        'nameEn' => 'Arab Urban Development Report 2024',
-        'descriptionAr' => 'تقرير سنوي يرصد التطورات في التنمية الحضرية.',
-        'descriptionEn' => 'Annual report monitoring urban development trends.',
+        'nameAr' => 'إعادة إعمار المدن العربية والتعافي بعد الأزمات',
+        'nameEn' => 'Reconstruction of Arab Cities and Post-Crisis Recovery',
+        'descriptionAr' => 'تقرير',
+        'descriptionEn' => 'Report',
+        'detailAr' => postmanDirectoryPublicationDetailExampleAr(),
+        'detailEn' => postmanDirectoryPublicationDetailExampleEn(),
         'sortOrder' => 0,
-    ], ['publicPath' => '/api/v1/programs/urban-policies/directory', 'labelAr' => 'منشور', 'description' => 'Directory publications. Build guide: `directory.rows.publications` in step 03. Detail: `GET .../directory/publications/{number}`.'])),
+    ], ['publicPath' => '/api/v1/programs/urban-policies/directory/publications/01', 'labelAr' => 'منشور', 'description' => 'Directory publications. Build guide: `directory.rows.publications` in step 03. Modal fields match screenshot «تفاصيل المنشور»: organizationName, organizationType, publicationCountry, languages, publicationDate, publicationType, topics, publicationLink, coverImage, languageVersions. Live: [?directory=publications&item=01](https://audi-w.vercel.app/ar/برامجنا/برنامج-السياسات-الحضرية?tab=developmentPortal&directory=publications&item=01).'])),
     postmanAdminFolder('نقاشات الدليل', 'Directory Discussions', adminCrud('directory/discussions', 'Directory Discussion', [
         'directoryType' => 'cities',
         'directoryNumber' => '01',

@@ -267,12 +267,19 @@ class DirectoryService
                 'title' => trim(($isAr ? $row->city_ar : $row->city_en).', '.($isAr ? $row->country_ar : $row->country_en)),
                 ...$this->projectProfileFields($row, $isAr),
             ],
-            'organizations', 'publications' => [
+            'organizations' => [
                 'id' => $row->id,
                 'number' => $row->number,
                 'name' => $isAr ? $row->name_ar : $row->name_en,
                 'description' => $isAr ? $row->description_ar : $row->description_en,
                 ...$this->organizationProfileFields($row, $isAr),
+            ],
+            'publications' => [
+                'id' => $row->id,
+                'number' => $row->number,
+                'name' => $isAr ? $row->name_ar : $row->name_en,
+                'description' => $isAr ? $row->description_ar : $row->description_en,
+                ...$this->publicationProfileFields($row, $isAr),
             ],
         };
 
@@ -336,6 +343,32 @@ class DirectoryService
             'founders',
             'references',
             'relatedProjects',
+        ];
+
+        return array_intersect_key($detail, array_flip($keys));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function publicationProfileFields(Model $row, bool $isAr): array
+    {
+        $detail = $isAr ? ($row->detail_ar ?? []) : ($row->detail_en ?? []);
+        if (! is_array($detail)) {
+            return [];
+        }
+
+        $keys = [
+            'organizationName',
+            'organizationType',
+            'publicationCountry',
+            'languages',
+            'publicationDate',
+            'publicationType',
+            'topics',
+            'publicationLink',
+            'coverImage',
+            'languageVersions',
         ];
 
         return array_intersect_key($detail, array_flip($keys));

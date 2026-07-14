@@ -46,6 +46,19 @@ const PROJECT_PROFILE_KEYS = [
   "relatedProjects",
 ] as const;
 
+const PUBLICATION_PROFILE_KEYS = [
+  "organizationName",
+  "organizationType",
+  "publicationCountry",
+  "languages",
+  "publicationDate",
+  "publicationType",
+  "topics",
+  "publicationLink",
+  "coverImage",
+  "languageVersions",
+] as const;
+
 function pickProfile(row: DirectoryRow, keys: readonly string[]) {
   return Object.fromEntries(
     keys.filter((key) => row[key] !== undefined).map((key) => [key, row[key]]),
@@ -81,6 +94,25 @@ export async function getFallbackDirectoryItem(
         startDate: row.startDate,
         endDate: row.endDate,
         title: `${city}, ${country}`,
+        detail: row.detail ?? profile,
+        ...profile,
+      },
+      discussions: [],
+      ui: {},
+    };
+  }
+
+  if (tab === "publications") {
+    const profile = pickProfile(row, PUBLICATION_PROFILE_KEYS);
+    const name = String(row.name ?? "");
+
+    return {
+      tab,
+      number,
+      item: {
+        number: row.number,
+        name,
+        description: row.description,
         detail: row.detail ?? profile,
         ...profile,
       },

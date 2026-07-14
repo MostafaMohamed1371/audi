@@ -212,6 +212,19 @@
           "interventionFields": "مجالات التدخل",
           "interventionTypes": "نوع التدخل"
         },
+        "publicationFields": {
+          "detailsTitle": "تفاصيل المنشور",
+          "organizationName": "اسم المنظمة",
+          "organizationType": "نوع المنظمة",
+          "publicationCountry": "بلد النشر",
+          "languages": "اللغة",
+          "publicationDate": "تاريخ النشر",
+          "publicationType": "نوع النشر",
+          "topics": "موضوع النشر",
+          "publicationLink": "رابط النشر",
+          "inArabicLabel": "باللغة العربية",
+          "inEnglishLabel": "باللغة الانجليزية"
+        },
         "projectDescriptionTitle": "وصف المشروع",
         "projectValuesTitle": "القيم و الأفكار الموجهة للمشروع:",
         "projectPolicyToolsTitle": "أدوات السياسات العامة المعتمدة في المشروع",
@@ -468,18 +481,65 @@
           "publications": [
             {
               "number": "01",
-              "name": "تقرير التنمية الحضرية العربية 2024",
-              "description": "تقرير سنوي"
+              "name": "إعادة إعمار المدن العربية والتعافي بعد الأزمات",
+              "description": "تقرير",
+              "organizationName": "المكتب العربي للإعلام للمدن",
+              "organizationType": "منظمة إقليمية (تعمل في أكثر من بلد عربي)",
+              "publicationCountry": "",
+              "languages": [
+                { "code": "ar", "label": "العربية" },
+                { "code": "en", "label": "إنجليزي" }
+              ],
+              "publicationDate": "ديسمبر - 2025",
+              "publicationType": "تقرير",
+              "topics": ["إدارة المخاطر", "السكن", "أخرى", "الثقافة الحضرية"],
+              "publicationLink": "https://example.com/arab-cities-reconstruction",
+              "coverImage": "/urban-policies/development-portal/publications/cover-01.png",
+              "languageVersions": {
+                "ar": { "label": "باللغة العربية", "href": "https://example.com/arab-cities-reconstruction/ar" },
+                "en": { "label": "باللغة الانجليزية", "href": "https://example.com/arab-cities-reconstruction/en" }
+              }
             },
             {
               "number": "02",
-              "name": "دليل السياسات الحضرية",
-              "description": "منشور مرجعي"
+              "name": "البنية التحتية الخضراء في المدن العربية",
+              "description": "دراسة",
+              "organizationName": "المعهد العربي لإنماء المدن",
+              "organizationType": "منظمة إقليمية",
+              "publicationCountry": "المملكة العربية السعودية",
+              "languages": [
+                { "code": "ar", "label": "العربية" },
+                { "code": "en", "label": "إنجليزي" }
+              ],
+              "publicationDate": "نوفمبر - 2025",
+              "publicationType": "دراسة",
+              "topics": ["البيئة", "البنية التحتية", "أخرى"],
+              "publicationLink": "https://example.com/green-infrastructure",
+              "coverImage": "/urban-policies/development-portal/publications/cover-02.png",
+              "languageVersions": {
+                "ar": { "label": "باللغة العربية", "href": "https://example.com/green-infrastructure/ar" },
+                "en": { "label": "باللغة الانجليزية", "href": "https://example.com/green-infrastructure/en" }
+              }
             },
             {
               "number": "03",
-              "name": "دراسة المدن الذكية في العالم العربي",
-              "description": "دراسة بحثية"
+              "name": "دليل السياسات الحضرية للمدن العربية",
+              "description": "دليل",
+              "organizationName": "المعهد العربي لإنماء المدن",
+              "organizationType": "منظمة إقليمية",
+              "publicationCountry": "المملكة العربية السعودية",
+              "languages": [
+                { "code": "ar", "label": "العربية" }
+              ],
+              "publicationDate": "أكتوبر - 2025",
+              "publicationType": "دليل",
+              "topics": ["السياسات الحضرية", "التخطيط", "أخرى"],
+              "publicationLink": "https://example.com/urban-policy-guide",
+              "coverImage": "/urban-policies/development-portal/publications/cover-03.png",
+              "languageVersions": {
+                "ar": { "label": "باللغة العربية", "href": "https://example.com/urban-policy-guide/ar" },
+                "en": { "label": "باللغة الانجليزية", "href": "https://example.com/urban-policy-guide/en" }
+              }
             }
           ]
         }
